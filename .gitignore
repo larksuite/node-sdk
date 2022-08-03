@@ -1,0 +1,10 @@
+# for logs and certain task outputs
+.DS_Store
+*/.DS_Store
+
+node_modules
+
+# output assets
+**/es
+**/lib
+**/types
