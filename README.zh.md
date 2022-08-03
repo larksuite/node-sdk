@@ -18,11 +18,11 @@
 ## 安装
 npm
 ```shell script
-npm install @larksuiteoapi/node-sdk/node-sdk
+npm install @larksuiteoapi/node-sdk
 ```
 yarn
 ```
-yarn add @larksuiteoapi/node-sdk/node-sdk
+yarn add @larksuiteoapi/node-sdk
 ```
 
 ## 如何使用
@@ -30,22 +30,22 @@ yarn add @larksuiteoapi/node-sdk/node-sdk
 
 Typescript
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 ```
 CommonJS
 ```javascript
-const lark = require('@larksuiteoapi/node-sdk/node-sdk');
+const lark = require('@larksuiteoapi/node-sdk');
 ```
 ECMAScript
 ```javascript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 ```
 ### api调用
 飞书开放平台开放的所有 API 列表，可点击[这里查看](https://open.feishu.cn/document/ukTMukTMukTM/uYTM5UjL2ETO14iNxkTN/server-api-list)。
 
 SDK提供了语义化的调用方式，只需要依据相关参数构造出client实例，接着使用其上的语义化方法（*client.业务域.资源.方法*）即可完成api调用，调用过程及调用结果均有完备的类型进行提示，如向群聊中发送消息：
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const client = new lark.Client({
     appId: 'app id',
@@ -72,7 +72,7 @@ const res = await client.im.message.create({
 对于自建应用，可以使用下面的代码创建一个client：
 
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const client = new lark.Client({
     appId: 'app id',
@@ -82,7 +82,7 @@ const client = new lark.Client({
 
 对于商店应用，需要显示的指定appType为lark.AppType.ISV：
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const client = new lark.Client({
     appId: 'app id',
@@ -167,7 +167,7 @@ await resp.writeFile(`filepath.suffix`);
 #### 普通调用
 某些老版本的开放接口，无法生成对应的语义化调用方法，需要使用client上的request方法来进行手动调用：
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const client = new lark.Client({
     appId: 'app id',
@@ -250,7 +250,7 @@ await client.im.message.create({
 `EventDispatcher`内部会进行数据解密等操作，如果没有传递相关参数，则会自动忽略。
 ```typescript
 import http from 'http';
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const eventDispatcher = new lark.EventDispatcher({
     encryptKey: 'encrypt key'
@@ -292,7 +292,7 @@ server.listen(3000);
 #### 和express结合
 SDK提供了针对experss的适配器，用于将eventDispatcher转化为express的中间件，可无缝与使用express编写的服务相结合（*示例中的bodyParser的使用不是必须的，但社区大多用其来格式化body数据*）：
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -325,7 +325,7 @@ server.listen(3000);
 #### 和koa结合
 SDK提供了针对koa的适配器，用于将eventDispatcher转化为koa的中间件，可无缝与使用koa编写的服务相结合(*示例中的koaBody的使用不是必须的，但社区大多用其来格式化body数据*）：
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 import Koa from 'koa';
 import koaBody from 'koa-body';
 
@@ -359,7 +359,7 @@ server.listen(3000);
 #### 和koa-router结合
 在使用koa来编写服务时，大多情况下会配合使用koa-router来对路由进行处理，因此SDK也提供了针对这一情况的适配：
 ```typescript
-import * as nodeSdk from '@larksuiteoapi/node-sdk/node-sdk';
+import * as nodeSdk from '@larksuiteoapi/node-sdk';
 import Koa from 'koa';
 import Router from '@koa/router';
 import koaBody from 'koa-body';
@@ -407,7 +407,7 @@ server.sendResult(result);
 
 ```typescript
 import http from 'http';
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 const cardDispatcher = new lark.CardActionHandler(
     {
@@ -438,7 +438,7 @@ server.listen(3000);
 #### AESCipher
 解密。如果配置了[加密推送](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/encrypt-key-encryption-configuration-case)，开放平台会推送加密的数据，这时候需要对数据进行解密处理，调用此方法可以便捷的进行解密。（一般情况下，SDK中内置了解密逻辑，不需要手动进行处理）。
 ```typescript
-import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 
 new lark.AESCipher('encrypt key').decrypt('content');
 ```
