@@ -19,11 +19,11 @@ All of these make the overall development experience poor. In order to make the 
 ## Installation
 npm
 ```shell script
-npm install @lark-open/node-sdk
+npm install @larksuiteoapi/node-sdk/node-sdk
 ````
 yarn
 ````
-yarn add @lark-open/node-sdk
+yarn add @larksuiteoapi/node-sdk/node-sdk
 ````
 
 ## How to use
@@ -31,22 +31,22 @@ Provides two versions of ECMAScript and CommonJS, and supports the use of native
 
 Typescript
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 ````
 CommonJS
 ````javascript
-const lark = require('@lark-open/node-sdk');
+const lark = require('@larksuiteoapi/node-sdk/node-sdk');
 ````
 ECMAScript
 ````javascript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 ````
 ### API Call
 The list of all APIs on Feishu Open Platform: [click here](https://open.feishu.cn/document/ukTMukTMukTM/uYTM5UjL2ETO14iNxkTN/server-api-list).
 
 The SDK provides a semantic calling method. You only need to construct a client instance according to the relevant parameters, and then use the semantic method (*client.business domain.resource.method*) on it to complete the API call, the calling process and the calling result. There are complete types for prompting, such as sending a message to a group chat:
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const client = new lark. Client({
     appId: 'app id',
@@ -73,7 +73,7 @@ const res = await client.im.message.create({
 For self-built applications, you can use the following code to create a client:
 
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const client = new lark. Client({
     appId: 'app id',
@@ -83,7 +83,7 @@ const client = new lark. Client({
 
 For store apps, the specified appType that needs to be displayed is lark.AppType.ISV:
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const client = new lark.Client({
     appId: 'app id',
@@ -168,7 +168,7 @@ await resp.writeFile(`filepath.suffix`);
 #### Normal call
 Some old versions of the open interface cannot generate corresponding semantic calling methods, and you need to use the request method on the client to make manual calls:
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const client = new lark. Client({
     appId: 'app id',
@@ -251,7 +251,7 @@ For the event processing scenario, we care about is only what kind of events to 
 `EventDispatcher` will perform operations such as data decryption internally. If no relevant parameters are passed, it will be automatically ignored.
 ```typescript
 import http from 'http';
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const eventDispatcher = new lark.EventDispatcher({
     encryptKey: 'encrypt key'
@@ -293,7 +293,7 @@ server.listen(3000);
 #### Combined with express
 The SDK provides an adapter for experss to convert eventDispatcher into express middleware, which can be seamlessly combined with services written using express (*The use of bodyParser in the example is not necessary, but the community mostly uses it to format body data*):
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -326,7 +326,7 @@ server.listen(3000);
 #### Combined with Koa
 The SDK provides an adapter for Koa to convert eventDispatcher into Koa middleware, which can be seamlessly combined with services written using Koa (*The use of koa-body in the example is not necessary, but the community mostly uses it to format body data*):
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 import Koa from 'koa';
 import koaBody from 'koa-body';
 
@@ -360,7 +360,7 @@ server.listen(3000);
 #### Combined with koa-router
 When using Koa to write services, in most cases, koa-router is used to process routing, so the SDK also provides adaptations for this situation:
 ```typescript
-import * as nodeSdk from '@lark-open/node-sdk';
+import * as nodeSdk from '@larksuiteoapi/node-sdk/node-sdk';
 import Koa from 'koa';
 import Router from '@koa/router';
 import koaBody from 'koa-body';
@@ -408,7 +408,7 @@ The processing of the Message Card is also a kind of Event processing. The only 
 
 ```typescript
 import http from 'http';
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 const cardDispatcher = new lark.CardActionHandler(
     {
@@ -439,7 +439,7 @@ server.listen(3000);
 #### AESCipher
 Decrypt. If [Encrypted Push](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/encrypt-key-encryption-configuration-case) is configured, the open platform will push encrypted data, At this time, the data needs to be decrypted, and this method can be called for convenient decryption. (In general, the decryption logic is built into the SDK, and no manual processing is required).
 ```typescript
-import * as lark from '@lark-open/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk/node-sdk';
 
 new lark.AESCipher('encrypt key').decrypt('content');
 ````
