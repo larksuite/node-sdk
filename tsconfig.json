@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "downlevelIteration": true,
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "declaration": true,
+        "removeComments": false,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "noEmit": false,
+        "useDefineForClassFields": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "emitDeclarationOnly": true,
+        "declarationDir": "types",
+    },
+    "exclude": ["__tests__", "node_modules"],
+    "ts-node": {
+        "transpileOnly": true
+    },
+}
