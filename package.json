@@ -37,6 +37,7 @@
     "lodash.pickby": "^4.6.0"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^5.27.1",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-typescript": "^8.3.2",
     "@types/jest": "^28.1.3",

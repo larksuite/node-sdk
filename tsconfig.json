@@ -19,6 +19,9 @@
         "baseUrl": ".",
         "emitDeclarationOnly": true,
         "declarationDir": "types",
+        "paths": {
+            "@node-sdk/*": ["*"]
+        }
     },
     "exclude": ["__tests__", "node_modules"],
     "ts-node": {

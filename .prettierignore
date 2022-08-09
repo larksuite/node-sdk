@@ -1,0 +1,6 @@
+node_modules
+
+# output assets
+es
+lib
+types

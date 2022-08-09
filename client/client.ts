@@ -97,7 +97,7 @@ export class Client extends RequestTemplate {
             targetOptions.headers.Authorization = `Bearer ${userAccessToken}`;
         } else if (!this.disableTokenCache) {
             const tenantAccessToken =
-                await this.tokenManager.getTernantAccessToken({
+                await this.tokenManager.getTenantAccessToken({
                     [CTenantKey]: get(targetOptions.lark, CTenantKey),
                 });
             if (tenantAccessToken) {

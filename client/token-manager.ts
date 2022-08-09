@@ -50,13 +50,13 @@ export class TokenManager {
     }
 
     async getCustomTenantAccessToken() {
-        const cachedTernantAccessToken = await this.cache?.get(
+        const cachedTenantAccessToken = await this.cache?.get(
             CTenantAccessToken
         );
 
-        if (cachedTernantAccessToken) {
+        if (cachedTenantAccessToken) {
             this.logger.debug('use cache token');
-            return cachedTernantAccessToken;
+            return cachedTenantAccessToken;
         }
 
         this.logger.debug('request token');
@@ -88,13 +88,13 @@ export class TokenManager {
             return undefined;
         }
 
-        const ternantAccessToken = await this.cache?.get(
+        const tenantAccessToken = await this.cache?.get(
             `larkMarketAccessToken${tenantKey}`
         );
 
-        if (ternantAccessToken) {
+        if (tenantAccessToken) {
             this.logger.debug('use cache token');
-            return ternantAccessToken;
+            return tenantAccessToken;
         }
 
         this.logger.debug('get app ticket');
@@ -142,7 +142,7 @@ export class TokenManager {
         return tenant_access_token;
     }
 
-    async getTernantAccessToken(params?: { [CTenantKey]?: string }) {
+    async getTenantAccessToken(params?: { [CTenantKey]?: string }) {
         assert(this.appType === AppType.SelfBuild, async () => {
             this.logger.debug('get custom app token');
         });
@@ -151,13 +151,13 @@ export class TokenManager {
         });
 
         // prettier-ignore
-        const ternantAccessToken =
+        const tenantAccessToken =
             this.appType === AppType.SelfBuild
                 ? await this.getCustomTenantAccessToken()
                 : await this.getMarketTenantAccessToken(
                       get(params, CTenantKey)!
                 );
 
-        return ternantAccessToken;
+        return tenantAccessToken;
     }
 }
