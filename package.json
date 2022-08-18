@@ -8,9 +8,6 @@
     "sdk",
     "nodejs"
   ],
-  "types": "./types",
-  "main": "./lib/index.js",
-  "module": "./es/index.js",
   "files": [
     "lib",
     "es",
@@ -54,7 +51,8 @@
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-license": "^2.8.1",
     "ts-jest": "^28.0.5",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.3"
   },
   "publishConfig": {
     "access": "public"

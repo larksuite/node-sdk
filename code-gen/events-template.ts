@@ -880,6 +880,91 @@ export interface IHandles extends IOtherEventHandles {
             }>;
         };
     }) => Promise<any> | any;
+    "contact.department.created_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+        };
+    }) => Promise<any> | any;
+    "contact.department.updated_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+        };
+        old_object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+        };
+    }) => Promise<any> | any;
+    "contact.department.deleted_v3"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        object?: {
+            name: string;
+            parent_department_id: string;
+            department_id?: string;
+            open_department_id?: string;
+            leader_user_id?: string;
+            chat_id?: string;
+            order?: number;
+            unit_ids?: Array<string>;
+            status?: { is_deleted?: boolean };
+            leaders?: Array<{ leaderType: number; leaderID: string }>;
+        };
+        old_object?: {
+            status?: { is_deleted?: boolean };
+            open_department_id?: string;
+        };
+    }) => Promise<any> | any;
     "contact.scope.updated_v3"?: (data: {
         event_id?: string;
         token?: string;
@@ -966,7 +1051,6 @@ export interface IHandles extends IOtherEventHandles {
                     language?: "zh-CN" | "en-US" | "ja-JP";
                 };
                 is_frozen?: boolean;
-                ent_email_password?: string;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1052,7 +1136,6 @@ export interface IHandles extends IOtherEventHandles {
                     language?: "zh-CN" | "en-US" | "ja-JP";
                 };
                 is_frozen?: boolean;
-                ent_email_password?: string;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1061,91 +1144,6 @@ export interface IHandles extends IOtherEventHandles {
                 member_count?: number;
                 status?: number;
             }>;
-        };
-    }) => Promise<any> | any;
-    "contact.department.created_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-        };
-    }) => Promise<any> | any;
-    "contact.department.updated_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-        };
-        old_object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-        };
-    }) => Promise<any> | any;
-    "contact.department.deleted_v3"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        object?: {
-            name: string;
-            parent_department_id: string;
-            department_id?: string;
-            open_department_id?: string;
-            leader_user_id?: string;
-            chat_id?: string;
-            order?: number;
-            unit_ids?: Array<string>;
-            status?: { is_deleted?: boolean };
-            leaders?: Array<{ leaderType: number; leaderID: string }>;
-        };
-        old_object?: {
-            status?: { is_deleted?: boolean };
-            open_department_id?: string;
         };
     }) => Promise<any> | any;
     "drive.file.deleted_v1"?: (data: {
@@ -1613,6 +1611,42 @@ export interface IHandles extends IOtherEventHandles {
         external?: boolean;
         operator_tenant_key?: string;
     }) => Promise<any> | any;
+    "im.message.receive_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sender: {
+            sender_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            sender_type: string;
+            tenant_key?: string;
+        };
+        message: {
+            message_id: string;
+            root_id?: string;
+            parent_id?: string;
+            create_time: string;
+            chat_id: string;
+            chat_type: string;
+            message_type: string;
+            content: string;
+            mentions?: Array<{
+                key: string;
+                id: { union_id?: string; user_id?: string; open_id?: string };
+                name: string;
+                tenant_key?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
     "im.chat.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1683,42 +1717,6 @@ export interface IHandles extends IOtherEventHandles {
                     user_id?: string;
                     open_id?: string;
                 };
-            }>;
-        };
-    }) => Promise<any> | any;
-    "im.message.receive_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        sender: {
-            sender_id?: {
-                union_id?: string;
-                user_id?: string;
-                open_id?: string;
-            };
-            sender_type: string;
-            tenant_key?: string;
-        };
-        message: {
-            message_id: string;
-            root_id?: string;
-            parent_id?: string;
-            create_time: string;
-            chat_id: string;
-            chat_type: string;
-            message_type: string;
-            content: string;
-            mentions?: Array<{
-                key: string;
-                id: { union_id?: string; user_id?: string; open_id?: string };
-                name: string;
-                tenant_key?: string;
             }>;
         };
     }) => Promise<any> | any;
