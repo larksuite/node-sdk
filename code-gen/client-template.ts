@@ -687,6 +687,743 @@ export default abstract class Client {
                     });
             },
         },
+        badgeImage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge_image&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: { image_file: Buffer; image_type: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { image_key?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badge_images`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return get(res, "data", {});
+            },
+        },
+        badgeGrant: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        grant_type: number;
+                        time_zone: string;
+                        rule_detail: {
+                            effective_time?: string;
+                            expiration_time?: string;
+                            anniversary?: number;
+                            effective_period?: number;
+                        };
+                        is_grant_all: boolean;
+                        user_ids?: Array<string>;
+                        department_ids?: Array<string>;
+                        group_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                grants?: Array<{
+                                                    id?: string;
+                                                    badge_id?: string;
+                                                    name: string;
+                                                    grant_type: number;
+                                                    time_zone: string;
+                                                    rule_detail: {
+                                                        effective_time?: string;
+                                                        expiration_time?: string;
+                                                        anniversary?: number;
+                                                        effective_period?: number;
+                                                    };
+                                                    is_grant_all: boolean;
+                                                    user_ids?: Array<string>;
+                                                    department_ids?: Array<string>;
+                                                    group_ids?: Array<string>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grants?: Array<{
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        grant_type: number;
+                        time_zone: string;
+                        rule_detail: {
+                            effective_time?: string;
+                            expiration_time?: string;
+                            anniversary?: number;
+                            effective_period?: number;
+                        };
+                        is_grant_all: boolean;
+                        user_ids?: Array<string>;
+                        department_ids?: Array<string>;
+                        group_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge.grant&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { badge_id: string; grant_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                grant?: {
+                                    id?: string;
+                                    badge_id?: string;
+                                    name: string;
+                                    grant_type: number;
+                                    time_zone: string;
+                                    rule_detail: {
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        anniversary?: number;
+                                        effective_period?: number;
+                                    };
+                                    is_grant_all: boolean;
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                    group_ids?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        badge: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        explanation?: string;
+                        detail_image: string;
+                        show_image: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        explanation?: string;
+                        detail_image: string;
+                        show_image: string;
+                    };
+                    path: { badge_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badge?: {
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        name?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/badges`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                badges?: Array<{
+                                                    id?: string;
+                                                    name: string;
+                                                    explanation?: string;
+                                                    detail_image: string;
+                                                    show_image: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=badge&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        name?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                badges?: Array<{
+                                    id?: string;
+                                    name: string;
+                                    explanation?: string;
+                                    detail_image: string;
+                                    show_image: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/badges`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         adminUserStat: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=admin&resource=admin_user_stat&apiName=list&version=v1 click to debug }
@@ -1529,64 +2266,6 @@ export default abstract class Client {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=create&version=v4 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        approval_code: string;
-                        user_id?: string;
-                        open_id: string;
-                        department_id?: string;
-                        form: string;
-                        node_approver_user_id_list?: Array<{
-                            key?: string;
-                            value?: Array<string>;
-                        }>;
-                        node_approver_open_id_list?: Array<{
-                            key?: string;
-                            value?: Array<string>;
-                        }>;
-                        node_cc_user_id_list?: Array<{
-                            key?: string;
-                            value?: Array<string>;
-                        }>;
-                        node_cc_open_id_list?: Array<{
-                            key?: string;
-                            value?: Array<string>;
-                        }>;
-                        uuid?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { instance_code: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/approval/v4/instances`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=cc&version=v4 click to debug }
              */
             cc: async (
@@ -2297,6 +2976,66 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=create&version=v4 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        approval_code: string;
+                        user_id?: string;
+                        open_id: string;
+                        department_id?: string;
+                        form: string;
+                        node_approver_user_id_list?: Array<{
+                            key?: string;
+                            value?: Array<string>;
+                        }>;
+                        node_approver_open_id_list?: Array<{
+                            key?: string;
+                            value?: Array<string>;
+                        }>;
+                        node_cc_user_id_list?: Array<{
+                            key?: string;
+                            value?: Array<string>;
+                        }>;
+                        node_cc_open_id_list?: Array<{
+                            key?: string;
+                            value?: Array<string>;
+                        }>;
+                        uuid?: string;
+                        allow_resubmit?: boolean;
+                        allow_submit_again?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { instance_code: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         task: {
             /**
@@ -2516,80 +3255,6 @@ export default abstract class Client {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=reject&version=v4 click to debug }
-             */
-            reject: async (
-                payload?: {
-                    data: {
-                        approval_code: string;
-                        instance_code: string;
-                        user_id: string;
-                        comment?: string;
-                        task_id: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/approval/v4/tasks/reject`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=approve&version=v4 click to debug }
-             */
-            approve: async (
-                payload?: {
-                    data: {
-                        approval_code: string;
-                        instance_code: string;
-                        user_id: string;
-                        comment?: string;
-                        task_id: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/approval/v4/tasks/approve`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=transfer&version=v4 click to debug }
              */
             transfer: async (
@@ -2731,6 +3396,120 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=resubmit&version=v4 click to debug }
+             */
+            resubmit: async (
+                payload?: {
+                    data: {
+                        approval_code: string;
+                        instance_code: string;
+                        user_id: string;
+                        comment?: string;
+                        task_id: string;
+                        form: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/resubmit`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=reject&version=v4 click to debug }
+             */
+            reject: async (
+                payload?: {
+                    data: {
+                        approval_code: string;
+                        instance_code: string;
+                        user_id: string;
+                        comment?: string;
+                        task_id: string;
+                        form?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/reject`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=approve&version=v4 click to debug }
+             */
+            approve: async (
+                payload?: {
+                    data: {
+                        approval_code: string;
+                        instance_code: string;
+                        user_id: string;
+                        comment?: string;
+                        task_id: string;
+                        form?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/approve`,
                             path
                         ),
                         method: "POST",
@@ -2934,6 +3713,7 @@ export default abstract class Client {
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
+                        process_manager_ids?: Array<string>;
                     };
                     params?: {
                         department_id_type?:
@@ -3567,7 +4347,11 @@ export default abstract class Client {
                         start_time: string;
                         end_time: string;
                         update_time: string;
-                        display_method?: "BROWSER" | "SIDEBAR" | "NORMAL";
+                        display_method?:
+                            | "BROWSER"
+                            | "SIDEBAR"
+                            | "NORMAL"
+                            | "TRUSTEESHIP";
                         update_mode?: "REPLACE" | "UPDATE";
                         task_list?: Array<{
                             task_id: string;
@@ -3593,7 +4377,11 @@ export default abstract class Client {
                                 is_reason_required?: boolean;
                                 is_need_attachment?: boolean;
                             }>;
-                            display_method?: "BROWSER" | "SIDEBAR" | "NORMAL";
+                            display_method?:
+                                | "BROWSER"
+                                | "SIDEBAR"
+                                | "NORMAL"
+                                | "TRUSTEESHIP";
                         }>;
                         cc_list?: Array<{
                             cc_id: string;
@@ -3605,13 +4393,25 @@ export default abstract class Client {
                             title?: string;
                             create_time: string;
                             update_time: string;
-                            display_method?: "BROWSER" | "SIDEBAR" | "NORMAL";
+                            display_method?:
+                                | "BROWSER"
+                                | "SIDEBAR"
+                                | "NORMAL"
+                                | "TRUSTEESHIP";
                         }>;
                         i18n_resources: Array<{
                             locale: "zh-CN" | "en-US" | "ja-JP";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
+                        trusteeship_url_token?: string;
+                        trusteeship_user_id_type?: string;
+                        trusteeship_urls?: {
+                            form_detail_url?: string;
+                            action_definition_url?: string;
+                            approval_node_url?: string;
+                            action_callback_url?: string;
+                        };
                     };
                 },
                 options?: IRequestOptions
@@ -3657,7 +4457,8 @@ export default abstract class Client {
                                     display_method?:
                                         | "BROWSER"
                                         | "SIDEBAR"
-                                        | "NORMAL";
+                                        | "NORMAL"
+                                        | "TRUSTEESHIP";
                                     update_mode?: "REPLACE" | "UPDATE";
                                     task_list?: Array<{
                                         task_id: string;
@@ -3692,7 +4493,8 @@ export default abstract class Client {
                                         display_method?:
                                             | "BROWSER"
                                             | "SIDEBAR"
-                                            | "NORMAL";
+                                            | "NORMAL"
+                                            | "TRUSTEESHIP";
                                     }>;
                                     cc_list?: Array<{
                                         cc_id: string;
@@ -3710,7 +4512,8 @@ export default abstract class Client {
                                         display_method?:
                                             | "BROWSER"
                                             | "SIDEBAR"
-                                            | "NORMAL";
+                                            | "NORMAL"
+                                            | "TRUSTEESHIP";
                                     }>;
                                     i18n_resources: Array<{
                                         locale: "zh-CN" | "en-US" | "ja-JP";
@@ -3720,6 +4523,14 @@ export default abstract class Client {
                                         }>;
                                         is_default: boolean;
                                     }>;
+                                    trusteeship_url_token?: string;
+                                    trusteeship_user_id_type?: string;
+                                    trusteeship_urls?: {
+                                        form_detail_url?: string;
+                                        action_definition_url?: string;
+                                        approval_node_url?: string;
+                                        action_callback_url?: string;
+                                    };
                                 };
                             };
                         }
@@ -3765,6 +4576,7 @@ export default abstract class Client {
                             action_callback_token?: string;
                             action_callback_key?: string;
                             allow_batch_operate?: boolean;
+                            exclude_efficiency_statistics?: boolean;
                         };
                         viewers?: Array<{
                             viewer_type?:
@@ -5394,244 +6206,6 @@ export default abstract class Client {
                     });
             },
         },
-        userApproval: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data?: {
-                        user_approval?: {
-                            user_id: string;
-                            date: string;
-                            outs?: Array<{
-                                uniq_id: string;
-                                unit: number;
-                                interval: number;
-                                start_time: string;
-                                end_time: string;
-                                i18n_names: {
-                                    ch?: string;
-                                    en?: string;
-                                    ja?: string;
-                                };
-                                default_locale: string;
-                                reason: string;
-                            }>;
-                            leaves?: Array<{
-                                uniq_id?: string;
-                                unit: number;
-                                interval: number;
-                                start_time: string;
-                                end_time: string;
-                                i18n_names: {
-                                    ch?: string;
-                                    en?: string;
-                                    ja?: string;
-                                };
-                                default_locale: "ch" | "en" | "ja";
-                                reason: string;
-                            }>;
-                            overtime_works?: Array<{
-                                duration: number;
-                                unit: number;
-                                category: number;
-                                type: number;
-                                start_time: string;
-                                end_time: string;
-                            }>;
-                            trips?: Array<{
-                                start_time: string;
-                                end_time: string;
-                                reason: string;
-                            }>;
-                        };
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_approval?: {
-                                    user_id: string;
-                                    date: string;
-                                    outs?: Array<{
-                                        approval_id?: string;
-                                        uniq_id: string;
-                                        unit: number;
-                                        interval: number;
-                                        start_time: string;
-                                        end_time: string;
-                                        i18n_names: {
-                                            ch?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                        default_locale: string;
-                                        reason: string;
-                                        approve_pass_time?: string;
-                                        approve_apply_time?: string;
-                                    }>;
-                                    leaves?: Array<{
-                                        approval_id?: string;
-                                        uniq_id?: string;
-                                        unit: number;
-                                        interval: number;
-                                        start_time: string;
-                                        end_time: string;
-                                        i18n_names: {
-                                            ch?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                        default_locale: "ch" | "en" | "ja";
-                                        reason: string;
-                                        approve_pass_time?: string;
-                                        approve_apply_time?: string;
-                                    }>;
-                                    overtime_works?: Array<{
-                                        approval_id?: string;
-                                        duration: number;
-                                        unit: number;
-                                        category: number;
-                                        type: number;
-                                        start_time: string;
-                                        end_time: string;
-                                    }>;
-                                    trips?: Array<{
-                                        approval_id?: string;
-                                        start_time: string;
-                                        end_time: string;
-                                        reason: string;
-                                        approve_pass_time: string;
-                                        approve_apply_time: string;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_approvals`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query&version=v1 click to debug }
-             */
-            query: async (
-                payload?: {
-                    data: {
-                        user_ids: Array<string>;
-                        check_date_from: number;
-                        check_date_to: number;
-                        check_date_type?: "PeriodTime" | "CreateTime";
-                        status?: number;
-                    };
-                    params: { employee_type: "employee_id" | "employee_no" };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                user_approvals?: Array<{
-                                    user_id: string;
-                                    date: string;
-                                    outs?: Array<{
-                                        approval_id?: string;
-                                        uniq_id: string;
-                                        unit: number;
-                                        interval: number;
-                                        start_time: string;
-                                        end_time: string;
-                                        i18n_names: {
-                                            ch?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                        default_locale: string;
-                                        reason: string;
-                                        approve_pass_time?: string;
-                                        approve_apply_time?: string;
-                                    }>;
-                                    leaves?: Array<{
-                                        approval_id?: string;
-                                        uniq_id?: string;
-                                        unit: number;
-                                        interval: number;
-                                        start_time: string;
-                                        end_time: string;
-                                        i18n_names: {
-                                            ch?: string;
-                                            en?: string;
-                                            ja?: string;
-                                        };
-                                        default_locale: "ch" | "en" | "ja";
-                                        reason: string;
-                                        approve_pass_time?: string;
-                                        approve_apply_time?: string;
-                                    }>;
-                                    overtime_works?: Array<{
-                                        approval_id?: string;
-                                        duration: number;
-                                        unit: number;
-                                        category: number;
-                                        type: number;
-                                        start_time: string;
-                                        end_time: string;
-                                    }>;
-                                    trips?: Array<{
-                                        approval_id?: string;
-                                        start_time: string;
-                                        end_time: string;
-                                        reason: string;
-                                        approve_pass_time: string;
-                                        approve_apply_time: string;
-                                    }>;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/attendance/v1/user_approvals/query`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
         userFlow: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=query&version=v1 click to debug }
@@ -6060,6 +6634,244 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        userApproval: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=query&version=v1 click to debug }
+             */
+            query: async (
+                payload?: {
+                    data: {
+                        user_ids: Array<string>;
+                        check_date_from: number;
+                        check_date_to: number;
+                        check_date_type?: "PeriodTime" | "CreateTime";
+                        status?: number;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_approvals?: Array<{
+                                    user_id: string;
+                                    date: string;
+                                    outs?: Array<{
+                                        approval_id?: string;
+                                        uniq_id: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: string;
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                    }>;
+                                    leaves?: Array<{
+                                        approval_id?: string;
+                                        uniq_id?: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: "ch" | "en" | "ja";
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                    }>;
+                                    overtime_works?: Array<{
+                                        approval_id?: string;
+                                        duration: number;
+                                        unit: number;
+                                        category: number;
+                                        type: number;
+                                        start_time: string;
+                                        end_time: string;
+                                    }>;
+                                    trips?: Array<{
+                                        approval_id?: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time: string;
+                                        approve_apply_time: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_approval&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        user_approval?: {
+                            user_id: string;
+                            date: string;
+                            outs?: Array<{
+                                uniq_id: string;
+                                unit: number;
+                                interval: number;
+                                start_time: string;
+                                end_time: string;
+                                i18n_names: {
+                                    ch?: string;
+                                    en?: string;
+                                    ja?: string;
+                                };
+                                default_locale: string;
+                                reason: string;
+                            }>;
+                            leaves?: Array<{
+                                uniq_id?: string;
+                                unit: number;
+                                interval: number;
+                                start_time: string;
+                                end_time: string;
+                                i18n_names: {
+                                    ch?: string;
+                                    en?: string;
+                                    ja?: string;
+                                };
+                                default_locale: "ch" | "en" | "ja";
+                                reason: string;
+                            }>;
+                            overtime_works?: Array<{
+                                duration: number;
+                                unit: number;
+                                category: number;
+                                type: number;
+                                start_time: string;
+                                end_time: string;
+                            }>;
+                            trips?: Array<{
+                                start_time: string;
+                                end_time: string;
+                                reason: string;
+                            }>;
+                        };
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_approval?: {
+                                    user_id: string;
+                                    date: string;
+                                    outs?: Array<{
+                                        approval_id?: string;
+                                        uniq_id: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: string;
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                    }>;
+                                    leaves?: Array<{
+                                        approval_id?: string;
+                                        uniq_id?: string;
+                                        unit: number;
+                                        interval: number;
+                                        start_time: string;
+                                        end_time: string;
+                                        i18n_names: {
+                                            ch?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        default_locale: "ch" | "en" | "ja";
+                                        reason: string;
+                                        approve_pass_time?: string;
+                                        approve_apply_time?: string;
+                                    }>;
+                                    overtime_works?: Array<{
+                                        approval_id?: string;
+                                        duration: number;
+                                        unit: number;
+                                        category: number;
+                                        type: number;
+                                        start_time: string;
+                                        end_time: string;
+                                    }>;
+                                    trips?: Array<{
+                                        approval_id?: string;
+                                        start_time: string;
+                                        end_time: string;
+                                        reason: string;
+                                        approve_pass_time: string;
+                                        approve_apply_time: string;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_approvals`,
                             path
                         ),
                         method: "POST",
@@ -8008,6 +8820,34 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.acl&apiName=unsubscription&version=v4 click to debug }
+             */
+            unsubscription: async (
+                payload?: {
+                    path: { calendar_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/unsubscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         calendarEventAttendee: {
             /**
@@ -9235,6 +10075,34 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=unsubscription&version=v4 click to debug }
+             */
+            unsubscription: async (
+                payload?: {
+                    path: { calendar_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/unsubscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         calendar: {
             /**
@@ -9879,6 +10747,29 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/primary`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=unsubscription&version=v4 click to debug }
+             */
+            unsubscription: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/unsubscription`,
                             path
                         ),
                         method: "POST",
@@ -12742,6 +13633,51 @@ export default abstract class Client {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=delete&version=v3 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    data?: {
+                        department_chat_acceptor_user_id?: string;
+                        external_chat_acceptor_user_id?: string;
+                        docs_acceptor_user_id?: string;
+                        calendar_acceptor_user_id?: string;
+                        application_acceptor_user_id?: string;
+                        helpdesk_acceptor_user_id?: string;
+                        minutes_acceptor_user_id?: string;
+                        survey_acceptor_user_id?: string;
+                        email_acceptor?: {
+                            processing_type: "1" | "2" | "3";
+                            acceptor_user_id?: string;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { user_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/contact/v3/users/:user_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=list&version=v3 click to debug }
              */
             listWithIterator: async (
@@ -12880,7 +13816,6 @@ export default abstract class Client {
                                                     time_zone?: string;
                                                     description?: string;
                                                     job_title?: string;
-                                                    ent_email_password?: string;
                                                 }>;
                                             };
                                         },
@@ -12996,7 +13931,6 @@ export default abstract class Client {
                                     time_zone?: string;
                                     description?: string;
                                     job_title?: string;
-                                    ent_email_password?: string;
                                 }>;
                             };
                         }
@@ -13106,7 +14040,6 @@ export default abstract class Client {
                                     time_zone?: string;
                                     description?: string;
                                     job_title?: string;
-                                    ent_email_password?: string;
                                 };
                             };
                         }
@@ -13276,7 +14209,6 @@ export default abstract class Client {
                                                             | "ja-JP";
                                                     };
                                                     is_frozen?: boolean;
-                                                    ent_email_password?: string;
                                                 }>;
                                             };
                                         },
@@ -13401,7 +14333,6 @@ export default abstract class Client {
                                         language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
-                                    ent_email_password?: string;
                                 }>;
                             };
                         }
@@ -13471,7 +14402,6 @@ export default abstract class Client {
                         description?: string;
                         job_title?: string;
                         is_frozen?: boolean;
-                        ent_email_password?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -13568,7 +14498,6 @@ export default abstract class Client {
                                         language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
-                                    ent_email_password?: string;
                                 };
                             };
                         }
@@ -13638,7 +14567,6 @@ export default abstract class Client {
                         description?: string;
                         job_title?: string;
                         is_frozen?: boolean;
-                        ent_email_password?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -13735,7 +14663,6 @@ export default abstract class Client {
                                         language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
-                                    ent_email_password?: string;
                                 };
                             };
                         }
@@ -13745,51 +14672,6 @@ export default abstract class Client {
                             path
                         ),
                         method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=delete&version=v3 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    data?: {
-                        department_chat_acceptor_user_id?: string;
-                        external_chat_acceptor_user_id?: string;
-                        docs_acceptor_user_id?: string;
-                        calendar_acceptor_user_id?: string;
-                        application_acceptor_user_id?: string;
-                        helpdesk_acceptor_user_id?: string;
-                        minutes_acceptor_user_id?: string;
-                        survey_acceptor_user_id?: string;
-                        email_acceptor?: {
-                            processing_type: "1" | "2" | "3";
-                            acceptor_user_id?: string;
-                        };
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { user_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/contact/v3/users/:user_id`,
-                            path
-                        ),
-                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -13855,7 +14737,6 @@ export default abstract class Client {
                             channels?: Array<string>;
                             language?: "zh-CN" | "en-US" | "ja-JP";
                         };
-                        ent_email_password?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -13952,7 +14833,6 @@ export default abstract class Client {
                                         language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
-                                    ent_email_password?: string;
                                 };
                             };
                         }
@@ -23295,35 +24175,6 @@ export default abstract class Client {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=subscribe&version=v1 click to debug }
-             */
-            subscribe: async (
-                payload?: {
-                    params: { file_type: "doc" | "docx" | "sheet" | "bitable" };
-                    path: { file_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/drive/v1/files/:file_token/subscribe`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=move&version=v1 click to debug }
              */
             move: async (
@@ -23770,6 +24621,35 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=subscribe&version=v1 click to debug }
+             */
+            subscribe: async (
+                payload?: {
+                    params: { file_type: "doc" | "docx" | "sheet" | "bitable" };
+                    path: { file_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/subscribe`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30869,11 +31749,40 @@ export default abstract class Client {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
+             */
+            patch: async (
+                payload?: {
+                    data: { content: string };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
              */
             reply: async (
                 payload?: {
-                    data: { content: string; msg_type: string };
+                    data: { content: string; msg_type: string; uuid?: string };
                     path: { message_id: string };
                 },
                 options?: IRequestOptions
@@ -30938,6 +31847,7 @@ export default abstract class Client {
                         receive_id: string;
                         content: string;
                         msg_type: string;
+                        uuid?: string;
                     };
                     params: {
                         receive_id_type:
@@ -30992,35 +31902,6 @@ export default abstract class Client {
                             path
                         ),
                         method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=patch&version=v1 click to debug }
-             */
-            patch: async (
-                payload?: {
-                    data: { content: string };
-                    path: { message_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id`,
-                            path
-                        ),
-                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -31692,6 +32573,7 @@ export default abstract class Client {
                                 membership_approval?: string;
                                 moderation_permission?: string;
                                 labels?: Array<string>;
+                                toolkit_ids?: Array<string>;
                             };
                         }
                     >({
@@ -32822,44 +33704,6 @@ export default abstract class Client {
                     });
             },
         },
-        messageResource: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    params: { type: string };
-                    path: { message_id: string; file_key: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const res = await http
-                    .request<any, any>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
-                            path
-                        ),
-                        method: "GET",
-                        headers,
-                        data,
-                        params,
-                        responseType: "stream",
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-
-                return {
-                    writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
-                    },
-                };
-            },
-        },
         chatTab: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat.tab&apiName=list_tabs&version=v1 click to debug }
@@ -33172,6 +34016,44 @@ export default abstract class Client {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
+            },
+        },
+        messageResource: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.resource&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    params: { type: string };
+                    path: { message_id: string; file_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await http
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        await res.pipe(fs.createWriteStream(filePath));
+                    },
+                };
             },
         },
     };
@@ -34617,73 +35499,6 @@ export default abstract class Client {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup.member&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data?: {
-                        email?: string;
-                        user_id?: string;
-                        department_id?: string;
-                        type?:
-                            | "USER"
-                            | "DEPARTMENT"
-                            | "COMPANY"
-                            | "EXTERNAL_USER"
-                            | "MAIL_GROUP"
-                            | "PUBLIC_MAILBOX"
-                            | "OTHER_MEMBER";
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        department_id_type?:
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path?: { mailgroup_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                member_id?: string;
-                                email?: string;
-                                user_id?: string;
-                                department_id?: string;
-                                type?:
-                                    | "USER"
-                                    | "DEPARTMENT"
-                                    | "COMPANY"
-                                    | "EXTERNAL_USER"
-                                    | "MAIL_GROUP"
-                                    | "PUBLIC_MAILBOX"
-                                    | "OTHER_MEMBER";
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup.member&apiName=get&version=v1 click to debug }
              */
             get: async (
@@ -34894,6 +35709,73 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=mailgroup.member&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        email?: string;
+                        user_id?: string;
+                        department_id?: string;
+                        type?:
+                            | "USER"
+                            | "DEPARTMENT"
+                            | "COMPANY"
+                            | "EXTERNAL_USER"
+                            | "MAIL_GROUP"
+                            | "PUBLIC_MAILBOX"
+                            | "OTHER_MEMBER";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path?: { mailgroup_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                member_id?: string;
+                                email?: string;
+                                user_id?: string;
+                                department_id?: string;
+                                type?:
+                                    | "USER"
+                                    | "DEPARTMENT"
+                                    | "COMPANY"
+                                    | "EXTERNAL_USER"
+                                    | "MAIL_GROUP"
+                                    | "PUBLIC_MAILBOX"
+                                    | "OTHER_MEMBER";
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -38194,695 +39076,7 @@ export default abstract class Client {
     sup_project = {};
 
     task = {
-        task: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=delete&version=v1 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=complete&version=v1 click to debug }
-             */
-            complete: async (
-                payload?: {
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id/complete`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=uncomplete&version=v1 click to debug }
-             */
-            uncomplete: async (
-                payload?: {
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id/uncomplete`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=batch_delete_follower&version=v1 click to debug }
-             */
-            batchDeleteFollower: async (
-                payload?: {
-                    data?: { id_list?: Array<string> };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { followers?: Array<string> };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_follower`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=batch_delete_collaborator&version=v1 click to debug }
-             */
-            batchDeleteCollaborator: async (
-                payload?: {
-                    data?: { id_list?: Array<string> };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { collaborators?: Array<string> };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_collaborator`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                task?: {
-                                    id?: string;
-                                    summary?: string;
-                                    description?: string;
-                                    complete_time?: string;
-                                    creator_id?: string;
-                                    extra?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    due?: {
-                                        time?: string;
-                                        timezone?: string;
-                                        is_all_day?: boolean;
-                                    };
-                                    origin: {
-                                        platform_i18n_name: string;
-                                        href?: { url?: string; title?: string };
-                                    };
-                                    can_edit?: boolean;
-                                    custom?: string;
-                                    source?: number;
-                                    followers?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborators?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborator_ids?: Array<string>;
-                                    follower_ids?: Array<string>;
-                                    repeat_rule?: string;
-                                    rich_summary?: string;
-                                    rich_description?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=patch&version=v1 click to debug }
-             */
-            patch: async (
-                payload?: {
-                    data: {
-                        task: {
-                            summary?: string;
-                            description?: string;
-                            extra?: string;
-                            due?: {
-                                time?: string;
-                                timezone?: string;
-                                is_all_day?: boolean;
-                            };
-                            origin?: {
-                                platform_i18n_name: string;
-                                href?: { url?: string; title?: string };
-                            };
-                            can_edit?: boolean;
-                            custom?: string;
-                            followers?: Array<{
-                                id?: string;
-                                id_list?: Array<string>;
-                            }>;
-                            collaborators?: Array<{
-                                id?: string;
-                                id_list?: Array<string>;
-                            }>;
-                            collaborator_ids?: Array<string>;
-                            follower_ids?: Array<string>;
-                            repeat_rule?: string;
-                            rich_summary?: string;
-                            rich_description?: string;
-                        };
-                        update_fields: Array<string>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                task?: {
-                                    id?: string;
-                                    summary?: string;
-                                    description?: string;
-                                    complete_time?: string;
-                                    creator_id?: string;
-                                    extra?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    due?: {
-                                        time?: string;
-                                        timezone?: string;
-                                        is_all_day?: boolean;
-                                    };
-                                    origin: {
-                                        platform_i18n_name: string;
-                                        href?: { url?: string; title?: string };
-                                    };
-                                    can_edit?: boolean;
-                                    custom?: string;
-                                    source?: number;
-                                    followers?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborators?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborator_ids?: Array<string>;
-                                    follower_ids?: Array<string>;
-                                    repeat_rule?: string;
-                                    rich_summary?: string;
-                                    rich_description?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=list&version=v1 click to debug }
-             */
-            listWithIterator: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        start_create_time?: string;
-                        end_create_time?: string;
-                        task_completed?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await http
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/task/v1/tasks`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    get<
-                                        {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    id?: string;
-                                                    summary?: string;
-                                                    description?: string;
-                                                    complete_time?: string;
-                                                    creator_id?: string;
-                                                    extra?: string;
-                                                    create_time?: string;
-                                                    update_time?: string;
-                                                    due?: {
-                                                        time?: string;
-                                                        timezone?: string;
-                                                        is_all_day?: boolean;
-                                                    };
-                                                    origin: {
-                                                        platform_i18n_name: string;
-                                                        href?: {
-                                                            url?: string;
-                                                            title?: string;
-                                                        };
-                                                    };
-                                                    can_edit?: boolean;
-                                                    custom?: string;
-                                                    source?: number;
-                                                    followers?: Array<{
-                                                        id?: string;
-                                                        id_list?: Array<string>;
-                                                    }>;
-                                                    collaborators?: Array<{
-                                                        id?: string;
-                                                        id_list?: Array<string>;
-                                                    }>;
-                                                    collaborator_ids?: Array<string>;
-                                                    follower_ids?: Array<string>;
-                                                    repeat_rule?: string;
-                                                    rich_summary?: string;
-                                                    rich_description?: string;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                            };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=list&version=v1 click to debug }
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        start_create_time?: string;
-                        end_create_time?: string;
-                        task_completed?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    id?: string;
-                                    summary?: string;
-                                    description?: string;
-                                    complete_time?: string;
-                                    creator_id?: string;
-                                    extra?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    due?: {
-                                        time?: string;
-                                        timezone?: string;
-                                        is_all_day?: boolean;
-                                    };
-                                    origin: {
-                                        platform_i18n_name: string;
-                                        href?: { url?: string; title?: string };
-                                    };
-                                    can_edit?: boolean;
-                                    custom?: string;
-                                    source?: number;
-                                    followers?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborators?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborator_ids?: Array<string>;
-                                    follower_ids?: Array<string>;
-                                    repeat_rule?: string;
-                                    rich_summary?: string;
-                                    rich_description?: string;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        summary?: string;
-                        description?: string;
-                        extra?: string;
-                        due?: {
-                            time?: string;
-                            timezone?: string;
-                            is_all_day?: boolean;
-                        };
-                        origin: {
-                            platform_i18n_name: string;
-                            href?: { url?: string; title?: string };
-                        };
-                        can_edit?: boolean;
-                        custom?: string;
-                        collaborator_ids?: Array<string>;
-                        follower_ids?: Array<string>;
-                        repeat_rule?: string;
-                        rich_summary?: string;
-                        rich_description?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                task?: {
-                                    id?: string;
-                                    summary?: string;
-                                    description?: string;
-                                    complete_time?: string;
-                                    creator_id?: string;
-                                    extra?: string;
-                                    create_time?: string;
-                                    update_time?: string;
-                                    due?: {
-                                        time?: string;
-                                        timezone?: string;
-                                        is_all_day?: boolean;
-                                    };
-                                    origin: {
-                                        platform_i18n_name: string;
-                                        href?: { url?: string; title?: string };
-                                    };
-                                    can_edit?: boolean;
-                                    custom?: string;
-                                    source?: number;
-                                    followers?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborators?: Array<{
-                                        id?: string;
-                                        id_list?: Array<string>;
-                                    }>;
-                                    collaborator_ids?: Array<string>;
-                                    follower_ids?: Array<string>;
-                                    repeat_rule?: string;
-                                    rich_summary?: string;
-                                    rich_description?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
         taskReminder: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task.reminder&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: { relative_fire_minute: number };
-                    path: { task_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                reminder?: {
-                                    id?: string;
-                                    relative_fire_minute: number;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=task&resource=task.reminder&apiName=list&version=v1 click to debug }
              */
@@ -39006,6 +39200,47 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task.reminder&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: { relative_fire_minute: number };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reminder?: {
+                                    id?: string;
+                                    relative_fire_minute: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -39791,6 +40026,653 @@ export default abstract class Client {
                     });
             },
         },
+        task: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=batch_delete_follower&version=v1 click to debug }
+             */
+            batchDeleteFollower: async (
+                payload?: {
+                    data?: { id_list?: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { followers?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_follower`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=batch_delete_collaborator&version=v1 click to debug }
+             */
+            batchDeleteCollaborator: async (
+                payload?: {
+                    data?: { id_list?: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { collaborators?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_collaborator`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                task?: {
+                                    id?: string;
+                                    summary?: string;
+                                    description?: string;
+                                    complete_time?: string;
+                                    creator_id?: string;
+                                    extra?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    due?: {
+                                        time?: string;
+                                        timezone?: string;
+                                        is_all_day?: boolean;
+                                    };
+                                    origin: {
+                                        platform_i18n_name: string;
+                                        href?: { url?: string; title?: string };
+                                    };
+                                    can_edit?: boolean;
+                                    custom?: string;
+                                    source?: number;
+                                    followers?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborators?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborator_ids?: Array<string>;
+                                    follower_ids?: Array<string>;
+                                    repeat_rule?: string;
+                                    rich_summary?: string;
+                                    rich_description?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        start_create_time?: string;
+                        end_create_time?: string;
+                        task_completed?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v1/tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    summary?: string;
+                                                    description?: string;
+                                                    complete_time?: string;
+                                                    creator_id?: string;
+                                                    extra?: string;
+                                                    create_time?: string;
+                                                    update_time?: string;
+                                                    due?: {
+                                                        time?: string;
+                                                        timezone?: string;
+                                                        is_all_day?: boolean;
+                                                    };
+                                                    origin: {
+                                                        platform_i18n_name: string;
+                                                        href?: {
+                                                            url?: string;
+                                                            title?: string;
+                                                        };
+                                                    };
+                                                    can_edit?: boolean;
+                                                    custom?: string;
+                                                    source?: number;
+                                                    followers?: Array<{
+                                                        id?: string;
+                                                        id_list?: Array<string>;
+                                                    }>;
+                                                    collaborators?: Array<{
+                                                        id?: string;
+                                                        id_list?: Array<string>;
+                                                    }>;
+                                                    collaborator_ids?: Array<string>;
+                                                    follower_ids?: Array<string>;
+                                                    repeat_rule?: string;
+                                                    rich_summary?: string;
+                                                    rich_description?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        start_create_time?: string;
+                        end_create_time?: string;
+                        task_completed?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    summary?: string;
+                                    description?: string;
+                                    complete_time?: string;
+                                    creator_id?: string;
+                                    extra?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    due?: {
+                                        time?: string;
+                                        timezone?: string;
+                                        is_all_day?: boolean;
+                                    };
+                                    origin: {
+                                        platform_i18n_name: string;
+                                        href?: { url?: string; title?: string };
+                                    };
+                                    can_edit?: boolean;
+                                    custom?: string;
+                                    source?: number;
+                                    followers?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborators?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborator_ids?: Array<string>;
+                                    follower_ids?: Array<string>;
+                                    repeat_rule?: string;
+                                    rich_summary?: string;
+                                    rich_description?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=complete&version=v1 click to debug }
+             */
+            complete: async (
+                payload?: {
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id/complete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=uncomplete&version=v1 click to debug }
+             */
+            uncomplete: async (
+                payload?: {
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id/uncomplete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=patch&version=v1 click to debug }
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        task: {
+                            summary?: string;
+                            description?: string;
+                            extra?: string;
+                            due?: {
+                                time?: string;
+                                timezone?: string;
+                                is_all_day?: boolean;
+                            };
+                            origin?: {
+                                platform_i18n_name: string;
+                                href?: { url?: string; title?: string };
+                            };
+                            can_edit?: boolean;
+                            custom?: string;
+                            followers?: Array<{
+                                id?: string;
+                                id_list?: Array<string>;
+                            }>;
+                            collaborators?: Array<{
+                                id?: string;
+                                id_list?: Array<string>;
+                            }>;
+                            collaborator_ids?: Array<string>;
+                            follower_ids?: Array<string>;
+                            repeat_rule?: string;
+                            rich_summary?: string;
+                            rich_description?: string;
+                        };
+                        update_fields: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                task?: {
+                                    id?: string;
+                                    summary?: string;
+                                    description?: string;
+                                    complete_time?: string;
+                                    creator_id?: string;
+                                    extra?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    due?: {
+                                        time?: string;
+                                        timezone?: string;
+                                        is_all_day?: boolean;
+                                    };
+                                    origin: {
+                                        platform_i18n_name: string;
+                                        href?: { url?: string; title?: string };
+                                    };
+                                    can_edit?: boolean;
+                                    custom?: string;
+                                    source?: number;
+                                    followers?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborators?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborator_ids?: Array<string>;
+                                    follower_ids?: Array<string>;
+                                    repeat_rule?: string;
+                                    rich_summary?: string;
+                                    rich_description?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks/:task_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        summary: string;
+                        description?: string;
+                        extra?: string;
+                        due?: {
+                            time?: string;
+                            timezone?: string;
+                            is_all_day?: boolean;
+                        };
+                        origin: {
+                            platform_i18n_name: string;
+                            href?: { url?: string; title?: string };
+                        };
+                        can_edit?: boolean;
+                        custom?: string;
+                        collaborator_ids?: Array<string>;
+                        follower_ids?: Array<string>;
+                        repeat_rule?: string;
+                        rich_summary?: string;
+                        rich_description?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                task?: {
+                                    id?: string;
+                                    summary?: string;
+                                    description?: string;
+                                    complete_time?: string;
+                                    creator_id?: string;
+                                    extra?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    due?: {
+                                        time?: string;
+                                        timezone?: string;
+                                        is_all_day?: boolean;
+                                    };
+                                    origin: {
+                                        platform_i18n_name: string;
+                                        href?: { url?: string; title?: string };
+                                    };
+                                    can_edit?: boolean;
+                                    custom?: string;
+                                    source?: number;
+                                    followers?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborators?: Array<{
+                                        id?: string;
+                                        id_list?: Array<string>;
+                                    }>;
+                                    collaborator_ids?: Array<string>;
+                                    follower_ids?: Array<string>;
+                                    repeat_rule?: string;
+                                    rich_summary?: string;
+                                    rich_description?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/task/v1/tasks`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
     };
 
     tenant = {
@@ -39950,220 +40832,6 @@ export default abstract class Client {
                     });
             },
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=apply&version=v1 click to debug }
-             */
-            apply: async (
-                payload?: {
-                    data: {
-                        end_time?: string;
-                        meeting_settings: {
-                            topic?: string;
-                            action_permissions?: Array<{
-                                permission: number;
-                                permission_checkers: Array<{
-                                    check_field: number;
-                                    check_mode: number;
-                                    check_list: Array<string>;
-                                }>;
-                            }>;
-                            meeting_initial_type?: number;
-                            call_setting?: {
-                                callee: {
-                                    id?: string;
-                                    user_type: number;
-                                    pstn_sip_info?: {
-                                        nickname?: string;
-                                        main_address: string;
-                                    };
-                                };
-                            };
-                        };
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                reserve?: {
-                                    id?: string;
-                                    meeting_no?: string;
-                                    url?: string;
-                                    app_link?: string;
-                                    live_link?: string;
-                                    end_time?: string;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/vc/v1/reserves/apply`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=update&version=v1 click to debug }
-             */
-            update: async (
-                payload?: {
-                    data?: {
-                        end_time?: string;
-                        meeting_settings?: {
-                            topic?: string;
-                            action_permissions?: Array<{
-                                permission: number;
-                                permission_checkers: Array<{
-                                    check_field: number;
-                                    check_mode: number;
-                                    check_list: Array<string>;
-                                }>;
-                            }>;
-                            meeting_initial_type?: number;
-                            call_setting?: {
-                                callee: {
-                                    id?: string;
-                                    user_type: number;
-                                    pstn_sip_info?: {
-                                        nickname?: string;
-                                        main_address: string;
-                                    };
-                                };
-                            };
-                        };
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path?: { reserve_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                reserve?: {
-                                    id?: string;
-                                    meeting_no?: string;
-                                    url?: string;
-                                    live_link?: string;
-                                    end_time?: string;
-                                    expire_status?: number;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path?: { reserve_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                reserve?: {
-                                    id?: string;
-                                    meeting_no?: string;
-                                    url?: string;
-                                    app_link?: string;
-                                    live_link?: string;
-                                    end_time?: string;
-                                    expire_status?: number;
-                                    reserve_user_id?: string;
-                                    meeting_settings?: {
-                                        topic?: string;
-                                        action_permissions?: Array<{
-                                            permission: number;
-                                            permission_checkers: Array<{
-                                                check_field: number;
-                                                check_mode: number;
-                                                check_list: Array<string>;
-                                            }>;
-                                        }>;
-                                        meeting_initial_type?: number;
-                                        call_setting?: {
-                                            callee: {
-                                                id?: string;
-                                                user_type: number;
-                                                pstn_sip_info?: {
-                                                    nickname?: string;
-                                                    main_address: string;
-                                                };
-                                            };
-                                        };
-                                    };
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=get_active_meeting&version=v1 click to debug }
              */
             getActiveMeeting: async (
@@ -40229,6 +40897,223 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { reserve_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reserve?: {
+                                    id?: string;
+                                    meeting_no?: string;
+                                    url?: string;
+                                    app_link?: string;
+                                    live_link?: string;
+                                    end_time?: string;
+                                    expire_status?: number;
+                                    reserve_user_id?: string;
+                                    meeting_settings?: {
+                                        topic?: string;
+                                        action_permissions?: Array<{
+                                            permission: number;
+                                            permission_checkers: Array<{
+                                                check_field: number;
+                                                check_mode: number;
+                                                check_list: Array<string>;
+                                            }>;
+                                        }>;
+                                        meeting_initial_type?: number;
+                                        call_setting?: {
+                                            callee: {
+                                                id?: string;
+                                                user_type: number;
+                                                pstn_sip_info?: {
+                                                    nickname?: string;
+                                                    main_address: string;
+                                                };
+                                            };
+                                        };
+                                        auto_record?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        end_time?: string;
+                        meeting_settings?: {
+                            topic?: string;
+                            action_permissions?: Array<{
+                                permission: number;
+                                permission_checkers: Array<{
+                                    check_field: number;
+                                    check_mode: number;
+                                    check_list: Array<string>;
+                                }>;
+                            }>;
+                            meeting_initial_type?: number;
+                            call_setting?: {
+                                callee: {
+                                    id?: string;
+                                    user_type: number;
+                                    pstn_sip_info?: {
+                                        nickname?: string;
+                                        main_address: string;
+                                    };
+                                };
+                            };
+                            auto_record?: boolean;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { reserve_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reserve?: {
+                                    id?: string;
+                                    meeting_no?: string;
+                                    url?: string;
+                                    live_link?: string;
+                                    end_time?: string;
+                                    expire_status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve&apiName=apply&version=v1 click to debug }
+             */
+            apply: async (
+                payload?: {
+                    data: {
+                        end_time?: string;
+                        meeting_settings: {
+                            topic?: string;
+                            action_permissions?: Array<{
+                                permission: number;
+                                permission_checkers: Array<{
+                                    check_field: number;
+                                    check_mode: number;
+                                    check_list: Array<string>;
+                                }>;
+                            }>;
+                            meeting_initial_type?: number;
+                            call_setting?: {
+                                callee: {
+                                    id?: string;
+                                    user_type: number;
+                                    pstn_sip_info?: {
+                                        nickname?: string;
+                                        main_address: string;
+                                    };
+                                };
+                            };
+                            auto_record?: boolean;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reserve?: {
+                                    id?: string;
+                                    meeting_no?: string;
+                                    url?: string;
+                                    app_link?: string;
+                                    live_link?: string;
+                                    end_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/reserves/apply`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -41154,48 +42039,6 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/exports/participant_quality_list`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=export&apiName=resource_reservation_list&version=v1 click to debug }
-             */
-            resourceReservationList: async (
-                payload?: {
-                    data: {
-                        group_id: string;
-                        need_topic?: boolean;
-                        start_time: string;
-                        end_time: string;
-                        room_ids?: Array<string>;
-                        is_exclude?: boolean;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { task_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/vc/v1/exports/resource_reservation_list`,
                             path
                         ),
                         method: "POST",
@@ -42221,45 +43064,6 @@ export default abstract class Client {
     bitable = {
         appTableField: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.field&apiName=delete&version=v1 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        field_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { field_id?: string; deleted?: boolean };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields/:field_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
              * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.field&apiName=list&version=v1 click to debug }
              */
             listWithIterator: async (
@@ -42663,6 +43467,1911 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.field&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        field_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { field_id?: string; deleted?: boolean };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields/:field_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        appTableForm: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=patch&version=v1 click to debug }
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        name?: string;
+                        description?: string;
+                        shared?: boolean;
+                        shared_limit?:
+                            | "off"
+                            | "tenant_editable"
+                            | "anyone_editable";
+                        submit_limit_once?: boolean;
+                    };
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        form_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                form: {
+                                    name?: string;
+                                    description?: string;
+                                    shared?: boolean;
+                                    shared_url?: string;
+                                    shared_limit?:
+                                        | "off"
+                                        | "tenant_editable"
+                                        | "anyone_editable";
+                                    submit_limit_once?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        form_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                form: {
+                                    name?: string;
+                                    description?: string;
+                                    shared?: boolean;
+                                    shared_url?: string;
+                                    shared_limit?:
+                                        | "off"
+                                        | "tenant_editable"
+                                        | "anyone_editable";
+                                    submit_limit_once?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        app: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data?: { name?: string; is_advanced?: boolean };
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    is_advanced?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    revision?: number;
+                                    is_advanced?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        appRole: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path?: { app_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    role_name: string;
+                                                    role_id?: string;
+                                                    table_roles: Array<{
+                                                        table_name?: string;
+                                                        table_id?: string;
+                                                        table_perm: number;
+                                                        rec_rule?: {
+                                                            conditions: Array<{
+                                                                field_name: string;
+                                                                operator?:
+                                                                    | "is"
+                                                                    | "isNot"
+                                                                    | "contains"
+                                                                    | "doesNotContain"
+                                                                    | "isEmpty"
+                                                                    | "isNotEmpty";
+                                                                value?: Array<string>;
+                                                                field_type?: number;
+                                                            }>;
+                                                            conjunction?:
+                                                                | "and"
+                                                                | "or";
+                                                            other_perm?: number;
+                                                        };
+                                                        field_perm?: {};
+                                                        allow_add_record?: boolean;
+                                                        allow_delete_record?: boolean;
+                                                    }>;
+                                                    block_roles?: Array<{
+                                                        block_id: string;
+                                                        block_type?: "dashboard";
+                                                        block_perm: number;
+                                                    }>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                total?: number;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path?: { app_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    role_name: string;
+                                    role_id?: string;
+                                    table_roles: Array<{
+                                        table_name?: string;
+                                        table_id?: string;
+                                        table_perm: number;
+                                        rec_rule?: {
+                                            conditions: Array<{
+                                                field_name: string;
+                                                operator?:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
+                                                value?: Array<string>;
+                                                field_type?: number;
+                                            }>;
+                                            conjunction?: "and" | "or";
+                                            other_perm?: number;
+                                        };
+                                        field_perm?: {};
+                                        allow_add_record?: boolean;
+                                        allow_delete_record?: boolean;
+                                    }>;
+                                    block_roles?: Array<{
+                                        block_id: string;
+                                        block_type?: "dashboard";
+                                        block_perm: number;
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    path?: { app_token?: string; role_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        role_name: string;
+                        table_roles: Array<{
+                            table_name?: string;
+                            table_id?: string;
+                            table_perm: number;
+                            rec_rule?: {
+                                conditions: Array<{
+                                    field_name: string;
+                                    operator?:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty";
+                                    value?: Array<string>;
+                                }>;
+                                conjunction?: "and" | "or";
+                                other_perm?: number;
+                            };
+                            field_perm?: {};
+                            allow_add_record?: boolean;
+                            allow_delete_record?: boolean;
+                        }>;
+                        block_roles?: Array<{
+                            block_id: string;
+                            block_perm: number;
+                        }>;
+                    };
+                    path?: { app_token?: string; role_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                role?: {
+                                    role_name: string;
+                                    role_id?: string;
+                                    table_roles: Array<{
+                                        table_name?: string;
+                                        table_id?: string;
+                                        table_perm: number;
+                                        rec_rule?: {
+                                            conditions: Array<{
+                                                field_name: string;
+                                                operator?:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
+                                                value?: Array<string>;
+                                                field_type?: number;
+                                            }>;
+                                            conjunction?: "and" | "or";
+                                            other_perm?: number;
+                                        };
+                                        field_perm?: {};
+                                        allow_add_record?: boolean;
+                                        allow_delete_record?: boolean;
+                                    }>;
+                                    block_roles?: Array<{
+                                        block_id: string;
+                                        block_type?: "dashboard";
+                                        block_perm: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        role_name: string;
+                        table_roles: Array<{
+                            table_name?: string;
+                            table_id?: string;
+                            table_perm: number;
+                            rec_rule?: {
+                                conditions: Array<{
+                                    field_name: string;
+                                    operator?:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty";
+                                    value?: Array<string>;
+                                }>;
+                                conjunction?: "and" | "or";
+                                other_perm?: number;
+                            };
+                            field_perm?: {};
+                            allow_add_record?: boolean;
+                            allow_delete_record?: boolean;
+                        }>;
+                        block_roles?: Array<{
+                            block_id: string;
+                            block_perm: number;
+                        }>;
+                    };
+                    path?: { app_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                role?: {
+                                    role_name: string;
+                                    role_id?: string;
+                                    table_roles: Array<{
+                                        table_name?: string;
+                                        table_id?: string;
+                                        table_perm: number;
+                                        rec_rule?: {
+                                            conditions: Array<{
+                                                field_name: string;
+                                                operator?:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
+                                                value?: Array<string>;
+                                                field_type?: number;
+                                            }>;
+                                            conjunction?: "and" | "or";
+                                            other_perm?: number;
+                                        };
+                                        field_perm?: {};
+                                        allow_add_record?: boolean;
+                                        allow_delete_record?: boolean;
+                                    }>;
+                                    block_roles?: Array<{
+                                        block_id: string;
+                                        block_type?: "dashboard";
+                                        block_perm: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        appRoleMember: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    params?: {
+                        member_id_type?:
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "chat_id"
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: {
+                        app_token?: string;
+                        role_id?: string;
+                        member_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/:member_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { app_token: string; role_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    open_id?: string;
+                                                    union_id?: string;
+                                                    user_id?: string;
+                                                    chat_id?: string;
+                                                    department_id?: string;
+                                                    open_department_id?: string;
+                                                    member_name?: string;
+                                                    member_en_name?: string;
+                                                    member_type?:
+                                                        | "user"
+                                                        | "chat"
+                                                        | "department";
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                total?: number;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { app_token: string; role_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    open_id?: string;
+                                    union_id?: string;
+                                    user_id?: string;
+                                    chat_id?: string;
+                                    department_id?: string;
+                                    open_department_id?: string;
+                                    member_name?: string;
+                                    member_en_name?: string;
+                                    member_type?:
+                                        | "user"
+                                        | "chat"
+                                        | "department";
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: { member_id: string };
+                    params?: {
+                        member_id_type?:
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "chat_id"
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path?: { app_token?: string; role_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=batch_create&version=v1 click to debug }
+             */
+            batchCreate: async (
+                payload?: {
+                    data: {
+                        member_list: Array<{
+                            type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "chat_id"
+                                | "department_id"
+                                | "open_department_id";
+                            id: string;
+                        }>;
+                    };
+                    path: { app_token: string; role_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=batch_delete&version=v1 click to debug }
+             */
+            batchDelete: async (
+                payload?: {
+                    data: {
+                        member_list: Array<{
+                            type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "chat_id"
+                                | "department_id"
+                                | "open_department_id";
+                            id: string;
+                        }>;
+                    };
+                    path: { app_token: string; role_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        appTableRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=list&version=v1 click to debug }
+             */
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        view_id?: string;
+                        filter?: string;
+                        sort?: string;
+                        field_names?: string;
+                        text_field_as_array?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        display_formula_ref?: boolean;
+                        automatic_fields?: boolean;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                total?: number;
+                                                items?: Array<{
+                                                    record_id?: string;
+                                                    created_by?: {
+                                                        id?: string;
+                                                        name?: string;
+                                                        en_name?: string;
+                                                        email?: string;
+                                                    };
+                                                    created_time?: number;
+                                                    last_modified_by?: {
+                                                        id?: string;
+                                                        name?: string;
+                                                        en_name?: string;
+                                                        email?: string;
+                                                    };
+                                                    last_modified_time?: number;
+                                                    fields: Map<
+                                                        string,
+                                                        | string
+                                                        | boolean
+                                                        | {
+                                                              text?: string;
+                                                              link?: string;
+                                                          }
+                                                        | {
+                                                              location?: string;
+                                                              pname?: string;
+                                                              cityname?: string;
+                                                              adname?: string;
+                                                              address?: string;
+                                                              name?: string;
+                                                              full_address?: string;
+                                                          }
+                                                        | Array<string>
+                                                        | Array<{
+                                                              id?: string;
+                                                              name?: string;
+                                                              en_name?: string;
+                                                              email?: string;
+                                                          }>
+                                                        | Array<{
+                                                              file_token?: string;
+                                                              name?: string;
+                                                              type?: string;
+                                                              size?: number;
+                                                              url?: string;
+                                                              tmp_url?: string;
+                                                          }>
+                                                    >;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=list&version=v1 click to debug }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        view_id?: string;
+                        filter?: string;
+                        sort?: string;
+                        field_names?: string;
+                        text_field_as_array?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        display_formula_ref?: boolean;
+                        automatic_fields?: boolean;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                total?: number;
+                                items?: Array<{
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=get&version=v1 click to debug }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        text_field_as_array?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        display_formula_ref?: boolean;
+                        automatic_fields?: boolean;
+                    };
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        record_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record?: {
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=update&version=v1 click to debug }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        fields: Map<
+                            string,
+                            | string
+                            | boolean
+                            | { text?: string; link?: string }
+                            | {
+                                  location?: string;
+                                  pname?: string;
+                                  cityname?: string;
+                                  adname?: string;
+                                  address?: string;
+                                  name?: string;
+                                  full_address?: string;
+                              }
+                            | Array<string>
+                            | Array<{
+                                  id?: string;
+                                  name?: string;
+                                  en_name?: string;
+                                  email?: string;
+                              }>
+                            | Array<{
+                                  file_token?: string;
+                                  name?: string;
+                                  type?: string;
+                                  size?: number;
+                                  url?: string;
+                                  tmp_url?: string;
+                              }>
+                        >;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        record_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record?: {
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_update&version=v1 click to debug }
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        records: Array<{
+                            record_id?: string;
+                            created_by?: {
+                                id?: string;
+                                name?: string;
+                                en_name?: string;
+                                email?: string;
+                            };
+                            created_time?: number;
+                            last_modified_by?: {
+                                id?: string;
+                                name?: string;
+                                en_name?: string;
+                                email?: string;
+                            };
+                            last_modified_time?: number;
+                            fields: Map<
+                                string,
+                                | string
+                                | boolean
+                                | { text?: string; link?: string }
+                                | {
+                                      location?: string;
+                                      pname?: string;
+                                      cityname?: string;
+                                      adname?: string;
+                                      address?: string;
+                                      name?: string;
+                                      full_address?: string;
+                                  }
+                                | Array<string>
+                                | Array<{
+                                      id?: string;
+                                      name?: string;
+                                      en_name?: string;
+                                      email?: string;
+                                  }>
+                                | Array<{
+                                      file_token?: string;
+                                      name?: string;
+                                      type?: string;
+                                      size?: number;
+                                      url?: string;
+                                      tmp_url?: string;
+                                  }>
+                            >;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                records?: Array<{
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_update`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=delete&version=v1 click to debug }
+             */
+            delete: async (
+                payload?: {
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        record_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { deleted?: boolean; record_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=create&version=v1 click to debug }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        fields: Map<
+                            string,
+                            | string
+                            | boolean
+                            | { text?: string; link?: string }
+                            | {
+                                  location?: string;
+                                  pname?: string;
+                                  cityname?: string;
+                                  adname?: string;
+                                  address?: string;
+                                  name?: string;
+                                  full_address?: string;
+                              }
+                            | Array<string>
+                            | Array<{
+                                  id?: string;
+                                  name?: string;
+                                  en_name?: string;
+                                  email?: string;
+                              }>
+                            | Array<{
+                                  file_token?: string;
+                                  name?: string;
+                                  type?: string;
+                                  size?: number;
+                                  url?: string;
+                                  tmp_url?: string;
+                              }>
+                        >;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                record?: {
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_delete&version=v1 click to debug }
+             */
+            batchDelete: async (
+                payload?: {
+                    data: { records: Array<string> };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                records?: Array<{
+                                    deleted?: boolean;
+                                    record_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_create&version=v1 click to debug }
+             */
+            batchCreate: async (
+                payload?: {
+                    data: {
+                        records: Array<{
+                            created_by?: {
+                                id?: string;
+                                name?: string;
+                                en_name?: string;
+                                email?: string;
+                            };
+                            created_time?: number;
+                            last_modified_by?: {
+                                id?: string;
+                                name?: string;
+                                en_name?: string;
+                                email?: string;
+                            };
+                            last_modified_time?: number;
+                            fields: Map<
+                                string,
+                                | string
+                                | boolean
+                                | { text?: string; link?: string }
+                                | {
+                                      location?: string;
+                                      pname?: string;
+                                      cityname?: string;
+                                      adname?: string;
+                                      address?: string;
+                                      name?: string;
+                                      full_address?: string;
+                                  }
+                                | Array<string>
+                                | Array<{
+                                      id?: string;
+                                      name?: string;
+                                      en_name?: string;
+                                      email?: string;
+                                  }>
+                                | Array<{
+                                      file_token?: string;
+                                      name?: string;
+                                      type?: string;
+                                      size?: number;
+                                      url?: string;
+                                      tmp_url?: string;
+                                  }>
+                            >;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                records?: Array<{
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    fields: Map<
+                                        string,
+                                        | string
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_create`,
                             path
                         ),
                         method: "POST",
@@ -43169,829 +45878,6 @@ export default abstract class Client {
                     });
             },
         },
-        app: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    path: { app_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app?: {
-                                    app_token?: string;
-                                    name?: string;
-                                    revision?: number;
-                                    is_advanced?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=update&version=v1 click to debug }
-             */
-            update: async (
-                payload?: {
-                    data?: { name?: string; is_advanced?: boolean };
-                    path: { app_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app?: {
-                                    app_token?: string;
-                                    name?: string;
-                                    is_advanced?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        appRole: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=delete&version=v1 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    path?: { app_token?: string; role_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=list&version=v1 click to debug }
-             */
-            listWithIterator: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                    path?: { app_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await http
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    get<
-                                        {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    role_name: string;
-                                                    role_id?: string;
-                                                    table_roles: Array<{
-                                                        table_name?: string;
-                                                        table_id?: string;
-                                                        table_perm: number;
-                                                        rec_rule?: {
-                                                            conditions: Array<{
-                                                                field_name: string;
-                                                                operator?:
-                                                                    | "is"
-                                                                    | "isNot"
-                                                                    | "contains"
-                                                                    | "doesNotContain"
-                                                                    | "isEmpty"
-                                                                    | "isNotEmpty";
-                                                                value?: Array<string>;
-                                                                field_type?: number;
-                                                            }>;
-                                                            conjunction?:
-                                                                | "and"
-                                                                | "or";
-                                                            other_perm?: number;
-                                                        };
-                                                        field_perm?: {};
-                                                        allow_add_record?: boolean;
-                                                        allow_delete_record?: boolean;
-                                                    }>;
-                                                    block_roles?: Array<{
-                                                        block_id: string;
-                                                        block_type?: "dashboard";
-                                                        block_perm: number;
-                                                    }>;
-                                                }>;
-                                                page_token?: string;
-                                                has_more?: boolean;
-                                                total?: number;
-                                            };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=list&version=v1 click to debug }
-             */
-            list: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                    path?: { app_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    role_name: string;
-                                    role_id?: string;
-                                    table_roles: Array<{
-                                        table_name?: string;
-                                        table_id?: string;
-                                        table_perm: number;
-                                        rec_rule?: {
-                                            conditions: Array<{
-                                                field_name: string;
-                                                operator?:
-                                                    | "is"
-                                                    | "isNot"
-                                                    | "contains"
-                                                    | "doesNotContain"
-                                                    | "isEmpty"
-                                                    | "isNotEmpty";
-                                                value?: Array<string>;
-                                                field_type?: number;
-                                            }>;
-                                            conjunction?: "and" | "or";
-                                            other_perm?: number;
-                                        };
-                                        field_perm?: {};
-                                        allow_add_record?: boolean;
-                                        allow_delete_record?: boolean;
-                                    }>;
-                                    block_roles?: Array<{
-                                        block_id: string;
-                                        block_type?: "dashboard";
-                                        block_perm: number;
-                                    }>;
-                                }>;
-                                page_token?: string;
-                                has_more?: boolean;
-                                total?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=update&version=v1 click to debug }
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        role_name: string;
-                        table_roles: Array<{
-                            table_name?: string;
-                            table_id?: string;
-                            table_perm: number;
-                            rec_rule?: {
-                                conditions: Array<{
-                                    field_name: string;
-                                    operator?:
-                                        | "is"
-                                        | "isNot"
-                                        | "contains"
-                                        | "doesNotContain"
-                                        | "isEmpty"
-                                        | "isNotEmpty";
-                                    value?: Array<string>;
-                                }>;
-                                conjunction?: "and" | "or";
-                                other_perm?: number;
-                            };
-                            field_perm?: {};
-                            allow_add_record?: boolean;
-                            allow_delete_record?: boolean;
-                        }>;
-                        block_roles?: Array<{
-                            block_id: string;
-                            block_perm: number;
-                        }>;
-                    };
-                    path?: { app_token?: string; role_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                role?: {
-                                    role_name: string;
-                                    role_id?: string;
-                                    table_roles: Array<{
-                                        table_name?: string;
-                                        table_id?: string;
-                                        table_perm: number;
-                                        rec_rule?: {
-                                            conditions: Array<{
-                                                field_name: string;
-                                                operator?:
-                                                    | "is"
-                                                    | "isNot"
-                                                    | "contains"
-                                                    | "doesNotContain"
-                                                    | "isEmpty"
-                                                    | "isNotEmpty";
-                                                value?: Array<string>;
-                                                field_type?: number;
-                                            }>;
-                                            conjunction?: "and" | "or";
-                                            other_perm?: number;
-                                        };
-                                        field_perm?: {};
-                                        allow_add_record?: boolean;
-                                        allow_delete_record?: boolean;
-                                    }>;
-                                    block_roles?: Array<{
-                                        block_id: string;
-                                        block_type?: "dashboard";
-                                        block_perm: number;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        role_name: string;
-                        table_roles: Array<{
-                            table_name?: string;
-                            table_id?: string;
-                            table_perm: number;
-                            rec_rule?: {
-                                conditions: Array<{
-                                    field_name: string;
-                                    operator?:
-                                        | "is"
-                                        | "isNot"
-                                        | "contains"
-                                        | "doesNotContain"
-                                        | "isEmpty"
-                                        | "isNotEmpty";
-                                    value?: Array<string>;
-                                }>;
-                                conjunction?: "and" | "or";
-                                other_perm?: number;
-                            };
-                            field_perm?: {};
-                            allow_add_record?: boolean;
-                            allow_delete_record?: boolean;
-                        }>;
-                        block_roles?: Array<{
-                            block_id: string;
-                            block_perm: number;
-                        }>;
-                    };
-                    path?: { app_token?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                role?: {
-                                    role_name: string;
-                                    role_id?: string;
-                                    table_roles: Array<{
-                                        table_name?: string;
-                                        table_id?: string;
-                                        table_perm: number;
-                                        rec_rule?: {
-                                            conditions: Array<{
-                                                field_name: string;
-                                                operator?:
-                                                    | "is"
-                                                    | "isNot"
-                                                    | "contains"
-                                                    | "doesNotContain"
-                                                    | "isEmpty"
-                                                    | "isNotEmpty";
-                                                value?: Array<string>;
-                                                field_type?: number;
-                                            }>;
-                                            conjunction?: "and" | "or";
-                                            other_perm?: number;
-                                        };
-                                        field_perm?: {};
-                                        allow_add_record?: boolean;
-                                        allow_delete_record?: boolean;
-                                    }>;
-                                    block_roles?: Array<{
-                                        block_id: string;
-                                        block_type?: "dashboard";
-                                        block_perm: number;
-                                    }>;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        appRoleMember: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=delete&version=v1 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    params?: {
-                        member_id_type?:
-                            | "open_id"
-                            | "union_id"
-                            | "user_id"
-                            | "chat_id"
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path: {
-                        app_token?: string;
-                        role_id?: string;
-                        member_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/:member_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: { member_id: string };
-                    params?: {
-                        member_id_type?:
-                            | "open_id"
-                            | "union_id"
-                            | "user_id"
-                            | "chat_id"
-                            | "department_id"
-                            | "open_department_id";
-                    };
-                    path?: { app_token?: string; role_id?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=list&version=v1 click to debug }
-             */
-            listWithIterator: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                    path: { app_token: string; role_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await http
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    get<
-                                        {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                items?: Array<{
-                                                    open_id?: string;
-                                                    union_id?: string;
-                                                    user_id?: string;
-                                                    chat_id?: string;
-                                                    department_id?: string;
-                                                    open_department_id?: string;
-                                                    member_name?: string;
-                                                    member_en_name?: string;
-                                                    member_type?:
-                                                        | "user"
-                                                        | "chat"
-                                                        | "department";
-                                                }>;
-                                                has_more?: boolean;
-                                                page_token?: string;
-                                                total?: number;
-                                            };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=list&version=v1 click to debug }
-             */
-            list: async (
-                payload?: {
-                    params?: { page_size?: number; page_token?: string };
-                    path: { app_token: string; role_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    open_id?: string;
-                                    union_id?: string;
-                                    user_id?: string;
-                                    chat_id?: string;
-                                    department_id?: string;
-                                    open_department_id?: string;
-                                    member_name?: string;
-                                    member_en_name?: string;
-                                    member_type?:
-                                        | "user"
-                                        | "chat"
-                                        | "department";
-                                }>;
-                                has_more?: boolean;
-                                page_token?: string;
-                                total?: number;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=batch_create&version=v1 click to debug }
-             */
-            batchCreate: async (
-                payload?: {
-                    data: {
-                        member_list: Array<{
-                            type?:
-                                | "open_id"
-                                | "union_id"
-                                | "user_id"
-                                | "chat_id"
-                                | "department_id"
-                                | "open_department_id";
-                            id: string;
-                        }>;
-                    };
-                    path: { app_token: string; role_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.role.member&apiName=batch_delete&version=v1 click to debug }
-             */
-            batchDelete: async (
-                payload?: {
-                    data: {
-                        member_list: Array<{
-                            type?:
-                                | "open_id"
-                                | "union_id"
-                                | "user_id"
-                                | "chat_id"
-                                | "department_id"
-                                | "open_department_id";
-                            id: string;
-                        }>;
-                    };
-                    path: { app_token: string; role_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
         appTableFormField: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form.field&apiName=patch&version=v1 click to debug }
@@ -44187,1049 +46073,6 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        appTableForm: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        form_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                form: {
-                                    name?: string;
-                                    description?: string;
-                                    shared?: boolean;
-                                    shared_url?: string;
-                                    shared_limit?:
-                                        | "off"
-                                        | "tenant_editable"
-                                        | "anyone_editable";
-                                    submit_limit_once?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=patch&version=v1 click to debug }
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        name?: string;
-                        description?: string;
-                        shared?: boolean;
-                        shared_limit?:
-                            | "off"
-                            | "tenant_editable"
-                            | "anyone_editable";
-                        submit_limit_once?: boolean;
-                    };
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        form_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                form: {
-                                    name?: string;
-                                    description?: string;
-                                    shared?: boolean;
-                                    shared_url?: string;
-                                    shared_limit?:
-                                        | "off"
-                                        | "tenant_editable"
-                                        | "anyone_editable";
-                                    submit_limit_once?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        appTableRecord: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=get&version=v1 click to debug }
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        text_field_as_array?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        display_formula_ref?: boolean;
-                        automatic_fields?: boolean;
-                    };
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        record_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                record?: {
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=update&version=v1 click to debug }
-             */
-            update: async (
-                payload?: {
-                    data: {
-                        fields: Map<
-                            string,
-                            | string
-                            | boolean
-                            | { text?: string; link?: string }
-                            | {
-                                  location?: string;
-                                  pname?: string;
-                                  cityname?: string;
-                                  adname?: string;
-                                  address?: string;
-                                  name?: string;
-                                  full_address?: string;
-                              }
-                            | Array<string>
-                            | Array<{
-                                  id?: string;
-                                  name?: string;
-                                  en_name?: string;
-                                  email?: string;
-                              }>
-                            | Array<{
-                                  file_token?: string;
-                                  name?: string;
-                                  type?: string;
-                                  size?: number;
-                                  url?: string;
-                                  tmp_url?: string;
-                              }>
-                        >;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        record_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                record?: {
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
-                            path
-                        ),
-                        method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_update&version=v1 click to debug }
-             */
-            batchUpdate: async (
-                payload?: {
-                    data: {
-                        records: Array<{
-                            record_id?: string;
-                            created_by?: {
-                                id?: string;
-                                name?: string;
-                                en_name?: string;
-                                email?: string;
-                            };
-                            created_time?: number;
-                            last_modified_by?: {
-                                id?: string;
-                                name?: string;
-                                en_name?: string;
-                                email?: string;
-                            };
-                            last_modified_time?: number;
-                            fields: Map<
-                                string,
-                                | string
-                                | boolean
-                                | { text?: string; link?: string }
-                                | {
-                                      location?: string;
-                                      pname?: string;
-                                      cityname?: string;
-                                      adname?: string;
-                                      address?: string;
-                                      name?: string;
-                                      full_address?: string;
-                                  }
-                                | Array<string>
-                                | Array<{
-                                      id?: string;
-                                      name?: string;
-                                      en_name?: string;
-                                      email?: string;
-                                  }>
-                                | Array<{
-                                      file_token?: string;
-                                      name?: string;
-                                      type?: string;
-                                      size?: number;
-                                      url?: string;
-                                      tmp_url?: string;
-                                  }>
-                            >;
-                        }>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                records?: Array<{
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_update`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=list&version=v1 click to debug }
-             */
-            listWithIterator: async (
-                payload?: {
-                    params?: {
-                        view_id?: string;
-                        filter?: string;
-                        sort?: string;
-                        field_names?: string;
-                        text_field_as_array?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        display_formula_ref?: boolean;
-                        automatic_fields?: boolean;
-                        page_token?: string;
-                        page_size?: number;
-                    };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await http
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    get<
-                                        {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                has_more?: boolean;
-                                                page_token?: string;
-                                                total?: number;
-                                                items?: Array<{
-                                                    record_id?: string;
-                                                    created_by?: {
-                                                        id?: string;
-                                                        name?: string;
-                                                        en_name?: string;
-                                                        email?: string;
-                                                    };
-                                                    created_time?: number;
-                                                    last_modified_by?: {
-                                                        id?: string;
-                                                        name?: string;
-                                                        en_name?: string;
-                                                        email?: string;
-                                                    };
-                                                    last_modified_time?: number;
-                                                    fields: Map<
-                                                        string,
-                                                        | string
-                                                        | boolean
-                                                        | {
-                                                              text?: string;
-                                                              link?: string;
-                                                          }
-                                                        | {
-                                                              location?: string;
-                                                              pname?: string;
-                                                              cityname?: string;
-                                                              adname?: string;
-                                                              address?: string;
-                                                              name?: string;
-                                                              full_address?: string;
-                                                          }
-                                                        | Array<string>
-                                                        | Array<{
-                                                              id?: string;
-                                                              name?: string;
-                                                              en_name?: string;
-                                                              email?: string;
-                                                          }>
-                                                        | Array<{
-                                                              file_token?: string;
-                                                              name?: string;
-                                                              type?: string;
-                                                              size?: number;
-                                                              url?: string;
-                                                              tmp_url?: string;
-                                                          }>
-                                                    >;
-                                                }>;
-                                            };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=list&version=v1 click to debug }
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        view_id?: string;
-                        filter?: string;
-                        sort?: string;
-                        field_names?: string;
-                        text_field_as_array?: boolean;
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        display_formula_ref?: boolean;
-                        automatic_fields?: boolean;
-                        page_token?: string;
-                        page_size?: number;
-                    };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                has_more?: boolean;
-                                page_token?: string;
-                                total?: number;
-                                items?: Array<{
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=delete&version=v1 click to debug }
-             */
-            delete: async (
-                payload?: {
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        record_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: { deleted?: boolean; record_id?: string };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
-                            path
-                        ),
-                        method: "DELETE",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=create&version=v1 click to debug }
-             */
-            create: async (
-                payload?: {
-                    data: {
-                        fields: Map<
-                            string,
-                            | string
-                            | boolean
-                            | { text?: string; link?: string }
-                            | {
-                                  location?: string;
-                                  pname?: string;
-                                  cityname?: string;
-                                  adname?: string;
-                                  address?: string;
-                                  name?: string;
-                                  full_address?: string;
-                              }
-                            | Array<string>
-                            | Array<{
-                                  id?: string;
-                                  name?: string;
-                                  en_name?: string;
-                                  email?: string;
-                              }>
-                            | Array<{
-                                  file_token?: string;
-                                  name?: string;
-                                  type?: string;
-                                  size?: number;
-                                  url?: string;
-                                  tmp_url?: string;
-                              }>
-                        >;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                record?: {
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_delete&version=v1 click to debug }
-             */
-            batchDelete: async (
-                payload?: {
-                    data: { records: Array<string> };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                records?: Array<{
-                                    deleted?: boolean;
-                                    record_id?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_create&version=v1 click to debug }
-             */
-            batchCreate: async (
-                payload?: {
-                    data: {
-                        records: Array<{
-                            created_by?: {
-                                id?: string;
-                                name?: string;
-                                en_name?: string;
-                                email?: string;
-                            };
-                            created_time?: number;
-                            last_modified_by?: {
-                                id?: string;
-                                name?: string;
-                                en_name?: string;
-                                email?: string;
-                            };
-                            last_modified_time?: number;
-                            fields: Map<
-                                string,
-                                | string
-                                | boolean
-                                | { text?: string; link?: string }
-                                | {
-                                      location?: string;
-                                      pname?: string;
-                                      cityname?: string;
-                                      adname?: string;
-                                      address?: string;
-                                      name?: string;
-                                      full_address?: string;
-                                  }
-                                | Array<string>
-                                | Array<{
-                                      id?: string;
-                                      name?: string;
-                                      en_name?: string;
-                                      email?: string;
-                                  }>
-                                | Array<{
-                                      file_token?: string;
-                                      name?: string;
-                                      type?: string;
-                                      size?: number;
-                                      url?: string;
-                                      tmp_url?: string;
-                                  }>
-                            >;
-                        }>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { app_token: string; table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                records?: Array<{
-                                    record_id?: string;
-                                    created_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    created_time?: number;
-                                    last_modified_by?: {
-                                        id?: string;
-                                        name?: string;
-                                        en_name?: string;
-                                        email?: string;
-                                    };
-                                    last_modified_time?: number;
-                                    fields: Map<
-                                        string,
-                                        | string
-                                        | boolean
-                                        | { text?: string; link?: string }
-                                        | {
-                                              location?: string;
-                                              pname?: string;
-                                              cityname?: string;
-                                              adname?: string;
-                                              address?: string;
-                                              name?: string;
-                                              full_address?: string;
-                                          }
-                                        | Array<string>
-                                        | Array<{
-                                              id?: string;
-                                              name?: string;
-                                              en_name?: string;
-                                              email?: string;
-                                          }>
-                                        | Array<{
-                                              file_token?: string;
-                                              name?: string;
-                                              type?: string;
-                                              size?: number;
-                                              url?: string;
-                                              tmp_url?: string;
-                                          }>
-                                    >;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_create`,
-                            path
-                        ),
-                        method: "POST",
                         data,
                         params,
                         headers,
