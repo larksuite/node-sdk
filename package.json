@@ -8,6 +8,9 @@
     "sdk",
     "nodejs"
   ],
+  "types": "./types",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
   "files": [
     "lib",
     "es",
