@@ -137,7 +137,10 @@ export class Client extends RequestTemplate {
         };
     }
 
-    async request(payload: AxiosRequestConfig, options?: IRequestOptions) {
+    async request<T = any>(
+        payload: AxiosRequestConfig,
+        options?: IRequestOptions
+    ) {
         const { data, params, headers, url, ...rest } = payload;
         const formatPayload = await this.formatPayload(
             {
@@ -150,7 +153,7 @@ export class Client extends RequestTemplate {
 
         this.logger.trace(`send request [${payload.method}]: ${payload.url}`);
         const res = await http
-            .request({
+            .request<T, T>({
                 ...rest,
                 ...{
                     url: `${this.domain}/${formatUrl(url)}`,
@@ -161,6 +164,7 @@ export class Client extends RequestTemplate {
             })
             .catch((e) => {
                 this.logger.error(e);
+                throw e;
             });
 
         return res;
