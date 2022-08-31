@@ -1,13 +1,13 @@
-import http from '@node-sdk/http';
-import identity from 'lodash.identity';
-import pickBy from 'lodash.pickby';
-import get from 'lodash.get';
-import fs from 'fs';
-import { fillApiPath } from '@node-sdk/utils';
-import { Logger } from '@node-sdk/typings';
-import { formatErrors } from '@node-sdk/client/utils';
-import { IRequestOptions } from './types';
-import { IPayload } from '../client/types';
+import http from "@node-sdk/http";
+import identity from "lodash.identity";
+import pickBy from "lodash.pickby";
+import get from "lodash.get";
+import fs from "fs";
+import { fillApiPath } from "@node-sdk/utils";
+import { Logger } from "@node-sdk/typings";
+import { formatErrors } from "@node-sdk/client/utils";
+import { IRequestOptions } from "./types";
+import { IPayload } from "../client/types";
 
 // auto gen
 export default abstract class Client {
@@ -56,11 +56,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -86,7 +86,7 @@ export default abstract class Client {
                         from: number;
                         to: number;
                         device_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -105,7 +105,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/acs/v1/access_records`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -151,7 +151,7 @@ export default abstract class Client {
                                                     device_id?: string;
                                                     is_clock_in?: boolean;
                                                     access_time?: string;
-                                                    access_type?: 'FA';
+                                                    access_type?: "FA";
                                                     access_data?: string;
                                                     is_door_open?: boolean;
                                                 }>;
@@ -159,8 +159,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -193,7 +193,7 @@ export default abstract class Client {
                         from: number;
                         to: number;
                         device_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -214,7 +214,7 @@ export default abstract class Client {
                                     device_id?: string;
                                     is_clock_in?: boolean;
                                     access_time?: string;
-                                    access_type?: 'FA';
+                                    access_type?: "FA";
                                     access_data?: string;
                                     is_door_open?: boolean;
                                 }>;
@@ -227,7 +227,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/access_records`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -274,7 +274,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/devices`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -302,7 +302,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         is_cropped?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { user_id: string };
                 },
@@ -317,11 +317,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -351,7 +351,7 @@ export default abstract class Client {
                         file_name: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { user_id: string };
                 },
@@ -366,12 +366,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -379,7 +379,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
         },
         /**
@@ -400,7 +400,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { user_id?: string };
                 },
@@ -430,7 +430,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/users/:user_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -445,7 +445,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -464,7 +464,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/acs/v1/users`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -515,8 +515,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -548,7 +548,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -579,7 +579,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/users`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -602,7 +602,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { feature?: { card?: number } };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { user_id?: string };
                 },
@@ -617,7 +617,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/acs/v1/users/:user_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -652,8 +652,8 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         department_id_type:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         start_date: string;
                         end_date: string;
                         department_id: string;
@@ -717,7 +717,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/admin_dept_stats`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -746,10 +746,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         start_date: string;
                         end_date: string;
                         department_id?: string;
@@ -804,7 +804,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/admin_user_stats`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -863,7 +863,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -912,7 +912,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -946,7 +946,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/admin/v1/badges`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -997,8 +997,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -1059,7 +1059,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -1114,7 +1114,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -1156,10 +1156,10 @@ export default abstract class Client {
                         group_ids?: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { badge_id: string };
                 },
@@ -1199,7 +1199,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1233,7 +1233,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -1255,10 +1255,10 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { badge_id: string; grant_id: string };
                 },
@@ -1298,7 +1298,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -1313,10 +1313,10 @@ export default abstract class Client {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { badge_id: string };
                 },
@@ -1336,7 +1336,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -1397,8 +1397,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -1428,10 +1428,10 @@ export default abstract class Client {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { badge_id: string };
                 },
@@ -1473,7 +1473,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -1510,10 +1510,10 @@ export default abstract class Client {
                         group_ids?: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { badge_id: string; grant_id: string };
                 },
@@ -1553,7 +1553,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -1599,12 +1599,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/badge_images`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -1612,7 +1612,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
         },
         /**
@@ -1635,7 +1635,7 @@ export default abstract class Client {
                         user_id: string;
                     };
                     params: {
-                        user_id_type: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type: "open_id" | "union_id" | "user_id";
                     };
                 },
                 options?: IRequestOptions
@@ -1649,7 +1649,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/admin/v1/password/reset`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1686,12 +1686,12 @@ export default abstract class Client {
                         date: string;
                         cycle_type: number;
                         department_id?: string;
-                        ability: 'app' | 'mp' | 'h5' | 'bot';
+                        ability: "app" | "mp" | "h5" | "bot";
                     };
                     params?: {
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { app_id: string };
                 },
@@ -1718,7 +1718,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/overview`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1745,8 +1745,8 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params: {
-                        lang: 'zh_cn' | 'en_us' | 'ja_jp';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_id: string; version_id: string };
                 },
@@ -1776,7 +1776,7 @@ export default abstract class Client {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: 'zh_cn' | 'en_us' | 'ja_jp';
+                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
@@ -1820,9 +1820,9 @@ export default abstract class Client {
                                             space_url?: string;
                                             i18n?: Array<{
                                                 i18n_key:
-                                                    | 'zh_cn'
-                                                    | 'en_us'
-                                                    | 'ja_jp';
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
                                                 name?: string;
                                                 read_description?: string;
                                                 write_description?: string;
@@ -1834,9 +1834,9 @@ export default abstract class Client {
                                             block_type_id?: string;
                                             i18n?: Array<{
                                                 i18n_key?:
-                                                    | 'zh_cn'
-                                                    | 'en_us'
-                                                    | 'ja_jp';
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
                                                 name?: string;
                                             }>;
                                             mobile_icon_url?: string;
@@ -1847,9 +1847,9 @@ export default abstract class Client {
                                             mobile_app_link?: string;
                                             i18n?: Array<{
                                                 i18n_key?:
-                                                    | 'zh_cn'
-                                                    | 'en_us'
-                                                    | 'ja_jp';
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
                                                 name?: string;
                                             }>;
                                         };
@@ -1881,7 +1881,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -1904,7 +1904,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { status?: number };
                     params: {
-                        user_id_type: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type: "user_id" | "union_id" | "open_id";
                         operator_id: string;
                         reject_reason?: string;
                     };
@@ -1921,7 +1921,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -1952,7 +1952,7 @@ export default abstract class Client {
                         to_date?: string;
                         feedback_type?: number;
                         status?: number;
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -1997,7 +1997,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2019,7 +2019,7 @@ export default abstract class Client {
             patch: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         status: number;
                         operator_id: string;
                     };
@@ -2036,7 +2036,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -2063,8 +2063,8 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params: {
-                        lang: 'zh_cn' | 'en_us' | 'ja_jp';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_id: string };
                 },
@@ -2099,15 +2099,15 @@ export default abstract class Client {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: 'zh_cn' | 'en_us' | 'ja_jp';
+                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
                                     }>;
                                     primary_language?:
-                                        | 'zh_cn'
-                                        | 'en_us'
-                                        | 'ja_jp';
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
                                     common_categories?: Array<string>;
                                     owner?: {
                                         type: number;
@@ -2125,7 +2125,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2147,7 +2147,7 @@ export default abstract class Client {
             patch: async (
                 payload?: {
                     data?: { common_categories?: Array<string> };
-                    params: { lang: 'zh_cn' | 'en_us' | 'ja_jp' };
+                    params: { lang: "zh_cn" | "en_us" | "ja_jp" };
                     path: { app_id: string };
                 },
                 options?: IRequestOptions
@@ -2161,7 +2161,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/:app_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -2174,10 +2174,10 @@ export default abstract class Client {
             underauditlistWithIterator: async (
                 payload?: {
                     params: {
-                        lang: 'zh_cn' | 'en_us' | 'ja_jp';
+                        lang: "zh_cn" | "en_us" | "ja_jp";
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -2196,7 +2196,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/application/v6/applications/underauditlist`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -2256,17 +2256,17 @@ export default abstract class Client {
                                                     back_home_url?: string;
                                                     i18n?: Array<{
                                                         i18n_key:
-                                                            | 'zh_cn'
-                                                            | 'en_us'
-                                                            | 'ja_jp';
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp";
                                                         name?: string;
                                                         description?: string;
                                                         help_use?: string;
                                                     }>;
                                                     primary_language?:
-                                                        | 'zh_cn'
-                                                        | 'en_us'
-                                                        | 'ja_jp';
+                                                        | "zh_cn"
+                                                        | "en_us"
+                                                        | "ja_jp";
                                                     common_categories?: Array<string>;
                                                     owner?: {
                                                         type: number;
@@ -2281,8 +2281,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -2310,10 +2310,10 @@ export default abstract class Client {
             underauditlist: async (
                 payload?: {
                     params: {
-                        lang: 'zh_cn' | 'en_us' | 'ja_jp';
+                        lang: "zh_cn" | "en_us" | "ja_jp";
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -2347,15 +2347,15 @@ export default abstract class Client {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: 'zh_cn' | 'en_us' | 'ja_jp';
+                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
                                     }>;
                                     primary_language?:
-                                        | 'zh_cn'
-                                        | 'en_us'
-                                        | 'ja_jp';
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
                                     common_categories?: Array<string>;
                                     owner?: {
                                         type: number;
@@ -2375,7 +2375,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/application/v6/applications/underauditlist`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2414,10 +2414,10 @@ export default abstract class Client {
                         description?: string;
                         viewers?: Array<{
                             viewer_type?:
-                                | 'TENANT'
-                                | 'DEPARTMENT'
-                                | 'USER'
-                                | 'NONE';
+                                | "TENANT"
+                                | "DEPARTMENT"
+                                | "USER"
+                                | "NONE";
                             viewer_user_id?: string;
                             viewer_department_id?: string;
                         }>;
@@ -2425,26 +2425,26 @@ export default abstract class Client {
                         node_list?: Array<{
                             id: string;
                             name?: string;
-                            node_type?: 'AND' | 'OR' | 'SEQUENTIAL';
+                            node_type?: "AND" | "OR" | "SEQUENTIAL";
                             approver?: Array<{
                                 type:
-                                    | 'Supervisor'
-                                    | 'SupervisorTopDown'
-                                    | 'DepartmentManager'
-                                    | 'DepartmentManagerTopDown'
-                                    | 'Personal'
-                                    | 'Free';
+                                    | "Supervisor"
+                                    | "SupervisorTopDown"
+                                    | "DepartmentManager"
+                                    | "DepartmentManagerTopDown"
+                                    | "Personal"
+                                    | "Free";
                                 user_id?: string;
                                 level?: string;
                             }>;
                             ccer?: Array<{
                                 type:
-                                    | 'Supervisor'
-                                    | 'SupervisorTopDown'
-                                    | 'DepartmentManager'
-                                    | 'DepartmentManagerTopDown'
-                                    | 'Personal'
-                                    | 'Free';
+                                    | "Supervisor"
+                                    | "SupervisorTopDown"
+                                    | "DepartmentManager"
+                                    | "DepartmentManagerTopDown"
+                                    | "Personal"
+                                    | "Free";
                                 user_id?: string;
                                 level?: string;
                             }>;
@@ -2466,7 +2466,7 @@ export default abstract class Client {
                         };
                         icon?: number;
                         i18n_resources: Array<{
-                            locale: 'zh-CN' | 'en-US' | 'ja-JP';
+                            locale: "zh-CN" | "en-US" | "ja-JP";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -2474,9 +2474,9 @@ export default abstract class Client {
                     };
                     params?: {
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                            | "department_id"
+                            | "open_department_id";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -2500,7 +2500,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/approvals`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2521,7 +2521,7 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
-                    params?: { locale?: 'zh-CN' | 'en-US' | 'ja-JP' };
+                    params?: { locale?: "zh-CN" | "en-US" | "ja-JP" };
                     path: { approval_code: string };
                 },
                 options?: IRequestOptions
@@ -2538,10 +2538,10 @@ export default abstract class Client {
                             data?: {
                                 approval_name: string;
                                 status:
-                                    | 'ACTIVE'
-                                    | 'INACTIVE'
-                                    | 'DELETED'
-                                    | 'UNKNOWN';
+                                    | "ACTIVE"
+                                    | "INACTIVE"
+                                    | "DELETED"
+                                    | "UNKNOWN";
                                 form: string;
                                 node_list: Array<{
                                     name: string;
@@ -2549,10 +2549,10 @@ export default abstract class Client {
                                     node_id: string;
                                     custom_node_id?: string;
                                     node_type:
-                                        | 'AND'
-                                        | 'OR'
-                                        | 'SEQUENTIAL'
-                                        | 'CC_NODE';
+                                        | "AND"
+                                        | "OR"
+                                        | "SEQUENTIAL"
+                                        | "CC_NODE";
                                     approver_chosen_multi: boolean;
                                     approver_chosen_range?: Array<{
                                         approver_range_type?: number;
@@ -2561,12 +2561,12 @@ export default abstract class Client {
                                 }>;
                                 viewers: Array<{
                                     type:
-                                        | 'TENANT'
-                                        | 'DEPARTMENT'
-                                        | 'USER'
-                                        | 'ROLE'
-                                        | 'USER_GROUP'
-                                        | 'NONE';
+                                        | "TENANT"
+                                        | "DEPARTMENT"
+                                        | "USER"
+                                        | "ROLE"
+                                        | "USER_GROUP"
+                                        | "NONE";
                                     id?: string;
                                     user_id?: string;
                                 }>;
@@ -2577,7 +2577,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2611,7 +2611,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code/subscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2645,7 +2645,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code/unsubscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2697,15 +2697,15 @@ export default abstract class Client {
                         };
                         viewers?: Array<{
                             viewer_type?:
-                                | 'TENANT'
-                                | 'DEPARTMENT'
-                                | 'USER'
-                                | 'NONE';
+                                | "TENANT"
+                                | "DEPARTMENT"
+                                | "USER"
+                                | "NONE";
                             viewer_user_id?: string;
                             viewer_department_id?: string;
                         }>;
                         i18n_resources?: Array<{
-                            locale: 'zh-CN' | 'en-US' | 'ja-JP';
+                            locale: "zh-CN" | "en-US" | "ja-JP";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -2713,9 +2713,9 @@ export default abstract class Client {
                     };
                     params?: {
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                            | "department_id"
+                            | "open_department_id";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -2736,7 +2736,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/external_approvals`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2800,7 +2800,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/external_instances/check`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2824,12 +2824,12 @@ export default abstract class Client {
                     data: {
                         approval_code: string;
                         status:
-                            | 'PENDING'
-                            | 'APPROVED'
-                            | 'REJECTED'
-                            | 'CANCELED'
-                            | 'DELETED'
-                            | 'HIDDEN';
+                            | "PENDING"
+                            | "APPROVED"
+                            | "REJECTED"
+                            | "CANCELED"
+                            | "DELETED"
+                            | "HIDDEN";
                         extra?: string;
                         instance_id: string;
                         links: { pc_link: string; mobile_link?: string };
@@ -2844,11 +2844,11 @@ export default abstract class Client {
                         end_time: string;
                         update_time: string;
                         display_method?:
-                            | 'BROWSER'
-                            | 'SIDEBAR'
-                            | 'NORMAL'
-                            | 'TRUSTEESHIP';
-                        update_mode?: 'REPLACE' | 'UPDATE';
+                            | "BROWSER"
+                            | "SIDEBAR"
+                            | "NORMAL"
+                            | "TRUSTEESHIP";
+                        update_mode?: "REPLACE" | "UPDATE";
                         task_list?: Array<{
                             task_id: string;
                             user_id?: string;
@@ -2856,28 +2856,28 @@ export default abstract class Client {
                             title?: string;
                             links: { pc_link: string; mobile_link?: string };
                             status:
-                                | 'PENDING'
-                                | 'APPROVED'
-                                | 'REJECTED'
-                                | 'TRANSFERRED'
-                                | 'DONE';
+                                | "PENDING"
+                                | "APPROVED"
+                                | "REJECTED"
+                                | "TRANSFERRED"
+                                | "DONE";
                             extra?: string;
                             create_time: string;
                             end_time: string;
                             update_time?: string;
                             action_context?: string;
                             action_configs?: Array<{
-                                action_type: 'APPROVE' | 'REJECT' | '{KEY}';
+                                action_type: "APPROVE" | "REJECT" | "{KEY}";
                                 action_name?: string;
                                 is_need_reason?: boolean;
                                 is_reason_required?: boolean;
                                 is_need_attachment?: boolean;
                             }>;
                             display_method?:
-                                | 'BROWSER'
-                                | 'SIDEBAR'
-                                | 'NORMAL'
-                                | 'TRUSTEESHIP';
+                                | "BROWSER"
+                                | "SIDEBAR"
+                                | "NORMAL"
+                                | "TRUSTEESHIP";
                             exclude_statistics?: boolean;
                         }>;
                         cc_list?: Array<{
@@ -2885,19 +2885,19 @@ export default abstract class Client {
                             user_id?: string;
                             open_id?: string;
                             links: { pc_link: string; mobile_link?: string };
-                            read_status: 'READ' | 'UNREAD';
+                            read_status: "READ" | "UNREAD";
                             extra?: string;
                             title?: string;
                             create_time: string;
                             update_time: string;
                             display_method?:
-                                | 'BROWSER'
-                                | 'SIDEBAR'
-                                | 'NORMAL'
-                                | 'TRUSTEESHIP';
+                                | "BROWSER"
+                                | "SIDEBAR"
+                                | "NORMAL"
+                                | "TRUSTEESHIP";
                         }>;
                         i18n_resources: Array<{
-                            locale: 'zh-CN' | 'en-US' | 'ja-JP';
+                            locale: "zh-CN" | "en-US" | "ja-JP";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -2926,12 +2926,12 @@ export default abstract class Client {
                                 data?: {
                                     approval_code: string;
                                     status:
-                                        | 'PENDING'
-                                        | 'APPROVED'
-                                        | 'REJECTED'
-                                        | 'CANCELED'
-                                        | 'DELETED'
-                                        | 'HIDDEN';
+                                        | "PENDING"
+                                        | "APPROVED"
+                                        | "REJECTED"
+                                        | "CANCELED"
+                                        | "DELETED"
+                                        | "HIDDEN";
                                     extra?: string;
                                     instance_id: string;
                                     links: {
@@ -2952,11 +2952,11 @@ export default abstract class Client {
                                     end_time: string;
                                     update_time: string;
                                     display_method?:
-                                        | 'BROWSER'
-                                        | 'SIDEBAR'
-                                        | 'NORMAL'
-                                        | 'TRUSTEESHIP';
-                                    update_mode?: 'REPLACE' | 'UPDATE';
+                                        | "BROWSER"
+                                        | "SIDEBAR"
+                                        | "NORMAL"
+                                        | "TRUSTEESHIP";
+                                    update_mode?: "REPLACE" | "UPDATE";
                                     task_list?: Array<{
                                         task_id: string;
                                         user_id?: string;
@@ -2967,11 +2967,11 @@ export default abstract class Client {
                                             mobile_link?: string;
                                         };
                                         status:
-                                            | 'PENDING'
-                                            | 'APPROVED'
-                                            | 'REJECTED'
-                                            | 'TRANSFERRED'
-                                            | 'DONE';
+                                            | "PENDING"
+                                            | "APPROVED"
+                                            | "REJECTED"
+                                            | "TRANSFERRED"
+                                            | "DONE";
                                         extra?: string;
                                         create_time: string;
                                         end_time: string;
@@ -2979,19 +2979,19 @@ export default abstract class Client {
                                         action_context?: string;
                                         action_configs?: Array<{
                                             action_type:
-                                                | 'APPROVE'
-                                                | 'REJECT'
-                                                | '{KEY}';
+                                                | "APPROVE"
+                                                | "REJECT"
+                                                | "{KEY}";
                                             action_name?: string;
                                             is_need_reason?: boolean;
                                             is_reason_required?: boolean;
                                             is_need_attachment?: boolean;
                                         }>;
                                         display_method?:
-                                            | 'BROWSER'
-                                            | 'SIDEBAR'
-                                            | 'NORMAL'
-                                            | 'TRUSTEESHIP';
+                                            | "BROWSER"
+                                            | "SIDEBAR"
+                                            | "NORMAL"
+                                            | "TRUSTEESHIP";
                                         exclude_statistics?: boolean;
                                     }>;
                                     cc_list?: Array<{
@@ -3002,19 +3002,19 @@ export default abstract class Client {
                                             pc_link: string;
                                             mobile_link?: string;
                                         };
-                                        read_status: 'READ' | 'UNREAD';
+                                        read_status: "READ" | "UNREAD";
                                         extra?: string;
                                         title?: string;
                                         create_time: string;
                                         update_time: string;
                                         display_method?:
-                                            | 'BROWSER'
-                                            | 'SIDEBAR'
-                                            | 'NORMAL'
-                                            | 'TRUSTEESHIP';
+                                            | "BROWSER"
+                                            | "SIDEBAR"
+                                            | "NORMAL"
+                                            | "TRUSTEESHIP";
                                     }>;
                                     i18n_resources: Array<{
-                                        locale: 'zh-CN' | 'en-US' | 'ja-JP';
+                                        locale: "zh-CN" | "en-US" | "ja-JP";
                                         texts: Array<{
                                             key: string;
                                             value: string;
@@ -3037,7 +3037,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/external_instances`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3059,11 +3059,11 @@ export default abstract class Client {
                         instance_ids?: Array<string>;
                         user_ids?: Array<string>;
                         status?:
-                            | 'PENDING'
-                            | 'APPROVED'
-                            | 'REJECTED'
-                            | 'TRANSFERRED'
-                            | 'DONE';
+                            | "PENDING"
+                            | "APPROVED"
+                            | "REJECTED"
+                            | "TRANSFERRED"
+                            | "DONE";
                     };
                     params?: { page_size?: number; page_token?: string };
                 },
@@ -3083,7 +3083,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/approval/v4/external_tasks`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -3128,21 +3128,21 @@ export default abstract class Client {
                                                     approval_id: string;
                                                     approval_code: string;
                                                     status:
-                                                        | 'PENDING'
-                                                        | 'APPROVED'
-                                                        | 'REJECTED'
-                                                        | 'CANCELED'
-                                                        | 'DELETED'
-                                                        | 'HIDDEN';
+                                                        | "PENDING"
+                                                        | "APPROVED"
+                                                        | "REJECTED"
+                                                        | "CANCELED"
+                                                        | "DELETED"
+                                                        | "HIDDEN";
                                                     update_time: string;
                                                     tasks?: Array<{
                                                         id: string;
                                                         status:
-                                                            | 'PENDING'
-                                                            | 'APPROVED'
-                                                            | 'REJECTED'
-                                                            | 'TRANSFERRED'
-                                                            | 'DONE';
+                                                            | "PENDING"
+                                                            | "APPROVED"
+                                                            | "REJECTED"
+                                                            | "TRANSFERRED"
+                                                            | "DONE";
                                                         update_time: string;
                                                     }>;
                                                 }>;
@@ -3150,8 +3150,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -3183,11 +3183,11 @@ export default abstract class Client {
                         instance_ids?: Array<string>;
                         user_ids?: Array<string>;
                         status?:
-                            | 'PENDING'
-                            | 'APPROVED'
-                            | 'REJECTED'
-                            | 'TRANSFERRED'
-                            | 'DONE';
+                            | "PENDING"
+                            | "APPROVED"
+                            | "REJECTED"
+                            | "TRANSFERRED"
+                            | "DONE";
                     };
                     params?: { page_size?: number; page_token?: string };
                 },
@@ -3208,21 +3208,21 @@ export default abstract class Client {
                                     approval_id: string;
                                     approval_code: string;
                                     status:
-                                        | 'PENDING'
-                                        | 'APPROVED'
-                                        | 'REJECTED'
-                                        | 'CANCELED'
-                                        | 'DELETED'
-                                        | 'HIDDEN';
+                                        | "PENDING"
+                                        | "APPROVED"
+                                        | "REJECTED"
+                                        | "CANCELED"
+                                        | "DELETED"
+                                        | "HIDDEN";
                                     update_time: string;
                                     tasks?: Array<{
                                         id: string;
                                         status:
-                                            | 'PENDING'
-                                            | 'APPROVED'
-                                            | 'REJECTED'
-                                            | 'TRANSFERRED'
-                                            | 'DONE';
+                                            | "PENDING"
+                                            | "APPROVED"
+                                            | "REJECTED"
+                                            | "TRANSFERRED"
+                                            | "DONE";
                                         update_time: string;
                                     }>;
                                 }>;
@@ -3235,7 +3235,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/external_tasks`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -3279,7 +3279,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/add_sign`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3306,7 +3306,7 @@ export default abstract class Client {
                         user_id: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3320,7 +3320,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/cancel`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3349,7 +3349,7 @@ export default abstract class Client {
                         comment?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3363,7 +3363,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/cc`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3429,7 +3429,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3451,9 +3451,9 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        locale?: 'zh-CN' | 'en-US' | 'ja-JP';
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
                         user_id?: string;
-                        user_id_type?: 'user_id' | 'open_id' | 'union_id';
+                        user_id_type?: "user_id" | "open_id" | "union_id";
                     };
                     path: { instance_id: string };
                 },
@@ -3477,11 +3477,11 @@ export default abstract class Client {
                                 serial_number: string;
                                 department_id: string;
                                 status:
-                                    | 'PENDING'
-                                    | 'APPROVED'
-                                    | 'REJECTED'
-                                    | 'CANCELED'
-                                    | 'DELETED';
+                                    | "PENDING"
+                                    | "APPROVED"
+                                    | "REJECTED"
+                                    | "CANCELED"
+                                    | "DELETED";
                                 uuid: string;
                                 form: string;
                                 task_list: Array<{
@@ -3489,20 +3489,20 @@ export default abstract class Client {
                                     user_id: string;
                                     open_id?: string;
                                     status:
-                                        | 'PENDING'
-                                        | 'APPROVED'
-                                        | 'REJECTED'
-                                        | 'TRANSFERRED'
-                                        | 'DONE';
+                                        | "PENDING"
+                                        | "APPROVED"
+                                        | "REJECTED"
+                                        | "TRANSFERRED"
+                                        | "DONE";
                                     node_id?: string;
                                     node_name?: string;
                                     custom_node_id?: string;
                                     type?:
-                                        | 'AND'
-                                        | 'OR'
-                                        | 'AUTO_PASS'
-                                        | 'AUTO_REJECT'
-                                        | 'SEQUENTIAL';
+                                        | "AND"
+                                        | "OR"
+                                        | "AUTO_PASS"
+                                        | "AUTO_REJECT"
+                                        | "SEQUENTIAL";
                                     start_time: string;
                                     end_time?: string;
                                 }>;
@@ -3521,22 +3521,22 @@ export default abstract class Client {
                                 }>;
                                 timeline: Array<{
                                     type:
-                                        | 'START'
-                                        | 'PASS'
-                                        | 'REJECT'
-                                        | 'AUTO_PASS'
-                                        | 'AUTO_REJECT'
-                                        | 'REMOVE_REPEAT'
-                                        | 'TRANSFER'
-                                        | 'ADD_APPROVER_BEFORE'
-                                        | 'ADD_APPROVER'
-                                        | 'ADD_APPROVER_AFTER'
-                                        | 'DELETE_APPROVER'
-                                        | 'ROLLBACK_SELECTED'
-                                        | 'ROLLBACK'
-                                        | 'CANCEL'
-                                        | 'DELETE'
-                                        | 'CC';
+                                        | "START"
+                                        | "PASS"
+                                        | "REJECT"
+                                        | "AUTO_PASS"
+                                        | "AUTO_REJECT"
+                                        | "REMOVE_REPEAT"
+                                        | "TRANSFER"
+                                        | "ADD_APPROVER_BEFORE"
+                                        | "ADD_APPROVER"
+                                        | "ADD_APPROVER_AFTER"
+                                        | "DELETE_APPROVER"
+                                        | "ROLLBACK_SELECTED"
+                                        | "ROLLBACK"
+                                        | "CANCEL"
+                                        | "DELETE"
+                                        | "CC";
                                     create_time: string;
                                     user_id?: string;
                                     open_id?: string;
@@ -3569,7 +3569,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -3605,7 +3605,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/approval/v4/instances`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -3650,8 +3650,8 @@ export default abstract class Client {
                                                 has_more: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -3708,7 +3708,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -3735,7 +3735,7 @@ export default abstract class Client {
                         task_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3769,7 +3769,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/preview`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3789,20 +3789,20 @@ export default abstract class Client {
                         group_external_id?: string;
                         instance_title?: string;
                         instance_status?:
-                            | 'PENDING'
-                            | 'RECALL'
-                            | 'REJECT'
-                            | 'DELETED'
-                            | 'APPROVED'
-                            | 'ALL';
+                            | "PENDING"
+                            | "RECALL"
+                            | "REJECT"
+                            | "DELETED"
+                            | "APPROVED"
+                            | "ALL";
                         instance_start_time_from?: string;
                         instance_start_time_to?: string;
-                        locale?: 'zh-CN' | 'en-US' | 'ja-JP';
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
                     };
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3821,7 +3821,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/approval/v4/instances/query`,
                                 path
                             ),
-                            method: 'POST',
+                            method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -3882,11 +3882,11 @@ export default abstract class Client {
                                                         start_time?: string;
                                                         end_time?: string;
                                                         status?:
-                                                            | 'reject'
-                                                            | 'pending'
-                                                            | 'recall'
-                                                            | 'deleted'
-                                                            | 'approved';
+                                                            | "reject"
+                                                            | "pending"
+                                                            | "recall"
+                                                            | "deleted"
+                                                            | "approved";
                                                         title?: string;
                                                         extra?: string;
                                                         serial_id?: string;
@@ -3900,8 +3900,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -3936,20 +3936,20 @@ export default abstract class Client {
                         group_external_id?: string;
                         instance_title?: string;
                         instance_status?:
-                            | 'PENDING'
-                            | 'RECALL'
-                            | 'REJECT'
-                            | 'DELETED'
-                            | 'APPROVED'
-                            | 'ALL';
+                            | "PENDING"
+                            | "RECALL"
+                            | "REJECT"
+                            | "DELETED"
+                            | "APPROVED"
+                            | "ALL";
                         instance_start_time_from?: string;
                         instance_start_time_to?: string;
-                        locale?: 'zh-CN' | 'en-US' | 'ja-JP';
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
                     };
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3983,11 +3983,11 @@ export default abstract class Client {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | 'reject'
-                                            | 'pending'
-                                            | 'recall'
-                                            | 'deleted'
-                                            | 'approved';
+                                            | "reject"
+                                            | "pending"
+                                            | "recall"
+                                            | "deleted"
+                                            | "approved";
                                         title?: string;
                                         extra?: string;
                                         serial_id?: string;
@@ -4006,7 +4006,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4034,15 +4034,15 @@ export default abstract class Client {
                         instance_external_id?: string;
                         group_external_id?: string;
                         cc_title?: string;
-                        read_status?: 'READ' | 'UNREAD' | 'ALL';
+                        read_status?: "READ" | "UNREAD" | "ALL";
                         cc_create_time_from?: string;
                         cc_create_time_to?: string;
-                        locale?: 'zh-CN' | 'en-US' | 'ja-JP';
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
                     };
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4076,11 +4076,11 @@ export default abstract class Client {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | 'reject'
-                                            | 'pending'
-                                            | 'recall'
-                                            | 'deleted'
-                                            | 'approved';
+                                            | "reject"
+                                            | "pending"
+                                            | "recall"
+                                            | "deleted"
+                                            | "approved";
                                         title?: string;
                                         extra?: string;
                                         serial_id?: string;
@@ -4092,7 +4092,7 @@ export default abstract class Client {
                                     cc?: {
                                         user_id?: string;
                                         create_time?: string;
-                                        read_status?: 'read' | 'unread';
+                                        read_status?: "read" | "unread";
                                         title?: string;
                                         extra?: string;
                                         link?: {
@@ -4110,7 +4110,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/search_cc`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4139,7 +4139,7 @@ export default abstract class Client {
                         task_def_key_list: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4153,7 +4153,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/specified_rollback`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4192,7 +4192,7 @@ export default abstract class Client {
                         extra?: string;
                     };
                     params: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                         user_id: string;
                     };
                     path: { instance_id: string };
@@ -4215,7 +4215,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4237,7 +4237,7 @@ export default abstract class Client {
             delete: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                         user_id: string;
                     };
                     path: { instance_id: string; comment_id: string };
@@ -4260,7 +4260,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments/:comment_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -4273,7 +4273,7 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                         user_id: string;
                         page_token?: string;
                         page_size?: number;
@@ -4296,7 +4296,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -4366,8 +4366,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -4395,7 +4395,7 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                         user_id: string;
                         page_token?: string;
                         page_size?: number;
@@ -4449,7 +4449,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -4471,7 +4471,7 @@ export default abstract class Client {
             remove: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                         user_id?: string;
                     };
                     path: { instance_id: string };
@@ -4497,7 +4497,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments/remove`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4532,7 +4532,7 @@ export default abstract class Client {
                         form?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4546,7 +4546,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/approve`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4562,8 +4562,8 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         user_id: string;
-                        topic: '1' | '2' | '3' | '17' | '18';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        topic: "1" | "2" | "3" | "17" | "18";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4582,7 +4582,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/approval/v4/tasks/query`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -4624,11 +4624,11 @@ export default abstract class Client {
                                             data?: {
                                                 tasks: Array<{
                                                     topic:
-                                                        | '1'
-                                                        | '2'
-                                                        | '3'
-                                                        | '17'
-                                                        | '18';
+                                                        | "1"
+                                                        | "2"
+                                                        | "3"
+                                                        | "17"
+                                                        | "18";
                                                     user_id: string;
                                                     title: string;
                                                     urls: {
@@ -4639,19 +4639,19 @@ export default abstract class Client {
                                                     process_external_id?: string;
                                                     task_external_id?: string;
                                                     status:
-                                                        | '1'
-                                                        | '2'
-                                                        | '17'
-                                                        | '18'
-                                                        | '33'
-                                                        | '34';
+                                                        | "1"
+                                                        | "2"
+                                                        | "17"
+                                                        | "18"
+                                                        | "33"
+                                                        | "34";
                                                     process_status:
-                                                        | '0'
-                                                        | '1'
-                                                        | '2'
-                                                        | '3'
-                                                        | '4'
-                                                        | '5';
+                                                        | "0"
+                                                        | "1"
+                                                        | "2"
+                                                        | "3"
+                                                        | "4"
+                                                        | "5";
                                                     definition_code: string;
                                                     initiators?: Array<string>;
                                                     initiator_names?: Array<string>;
@@ -4671,8 +4671,8 @@ export default abstract class Client {
                                                 };
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -4703,8 +4703,8 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         user_id: string;
-                        topic: '1' | '2' | '3' | '17' | '18';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        topic: "1" | "2" | "3" | "17" | "18";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4720,7 +4720,7 @@ export default abstract class Client {
                             msg?: string;
                             data?: {
                                 tasks: Array<{
-                                    topic: '1' | '2' | '3' | '17' | '18';
+                                    topic: "1" | "2" | "3" | "17" | "18";
                                     user_id: string;
                                     title: string;
                                     urls: {
@@ -4731,19 +4731,19 @@ export default abstract class Client {
                                     process_external_id?: string;
                                     task_external_id?: string;
                                     status:
-                                        | '1'
-                                        | '2'
-                                        | '17'
-                                        | '18'
-                                        | '33'
-                                        | '34';
+                                        | "1"
+                                        | "2"
+                                        | "17"
+                                        | "18"
+                                        | "33"
+                                        | "34";
                                     process_status:
-                                        | '0'
-                                        | '1'
-                                        | '2'
-                                        | '3'
-                                        | '4'
-                                        | '5';
+                                        | "0"
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5";
                                     definition_code: string;
                                     initiators?: Array<string>;
                                     initiator_names?: Array<string>;
@@ -4765,7 +4765,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -4795,7 +4795,7 @@ export default abstract class Client {
                         form?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4809,7 +4809,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/reject`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4839,7 +4839,7 @@ export default abstract class Client {
                         form: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4853,7 +4853,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/resubmit`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4882,22 +4882,22 @@ export default abstract class Client {
                         group_external_id?: string;
                         task_title?: string;
                         task_status?:
-                            | 'PENDING'
-                            | 'REJECTED'
-                            | 'APPROVED'
-                            | 'TRANSFERRED'
-                            | 'DONE'
-                            | 'RM_REPEAT'
-                            | 'PROCESSED'
-                            | 'ALL';
+                            | "PENDING"
+                            | "REJECTED"
+                            | "APPROVED"
+                            | "TRANSFERRED"
+                            | "DONE"
+                            | "RM_REPEAT"
+                            | "PROCESSED"
+                            | "ALL";
                         task_start_time_from?: string;
                         task_start_time_to?: string;
-                        locale?: 'zh-CN' | 'en-US' | 'ja-JP';
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
                     };
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4931,11 +4931,11 @@ export default abstract class Client {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | 'reject'
-                                            | 'pending'
-                                            | 'recall'
-                                            | 'deleted'
-                                            | 'approved';
+                                            | "reject"
+                                            | "pending"
+                                            | "recall"
+                                            | "deleted"
+                                            | "approved";
                                         title?: string;
                                         extra?: string;
                                         serial_id?: string;
@@ -4949,14 +4949,14 @@ export default abstract class Client {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | 'rejected'
-                                            | 'pending'
-                                            | 'approved'
-                                            | 'transferred'
-                                            | 'done'
-                                            | 'rm_repeat'
-                                            | 'processed'
-                                            | 'hidden';
+                                            | "rejected"
+                                            | "pending"
+                                            | "approved"
+                                            | "transferred"
+                                            | "done"
+                                            | "rm_repeat"
+                                            | "processed"
+                                            | "hidden";
                                         title?: string;
                                         extra?: string;
                                         link?: {
@@ -4975,7 +4975,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5005,7 +5005,7 @@ export default abstract class Client {
                         task_id: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -5019,7 +5019,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/approval/v4/tasks/transfer`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5073,11 +5073,11 @@ export default abstract class Client {
                                 approval_info?: {
                                     approval_id: string;
                                     approval_type:
-                                        | 'leave'
-                                        | 'overtime'
-                                        | 'trip'
-                                        | 'out'
-                                        | 'remedy';
+                                        | "leave"
+                                        | "overtime"
+                                        | "trip"
+                                        | "out"
+                                        | "remedy";
                                     status: number;
                                 };
                             };
@@ -5087,7 +5087,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5126,11 +5126,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/files/:file_id/download`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -5175,12 +5175,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/files/upload`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -5188,7 +5188,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
         },
         /**
@@ -5287,8 +5287,8 @@ export default abstract class Client {
                         operator_id?: string;
                     };
                     params: {
-                        employee_type: 'employee_id' | 'employee_no';
-                        dept_type: 'open_id';
+                        employee_type: "employee_id" | "employee_no";
+                        dept_type: "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -5387,7 +5387,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/groups`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5421,7 +5421,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -5443,8 +5443,8 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params: {
-                        employee_type: 'employee_id' | 'employee_no';
-                        dept_type: 'open_id';
+                        employee_type: "employee_id" | "employee_no";
+                        dept_type: "open_id";
                     };
                     path: { group_id: string };
                 },
@@ -5541,7 +5541,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5571,7 +5571,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/attendance/v1/groups`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -5619,8 +5619,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -5674,7 +5674,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/groups`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5722,7 +5722,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/groups/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5831,7 +5831,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/shifts`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5865,7 +5865,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -5936,7 +5936,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -5966,7 +5966,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/attendance/v1/shifts`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -6041,8 +6041,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -6123,7 +6123,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/shifts`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -6194,7 +6194,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/shifts/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6251,7 +6251,7 @@ export default abstract class Client {
                                     en?: string;
                                     ja?: string;
                                 };
-                                default_locale: 'ch' | 'en' | 'ja';
+                                default_locale: "ch" | "en" | "ja";
                                 reason: string;
                             }>;
                             overtime_works?: Array<{
@@ -6271,7 +6271,7 @@ export default abstract class Client {
                             }>;
                         };
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6317,7 +6317,7 @@ export default abstract class Client {
                                             en?: string;
                                             ja?: string;
                                         };
-                                        default_locale: 'ch' | 'en' | 'ja';
+                                        default_locale: "ch" | "en" | "ja";
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
@@ -6347,7 +6347,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_approvals`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6374,10 +6374,10 @@ export default abstract class Client {
                         user_ids: Array<string>;
                         check_date_from: number;
                         check_date_to: number;
-                        check_date_type?: 'PeriodTime' | 'CreateTime';
+                        check_date_type?: "PeriodTime" | "CreateTime";
                         status?: number;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6423,7 +6423,7 @@ export default abstract class Client {
                                             en?: string;
                                             ja?: string;
                                         };
-                                        default_locale: 'ch' | 'en' | 'ja';
+                                        default_locale: "ch" | "en" | "ja";
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
@@ -6453,7 +6453,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_approvals/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6489,7 +6489,7 @@ export default abstract class Client {
                         }>;
                         operator_id?: string;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6517,7 +6517,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6543,7 +6543,7 @@ export default abstract class Client {
                         check_date_from: number;
                         check_date_to: number;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6571,7 +6571,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_daily_shifts/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6617,19 +6617,19 @@ export default abstract class Client {
                             photo_urls?: Array<string>;
                             device_id?: string;
                             check_result?:
-                                | 'NoNeedCheck'
-                                | 'SystemCheck'
-                                | 'Normal'
-                                | 'Early'
-                                | 'Late'
-                                | 'SeriousLate'
-                                | 'Lack'
-                                | 'Invalid'
-                                | 'None'
-                                | 'Todo';
+                                | "NoNeedCheck"
+                                | "SystemCheck"
+                                | "Normal"
+                                | "Early"
+                                | "Late"
+                                | "SeriousLate"
+                                | "Lack"
+                                | "Invalid"
+                                | "None"
+                                | "Todo";
                         }>;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6660,16 +6660,16 @@ export default abstract class Client {
                                     photo_urls?: Array<string>;
                                     device_id?: string;
                                     check_result?:
-                                        | 'NoNeedCheck'
-                                        | 'SystemCheck'
-                                        | 'Normal'
-                                        | 'Early'
-                                        | 'Late'
-                                        | 'SeriousLate'
-                                        | 'Lack'
-                                        | 'Invalid'
-                                        | 'None'
-                                        | 'Todo';
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
                                 }>;
                             };
                         }
@@ -6678,7 +6678,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6701,9 +6701,9 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         employee_type:
-                            | 'open_id'
-                            | 'employee_id'
-                            | 'employee_no';
+                            | "open_id"
+                            | "employee_id"
+                            | "employee_no";
                     };
                     path: { user_flow_id: string };
                 },
@@ -6735,16 +6735,16 @@ export default abstract class Client {
                                 photo_urls?: Array<string>;
                                 device_id?: string;
                                 check_result?:
-                                    | 'NoNeedCheck'
-                                    | 'SystemCheck'
-                                    | 'Normal'
-                                    | 'Early'
-                                    | 'Late'
-                                    | 'SeriousLate'
-                                    | 'Lack'
-                                    | 'Invalid'
-                                    | 'None'
-                                    | 'Todo';
+                                    | "NoNeedCheck"
+                                    | "SystemCheck"
+                                    | "Normal"
+                                    | "Early"
+                                    | "Late"
+                                    | "SeriousLate"
+                                    | "Lack"
+                                    | "Invalid"
+                                    | "None"
+                                    | "Todo";
                             };
                         }
                     >({
@@ -6752,7 +6752,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_flows/:user_flow_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -6781,7 +6781,7 @@ export default abstract class Client {
                         check_time_to: string;
                     };
                     params: {
-                        employee_type: 'employee_id' | 'employee_no';
+                        employee_type: "employee_id" | "employee_no";
                         include_terminated_user?: boolean;
                     };
                 },
@@ -6814,16 +6814,16 @@ export default abstract class Client {
                                     photo_urls?: Array<string>;
                                     device_id?: string;
                                     check_result?:
-                                        | 'NoNeedCheck'
-                                        | 'SystemCheck'
-                                        | 'Normal'
-                                        | 'Early'
-                                        | 'Late'
-                                        | 'SeriousLate'
-                                        | 'Lack'
-                                        | 'Invalid'
-                                        | 'None'
-                                        | 'Todo';
+                                        | "NoNeedCheck"
+                                        | "SystemCheck"
+                                        | "Normal"
+                                        | "Early"
+                                        | "Late"
+                                        | "SeriousLate"
+                                        | "Lack"
+                                        | "Invalid"
+                                        | "None"
+                                        | "Todo";
                                 }>;
                             };
                         }
@@ -6832,7 +6832,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_flows/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6865,7 +6865,7 @@ export default abstract class Client {
                             face_key_update_time?: string;
                         };
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6891,7 +6891,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_settings/modify`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6913,7 +6913,7 @@ export default abstract class Client {
             query: async (
                 payload?: {
                     data: { user_ids: Array<string> };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6939,7 +6939,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_settings/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -6966,8 +6966,8 @@ export default abstract class Client {
             query: async (
                 payload?: {
                     data: {
-                        locale: 'en' | 'ja' | 'zh';
-                        stats_type: 'daily' | 'month';
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
                         start_date: number;
                         end_date: number;
                         user_ids?: Array<string>;
@@ -6975,7 +6975,7 @@ export default abstract class Client {
                         current_group_only?: boolean;
                         user_id?: string;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7009,7 +7009,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_stats_datas/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7036,12 +7036,12 @@ export default abstract class Client {
             query: async (
                 payload?: {
                     data: {
-                        locale: 'en' | 'ja' | 'zh';
-                        stats_type: 'daily' | 'month';
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
                         start_date: number;
                         end_date: number;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7056,7 +7056,7 @@ export default abstract class Client {
                             msg?: string;
                             data?: {
                                 user_stats_field?: {
-                                    stats_type: 'daily' | 'month';
+                                    stats_type: "daily" | "month";
                                     user_id: string;
                                     fields: Array<{
                                         code: string;
@@ -7075,7 +7075,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_stats_fields/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7102,11 +7102,11 @@ export default abstract class Client {
             query: async (
                 payload?: {
                     data: {
-                        locale: 'en' | 'ja' | 'zh';
-                        stats_type: 'daily' | 'month';
+                        locale: "en" | "ja" | "zh";
+                        stats_type: "daily" | "month";
                         user_id?: string;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7122,7 +7122,7 @@ export default abstract class Client {
                             data?: {
                                 view?: {
                                     view_id: string;
-                                    stats_type: 'daily' | 'month';
+                                    stats_type: "daily" | "month";
                                     user_id: string;
                                     items?: Array<{
                                         code: string;
@@ -7145,7 +7145,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_stats_views/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7169,7 +7169,7 @@ export default abstract class Client {
                     data: {
                         view: {
                             view_id: string;
-                            stats_type: 'daily' | 'month';
+                            stats_type: "daily" | "month";
                             user_id: string;
                             items?: Array<{
                                 code: string;
@@ -7180,7 +7180,7 @@ export default abstract class Client {
                             }>;
                         };
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                     path: { user_stats_view_id: string };
                 },
                 options?: IRequestOptions
@@ -7197,7 +7197,7 @@ export default abstract class Client {
                             data?: {
                                 view?: {
                                     view_id: string;
-                                    stats_type: 'daily' | 'month';
+                                    stats_type: "daily" | "month";
                                     user_id: string;
                                     items?: Array<{
                                         code: string;
@@ -7220,7 +7220,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_stats_views/:user_stats_view_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -7254,7 +7254,7 @@ export default abstract class Client {
                         check_date_to: number;
                     };
                     params: {
-                        employee_type: 'employee_id' | 'employee_no';
+                        employee_type: "employee_id" | "employee_no";
                         ignore_invalid_users?: boolean;
                         include_terminated_user?: boolean;
                     };
@@ -7297,16 +7297,16 @@ export default abstract class Client {
                                             photo_urls?: Array<string>;
                                             device_id?: string;
                                             check_result?:
-                                                | 'NoNeedCheck'
-                                                | 'SystemCheck'
-                                                | 'Normal'
-                                                | 'Early'
-                                                | 'Late'
-                                                | 'SeriousLate'
-                                                | 'Lack'
-                                                | 'Invalid'
-                                                | 'None'
-                                                | 'Todo';
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "SeriousLate"
+                                                | "Lack"
+                                                | "Invalid"
+                                                | "None"
+                                                | "Todo";
                                         };
                                         check_out_record_id: string;
                                         check_out_record?: {
@@ -7326,51 +7326,51 @@ export default abstract class Client {
                                             photo_urls?: Array<string>;
                                             device_id?: string;
                                             check_result?:
-                                                | 'NoNeedCheck'
-                                                | 'SystemCheck'
-                                                | 'Normal'
-                                                | 'Early'
-                                                | 'Late'
-                                                | 'SeriousLate'
-                                                | 'Lack'
-                                                | 'Invalid'
-                                                | 'None'
-                                                | 'Todo';
+                                                | "NoNeedCheck"
+                                                | "SystemCheck"
+                                                | "Normal"
+                                                | "Early"
+                                                | "Late"
+                                                | "SeriousLate"
+                                                | "Lack"
+                                                | "Invalid"
+                                                | "None"
+                                                | "Todo";
                                         };
                                         check_in_result:
-                                            | 'NoNeedCheck'
-                                            | 'SystemCheck'
-                                            | 'Normal'
-                                            | 'Early'
-                                            | 'Late'
-                                            | 'Lack';
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "Lack";
                                         check_out_result:
-                                            | 'NoNeedCheck'
-                                            | 'SystemCheck'
-                                            | 'Normal'
-                                            | 'Early'
-                                            | 'Late'
-                                            | 'Lack';
+                                            | "NoNeedCheck"
+                                            | "SystemCheck"
+                                            | "Normal"
+                                            | "Early"
+                                            | "Late"
+                                            | "Lack";
                                         check_in_result_supplement:
-                                            | 'None'
-                                            | 'ManagerModification'
-                                            | 'CardReplacement'
-                                            | 'ShiftChange'
-                                            | 'Travel'
-                                            | 'Leave'
-                                            | 'GoOut'
-                                            | 'CardReplacementApplication'
-                                            | 'FieldPunch';
+                                            | "None"
+                                            | "ManagerModification"
+                                            | "CardReplacement"
+                                            | "ShiftChange"
+                                            | "Travel"
+                                            | "Leave"
+                                            | "GoOut"
+                                            | "CardReplacementApplication"
+                                            | "FieldPunch";
                                         check_out_result_supplement:
-                                            | 'None'
-                                            | 'ManagerModification'
-                                            | 'CardReplacement'
-                                            | 'ShiftChange'
-                                            | 'Travel'
-                                            | 'Leave'
-                                            | 'GoOut'
-                                            | 'CardReplacementApplication'
-                                            | 'FieldPunch';
+                                            | "None"
+                                            | "ManagerModification"
+                                            | "CardReplacement"
+                                            | "ShiftChange"
+                                            | "Travel"
+                                            | "Leave"
+                                            | "GoOut"
+                                            | "CardReplacementApplication"
+                                            | "FieldPunch";
                                         check_in_shift_time?: string;
                                         check_out_shift_time?: string;
                                     }>;
@@ -7384,7 +7384,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_tasks/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7419,7 +7419,7 @@ export default abstract class Client {
                         reason: string;
                         time?: string;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7454,7 +7454,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_task_remedys`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7479,10 +7479,10 @@ export default abstract class Client {
                         user_ids: Array<string>;
                         check_time_from: string;
                         check_time_to: string;
-                        check_date_type?: 'PeriodTime' | 'CreateTime';
+                        check_date_type?: "PeriodTime" | "CreateTime";
                         status?: number;
                     };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7517,7 +7517,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_task_remedys/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7539,7 +7539,7 @@ export default abstract class Client {
             queryUserAllowedRemedys: async (
                 payload?: {
                     data: { user_id: string; remedy_date: number };
-                    params: { employee_type: 'employee_id' | 'employee_no' };
+                    params: { employee_type: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7571,7 +7571,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7615,7 +7615,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/baike/v1/classifications`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -7663,8 +7663,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -7718,7 +7718,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/classifications`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -7788,7 +7788,7 @@ export default abstract class Client {
                         rich_text?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -7883,7 +7883,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/drafts`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7943,7 +7943,7 @@ export default abstract class Client {
                         rich_text?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { draft_id: string };
                 },
@@ -8039,7 +8039,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/drafts/:draft_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -8104,7 +8104,7 @@ export default abstract class Client {
                         rich_text?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8194,7 +8194,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -8220,7 +8220,7 @@ export default abstract class Client {
                     params?: {
                         provider?: string;
                         outer_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { entity_id?: string };
                 },
@@ -8311,7 +8311,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities/:entity_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -8358,7 +8358,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities/highlight`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -8374,7 +8374,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         provider?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8393,7 +8393,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/baike/v1/entities`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -8506,8 +8506,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -8538,7 +8538,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         provider?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8629,7 +8629,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -8675,7 +8675,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities/match`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -8691,7 +8691,7 @@ export default abstract class Client {
                     params?: {
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8710,7 +8710,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/baike/v1/entities/search`,
                                 path
                             ),
-                            method: 'POST',
+                            method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -8823,8 +8823,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -8855,7 +8855,7 @@ export default abstract class Client {
                     params?: {
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8946,7 +8946,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -9006,7 +9006,7 @@ export default abstract class Client {
                         rich_text?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { entity_id?: string };
                 },
@@ -9097,7 +9097,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/baike/v1/entities/:entity_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -9138,7 +9138,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/dashboards`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -9186,8 +9186,8 @@ export default abstract class Client {
                                                 has_more: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -9244,7 +9244,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/dashboards`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -9299,7 +9299,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -9351,7 +9351,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -9387,15 +9387,15 @@ export default abstract class Client {
                                 conditions: Array<{
                                     field_name: string;
                                     operator?:
-                                        | 'is'
-                                        | 'isNot'
-                                        | 'contains'
-                                        | 'doesNotContain'
-                                        | 'isEmpty'
-                                        | 'isNotEmpty';
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty";
                                     value?: Array<string>;
                                 }>;
-                                conjunction?: 'and' | 'or';
+                                conjunction?: "and" | "or";
                                 other_perm?: number;
                             };
                             field_perm?: {};
@@ -9432,16 +9432,16 @@ export default abstract class Client {
                                             conditions: Array<{
                                                 field_name: string;
                                                 operator?:
-                                                    | 'is'
-                                                    | 'isNot'
-                                                    | 'contains'
-                                                    | 'doesNotContain'
-                                                    | 'isEmpty'
-                                                    | 'isNotEmpty';
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
                                                 value?: Array<string>;
                                                 field_type?: number;
                                             }>;
-                                            conjunction?: 'and' | 'or';
+                                            conjunction?: "and" | "or";
                                             other_perm?: number;
                                         };
                                         field_perm?: {};
@@ -9450,7 +9450,7 @@ export default abstract class Client {
                                     }>;
                                     block_roles?: Array<{
                                         block_id: string;
-                                        block_type?: 'dashboard';
+                                        block_type?: "dashboard";
                                         block_perm: number;
                                     }>;
                                 };
@@ -9461,7 +9461,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -9495,7 +9495,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -9526,7 +9526,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -9577,18 +9577,18 @@ export default abstract class Client {
                                                             conditions: Array<{
                                                                 field_name: string;
                                                                 operator?:
-                                                                    | 'is'
-                                                                    | 'isNot'
-                                                                    | 'contains'
-                                                                    | 'doesNotContain'
-                                                                    | 'isEmpty'
-                                                                    | 'isNotEmpty';
+                                                                    | "is"
+                                                                    | "isNot"
+                                                                    | "contains"
+                                                                    | "doesNotContain"
+                                                                    | "isEmpty"
+                                                                    | "isNotEmpty";
                                                                 value?: Array<string>;
                                                                 field_type?: number;
                                                             }>;
                                                             conjunction?:
-                                                                | 'and'
-                                                                | 'or';
+                                                                | "and"
+                                                                | "or";
                                                             other_perm?: number;
                                                         };
                                                         field_perm?: {};
@@ -9597,7 +9597,7 @@ export default abstract class Client {
                                                     }>;
                                                     block_roles?: Array<{
                                                         block_id: string;
-                                                        block_type?: 'dashboard';
+                                                        block_type?: "dashboard";
                                                         block_perm: number;
                                                     }>;
                                                 }>;
@@ -9606,8 +9606,8 @@ export default abstract class Client {
                                                 total?: number;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -9660,16 +9660,16 @@ export default abstract class Client {
                                             conditions: Array<{
                                                 field_name: string;
                                                 operator?:
-                                                    | 'is'
-                                                    | 'isNot'
-                                                    | 'contains'
-                                                    | 'doesNotContain'
-                                                    | 'isEmpty'
-                                                    | 'isNotEmpty';
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
                                                 value?: Array<string>;
                                                 field_type?: number;
                                             }>;
-                                            conjunction?: 'and' | 'or';
+                                            conjunction?: "and" | "or";
                                             other_perm?: number;
                                         };
                                         field_perm?: {};
@@ -9678,7 +9678,7 @@ export default abstract class Client {
                                     }>;
                                     block_roles?: Array<{
                                         block_id: string;
-                                        block_type?: 'dashboard';
+                                        block_type?: "dashboard";
                                         block_perm: number;
                                     }>;
                                 }>;
@@ -9692,7 +9692,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -9725,15 +9725,15 @@ export default abstract class Client {
                                 conditions: Array<{
                                     field_name: string;
                                     operator?:
-                                        | 'is'
-                                        | 'isNot'
-                                        | 'contains'
-                                        | 'doesNotContain'
-                                        | 'isEmpty'
-                                        | 'isNotEmpty';
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty";
                                     value?: Array<string>;
                                 }>;
-                                conjunction?: 'and' | 'or';
+                                conjunction?: "and" | "or";
                                 other_perm?: number;
                             };
                             field_perm?: {};
@@ -9770,16 +9770,16 @@ export default abstract class Client {
                                             conditions: Array<{
                                                 field_name: string;
                                                 operator?:
-                                                    | 'is'
-                                                    | 'isNot'
-                                                    | 'contains'
-                                                    | 'doesNotContain'
-                                                    | 'isEmpty'
-                                                    | 'isNotEmpty';
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty";
                                                 value?: Array<string>;
                                                 field_type?: number;
                                             }>;
-                                            conjunction?: 'and' | 'or';
+                                            conjunction?: "and" | "or";
                                             other_perm?: number;
                                         };
                                         field_perm?: {};
@@ -9788,7 +9788,7 @@ export default abstract class Client {
                                     }>;
                                     block_roles?: Array<{
                                         block_id: string;
-                                        block_type?: 'dashboard';
+                                        block_type?: "dashboard";
                                         block_perm: number;
                                     }>;
                                 };
@@ -9799,7 +9799,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -9828,12 +9828,12 @@ export default abstract class Client {
                     data: {
                         member_list: Array<{
                             type?:
-                                | 'open_id'
-                                | 'union_id'
-                                | 'user_id'
-                                | 'chat_id'
-                                | 'department_id'
-                                | 'open_department_id';
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "chat_id"
+                                | "department_id"
+                                | "open_department_id";
                             id: string;
                         }>;
                     };
@@ -9850,7 +9850,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -9874,12 +9874,12 @@ export default abstract class Client {
                     data: {
                         member_list: Array<{
                             type?:
-                                | 'open_id'
-                                | 'union_id'
-                                | 'user_id'
-                                | 'chat_id'
-                                | 'department_id'
-                                | 'open_department_id';
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "chat_id"
+                                | "department_id"
+                                | "open_department_id";
                             id: string;
                         }>;
                     };
@@ -9896,7 +9896,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -9920,12 +9920,12 @@ export default abstract class Client {
                     data: { member_id: string };
                     params?: {
                         member_id_type?:
-                            | 'open_id'
-                            | 'union_id'
-                            | 'user_id'
-                            | 'chat_id'
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "chat_id"
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { app_token?: string; role_id?: string };
                 },
@@ -9940,7 +9940,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -9963,12 +9963,12 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         member_id_type?:
-                            | 'open_id'
-                            | 'union_id'
-                            | 'user_id'
-                            | 'chat_id'
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "chat_id"
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: {
                         app_token?: string;
@@ -9987,7 +9987,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/:member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -10018,7 +10018,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -10068,17 +10068,17 @@ export default abstract class Client {
                                                     member_name?: string;
                                                     member_en_name?: string;
                                                     member_type?:
-                                                        | 'user'
-                                                        | 'chat'
-                                                        | 'department';
+                                                        | "user"
+                                                        | "chat"
+                                                        | "department";
                                                 }>;
                                                 has_more?: boolean;
                                                 page_token?: string;
                                                 total?: number;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -10130,9 +10130,9 @@ export default abstract class Client {
                                     member_name?: string;
                                     member_en_name?: string;
                                     member_type?:
-                                        | 'user'
-                                        | 'chat'
-                                        | 'department';
+                                        | "user"
+                                        | "chat"
+                                        | "department";
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -10144,7 +10144,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -10174,7 +10174,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { tables?: Array<{ name?: string }> };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_token: string };
                 },
@@ -10196,7 +10196,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/batch_create`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -10233,7 +10233,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/batch_delete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -10258,7 +10258,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { table?: { name?: string } };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_token: string };
                 },
@@ -10280,7 +10280,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -10316,7 +10316,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -10347,7 +10347,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -10397,8 +10397,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -10457,7 +10457,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -10502,17 +10502,17 @@ export default abstract class Client {
                             table_name?: string;
                             back_field_name?: string;
                             auto_serial?: {
-                                type: 'custom' | 'auto_increment_number';
+                                type: "custom" | "auto_increment_number";
                                 options?: Array<{
                                     type:
-                                        | 'system_number'
-                                        | 'fixed_text'
-                                        | 'created_time';
+                                        | "system_number"
+                                        | "fixed_text"
+                                        | "created_time";
                                     value: string;
                                 }>;
                             };
                             location?: {
-                                input_type: 'only_mobile' | 'not_limit';
+                                input_type: "only_mobile" | "not_limit";
                             };
                         };
                         description?: { disable_sync?: boolean; text?: string };
@@ -10550,20 +10550,20 @@ export default abstract class Client {
                                         back_field_name?: string;
                                         auto_serial?: {
                                             type:
-                                                | 'custom'
-                                                | 'auto_increment_number';
+                                                | "custom"
+                                                | "auto_increment_number";
                                             options?: Array<{
                                                 type:
-                                                    | 'system_number'
-                                                    | 'fixed_text'
-                                                    | 'created_time';
+                                                    | "system_number"
+                                                    | "fixed_text"
+                                                    | "created_time";
                                                 value: string;
                                             }>;
                                         };
                                         location?: {
                                             input_type:
-                                                | 'only_mobile'
-                                                | 'not_limit';
+                                                | "only_mobile"
+                                                | "not_limit";
                                         };
                                     };
                                     description?: {
@@ -10578,7 +10578,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -10625,7 +10625,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields/:field_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -10661,7 +10661,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -10723,20 +10723,20 @@ export default abstract class Client {
                                                         back_field_name?: string;
                                                         auto_serial?: {
                                                             type:
-                                                                | 'custom'
-                                                                | 'auto_increment_number';
+                                                                | "custom"
+                                                                | "auto_increment_number";
                                                             options?: Array<{
                                                                 type:
-                                                                    | 'system_number'
-                                                                    | 'fixed_text'
-                                                                    | 'created_time';
+                                                                    | "system_number"
+                                                                    | "fixed_text"
+                                                                    | "created_time";
                                                                 value: string;
                                                             }>;
                                                         };
                                                         location?: {
                                                             input_type:
-                                                                | 'only_mobile'
-                                                                | 'not_limit';
+                                                                | "only_mobile"
+                                                                | "not_limit";
                                                         };
                                                     };
                                                     description?: {
@@ -10746,8 +10746,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -10818,20 +10818,20 @@ export default abstract class Client {
                                         back_field_name?: string;
                                         auto_serial?: {
                                             type:
-                                                | 'custom'
-                                                | 'auto_increment_number';
+                                                | "custom"
+                                                | "auto_increment_number";
                                             options?: Array<{
                                                 type:
-                                                    | 'system_number'
-                                                    | 'fixed_text'
-                                                    | 'created_time';
+                                                    | "system_number"
+                                                    | "fixed_text"
+                                                    | "created_time";
                                                 value: string;
                                             }>;
                                         };
                                         location?: {
                                             input_type:
-                                                | 'only_mobile'
-                                                | 'not_limit';
+                                                | "only_mobile"
+                                                | "not_limit";
                                         };
                                     };
                                     description?: {
@@ -10846,7 +10846,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -10886,17 +10886,17 @@ export default abstract class Client {
                             table_name?: string;
                             back_field_name?: string;
                             auto_serial?: {
-                                type: 'custom' | 'auto_increment_number';
+                                type: "custom" | "auto_increment_number";
                                 options?: Array<{
                                     type:
-                                        | 'system_number'
-                                        | 'fixed_text'
-                                        | 'created_time';
+                                        | "system_number"
+                                        | "fixed_text"
+                                        | "created_time";
                                     value: string;
                                 }>;
                             };
                             location?: {
-                                input_type: 'only_mobile' | 'not_limit';
+                                input_type: "only_mobile" | "not_limit";
                             };
                         };
                         description?: { disable_sync?: boolean; text?: string };
@@ -10938,20 +10938,20 @@ export default abstract class Client {
                                         back_field_name?: string;
                                         auto_serial?: {
                                             type:
-                                                | 'custom'
-                                                | 'auto_increment_number';
+                                                | "custom"
+                                                | "auto_increment_number";
                                             options?: Array<{
                                                 type:
-                                                    | 'system_number'
-                                                    | 'fixed_text'
-                                                    | 'created_time';
+                                                    | "system_number"
+                                                    | "fixed_text"
+                                                    | "created_time";
                                                 value: string;
                                             }>;
                                         };
                                         location?: {
                                             input_type:
-                                                | 'only_mobile'
-                                                | 'not_limit';
+                                                | "only_mobile"
+                                                | "not_limit";
                                         };
                                     };
                                     description?: {
@@ -10966,7 +10966,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields/:field_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -11006,7 +11006,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/fields`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -11058,8 +11058,8 @@ export default abstract class Client {
                                                 total: number;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -11124,7 +11124,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/fields`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -11187,7 +11187,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/fields/:field_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -11239,9 +11239,9 @@ export default abstract class Client {
                                     shared?: boolean;
                                     shared_url?: string;
                                     shared_limit?:
-                                        | 'off'
-                                        | 'tenant_editable'
-                                        | 'anyone_editable';
+                                        | "off"
+                                        | "tenant_editable"
+                                        | "anyone_editable";
                                     submit_limit_once?: boolean;
                                 };
                             };
@@ -11251,7 +11251,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -11279,9 +11279,9 @@ export default abstract class Client {
                         description?: string;
                         shared?: boolean;
                         shared_limit?:
-                            | 'off'
-                            | 'tenant_editable'
-                            | 'anyone_editable';
+                            | "off"
+                            | "tenant_editable"
+                            | "anyone_editable";
                         submit_limit_once?: boolean;
                     };
                     path: {
@@ -11308,9 +11308,9 @@ export default abstract class Client {
                                     shared?: boolean;
                                     shared_url?: string;
                                     shared_limit?:
-                                        | 'off'
-                                        | 'tenant_editable'
-                                        | 'anyone_editable';
+                                        | "off"
+                                        | "tenant_editable"
+                                        | "anyone_editable";
                                     submit_limit_once?: boolean;
                                 };
                             };
@@ -11320,7 +11320,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -11397,7 +11397,7 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -11467,7 +11467,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_create`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -11516,7 +11516,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -11589,7 +11589,7 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -11659,7 +11659,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_update`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -11715,7 +11715,7 @@ export default abstract class Client {
                         >;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -11785,7 +11785,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -11832,7 +11832,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -11857,7 +11857,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         text_field_as_array?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         display_formula_ref?: boolean;
                         automatic_fields?: boolean;
                     };
@@ -11933,7 +11933,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -11951,7 +11951,7 @@ export default abstract class Client {
                         sort?: string;
                         field_names?: string;
                         text_field_as_array?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         display_formula_ref?: boolean;
                         automatic_fields?: boolean;
                         page_token?: string;
@@ -11975,7 +11975,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -12070,8 +12070,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -12106,7 +12106,7 @@ export default abstract class Client {
                         sort?: string;
                         field_names?: string;
                         text_field_as_array?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         display_formula_ref?: boolean;
                         automatic_fields?: boolean;
                         page_token?: string;
@@ -12183,7 +12183,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -12239,7 +12239,7 @@ export default abstract class Client {
                         >;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: {
                         app_token: string;
@@ -12313,7 +12313,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -12344,11 +12344,11 @@ export default abstract class Client {
                     data: {
                         view_name: string;
                         view_type?:
-                            | 'grid'
-                            | 'kanban'
-                            | 'gallery'
-                            | 'gantt'
-                            | 'form';
+                            | "grid"
+                            | "kanban"
+                            | "gallery"
+                            | "gantt"
+                            | "form";
                     };
                     path?: { app_token?: string; table_id?: string };
                 },
@@ -12376,7 +12376,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -12416,7 +12416,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views/:view_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -12447,7 +12447,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -12497,8 +12497,8 @@ export default abstract class Client {
                                                 total?: number;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -12557,7 +12557,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -12637,7 +12637,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/block/v2/entities`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -12685,7 +12685,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/block/v2/entities/:block_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -12730,7 +12730,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/block/v2/message`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -12765,15 +12765,15 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         role:
-                            | 'unknown'
-                            | 'free_busy_reader'
-                            | 'reader'
-                            | 'writer'
-                            | 'owner';
-                        scope: { type: 'user'; user_id?: string };
+                            | "unknown"
+                            | "free_busy_reader"
+                            | "reader"
+                            | "writer"
+                            | "owner";
+                        scope: { type: "user"; user_id?: string };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { calendar_id: string };
                 },
@@ -12791,12 +12791,12 @@ export default abstract class Client {
                             data?: {
                                 acl_id: string;
                                 role:
-                                    | 'unknown'
-                                    | 'free_busy_reader'
-                                    | 'reader'
-                                    | 'writer'
-                                    | 'owner';
-                                scope: { type: 'user'; user_id?: string };
+                                    | "unknown"
+                                    | "free_busy_reader"
+                                    | "reader"
+                                    | "writer"
+                                    | "owner";
+                                scope: { type: "user"; user_id?: string };
                             };
                         }
                     >({
@@ -12804,7 +12804,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -12840,7 +12840,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/:acl_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -12853,7 +12853,7 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -12875,7 +12875,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -12918,13 +12918,13 @@ export default abstract class Client {
                                                 acls?: Array<{
                                                     acl_id: string;
                                                     role:
-                                                        | 'unknown'
-                                                        | 'free_busy_reader'
-                                                        | 'reader'
-                                                        | 'writer'
-                                                        | 'owner';
+                                                        | "unknown"
+                                                        | "free_busy_reader"
+                                                        | "reader"
+                                                        | "writer"
+                                                        | "owner";
                                                     scope: {
-                                                        type: 'user';
+                                                        type: "user";
                                                         user_id?: string;
                                                     };
                                                 }>;
@@ -12932,8 +12932,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -12963,7 +12963,7 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -12984,12 +12984,12 @@ export default abstract class Client {
                                 acls?: Array<{
                                     acl_id: string;
                                     role:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
-                                    scope: { type: 'user'; user_id?: string };
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
+                                    scope: { type: "user"; user_id?: string };
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -13000,7 +13000,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -13036,7 +13036,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/subscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13072,7 +13072,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/unsubscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13102,9 +13102,9 @@ export default abstract class Client {
                         summary?: string;
                         description?: string;
                         permissions?:
-                            | 'private'
-                            | 'show_only_free_busy'
-                            | 'public';
+                            | "private"
+                            | "show_only_free_busy"
+                            | "public";
                         color?: number;
                         summary_alias?: string;
                     };
@@ -13126,26 +13126,26 @@ export default abstract class Client {
                                     summary?: string;
                                     description?: string;
                                     permissions?:
-                                        | 'private'
-                                        | 'show_only_free_busy'
-                                        | 'public';
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
                                     color?: number;
                                     type?:
-                                        | 'unknown'
-                                        | 'primary'
-                                        | 'shared'
-                                        | 'google'
-                                        | 'resource'
-                                        | 'exchange';
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
                                     summary_alias?: string;
                                     is_deleted?: boolean;
                                     is_third_party?: boolean;
                                     role?:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
                                 };
                             };
                         }
@@ -13154,7 +13154,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13190,7 +13190,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -13231,26 +13231,26 @@ export default abstract class Client {
                                 summary?: string;
                                 description?: string;
                                 permissions?:
-                                    | 'private'
-                                    | 'show_only_free_busy'
-                                    | 'public';
+                                    | "private"
+                                    | "show_only_free_busy"
+                                    | "public";
                                 color?: number;
                                 type?:
-                                    | 'unknown'
-                                    | 'primary'
-                                    | 'shared'
-                                    | 'google'
-                                    | 'resource'
-                                    | 'exchange';
+                                    | "unknown"
+                                    | "primary"
+                                    | "shared"
+                                    | "google"
+                                    | "resource"
+                                    | "exchange";
                                 summary_alias?: string;
                                 is_deleted?: boolean;
                                 is_third_party?: boolean;
                                 role?:
-                                    | 'unknown'
-                                    | 'free_busy_reader'
-                                    | 'reader'
-                                    | 'writer'
-                                    | 'owner';
+                                    | "unknown"
+                                    | "free_busy_reader"
+                                    | "reader"
+                                    | "writer"
+                                    | "owner";
                             };
                         }
                     >({
@@ -13258,7 +13258,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -13307,26 +13307,26 @@ export default abstract class Client {
                                     summary?: string;
                                     description?: string;
                                     permissions?:
-                                        | 'private'
-                                        | 'show_only_free_busy'
-                                        | 'public';
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
                                     color?: number;
                                     type?:
-                                        | 'unknown'
-                                        | 'primary'
-                                        | 'shared'
-                                        | 'google'
-                                        | 'resource'
-                                        | 'exchange';
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
                                     summary_alias?: string;
                                     is_deleted?: boolean;
                                     is_third_party?: boolean;
                                     role?:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
                                 }>;
                             };
                         }
@@ -13335,7 +13335,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -13362,9 +13362,9 @@ export default abstract class Client {
                         summary?: string;
                         description?: string;
                         permissions?:
-                            | 'private'
-                            | 'show_only_free_busy'
-                            | 'public';
+                            | "private"
+                            | "show_only_free_busy"
+                            | "public";
                         color?: number;
                         summary_alias?: string;
                     };
@@ -13387,26 +13387,26 @@ export default abstract class Client {
                                     summary?: string;
                                     description?: string;
                                     permissions?:
-                                        | 'private'
-                                        | 'show_only_free_busy'
-                                        | 'public';
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
                                     color?: number;
                                     type?:
-                                        | 'unknown'
-                                        | 'primary'
-                                        | 'shared'
-                                        | 'google'
-                                        | 'resource'
-                                        | 'exchange';
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
                                     summary_alias?: string;
                                     is_deleted?: boolean;
                                     is_third_party?: boolean;
                                     role?:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
                                 };
                             };
                         }
@@ -13415,7 +13415,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -13437,7 +13437,7 @@ export default abstract class Client {
             primary: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -13458,26 +13458,26 @@ export default abstract class Client {
                                         summary?: string;
                                         description?: string;
                                         permissions?:
-                                            | 'private'
-                                            | 'show_only_free_busy'
-                                            | 'public';
+                                            | "private"
+                                            | "show_only_free_busy"
+                                            | "public";
                                         color?: number;
                                         type?:
-                                            | 'unknown'
-                                            | 'primary'
-                                            | 'shared'
-                                            | 'google'
-                                            | 'resource'
-                                            | 'exchange';
+                                            | "unknown"
+                                            | "primary"
+                                            | "shared"
+                                            | "google"
+                                            | "resource"
+                                            | "exchange";
                                         summary_alias?: string;
                                         is_deleted?: boolean;
                                         is_third_party?: boolean;
                                         role?:
-                                            | 'unknown'
-                                            | 'free_busy_reader'
-                                            | 'reader'
-                                            | 'writer'
-                                            | 'owner';
+                                            | "unknown"
+                                            | "free_busy_reader"
+                                            | "reader"
+                                            | "writer"
+                                            | "owner";
                                     };
                                     user_id?: string;
                                 }>;
@@ -13488,7 +13488,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/primary`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13519,7 +13519,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/calendar/v4/calendars/search`,
                                 path
                             ),
-                            method: 'POST',
+                            method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -13564,32 +13564,32 @@ export default abstract class Client {
                                                     summary?: string;
                                                     description?: string;
                                                     permissions?:
-                                                        | 'private'
-                                                        | 'show_only_free_busy'
-                                                        | 'public';
+                                                        | "private"
+                                                        | "show_only_free_busy"
+                                                        | "public";
                                                     color?: number;
                                                     type?:
-                                                        | 'unknown'
-                                                        | 'primary'
-                                                        | 'shared'
-                                                        | 'google'
-                                                        | 'resource'
-                                                        | 'exchange';
+                                                        | "unknown"
+                                                        | "primary"
+                                                        | "shared"
+                                                        | "google"
+                                                        | "resource"
+                                                        | "exchange";
                                                     summary_alias?: string;
                                                     is_deleted?: boolean;
                                                     is_third_party?: boolean;
                                                     role?:
-                                                        | 'unknown'
-                                                        | 'free_busy_reader'
-                                                        | 'reader'
-                                                        | 'writer'
-                                                        | 'owner';
+                                                        | "unknown"
+                                                        | "free_busy_reader"
+                                                        | "reader"
+                                                        | "writer"
+                                                        | "owner";
                                                 }>;
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -13636,26 +13636,26 @@ export default abstract class Client {
                                     summary?: string;
                                     description?: string;
                                     permissions?:
-                                        | 'private'
-                                        | 'show_only_free_busy'
-                                        | 'public';
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
                                     color?: number;
                                     type?:
-                                        | 'unknown'
-                                        | 'primary'
-                                        | 'shared'
-                                        | 'google'
-                                        | 'resource'
-                                        | 'exchange';
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
                                     summary_alias?: string;
                                     is_deleted?: boolean;
                                     is_third_party?: boolean;
                                     role?:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
                                 }>;
                                 page_token?: string;
                             };
@@ -13665,7 +13665,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13707,26 +13707,26 @@ export default abstract class Client {
                                     summary?: string;
                                     description?: string;
                                     permissions?:
-                                        | 'private'
-                                        | 'show_only_free_busy'
-                                        | 'public';
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
                                     color?: number;
                                     type?:
-                                        | 'unknown'
-                                        | 'primary'
-                                        | 'shared'
-                                        | 'google'
-                                        | 'resource'
-                                        | 'exchange';
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
                                     summary_alias?: string;
                                     is_deleted?: boolean;
                                     is_third_party?: boolean;
                                     role?:
-                                        | 'unknown'
-                                        | 'free_busy_reader'
-                                        | 'reader'
-                                        | 'writer'
-                                        | 'owner';
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
                                 };
                             };
                         }
@@ -13735,7 +13735,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/subscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13764,7 +13764,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/subscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13800,7 +13800,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/unsubscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13829,7 +13829,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/unsubscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13860,7 +13860,7 @@ export default abstract class Client {
                     data?: {
                         attendee_ids?: Array<string>;
                         delete_ids?: Array<{
-                            type?: 'user' | 'chat' | 'resource' | 'third_party';
+                            type?: "user" | "chat" | "resource" | "third_party";
                             user_id?: string;
                             chat_id?: string;
                             room_id?: string;
@@ -13871,7 +13871,7 @@ export default abstract class Client {
                         is_enable_admin?: boolean;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { calendar_id: string; event_id: string };
                 },
@@ -13886,7 +13886,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/batch_delete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -13911,7 +13911,7 @@ export default abstract class Client {
                 payload?: {
                     data?: {
                         attendees?: Array<{
-                            type?: 'user' | 'chat' | 'resource' | 'third_party';
+                            type?: "user" | "chat" | "resource" | "third_party";
                             is_optional?: boolean;
                             user_id?: string;
                             chat_id?: string;
@@ -13932,7 +13932,7 @@ export default abstract class Client {
                         is_enable_admin?: boolean;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { calendar_id: string; event_id: string };
                 },
@@ -13950,28 +13950,28 @@ export default abstract class Client {
                             data?: {
                                 attendees?: Array<{
                                     type?:
-                                        | 'user'
-                                        | 'chat'
-                                        | 'resource'
-                                        | 'third_party';
+                                        | "user"
+                                        | "chat"
+                                        | "resource"
+                                        | "third_party";
                                     attendee_id?: string;
                                     rsvp_status?:
-                                        | 'needs_action'
-                                        | 'accept'
-                                        | 'tentative'
-                                        | 'decline'
-                                        | 'removed';
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                     is_optional?: boolean;
                                     is_organizer?: boolean;
                                     is_external?: boolean;
                                     display_name?: string;
                                     chat_members?: Array<{
                                         rsvp_status?:
-                                            | 'needs_action'
-                                            | 'accept'
-                                            | 'tentative'
-                                            | 'decline'
-                                            | 'removed';
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                         is_optional?: boolean;
                                         display_name?: string;
                                         is_organizer?: boolean;
@@ -13998,7 +13998,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -14011,7 +14011,7 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -14033,7 +14033,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -14075,28 +14075,28 @@ export default abstract class Client {
                                             data?: {
                                                 items?: Array<{
                                                     type?:
-                                                        | 'user'
-                                                        | 'chat'
-                                                        | 'resource'
-                                                        | 'third_party';
+                                                        | "user"
+                                                        | "chat"
+                                                        | "resource"
+                                                        | "third_party";
                                                     attendee_id?: string;
                                                     rsvp_status?:
-                                                        | 'needs_action'
-                                                        | 'accept'
-                                                        | 'tentative'
-                                                        | 'decline'
-                                                        | 'removed';
+                                                        | "needs_action"
+                                                        | "accept"
+                                                        | "tentative"
+                                                        | "decline"
+                                                        | "removed";
                                                     is_optional?: boolean;
                                                     is_organizer?: boolean;
                                                     is_external?: boolean;
                                                     display_name?: string;
                                                     chat_members?: Array<{
                                                         rsvp_status?:
-                                                            | 'needs_action'
-                                                            | 'accept'
-                                                            | 'tentative'
-                                                            | 'decline'
-                                                            | 'removed';
+                                                            | "needs_action"
+                                                            | "accept"
+                                                            | "tentative"
+                                                            | "decline"
+                                                            | "removed";
                                                         is_optional?: boolean;
                                                         display_name?: string;
                                                         is_organizer?: boolean;
@@ -14120,8 +14120,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -14151,7 +14151,7 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -14171,28 +14171,28 @@ export default abstract class Client {
                             data?: {
                                 items?: Array<{
                                     type?:
-                                        | 'user'
-                                        | 'chat'
-                                        | 'resource'
-                                        | 'third_party';
+                                        | "user"
+                                        | "chat"
+                                        | "resource"
+                                        | "third_party";
                                     attendee_id?: string;
                                     rsvp_status?:
-                                        | 'needs_action'
-                                        | 'accept'
-                                        | 'tentative'
-                                        | 'decline'
-                                        | 'removed';
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                     is_optional?: boolean;
                                     is_organizer?: boolean;
                                     is_external?: boolean;
                                     display_name?: string;
                                     chat_members?: Array<{
                                         rsvp_status?:
-                                            | 'needs_action'
-                                            | 'accept'
-                                            | 'tentative'
-                                            | 'decline'
-                                            | 'removed';
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                         is_optional?: boolean;
                                         display_name?: string;
                                         is_organizer?: boolean;
@@ -14221,7 +14221,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -14241,7 +14241,7 @@ export default abstract class Client {
                     params?: {
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: {
                         calendar_id: string;
@@ -14265,7 +14265,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/:attendee_id/chat_members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -14307,11 +14307,11 @@ export default abstract class Client {
                                             data?: {
                                                 items?: Array<{
                                                     rsvp_status?:
-                                                        | 'needs_action'
-                                                        | 'accept'
-                                                        | 'tentative'
-                                                        | 'decline'
-                                                        | 'removed';
+                                                        | "needs_action"
+                                                        | "accept"
+                                                        | "tentative"
+                                                        | "decline"
+                                                        | "removed";
                                                     is_optional?: boolean;
                                                     display_name?: string;
                                                     open_id?: string;
@@ -14322,8 +14322,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -14355,7 +14355,7 @@ export default abstract class Client {
                     params?: {
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: {
                         calendar_id: string;
@@ -14377,11 +14377,11 @@ export default abstract class Client {
                             data?: {
                                 items?: Array<{
                                     rsvp_status?:
-                                        | 'needs_action'
-                                        | 'accept'
-                                        | 'tentative'
-                                        | 'decline'
-                                        | 'removed';
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                     is_optional?: boolean;
                                     display_name?: string;
                                     open_id?: string;
@@ -14397,7 +14397,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/:attendee_id/chat_members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -14441,22 +14441,22 @@ export default abstract class Client {
                         };
                         vchat?: {
                             vc_type?:
-                                | 'vc'
-                                | 'third_party'
-                                | 'no_meeting'
-                                | 'lark_live'
-                                | 'unknown';
-                            icon_type?: 'vc' | 'live' | 'default';
+                                | "vc"
+                                | "third_party"
+                                | "no_meeting"
+                                | "lark_live"
+                                | "unknown";
+                            icon_type?: "vc" | "live" | "default";
                             description?: string;
                             meeting_url?: string;
                         };
-                        visibility?: 'default' | 'public' | 'private';
+                        visibility?: "default" | "public" | "private";
                         attendee_ability?:
-                            | 'none'
-                            | 'can_see_others'
-                            | 'can_invite_others'
-                            | 'can_modify_event';
-                        free_busy_status?: 'busy' | 'free';
+                            | "none"
+                            | "can_see_others"
+                            | "can_invite_others"
+                            | "can_modify_event";
+                        free_busy_status?: "busy" | "free";
                         location?: {
                             name?: string;
                             address?: string;
@@ -14469,10 +14469,10 @@ export default abstract class Client {
                         schemas?: Array<{
                             ui_name?: string;
                             ui_status?:
-                                | 'hide'
-                                | 'readonly'
-                                | 'editable'
-                                | 'unknown';
+                                | "hide"
+                                | "readonly"
+                                | "editable"
+                                | "unknown";
                             app_link?: string;
                         }>;
                     };
@@ -14508,25 +14508,25 @@ export default abstract class Client {
                                     };
                                     vchat?: {
                                         vc_type?:
-                                            | 'vc'
-                                            | 'third_party'
-                                            | 'no_meeting'
-                                            | 'lark_live'
-                                            | 'unknown';
-                                        icon_type?: 'vc' | 'live' | 'default';
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
                                     };
                                     visibility?:
-                                        | 'default'
-                                        | 'public'
-                                        | 'private';
+                                        | "default"
+                                        | "public"
+                                        | "private";
                                     attendee_ability?:
-                                        | 'none'
-                                        | 'can_see_others'
-                                        | 'can_invite_others'
-                                        | 'can_modify_event';
-                                    free_busy_status?: 'busy' | 'free';
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
                                     location?: {
                                         name?: string;
                                         address?: string;
@@ -14537,18 +14537,18 @@ export default abstract class Client {
                                     reminders?: Array<{ minutes?: number }>;
                                     recurrence?: string;
                                     status?:
-                                        | 'tentative'
-                                        | 'confirmed'
-                                        | 'cancelled';
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
-                                            | 'hide'
-                                            | 'readonly'
-                                            | 'editable'
-                                            | 'unknown';
+                                            | "hide"
+                                            | "readonly"
+                                            | "editable"
+                                            | "unknown";
                                         app_link?: string;
                                     }>;
                                 };
@@ -14559,7 +14559,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -14596,7 +14596,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -14650,25 +14650,25 @@ export default abstract class Client {
                                     };
                                     vchat?: {
                                         vc_type?:
-                                            | 'vc'
-                                            | 'third_party'
-                                            | 'no_meeting'
-                                            | 'lark_live'
-                                            | 'unknown';
-                                        icon_type?: 'vc' | 'live' | 'default';
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
                                     };
                                     visibility?:
-                                        | 'default'
-                                        | 'public'
-                                        | 'private';
+                                        | "default"
+                                        | "public"
+                                        | "private";
                                     attendee_ability?:
-                                        | 'none'
-                                        | 'can_see_others'
-                                        | 'can_invite_others'
-                                        | 'can_modify_event';
-                                    free_busy_status?: 'busy' | 'free';
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
                                     location?: {
                                         name?: string;
                                         address?: string;
@@ -14679,18 +14679,18 @@ export default abstract class Client {
                                     reminders?: Array<{ minutes?: number }>;
                                     recurrence?: string;
                                     status?:
-                                        | 'tentative'
-                                        | 'confirmed'
-                                        | 'cancelled';
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
-                                            | 'hide'
-                                            | 'readonly'
-                                            | 'editable'
-                                            | 'unknown';
+                                            | "hide"
+                                            | "readonly"
+                                            | "editable"
+                                            | "unknown";
                                         app_link?: string;
                                     }>;
                                 };
@@ -14701,7 +14701,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -14766,25 +14766,25 @@ export default abstract class Client {
                                     };
                                     vchat?: {
                                         vc_type?:
-                                            | 'vc'
-                                            | 'third_party'
-                                            | 'no_meeting'
-                                            | 'lark_live'
-                                            | 'unknown';
-                                        icon_type?: 'vc' | 'live' | 'default';
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
                                     };
                                     visibility?:
-                                        | 'default'
-                                        | 'public'
-                                        | 'private';
+                                        | "default"
+                                        | "public"
+                                        | "private";
                                     attendee_ability?:
-                                        | 'none'
-                                        | 'can_see_others'
-                                        | 'can_invite_others'
-                                        | 'can_modify_event';
-                                    free_busy_status?: 'busy' | 'free';
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
                                     location?: {
                                         name?: string;
                                         address?: string;
@@ -14795,18 +14795,18 @@ export default abstract class Client {
                                     reminders?: Array<{ minutes?: number }>;
                                     recurrence?: string;
                                     status?:
-                                        | 'tentative'
-                                        | 'confirmed'
-                                        | 'cancelled';
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
-                                            | 'hide'
-                                            | 'readonly'
-                                            | 'editable'
-                                            | 'unknown';
+                                            | "hide"
+                                            | "readonly"
+                                            | "editable"
+                                            | "unknown";
                                         app_link?: string;
                                     }>;
                                 }>;
@@ -14817,7 +14817,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -14856,22 +14856,22 @@ export default abstract class Client {
                         };
                         vchat?: {
                             vc_type?:
-                                | 'vc'
-                                | 'third_party'
-                                | 'no_meeting'
-                                | 'lark_live'
-                                | 'unknown';
-                            icon_type?: 'vc' | 'live' | 'default';
+                                | "vc"
+                                | "third_party"
+                                | "no_meeting"
+                                | "lark_live"
+                                | "unknown";
+                            icon_type?: "vc" | "live" | "default";
                             description?: string;
                             meeting_url?: string;
                         };
-                        visibility?: 'default' | 'public' | 'private';
+                        visibility?: "default" | "public" | "private";
                         attendee_ability?:
-                            | 'none'
-                            | 'can_see_others'
-                            | 'can_invite_others'
-                            | 'can_modify_event';
-                        free_busy_status?: 'busy' | 'free';
+                            | "none"
+                            | "can_see_others"
+                            | "can_invite_others"
+                            | "can_modify_event";
+                        free_busy_status?: "busy" | "free";
                         location?: {
                             name?: string;
                             address?: string;
@@ -14884,10 +14884,10 @@ export default abstract class Client {
                         schemas?: Array<{
                             ui_name?: string;
                             ui_status?:
-                                | 'hide'
-                                | 'readonly'
-                                | 'editable'
-                                | 'unknown';
+                                | "hide"
+                                | "readonly"
+                                | "editable"
+                                | "unknown";
                             app_link?: string;
                         }>;
                     };
@@ -14923,25 +14923,25 @@ export default abstract class Client {
                                     };
                                     vchat?: {
                                         vc_type?:
-                                            | 'vc'
-                                            | 'third_party'
-                                            | 'no_meeting'
-                                            | 'lark_live'
-                                            | 'unknown';
-                                        icon_type?: 'vc' | 'live' | 'default';
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
                                     };
                                     visibility?:
-                                        | 'default'
-                                        | 'public'
-                                        | 'private';
+                                        | "default"
+                                        | "public"
+                                        | "private";
                                     attendee_ability?:
-                                        | 'none'
-                                        | 'can_see_others'
-                                        | 'can_invite_others'
-                                        | 'can_modify_event';
-                                    free_busy_status?: 'busy' | 'free';
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
                                     location?: {
                                         name?: string;
                                         address?: string;
@@ -14952,18 +14952,18 @@ export default abstract class Client {
                                     reminders?: Array<{ minutes?: number }>;
                                     recurrence?: string;
                                     status?:
-                                        | 'tentative'
-                                        | 'confirmed'
-                                        | 'cancelled';
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
-                                            | 'hide'
-                                            | 'readonly'
-                                            | 'editable'
-                                            | 'unknown';
+                                            | "hide"
+                                            | "readonly"
+                                            | "editable"
+                                            | "unknown";
                                         app_link?: string;
                                     }>;
                                 };
@@ -14974,7 +14974,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -15005,7 +15005,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -15027,7 +15027,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/search`,
                                 path
                             ),
-                            method: 'POST',
+                            method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -15085,30 +15085,30 @@ export default abstract class Client {
                                                     };
                                                     vchat?: {
                                                         vc_type?:
-                                                            | 'vc'
-                                                            | 'third_party'
-                                                            | 'no_meeting'
-                                                            | 'lark_live'
-                                                            | 'unknown';
+                                                            | "vc"
+                                                            | "third_party"
+                                                            | "no_meeting"
+                                                            | "lark_live"
+                                                            | "unknown";
                                                         icon_type?:
-                                                            | 'vc'
-                                                            | 'live'
-                                                            | 'default';
+                                                            | "vc"
+                                                            | "live"
+                                                            | "default";
                                                         description?: string;
                                                         meeting_url?: string;
                                                     };
                                                     visibility?:
-                                                        | 'default'
-                                                        | 'public'
-                                                        | 'private';
+                                                        | "default"
+                                                        | "public"
+                                                        | "private";
                                                     attendee_ability?:
-                                                        | 'none'
-                                                        | 'can_see_others'
-                                                        | 'can_invite_others'
-                                                        | 'can_modify_event';
+                                                        | "none"
+                                                        | "can_see_others"
+                                                        | "can_invite_others"
+                                                        | "can_modify_event";
                                                     free_busy_status?:
-                                                        | 'busy'
-                                                        | 'free';
+                                                        | "busy"
+                                                        | "free";
                                                     location?: {
                                                         name?: string;
                                                         address?: string;
@@ -15121,26 +15121,26 @@ export default abstract class Client {
                                                     }>;
                                                     recurrence?: string;
                                                     status?:
-                                                        | 'tentative'
-                                                        | 'confirmed'
-                                                        | 'cancelled';
+                                                        | "tentative"
+                                                        | "confirmed"
+                                                        | "cancelled";
                                                     is_exception?: boolean;
                                                     recurring_event_id?: string;
                                                     schemas?: Array<{
                                                         ui_name?: string;
                                                         ui_status?:
-                                                            | 'hide'
-                                                            | 'readonly'
-                                                            | 'editable'
-                                                            | 'unknown';
+                                                            | "hide"
+                                                            | "readonly"
+                                                            | "editable"
+                                                            | "unknown";
                                                         app_link?: string;
                                                     }>;
                                                 }>;
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -15188,7 +15188,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -15224,25 +15224,25 @@ export default abstract class Client {
                                     };
                                     vchat?: {
                                         vc_type?:
-                                            | 'vc'
-                                            | 'third_party'
-                                            | 'no_meeting'
-                                            | 'lark_live'
-                                            | 'unknown';
-                                        icon_type?: 'vc' | 'live' | 'default';
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
                                     };
                                     visibility?:
-                                        | 'default'
-                                        | 'public'
-                                        | 'private';
+                                        | "default"
+                                        | "public"
+                                        | "private";
                                     attendee_ability?:
-                                        | 'none'
-                                        | 'can_see_others'
-                                        | 'can_invite_others'
-                                        | 'can_modify_event';
-                                    free_busy_status?: 'busy' | 'free';
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
                                     location?: {
                                         name?: string;
                                         address?: string;
@@ -15253,18 +15253,18 @@ export default abstract class Client {
                                     reminders?: Array<{ minutes?: number }>;
                                     recurrence?: string;
                                     status?:
-                                        | 'tentative'
-                                        | 'confirmed'
-                                        | 'cancelled';
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
-                                            | 'hide'
-                                            | 'readonly'
-                                            | 'editable'
-                                            | 'unknown';
+                                            | "hide"
+                                            | "readonly"
+                                            | "editable"
+                                            | "unknown";
                                         app_link?: string;
                                     }>;
                                 }>;
@@ -15276,7 +15276,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15312,7 +15312,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/subscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15348,7 +15348,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/unsubscription`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15382,7 +15382,7 @@ export default abstract class Client {
                         user_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -15401,11 +15401,11 @@ export default abstract class Client {
                                 exchange_account?: string;
                                 user_id?: string;
                                 status?:
-                                    | 'doing'
-                                    | 'cal_done'
-                                    | 'timespan_done'
-                                    | 'done'
-                                    | 'err';
+                                    | "doing"
+                                    | "cal_done"
+                                    | "timespan_done"
+                                    | "done"
+                                    | "err";
                                 exchange_binding_id: string;
                             };
                         }
@@ -15414,7 +15414,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/exchange_bindings`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15450,7 +15450,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/exchange_bindings/:exchange_binding_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -15474,7 +15474,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { exchange_binding_id: string };
                 },
@@ -15494,11 +15494,11 @@ export default abstract class Client {
                                 exchange_account?: string;
                                 user_id?: string;
                                 status?:
-                                    | 'doing'
-                                    | 'cal_done'
-                                    | 'timespan_done'
-                                    | 'done'
-                                    | 'err';
+                                    | "doing"
+                                    | "cal_done"
+                                    | "timespan_done"
+                                    | "done"
+                                    | "err";
                                 exchange_binding_id?: string;
                             };
                         }
@@ -15507,7 +15507,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/exchange_bindings/:exchange_binding_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -15540,7 +15540,7 @@ export default abstract class Client {
                         room_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -15566,7 +15566,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/freebusy/list`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15617,7 +15617,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/settings/generate_caldav_conf`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15652,7 +15652,7 @@ export default abstract class Client {
                         description?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -15681,7 +15681,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/timeoff_events`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -15715,7 +15715,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/calendar/v4/timeoff_events/:timeoff_event_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -15759,7 +15759,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/custom_attrs`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -15805,8 +15805,8 @@ export default abstract class Client {
                                                     options?: {
                                                         default_option_id?: string;
                                                         option_type:
-                                                            | 'TEXT'
-                                                            | 'PICTURE';
+                                                            | "TEXT"
+                                                            | "PICTURE";
                                                         options: Array<{
                                                             id: string;
                                                             value: string;
@@ -15822,8 +15822,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -15871,7 +15871,7 @@ export default abstract class Client {
                                     type: string;
                                     options?: {
                                         default_option_id?: string;
-                                        option_type: 'TEXT' | 'PICTURE';
+                                        option_type: "TEXT" | "PICTURE";
                                         options: Array<{
                                             id: string;
                                             value: string;
@@ -15892,7 +15892,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/custom_attrs`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -15910,10 +15910,10 @@ export default abstract class Client {
             childrenWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         fetch_child?: boolean;
                         page_size?: number;
                         page_token?: string;
@@ -15936,7 +15936,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/departments/:department_id/children`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -16004,8 +16004,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -16035,10 +16035,10 @@ export default abstract class Client {
             children: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         fetch_child?: boolean;
                         page_size?: number;
                         page_token?: string;
@@ -16088,7 +16088,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/:department_id/children`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -16130,10 +16130,10 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         client_token?: string;
                     };
                 },
@@ -16177,7 +16177,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -16202,8 +16202,8 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { department_id?: string };
                 },
@@ -16218,7 +16218,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/:department_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -16242,10 +16242,10 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { department_id?: string };
                 },
@@ -16289,7 +16289,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/:department_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -16302,10 +16302,10 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         parent_department_id?: string;
                         fetch_child?: boolean;
                         page_token?: string;
@@ -16328,7 +16328,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/departments`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -16395,8 +16395,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -16426,10 +16426,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         parent_department_id?: string;
                         fetch_child?: boolean;
                         page_token?: string;
@@ -16478,7 +16478,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -16491,10 +16491,10 @@ export default abstract class Client {
             parentWithIterator: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id: string;
                         page_token?: string;
                         page_size?: number;
@@ -16516,7 +16516,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/departments/parent`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -16583,8 +16583,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -16614,10 +16614,10 @@ export default abstract class Client {
             parent: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id: string;
                         page_token?: string;
                         page_size?: number;
@@ -16665,7 +16665,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/parent`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -16706,10 +16706,10 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { department_id?: string };
                 },
@@ -16753,7 +16753,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/:department_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -16767,10 +16767,10 @@ export default abstract class Client {
                 payload?: {
                     data: { query: string };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -16791,7 +16791,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/departments/search`,
                                 path
                             ),
-                            method: 'POST',
+                            method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -16859,8 +16859,8 @@ export default abstract class Client {
                                                 has_more: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -16891,10 +16891,10 @@ export default abstract class Client {
                 payload?: {
                     data: { query: string };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -16942,7 +16942,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/search`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -16966,8 +16966,8 @@ export default abstract class Client {
                     data: { department_id: string };
                     params?: {
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                 },
                 options?: IRequestOptions
@@ -16981,7 +16981,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/unbind_department_chat`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17022,10 +17022,10 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { department_id?: string };
                 },
@@ -17069,7 +17069,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/departments/:department_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -17135,7 +17135,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/employee_type_enums`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17169,7 +17169,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/employee_type_enums/:enum_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -17199,7 +17199,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/employee_type_enums`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -17254,8 +17254,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -17316,7 +17316,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/employee_type_enums`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -17378,7 +17378,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/employee_type_enums/:enum_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -17429,7 +17429,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17463,7 +17463,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -17512,7 +17512,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -17535,7 +17535,7 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         member_id: string;
-                        member_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        member_id_type?: "open_id" | "union_id" | "user_id";
                         group_type?: number;
                         page_size?: number;
                         page_token?: string;
@@ -17563,7 +17563,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/member_belong`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -17598,7 +17598,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -17632,7 +17632,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/group/simplelist`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -17683,8 +17683,8 @@ export default abstract class Client {
                                                 has_more: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -17745,7 +17745,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/simplelist`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -17772,8 +17772,8 @@ export default abstract class Client {
             add: async (
                 payload?: {
                     data: {
-                        member_type: 'user';
-                        member_id_type: 'open_id' | 'union_id' | 'user_id';
+                        member_type: "user";
+                        member_id_type: "open_id" | "union_id" | "user_id";
                         member_id: string;
                     };
                     path: { group_id: string };
@@ -17789,7 +17789,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/add`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17844,7 +17844,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/batch_add`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17887,7 +17887,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/batch_remove`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17909,9 +17909,9 @@ export default abstract class Client {
             remove: async (
                 payload?: {
                     data: {
-                        member_type: 'user';
+                        member_type: "user";
                         member_id: string;
-                        member_id_type: 'open_id' | 'union_id' | 'user_id';
+                        member_id_type: "open_id" | "union_id" | "user_id";
                     };
                     path: { group_id: string };
                 },
@@ -17926,7 +17926,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/remove`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -17951,11 +17951,11 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         member_id_type?:
-                            | 'open_id'
-                            | 'union_id'
-                            | 'user_id'
-                            | 'department_id';
-                        member_type?: 'user' | 'department';
+                            | "open_id"
+                            | "union_id"
+                            | "user_id"
+                            | "department_id";
+                        member_type?: "user" | "department";
                     };
                     path: { group_id: string };
                 },
@@ -17985,7 +17985,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/simplelist`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -18003,10 +18003,10 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -18027,7 +18027,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/scopes`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -18074,8 +18074,8 @@ export default abstract class Client {
                                                 page_token?: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -18103,10 +18103,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -18135,7 +18135,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/scopes`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -18165,8 +18165,8 @@ export default abstract class Client {
                         unit_id: string;
                         department_id: string;
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                 },
                 options?: IRequestOptions
@@ -18180,7 +18180,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/bind_department`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -18221,7 +18221,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -18255,7 +18255,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/:unit_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -18302,7 +18302,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/:unit_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -18351,7 +18351,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -18375,8 +18375,8 @@ export default abstract class Client {
                     params: {
                         unit_id: string;
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -18406,7 +18406,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/list_department`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -18441,7 +18441,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/:unit_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -18466,8 +18466,8 @@ export default abstract class Client {
                         unit_id: string;
                         department_id: string;
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                 },
                 options?: IRequestOptions
@@ -18481,7 +18481,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/unit/unbind_department`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -18511,7 +18511,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { emails?: Array<string>; mobiles?: Array<string> };
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                 },
                 options?: IRequestOptions
@@ -18538,7 +18538,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/batch_get_id`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -18610,15 +18610,15 @@ export default abstract class Client {
                         need_send_notification?: boolean;
                         notification_option?: {
                             channels?: Array<string>;
-                            language?: 'zh-CN' | 'en-US' | 'ja-JP';
+                            language?: "zh-CN" | "en-US" | "ja-JP";
                         };
                         geo?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         client_token?: string;
                     };
                 },
@@ -18706,7 +18706,7 @@ export default abstract class Client {
                                     need_send_notification?: boolean;
                                     notification_option?: {
                                         channels?: Array<string>;
-                                        language?: 'zh-CN' | 'en-US' | 'ja-JP';
+                                        language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
                                     geo?: string;
@@ -18718,7 +18718,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -18751,12 +18751,12 @@ export default abstract class Client {
                         minutes_acceptor_user_id?: string;
                         survey_acceptor_user_id?: string;
                         email_acceptor?: {
-                            processing_type: '1' | '2' | '3';
+                            processing_type: "1" | "2" | "3";
                             acceptor_user_id?: string;
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { user_id: string };
                 },
@@ -18771,7 +18771,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/:user_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -18784,10 +18784,10 @@ export default abstract class Client {
             findByDepartmentWithIterator: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id: string;
                         page_size?: number;
                         page_token?: string;
@@ -18809,7 +18809,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/users/find_by_department`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -18924,17 +18924,17 @@ export default abstract class Client {
                                                     notification_option?: {
                                                         channels?: Array<string>;
                                                         language?:
-                                                            | 'zh-CN'
-                                                            | 'en-US'
-                                                            | 'ja-JP';
+                                                            | "zh-CN"
+                                                            | "en-US"
+                                                            | "ja-JP";
                                                     };
                                                     is_frozen?: boolean;
                                                     geo?: string;
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -18964,10 +18964,10 @@ export default abstract class Client {
             findByDepartment: async (
                 payload?: {
                     params: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id: string;
                         page_size?: number;
                         page_token?: string;
@@ -19059,7 +19059,7 @@ export default abstract class Client {
                                     need_send_notification?: boolean;
                                     notification_option?: {
                                         channels?: Array<string>;
-                                        language?: 'zh-CN' | 'en-US' | 'ja-JP';
+                                        language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
                                     geo?: string;
@@ -19071,7 +19071,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/find_by_department`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -19093,10 +19093,10 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { user_id: string };
                 },
@@ -19187,7 +19187,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/:user_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -19200,10 +19200,10 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id?: string;
                         page_token?: string;
                         page_size?: number;
@@ -19225,7 +19225,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/contact/v3/users`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -19337,8 +19337,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -19368,10 +19368,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         department_id?: string;
                         page_token?: string;
                         page_size?: number;
@@ -19466,7 +19466,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -19536,10 +19536,10 @@ export default abstract class Client {
                         geo?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { user_id: string };
                 },
@@ -19627,7 +19627,7 @@ export default abstract class Client {
                                     need_send_notification?: boolean;
                                     notification_option?: {
                                         channels?: Array<string>;
-                                        language?: 'zh-CN' | 'en-US' | 'ja-JP';
+                                        language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
                                     geo?: string;
@@ -19639,7 +19639,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/:user_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -19711,10 +19711,10 @@ export default abstract class Client {
                         geo?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path: { user_id: string };
                 },
@@ -19802,7 +19802,7 @@ export default abstract class Client {
                                     need_send_notification?: boolean;
                                     notification_option?: {
                                         channels?: Array<string>;
-                                        language?: 'zh-CN' | 'en-US' | 'ja-JP';
+                                        language?: "zh-CN" | "en-US" | "ja-JP";
                                     };
                                     is_frozen?: boolean;
                                     geo?: string;
@@ -19814,7 +19814,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/contact/v3/users/:user_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -19996,7 +19996,7 @@ export default abstract class Client {
                     params?: {
                         document_revision_id?: number;
                         client_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { document_id?: string };
                 },
@@ -20846,10 +20846,10 @@ export default abstract class Client {
                                             kr_ids?: Array<string>;
                                         }>;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -20867,16 +20867,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -20937,16 +20937,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -21010,7 +21010,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/batch_update`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -21035,7 +21035,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         document_revision_id?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string; block_id: string };
                 },
@@ -21874,10 +21874,10 @@ export default abstract class Client {
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -21895,16 +21895,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -21965,16 +21965,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -22036,7 +22036,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -22052,7 +22052,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         document_revision_id?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string };
                 },
@@ -22072,7 +22072,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -23086,10 +23086,10 @@ export default abstract class Client {
                                                     okr?: {
                                                         okr_id?: string;
                                                         period_display_status?:
-                                                            | 'default'
-                                                            | 'normal'
-                                                            | 'invalid'
-                                                            | 'hidden';
+                                                            | "default"
+                                                            | "normal"
+                                                            | "invalid"
+                                                            | "hidden";
                                                         period_name_zh?: string;
                                                         period_name_en?: string;
                                                         user_id?: string;
@@ -23108,19 +23108,19 @@ export default abstract class Client {
                                                         weight?: number;
                                                         progress_rate?: {
                                                             mode?:
-                                                                | 'simple'
-                                                                | 'advanced';
+                                                                | "simple"
+                                                                | "advanced";
                                                             current?: number;
                                                             percent?: number;
                                                             progress_status?:
-                                                                | 'unset'
-                                                                | 'normal'
-                                                                | 'risk'
-                                                                | 'extended';
+                                                                | "unset"
+                                                                | "normal"
+                                                                | "risk"
+                                                                | "extended";
                                                             start?: number;
                                                             status_type?:
-                                                                | 'default'
-                                                                | 'custom';
+                                                                | "default"
+                                                                | "custom";
                                                             target?: number;
                                                         };
                                                         content?: {
@@ -23186,19 +23186,19 @@ export default abstract class Client {
                                                         weight?: number;
                                                         progress_rate?: {
                                                             mode?:
-                                                                | 'simple'
-                                                                | 'advanced';
+                                                                | "simple"
+                                                                | "advanced";
                                                             current?: number;
                                                             percent?: number;
                                                             progress_status?:
-                                                                | 'unset'
-                                                                | 'normal'
-                                                                | 'risk'
-                                                                | 'extended';
+                                                                | "unset"
+                                                                | "normal"
+                                                                | "risk"
+                                                                | "extended";
                                                             start?: number;
                                                             status_type?:
-                                                                | 'default'
-                                                                | 'custom';
+                                                                | "default"
+                                                                | "custom";
                                                             target?: number;
                                                         };
                                                         content?: {
@@ -23261,8 +23261,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -23295,7 +23295,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         document_revision_id?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string };
                 },
@@ -24134,10 +24134,10 @@ export default abstract class Client {
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -24155,16 +24155,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -24225,16 +24225,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -24298,7 +24298,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -24443,7 +24443,7 @@ export default abstract class Client {
                     params?: {
                         document_revision_id?: number;
                         client_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string; block_id: string };
                 },
@@ -25293,10 +25293,10 @@ export default abstract class Client {
                                             kr_ids?: Array<string>;
                                         }>;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -25314,16 +25314,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -25384,16 +25384,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -25457,7 +25457,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -25513,7 +25513,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children/batch_delete`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -26237,7 +26237,7 @@ export default abstract class Client {
                     params?: {
                         document_revision_id?: number;
                         client_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string; block_id: string };
                 },
@@ -27087,10 +27087,10 @@ export default abstract class Client {
                                             kr_ids?: Array<string>;
                                         }>;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -27108,16 +27108,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -27178,16 +27178,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -27251,7 +27251,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -27267,7 +27267,7 @@ export default abstract class Client {
                         document_revision_id?: number;
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string; block_id: string };
                 },
@@ -27287,7 +27287,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -28301,10 +28301,10 @@ export default abstract class Client {
                                                     okr?: {
                                                         okr_id?: string;
                                                         period_display_status?:
-                                                            | 'default'
-                                                            | 'normal'
-                                                            | 'invalid'
-                                                            | 'hidden';
+                                                            | "default"
+                                                            | "normal"
+                                                            | "invalid"
+                                                            | "hidden";
                                                         period_name_zh?: string;
                                                         period_name_en?: string;
                                                         user_id?: string;
@@ -28323,19 +28323,19 @@ export default abstract class Client {
                                                         weight?: number;
                                                         progress_rate?: {
                                                             mode?:
-                                                                | 'simple'
-                                                                | 'advanced';
+                                                                | "simple"
+                                                                | "advanced";
                                                             current?: number;
                                                             percent?: number;
                                                             progress_status?:
-                                                                | 'unset'
-                                                                | 'normal'
-                                                                | 'risk'
-                                                                | 'extended';
+                                                                | "unset"
+                                                                | "normal"
+                                                                | "risk"
+                                                                | "extended";
                                                             start?: number;
                                                             status_type?:
-                                                                | 'default'
-                                                                | 'custom';
+                                                                | "default"
+                                                                | "custom";
                                                             target?: number;
                                                         };
                                                         content?: {
@@ -28401,19 +28401,19 @@ export default abstract class Client {
                                                         weight?: number;
                                                         progress_rate?: {
                                                             mode?:
-                                                                | 'simple'
-                                                                | 'advanced';
+                                                                | "simple"
+                                                                | "advanced";
                                                             current?: number;
                                                             percent?: number;
                                                             progress_status?:
-                                                                | 'unset'
-                                                                | 'normal'
-                                                                | 'risk'
-                                                                | 'extended';
+                                                                | "unset"
+                                                                | "normal"
+                                                                | "risk"
+                                                                | "extended";
                                                             start?: number;
                                                             status_type?:
-                                                                | 'default'
-                                                                | 'custom';
+                                                                | "default"
+                                                                | "custom";
                                                             target?: number;
                                                         };
                                                         content?: {
@@ -28476,8 +28476,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -28510,7 +28510,7 @@ export default abstract class Client {
                         document_revision_id?: number;
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { document_id: string; block_id: string };
                 },
@@ -29349,10 +29349,10 @@ export default abstract class Client {
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
-                                            | 'default'
-                                            | 'normal'
-                                            | 'invalid'
-                                            | 'hidden';
+                                            | "default"
+                                            | "normal"
+                                            | "invalid"
+                                            | "hidden";
                                         period_name_zh?: string;
                                         period_name_en?: string;
                                         user_id?: string;
@@ -29370,16 +29370,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -29440,16 +29440,16 @@ export default abstract class Client {
                                         visible?: boolean;
                                         weight?: number;
                                         progress_rate?: {
-                                            mode?: 'simple' | 'advanced';
+                                            mode?: "simple" | "advanced";
                                             current?: number;
                                             percent?: number;
                                             progress_status?:
-                                                | 'unset'
-                                                | 'normal'
-                                                | 'risk'
-                                                | 'extended';
+                                                | "unset"
+                                                | "normal"
+                                                | "risk"
+                                                | "extended";
                                             start?: number;
-                                            status_type?: 'default' | 'custom';
+                                            status_type?: "default" | "custom";
                                             target?: number;
                                         };
                                         content?: {
@@ -29513,7 +29513,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -29567,7 +29567,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -29616,7 +29616,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -29660,7 +29660,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/docx/v1/documents/:document_id/raw_content`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -29692,9 +29692,9 @@ export default abstract class Client {
             create: async (
                 payload?: {
                     data: {
-                        file_extension: 'docx' | 'pdf' | 'xlsx';
+                        file_extension: "docx" | "pdf" | "xlsx";
                         token: string;
-                        type: 'doc' | 'sheet' | 'bitable' | 'docx';
+                        type: "doc" | "sheet" | "bitable" | "docx";
                     };
                 },
                 options?: IRequestOptions
@@ -29715,7 +29715,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/export_tasks`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -29749,11 +29749,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/export_tasks/file/:file_token/download`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -29793,8 +29793,8 @@ export default abstract class Client {
                             msg?: string;
                             data?: {
                                 result?: {
-                                    file_extension: 'docx' | 'pdf' | 'xlsx';
-                                    type: 'doc' | 'sheet' | 'bitable' | 'docx';
+                                    file_extension: "docx" | "pdf" | "xlsx";
+                                    type: "doc" | "sheet" | "bitable" | "docx";
                                     file_name?: string;
                                     file_token?: string;
                                     file_size?: number;
@@ -29808,7 +29808,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/export_tasks/:ticket`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -29855,9 +29855,9 @@ export default abstract class Client {
                                 content: {
                                     elements: Array<{
                                         type:
-                                            | 'text_run'
-                                            | 'docs_link'
-                                            | 'person';
+                                            | "text_run"
+                                            | "docs_link"
+                                            | "person";
                                         text_run?: { text: string };
                                         docs_link?: { url: string };
                                         person?: { user_id: string };
@@ -29868,8 +29868,8 @@ export default abstract class Client {
                         };
                     };
                     params: {
-                        file_type: 'doc' | 'sheet' | 'file' | 'docx';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
                 },
@@ -29905,9 +29905,9 @@ export default abstract class Client {
                                         content: {
                                             elements: Array<{
                                                 type:
-                                                    | 'text_run'
-                                                    | 'docs_link'
-                                                    | 'person';
+                                                    | "text_run"
+                                                    | "docs_link"
+                                                    | "person";
                                                 text_run?: { text: string };
                                                 docs_link?: { url: string };
                                                 person?: { user_id: string };
@@ -29923,7 +29923,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -29945,8 +29945,8 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params: {
-                        file_type: 'doc' | 'sheet' | 'file' | 'docx';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string; comment_id: string };
                 },
@@ -29982,9 +29982,9 @@ export default abstract class Client {
                                         content: {
                                             elements: Array<{
                                                 type:
-                                                    | 'text_run'
-                                                    | 'docs_link'
-                                                    | 'person';
+                                                    | "text_run"
+                                                    | "docs_link"
+                                                    | "person";
                                                 text_run?: { text: string };
                                                 docs_link?: { url: string };
                                                 person?: { user_id: string };
@@ -30000,7 +30000,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -30013,8 +30013,8 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params: {
-                        file_type: 'doc' | 'sheet' | 'file' | 'docx';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         is_solved?: boolean;
                         page_token?: string;
                         page_size?: number;
@@ -30037,7 +30037,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -30100,9 +30100,9 @@ export default abstract class Client {
                                                             content: {
                                                                 elements: Array<{
                                                                     type:
-                                                                        | 'text_run'
-                                                                        | 'docs_link'
-                                                                        | 'person';
+                                                                        | "text_run"
+                                                                        | "docs_link"
+                                                                        | "person";
                                                                     text_run?: {
                                                                         text: string;
                                                                     };
@@ -30122,8 +30122,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -30153,8 +30153,8 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params: {
-                        file_type: 'doc' | 'sheet' | 'file' | 'docx';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         is_solved?: boolean;
                         page_token?: string;
                         page_size?: number;
@@ -30196,9 +30196,9 @@ export default abstract class Client {
                                             content: {
                                                 elements: Array<{
                                                     type:
-                                                        | 'text_run'
-                                                        | 'docs_link'
-                                                        | 'person';
+                                                        | "text_run"
+                                                        | "docs_link"
+                                                        | "person";
                                                     text_run?: { text: string };
                                                     docs_link?: { url: string };
                                                     person?: {
@@ -30219,7 +30219,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -30241,7 +30241,7 @@ export default abstract class Client {
             patch: async (
                 payload?: {
                     data: { is_solved: boolean };
-                    params: { file_type: 'doc' | 'sheet' | 'file' | 'docx' };
+                    params: { file_type: "doc" | "sheet" | "file" | "docx" };
                     path: { file_token: string; comment_id: string };
                 },
                 options?: IRequestOptions
@@ -30255,7 +30255,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -30281,7 +30281,7 @@ export default abstract class Client {
              */
             delete: async (
                 payload?: {
-                    params: { file_type: 'doc' | 'sheet' | 'file' | 'docx' };
+                    params: { file_type: "doc" | "sheet" | "file" | "docx" };
                     path: {
                         file_token: string;
                         comment_id: string;
@@ -30299,7 +30299,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -30323,7 +30323,7 @@ export default abstract class Client {
                     data: {
                         content: {
                             elements: Array<{
-                                type: 'text_run' | 'docs_link' | 'person';
+                                type: "text_run" | "docs_link" | "person";
                                 text_run?: { text: string };
                                 docs_link?: { url: string };
                                 person?: { user_id: string };
@@ -30331,8 +30331,8 @@ export default abstract class Client {
                         };
                     };
                     params: {
-                        file_type: 'doc' | 'sheet' | 'file' | 'docx';
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: {
                         file_token: string;
@@ -30351,7 +30351,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -30382,12 +30382,12 @@ export default abstract class Client {
                     data: {
                         name: string;
                         type?:
-                            | 'file'
-                            | 'doc'
-                            | 'sheet'
-                            | 'bitable'
-                            | 'docx'
-                            | 'mindnote';
+                            | "file"
+                            | "doc"
+                            | "sheet"
+                            | "bitable"
+                            | "docx"
+                            | "mindnote";
                         folder_token: string;
                         extra?: Array<{ key: string; value: string }>;
                     };
@@ -30423,7 +30423,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/copy`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30466,7 +30466,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/create_folder`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30493,14 +30493,14 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         type:
-                            | 'file'
-                            | 'docx'
-                            | 'bitable'
-                            | 'folder'
-                            | 'doc'
-                            | 'sheet'
-                            | 'mindnote'
-                            | 'shortcut';
+                            | "file"
+                            | "docx"
+                            | "bitable"
+                            | "folder"
+                            | "doc"
+                            | "sheet"
+                            | "mindnote"
+                            | "shortcut";
                     };
                     path?: { file_token?: string };
                 },
@@ -30522,7 +30522,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -30558,11 +30558,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/download`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -30599,7 +30599,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/drive/v1/files`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -30654,8 +30654,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -30720,7 +30720,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -30743,13 +30743,13 @@ export default abstract class Client {
                 payload?: {
                     data?: {
                         type?:
-                            | 'file'
-                            | 'docx'
-                            | 'bitable'
-                            | 'doc'
-                            | 'sheet'
-                            | 'mindnote'
-                            | 'folder';
+                            | "file"
+                            | "docx"
+                            | "bitable"
+                            | "doc"
+                            | "sheet"
+                            | "mindnote"
+                            | "folder";
                         folder_token?: string;
                     };
                     path: { file_token: string };
@@ -30772,7 +30772,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/move`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30793,7 +30793,7 @@ export default abstract class Client {
              */
             subscribe: async (
                 payload?: {
-                    params: { file_type: 'doc' | 'docx' | 'sheet' | 'bitable' };
+                    params: { file_type: "doc" | "docx" | "sheet" | "bitable" };
                     path: { file_token: string };
                 },
                 options?: IRequestOptions
@@ -30807,7 +30807,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/subscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30848,7 +30848,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/task_check`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -30875,7 +30875,7 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         file_name: string;
-                        parent_type: 'explorer';
+                        parent_type: "explorer";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -30900,12 +30900,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/upload_all`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -30913,7 +30913,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
@@ -30948,7 +30948,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/upload_finish`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -30990,12 +30990,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/upload_part`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -31003,7 +31003,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_prepare&version=v1 click to debug }
@@ -31022,7 +31022,7 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         file_name: string;
-                        parent_type: 'explorer';
+                        parent_type: "explorer";
                         parent_node: string;
                         size: number;
                     };
@@ -31049,7 +31049,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/upload_prepare`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31077,13 +31077,13 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         file_type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'mindnote'
-                            | 'bitable'
-                            | 'wiki'
-                            | 'file'
-                            | 'docx';
+                            | "doc"
+                            | "sheet"
+                            | "mindnote"
+                            | "bitable"
+                            | "wiki"
+                            | "file"
+                            | "docx";
                     };
                     path?: { file_token?: string };
                 },
@@ -31114,7 +31114,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/statistics`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -31142,9 +31142,9 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         subscription_id?: string;
-                        subscription_type: 'comment_update';
+                        subscription_type: "comment_update";
                         is_subcribe?: boolean;
-                        file_type: 'doc' | 'docx' | 'wiki';
+                        file_type: "doc" | "docx" | "wiki";
                     };
                     path: { file_token: string };
                 },
@@ -31162,9 +31162,9 @@ export default abstract class Client {
                             data?: {
                                 subscription?: {
                                     subscription_id?: string;
-                                    subscription_type?: 'comment_update';
+                                    subscription_type?: "comment_update";
                                     is_subcribe?: boolean;
-                                    file_type: 'doc' | 'docx' | 'wiki';
+                                    file_type: "doc" | "docx" | "wiki";
                                 };
                             };
                         }
@@ -31173,7 +31173,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/subscriptions`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31196,9 +31196,9 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         subscription_id?: string;
-                        subscription_type?: 'comment_update';
+                        subscription_type?: "comment_update";
                         is_subcribe?: boolean;
-                        file_type: 'doc' | 'docx' | 'wiki';
+                        file_type: "doc" | "docx" | "wiki";
                     };
                     path?: { file_token?: string; subscription_id?: string };
                 },
@@ -31216,9 +31216,9 @@ export default abstract class Client {
                             data?: {
                                 subscription?: {
                                     subscription_id?: string;
-                                    subscription_type?: 'comment_update';
+                                    subscription_type?: "comment_update";
                                     is_subcribe?: boolean;
-                                    file_type: 'doc' | 'docx' | 'wiki';
+                                    file_type: "doc" | "docx" | "wiki";
                                 };
                             };
                         }
@@ -31227,7 +31227,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/subscriptions/:subscription_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -31250,7 +31250,7 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         is_subscribe: boolean;
-                        file_type: 'doc' | 'docx' | 'wiki';
+                        file_type: "doc" | "docx" | "wiki";
                     };
                     path?: { file_token?: string; subscription_id?: string };
                 },
@@ -31268,9 +31268,9 @@ export default abstract class Client {
                             data?: {
                                 subscription?: {
                                     subscription_id?: string;
-                                    subscription_type?: 'comment_update';
+                                    subscription_type?: "comment_update";
                                     is_subcribe?: boolean;
-                                    file_type: 'doc' | 'docx' | 'wiki';
+                                    file_type: "doc" | "docx" | "wiki";
                                 };
                             };
                         }
@@ -31279,7 +31279,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/files/:file_token/subscriptions/:subscription_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -31331,7 +31331,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/import_tasks`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31382,7 +31382,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/import_tasks/:ticket`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -31435,7 +31435,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/batch_get_tmp_download_url`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -31472,11 +31472,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -31507,17 +31507,17 @@ export default abstract class Client {
                     data: {
                         file_name: string;
                         parent_type:
-                            | 'doc_image'
-                            | 'docx_image'
-                            | 'sheet_image'
-                            | 'doc_file'
-                            | 'docx_file'
-                            | 'sheet_file'
-                            | 'vc_virtual_background'
-                            | 'bitable_image'
-                            | 'bitable_file'
-                            | 'moments'
-                            | 'ccm_import_open';
+                            | "doc_image"
+                            | "docx_image"
+                            | "sheet_image"
+                            | "doc_file"
+                            | "docx_file"
+                            | "sheet_file"
+                            | "vc_virtual_background"
+                            | "bitable_image"
+                            | "bitable_file"
+                            | "moments"
+                            | "ccm_import_open";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -31543,12 +31543,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/upload_all`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -31556,7 +31556,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
@@ -31591,7 +31591,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/upload_finish`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31633,12 +31633,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/upload_part`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -31646,7 +31646,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
@@ -31666,15 +31666,15 @@ export default abstract class Client {
                     data: {
                         file_name: string;
                         parent_type:
-                            | 'doc_image'
-                            | 'sheet_image'
-                            | 'doc_file'
-                            | 'sheet_file'
-                            | 'vc_virtual_background'
-                            | 'bitable_image'
-                            | 'bitable_file'
-                            | 'moments'
-                            | 'ccm_import_open';
+                            | "doc_image"
+                            | "sheet_image"
+                            | "doc_file"
+                            | "sheet_file"
+                            | "vc_virtual_background"
+                            | "bitable_image"
+                            | "bitable_file"
+                            | "moments"
+                            | "ccm_import_open";
                         parent_node: string;
                         size: number;
                         extra?: string;
@@ -31702,7 +31702,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/medias/upload_prepare`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31732,19 +31732,19 @@ export default abstract class Client {
                         request_docs: Array<{
                             doc_token: string;
                             doc_type:
-                                | 'doc'
-                                | 'sheet'
-                                | 'bitable'
-                                | 'mindnote'
-                                | 'file'
-                                | 'wiki'
-                                | 'docx'
-                                | 'folder';
+                                | "doc"
+                                | "sheet"
+                                | "bitable"
+                                | "mindnote"
+                                | "file"
+                                | "wiki"
+                                | "docx"
+                                | "folder";
                         }>;
                         with_url?: boolean;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -31780,7 +31780,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/metas/batch_query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31808,24 +31808,24 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         member_type:
-                            | 'email'
-                            | 'openid'
-                            | 'openchat'
-                            | 'opendepartmentid'
-                            | 'userid';
+                            | "email"
+                            | "openid"
+                            | "openchat"
+                            | "opendepartmentid"
+                            | "userid";
                         member_id: string;
-                        perm: 'view' | 'edit' | 'full_access';
+                        perm: "view" | "edit" | "full_access";
                     };
                     params: {
                         type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'file'
-                            | 'wiki'
-                            | 'bitable'
-                            | 'docx'
-                            | 'folder'
-                            | 'mindnote';
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "folder"
+                            | "mindnote";
                         need_notification?: boolean;
                     };
                     path: { token: string };
@@ -31844,13 +31844,13 @@ export default abstract class Client {
                             data?: {
                                 member?: {
                                     member_type:
-                                        | 'email'
-                                        | 'openid'
-                                        | 'openchat'
-                                        | 'opendepartmentid'
-                                        | 'userid';
+                                        | "email"
+                                        | "openid"
+                                        | "openchat"
+                                        | "opendepartmentid"
+                                        | "userid";
                                     member_id: string;
-                                    perm: 'view' | 'edit' | 'full_access';
+                                    perm: "view" | "edit" | "full_access";
                                 };
                             };
                         }
@@ -31859,7 +31859,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -31882,20 +31882,20 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'file'
-                            | 'wiki'
-                            | 'bitable'
-                            | 'docx'
-                            | 'folder'
-                            | 'mindnote';
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "folder"
+                            | "mindnote";
                         member_type:
-                            | 'email'
-                            | 'openid'
-                            | 'openchat'
-                            | 'opendepartmentid'
-                            | 'userid';
+                            | "email"
+                            | "openid"
+                            | "openchat"
+                            | "opendepartmentid"
+                            | "userid";
                     };
                     path: { token: string; member_id: string };
                 },
@@ -31910,7 +31910,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members/:member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -31935,23 +31935,23 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         member_type:
-                            | 'email'
-                            | 'openid'
-                            | 'openchat'
-                            | 'opendepartmentid'
-                            | 'userid';
-                        perm: 'view' | 'edit' | 'full_access';
+                            | "email"
+                            | "openid"
+                            | "openchat"
+                            | "opendepartmentid"
+                            | "userid";
+                        perm: "view" | "edit" | "full_access";
                     };
                     params: {
                         need_notification?: boolean;
                         type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'file'
-                            | 'wiki'
-                            | 'bitable'
-                            | 'docx'
-                            | 'mindnote';
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "mindnote";
                     };
                     path: { token: string; member_id: string };
                 },
@@ -31969,13 +31969,13 @@ export default abstract class Client {
                             data?: {
                                 member?: {
                                     member_type:
-                                        | 'email'
-                                        | 'openid'
-                                        | 'openchat'
-                                        | 'opendepartmentid'
-                                        | 'userid';
+                                        | "email"
+                                        | "openid"
+                                        | "openchat"
+                                        | "opendepartmentid"
+                                        | "userid";
                                     member_id: string;
-                                    perm: 'view' | 'edit' | 'full_access';
+                                    perm: "view" | "edit" | "full_access";
                                 };
                             };
                         }
@@ -31984,7 +31984,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members/:member_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -32012,12 +32012,12 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'file'
-                            | 'wiki'
-                            | 'bitable'
-                            | 'docx';
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx";
                     };
                     path: { token: string };
                 },
@@ -32036,22 +32036,22 @@ export default abstract class Client {
                                 permission_public?: {
                                     external_access?: boolean;
                                     security_entity?:
-                                        | 'anyone_can_view'
-                                        | 'anyone_can_edit'
-                                        | 'only_full_access';
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit"
+                                        | "only_full_access";
                                     comment_entity?:
-                                        | 'anyone_can_view'
-                                        | 'anyone_can_edit';
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit";
                                     share_entity?:
-                                        | 'anyone'
-                                        | 'same_tenant'
-                                        | 'only_full_access';
+                                        | "anyone"
+                                        | "same_tenant"
+                                        | "only_full_access";
                                     link_share_entity?:
-                                        | 'tenant_readable'
-                                        | 'tenant_editable'
-                                        | 'anyone_readable'
-                                        | 'anyone_editable'
-                                        | 'closed';
+                                        | "tenant_readable"
+                                        | "tenant_editable"
+                                        | "anyone_readable"
+                                        | "anyone_editable"
+                                        | "closed";
                                     invite_external?: boolean;
                                     lock_switch?: boolean;
                                 };
@@ -32062,7 +32062,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -32086,30 +32086,30 @@ export default abstract class Client {
                     data?: {
                         external_access?: boolean;
                         security_entity?:
-                            | 'anyone_can_view'
-                            | 'anyone_can_edit'
-                            | 'only_full_access';
-                        comment_entity?: 'anyone_can_view' | 'anyone_can_edit';
+                            | "anyone_can_view"
+                            | "anyone_can_edit"
+                            | "only_full_access";
+                        comment_entity?: "anyone_can_view" | "anyone_can_edit";
                         share_entity?:
-                            | 'anyone'
-                            | 'same_tenant'
-                            | 'only_full_access';
+                            | "anyone"
+                            | "same_tenant"
+                            | "only_full_access";
                         link_share_entity?:
-                            | 'tenant_readable'
-                            | 'tenant_editable'
-                            | 'anyone_readable'
-                            | 'anyone_editable'
-                            | 'closed';
+                            | "tenant_readable"
+                            | "tenant_editable"
+                            | "anyone_readable"
+                            | "anyone_editable"
+                            | "closed";
                         invite_external?: boolean;
                     };
                     params: {
                         type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'file'
-                            | 'wiki'
-                            | 'bitable'
-                            | 'docx';
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx";
                     };
                     path: { token: string };
                 },
@@ -32128,22 +32128,22 @@ export default abstract class Client {
                                 permission_public?: {
                                     external_access?: boolean;
                                     security_entity?:
-                                        | 'anyone_can_view'
-                                        | 'anyone_can_edit'
-                                        | 'only_full_access';
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit"
+                                        | "only_full_access";
                                     comment_entity?:
-                                        | 'anyone_can_view'
-                                        | 'anyone_can_edit';
+                                        | "anyone_can_view"
+                                        | "anyone_can_edit";
                                     share_entity?:
-                                        | 'anyone'
-                                        | 'same_tenant'
-                                        | 'only_full_access';
+                                        | "anyone"
+                                        | "same_tenant"
+                                        | "only_full_access";
                                     link_share_entity?:
-                                        | 'tenant_readable'
-                                        | 'tenant_editable'
-                                        | 'anyone_readable'
-                                        | 'anyone_editable'
-                                        | 'closed';
+                                        | "tenant_readable"
+                                        | "tenant_editable"
+                                        | "anyone_readable"
+                                        | "anyone_editable"
+                                        | "closed";
                                     invite_external?: boolean;
                                     lock_switch?: boolean;
                                 };
@@ -32154,7 +32154,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/drive/v1/permissions/:token/public`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -32204,11 +32204,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/ehr/v1/attachments/:token`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -32229,12 +32229,12 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        view?: 'basic' | 'full';
+                        view?: "basic" | "full";
                         status?: number;
                         type?: number;
                         start_time?: string;
                         end_time?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         user_ids?: number;
                         page_token?: string;
                         page_size?: number;
@@ -32256,7 +32256,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/ehr/v1/employees`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -32455,10 +32455,10 @@ export default abstract class Client {
                                                         key?: string;
                                                         label?: string;
                                                         type?:
-                                                            | 'text'
-                                                            | 'date'
-                                                            | 'option'
-                                                            | 'file';
+                                                            | "text"
+                                                            | "date"
+                                                            | "option"
+                                                            | "file";
                                                         value?: string;
                                                     }>;
                                                 }>;
@@ -32466,8 +32466,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -32495,12 +32495,12 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        view?: 'basic' | 'full';
+                        view?: "basic" | "full";
                         status?: number;
                         type?: number;
                         start_time?: string;
                         end_time?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         user_ids?: number;
                         page_token?: string;
                         page_size?: number;
@@ -32674,10 +32674,10 @@ export default abstract class Client {
                                         key?: string;
                                         label?: string;
                                         type?:
-                                            | 'text'
-                                            | 'date'
-                                            | 'option'
-                                            | 'file';
+                                            | "text"
+                                            | "date"
+                                            | "option"
+                                            | "file";
                                         value?: string;
                                     }>;
                                 }>;
@@ -32690,7 +32690,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/ehr/v1/employees`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -32734,7 +32734,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/event/v1/outbound_ip`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -32779,8 +32779,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -32833,7 +32833,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/event/v1/outbound_ip`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -32940,7 +32940,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/face_detection/v1/image/detect_face_attributes`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -32994,7 +32994,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_emails`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33029,7 +33029,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -33068,7 +33068,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -33131,7 +33131,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33175,7 +33175,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -33224,7 +33224,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_schedules`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -33287,7 +33287,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_schedules`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33342,7 +33342,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -33376,7 +33376,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -33437,7 +33437,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33480,7 +33480,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33526,7 +33526,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -33575,7 +33575,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/agent_skill_rules`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33602,13 +33602,13 @@ export default abstract class Client {
             create: async (
                 payload?: {
                     data: {
-                        msg_type: 'text' | 'post' | 'image' | 'interactive';
+                        msg_type: "text" | "post" | "image" | "interactive";
                         content: string;
                         receiver_id: string;
-                        receive_type?: 'chat' | 'user';
+                        receive_type?: "chat" | "user";
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -33629,7 +33629,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/message`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -33688,7 +33688,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/categories`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -33722,7 +33722,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -33769,7 +33769,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33823,7 +33823,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/categories`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -33858,7 +33858,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -33897,7 +33897,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/events/subscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -33931,7 +33931,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/events/unsubscribe`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34025,7 +34025,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34059,7 +34059,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -34093,11 +34093,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id/image/:image_key`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -34181,7 +34181,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -34217,7 +34217,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/helpdesk/v1/faqs`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -34302,8 +34302,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -34400,7 +34400,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -34443,7 +34443,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -34478,7 +34478,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/helpdesk/v1/faqs/search`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -34561,8 +34561,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -34656,7 +34656,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/faqs/search`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -34695,7 +34695,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34730,7 +34730,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34792,7 +34792,7 @@ export default abstract class Client {
                         ext?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -34816,7 +34816,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34851,7 +34851,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -34873,7 +34873,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { notification_id: string };
                 },
@@ -34940,7 +34940,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35002,7 +35002,7 @@ export default abstract class Client {
                         ext?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { notification_id: string };
                 },
@@ -35017,7 +35017,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -35051,7 +35051,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35093,7 +35093,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/submit_approve`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35136,7 +35136,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35226,7 +35226,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/customized_fields`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35351,7 +35351,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35495,7 +35495,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35541,7 +35541,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/start_service`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35579,11 +35579,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -35633,7 +35633,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -35680,7 +35680,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35739,7 +35739,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/messages`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35789,7 +35789,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -35823,7 +35823,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields/:ticket_customized_field_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -35896,7 +35896,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields/:ticket_customized_field_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -35927,7 +35927,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -36004,8 +36004,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -36089,7 +36089,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36130,7 +36130,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields/:ticket_customized_field_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -36182,7 +36182,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -36278,7 +36278,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications/:application_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36333,7 +36333,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36355,7 +36355,7 @@ export default abstract class Client {
             offer: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { application_id: string };
                 },
@@ -36497,7 +36497,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/offer`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36536,7 +36536,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/terminate`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -36570,7 +36570,7 @@ export default abstract class Client {
                         employee_type?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { application_id: string };
                 },
@@ -36610,7 +36610,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/transfer_onboard`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -36640,10 +36640,10 @@ export default abstract class Client {
                         page_size: number;
                         page_token?: string;
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                     path: { application_id: string };
                 },
@@ -36724,7 +36724,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/interviews`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36778,7 +36778,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/attachments/:attachment_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36815,7 +36815,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/attachments/:attachment_id/preview`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36842,7 +36842,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { employee_id: string };
                 },
@@ -36882,7 +36882,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/employees/:employee_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36905,7 +36905,7 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         application_id: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -36944,7 +36944,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/employees/get_by_application`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -36974,7 +36974,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { employee_id: string };
                 },
@@ -37014,7 +37014,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/employees/:employee_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -37042,10 +37042,10 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                     path: { job_id: number };
                 },
@@ -37185,7 +37185,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/jobs/:job_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37213,10 +37213,10 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                     path: { job_id: string; manager_id: string };
                 },
@@ -37245,7 +37245,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/jobs/:job_id/managers/:manager_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37306,7 +37306,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/job_processes`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37341,10 +37341,10 @@ export default abstract class Client {
                     };
                     params?: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                 },
                 options?: IRequestOptions
@@ -37376,7 +37376,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/notes`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -37399,10 +37399,10 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                     path: { note_id: string };
                 },
@@ -37435,7 +37435,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/notes/:note_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37461,10 +37461,10 @@ export default abstract class Client {
                         page_token?: string;
                         talent_id: string;
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                 },
                 options?: IRequestOptions
@@ -37498,7 +37498,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/notes`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37522,10 +37522,10 @@ export default abstract class Client {
                     data: { content: string };
                     params?: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                     path: { note_id: string };
                 },
@@ -37558,7 +37558,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/notes/:note_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -37622,7 +37622,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/offer_schemas/:offer_schema_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37651,10 +37651,10 @@ export default abstract class Client {
                     params: {
                         application_id: string;
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                     };
                 },
                 options?: IRequestOptions
@@ -37689,7 +37689,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/referrals/get_by_application`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -37724,7 +37724,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/hire/v1/resume_sources`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -37775,8 +37775,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -37833,7 +37833,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/resume_sources`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38276,7 +38276,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/hire/v1/talents/:talent_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38316,7 +38316,7 @@ export default abstract class Client {
                     };
                     params: {
                         user_id: string;
-                        user_id_type?: 'open_id' | 'user_id' | 'union_id';
+                        user_id_type?: "open_id" | "user_id" | "union_id";
                     };
                 },
                 options?: IRequestOptions
@@ -38337,7 +38337,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/human_authentication/v1/identities`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -38383,7 +38383,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -38436,7 +38436,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/get_progress`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38484,7 +38484,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id/read_user`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38513,7 +38513,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { chat_id: string };
                 },
@@ -38534,16 +38534,16 @@ export default abstract class Client {
                                 create_time?: string;
                                 update_time?: string;
                                 owner_id_type?:
-                                    | 'user_id'
-                                    | 'union_id'
-                                    | 'open_id'
-                                    | 'app_id';
+                                    | "user_id"
+                                    | "union_id"
+                                    | "open_id"
+                                    | "app_id";
                                 owner_id?: string;
                                 modifier_id_type?:
-                                    | 'user_id'
-                                    | 'union_id'
-                                    | 'open_id'
-                                    | 'app_id';
+                                    | "user_id"
+                                    | "union_id"
+                                    | "open_id"
+                                    | "app_id";
                                 modifier_id?: string;
                             };
                         }
@@ -38552,7 +38552,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38589,7 +38589,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -38639,7 +38639,7 @@ export default abstract class Client {
                         toolkit_ids?: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         set_bot_manager?: boolean;
                     };
                 },
@@ -38688,7 +38688,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -38724,7 +38724,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -38748,7 +38748,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -38798,7 +38798,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38811,7 +38811,7 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -38832,7 +38832,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/chats`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -38887,8 +38887,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -38918,7 +38918,7 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -38955,7 +38955,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -38968,7 +38968,7 @@ export default abstract class Client {
             searchWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         query?: string;
                         page_token?: string;
                         page_size?: number;
@@ -38990,7 +38990,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/chats/search`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -39045,8 +39045,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -39076,7 +39076,7 @@ export default abstract class Client {
             search: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         query?: string;
                         page_token?: string;
                         page_size?: number;
@@ -39114,7 +39114,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/search`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -39158,7 +39158,7 @@ export default abstract class Client {
                         toolkit_ids?: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -39173,7 +39173,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -39204,10 +39204,10 @@ export default abstract class Client {
                     data?: { manager_ids?: Array<string> };
                     params?: {
                         member_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'app_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -39232,7 +39232,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/add_managers`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -39258,10 +39258,10 @@ export default abstract class Client {
                     data?: { manager_ids?: Array<string> };
                     params?: {
                         member_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'app_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -39286,7 +39286,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/managers/delete_managers`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -39317,10 +39317,10 @@ export default abstract class Client {
                     data?: { id_list?: Array<string> };
                     params?: {
                         member_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'app_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
                         succeed_type?: number;
                     };
                     path?: { chat_id?: string };
@@ -39346,7 +39346,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -39372,10 +39372,10 @@ export default abstract class Client {
                     data?: { id_list?: Array<string> };
                     params?: {
                         member_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'app_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "app_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -39397,7 +39397,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -39410,7 +39410,7 @@ export default abstract class Client {
             getWithIterator: async (
                 payload?: {
                     params?: {
-                        member_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        member_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -39432,7 +39432,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -39483,8 +39483,8 @@ export default abstract class Client {
                                                 member_total?: number;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -39514,7 +39514,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        member_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        member_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -39548,7 +39548,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -39589,7 +39589,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members/is_in_chat`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -39625,7 +39625,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -39643,7 +39643,7 @@ export default abstract class Client {
             getWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -39665,7 +39665,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -39715,8 +39715,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -39746,7 +39746,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -39779,7 +39779,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -39808,7 +39808,7 @@ export default abstract class Client {
                         moderator_removed_list?: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { chat_id?: string };
                 },
@@ -39823,7 +39823,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -39856,14 +39856,14 @@ export default abstract class Client {
                             tab_id?: string;
                             tab_name?: string;
                             tab_type:
-                                | 'message'
-                                | 'doc_list'
-                                | 'doc'
-                                | 'pin'
-                                | 'meeting_minute'
-                                | 'chat_announcement'
-                                | 'url'
-                                | 'file';
+                                | "message"
+                                | "doc_list"
+                                | "doc"
+                                | "pin"
+                                | "meeting_minute"
+                                | "chat_announcement"
+                                | "url"
+                                | "file";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
@@ -39889,14 +39889,14 @@ export default abstract class Client {
                                     tab_id?: string;
                                     tab_name?: string;
                                     tab_type:
-                                        | 'message'
-                                        | 'doc_list'
-                                        | 'doc'
-                                        | 'pin'
-                                        | 'meeting_minute'
-                                        | 'chat_announcement'
-                                        | 'url'
-                                        | 'file';
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -39910,7 +39910,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -39950,14 +39950,14 @@ export default abstract class Client {
                                     tab_id?: string;
                                     tab_name?: string;
                                     tab_type:
-                                        | 'message'
-                                        | 'doc_list'
-                                        | 'doc'
-                                        | 'pin'
-                                        | 'meeting_minute'
-                                        | 'chat_announcement'
-                                        | 'url'
-                                        | 'file';
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -39971,7 +39971,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -40010,14 +40010,14 @@ export default abstract class Client {
                                     tab_id?: string;
                                     tab_name?: string;
                                     tab_type:
-                                        | 'message'
-                                        | 'doc_list'
-                                        | 'doc'
-                                        | 'pin'
-                                        | 'meeting_minute'
-                                        | 'chat_announcement'
-                                        | 'url'
-                                        | 'file';
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -40031,7 +40031,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/list_tabs`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -40073,14 +40073,14 @@ export default abstract class Client {
                                     tab_id?: string;
                                     tab_name?: string;
                                     tab_type:
-                                        | 'message'
-                                        | 'doc_list'
-                                        | 'doc'
-                                        | 'pin'
-                                        | 'meeting_minute'
-                                        | 'chat_announcement'
-                                        | 'url'
-                                        | 'file';
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -40094,7 +40094,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/sort_tabs`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -40122,14 +40122,14 @@ export default abstract class Client {
                             tab_id?: string;
                             tab_name?: string;
                             tab_type:
-                                | 'message'
-                                | 'doc_list'
-                                | 'doc'
-                                | 'pin'
-                                | 'meeting_minute'
-                                | 'chat_announcement'
-                                | 'url'
-                                | 'file';
+                                | "message"
+                                | "doc_list"
+                                | "doc"
+                                | "pin"
+                                | "meeting_minute"
+                                | "chat_announcement"
+                                | "url"
+                                | "file";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
@@ -40155,14 +40155,14 @@ export default abstract class Client {
                                     tab_id?: string;
                                     tab_name?: string;
                                     tab_type:
-                                        | 'message'
-                                        | 'doc_list'
-                                        | 'doc'
-                                        | 'pin'
-                                        | 'meeting_minute'
-                                        | 'chat_announcement'
-                                        | 'url'
-                                        | 'file';
+                                        | "message"
+                                        | "doc_list"
+                                        | "doc"
+                                        | "pin"
+                                        | "meeting_minute"
+                                        | "chat_announcement"
+                                        | "url"
+                                        | "file";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -40176,7 +40176,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/chat_tabs/update_tabs`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -40215,7 +40215,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -40238,7 +40238,7 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         chat_top_notice: Array<{
-                            action_type?: '1' | '2';
+                            action_type?: "1" | "2";
                             message_id?: string;
                         }>;
                     };
@@ -40255,7 +40255,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -40285,13 +40285,13 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         file_type:
-                            | 'opus'
-                            | 'mp4'
-                            | 'pdf'
-                            | 'doc'
-                            | 'xls'
-                            | 'ppt'
-                            | 'stream';
+                            | "opus"
+                            | "mp4"
+                            | "pdf"
+                            | "doc"
+                            | "xls"
+                            | "ppt"
+                            | "stream";
                         file_name: string;
                         duration?: number;
                         file: Buffer;
@@ -40315,12 +40315,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/files`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -40328,7 +40328,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
@@ -40356,11 +40356,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/files/:file_key`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -40391,7 +40391,7 @@ export default abstract class Client {
              */
             create: async (
                 payload?: {
-                    data: { image_type: 'message' | 'avatar'; image: Buffer };
+                    data: { image_type: "message" | "avatar"; image: Buffer };
                 },
                 options?: IRequestOptions
             ) => {
@@ -40411,12 +40411,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/images`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -40424,7 +40424,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
@@ -40452,11 +40452,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/images/:image_key`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -40495,11 +40495,11 @@ export default abstract class Client {
                     };
                     params: {
                         receive_id_type:
-                            | 'open_id'
-                            | 'user_id'
-                            | 'union_id'
-                            | 'email'
-                            | 'chat_id';
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id";
                     };
                 },
                 options?: IRequestOptions
@@ -40545,7 +40545,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -40581,7 +40581,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -40651,7 +40651,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -40688,7 +40688,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/messages`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -40758,8 +40758,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -40846,7 +40846,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -40883,7 +40883,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -40907,7 +40907,7 @@ export default abstract class Client {
             readUsers: async (
                 payload?: {
                     params: {
-                        user_id_type: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type: "user_id" | "union_id" | "open_id";
                         page_size?: number;
                         page_token?: string;
                     };
@@ -40940,7 +40940,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/read_users`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -41009,7 +41009,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -41034,7 +41034,7 @@ export default abstract class Client {
                 payload?: {
                     data: { user_id_list: Array<string> };
                     params: {
-                        user_id_type: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type: "user_id" | "union_id" | "open_id";
                     };
                     path: { message_id: string };
                 },
@@ -41056,7 +41056,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_app`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -41083,7 +41083,7 @@ export default abstract class Client {
                 payload?: {
                     data: { user_id_list: Array<string> };
                     params: {
-                        user_id_type: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type: "user_id" | "union_id" | "open_id";
                     };
                     path: { message_id: string };
                 },
@@ -41105,7 +41105,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_phone`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -41132,7 +41132,7 @@ export default abstract class Client {
                 payload?: {
                     data: { user_id_list: Array<string> };
                     params: {
-                        user_id_type: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type: "user_id" | "union_id" | "open_id";
                     };
                     path: { message_id: string };
                 },
@@ -41154,7 +41154,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/urgent_sms`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -41200,7 +41200,7 @@ export default abstract class Client {
                                 reaction_id?: string;
                                 operator?: {
                                     operator_id: string;
-                                    operator_type: 'app' | 'user';
+                                    operator_type: "app" | "user";
                                 };
                                 action_time?: string;
                                 reaction_type?: { emoji_type: string };
@@ -41211,7 +41211,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -41251,7 +41251,7 @@ export default abstract class Client {
                                 reaction_id?: string;
                                 operator?: {
                                     operator_id: string;
-                                    operator_type: 'app' | 'user';
+                                    operator_type: "app" | "user";
                                 };
                                 action_time?: string;
                                 reaction_type?: { emoji_type: string };
@@ -41262,7 +41262,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/reactions/:reaction_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -41278,7 +41278,7 @@ export default abstract class Client {
                         reaction_type?: string;
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { message_id: string };
                 },
@@ -41298,7 +41298,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -41343,8 +41343,8 @@ export default abstract class Client {
                                                     operator?: {
                                                         operator_id: string;
                                                         operator_type:
-                                                            | 'app'
-                                                            | 'user';
+                                                            | "app"
+                                                            | "user";
                                                     };
                                                     action_time?: string;
                                                     reaction_type?: {
@@ -41355,8 +41355,8 @@ export default abstract class Client {
                                                 page_token: string;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -41389,7 +41389,7 @@ export default abstract class Client {
                         reaction_type?: string;
                         page_token?: string;
                         page_size?: number;
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { message_id: string };
                 },
@@ -41409,7 +41409,7 @@ export default abstract class Client {
                                     reaction_id?: string;
                                     operator?: {
                                         operator_id: string;
-                                        operator_type: 'app' | 'user';
+                                        operator_type: "app" | "user";
                                     };
                                     action_time?: string;
                                     reaction_type?: { emoji_type: string };
@@ -41423,7 +41423,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -41465,11 +41465,11 @@ export default abstract class Client {
                             `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         headers,
                         data,
                         params,
-                        responseType: 'stream',
+                        responseType: "stream",
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -41529,7 +41529,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/aliases`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -41563,7 +41563,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/aliases/:alias_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -41609,7 +41609,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/aliases`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -41640,10 +41640,10 @@ export default abstract class Client {
                         name?: string;
                         description?: string;
                         who_can_send_mail?:
-                            | 'ANYONE'
-                            | 'ALL_INTERNAL_USERS'
-                            | 'ALL_GROUP_MEMBERS'
-                            | 'CUSTOM_MEMBERS';
+                            | "ANYONE"
+                            | "ALL_INTERNAL_USERS"
+                            | "ALL_GROUP_MEMBERS"
+                            | "CUSTOM_MEMBERS";
                     };
                 },
                 options?: IRequestOptions
@@ -41666,10 +41666,10 @@ export default abstract class Client {
                                 include_external_member?: boolean;
                                 include_all_company_member?: boolean;
                                 who_can_send_mail?:
-                                    | 'ANYONE'
-                                    | 'ALL_INTERNAL_USERS'
-                                    | 'ALL_GROUP_MEMBERS'
-                                    | 'CUSTOM_MEMBERS';
+                                    | "ANYONE"
+                                    | "ALL_INTERNAL_USERS"
+                                    | "ALL_GROUP_MEMBERS"
+                                    | "CUSTOM_MEMBERS";
                             };
                         }
                     >({
@@ -41677,7 +41677,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -41711,7 +41711,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -41754,10 +41754,10 @@ export default abstract class Client {
                                 include_external_member?: boolean;
                                 include_all_company_member?: boolean;
                                 who_can_send_mail?:
-                                    | 'ANYONE'
-                                    | 'ALL_INTERNAL_USERS'
-                                    | 'ALL_GROUP_MEMBERS'
-                                    | 'CUSTOM_MEMBERS';
+                                    | "ANYONE"
+                                    | "ALL_INTERNAL_USERS"
+                                    | "ALL_GROUP_MEMBERS"
+                                    | "CUSTOM_MEMBERS";
                             };
                         }
                     >({
@@ -41765,7 +41765,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -41779,7 +41779,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         manager_user_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -41800,7 +41800,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/mailgroups`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -41851,15 +41851,15 @@ export default abstract class Client {
                                                     include_external_member?: boolean;
                                                     include_all_company_member?: boolean;
                                                     who_can_send_mail?:
-                                                        | 'ANYONE'
-                                                        | 'ALL_INTERNAL_USERS'
-                                                        | 'ALL_GROUP_MEMBERS'
-                                                        | 'CUSTOM_MEMBERS';
+                                                        | "ANYONE"
+                                                        | "ALL_INTERNAL_USERS"
+                                                        | "ALL_GROUP_MEMBERS"
+                                                        | "CUSTOM_MEMBERS";
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -41888,7 +41888,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         manager_user_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -41916,10 +41916,10 @@ export default abstract class Client {
                                     include_external_member?: boolean;
                                     include_all_company_member?: boolean;
                                     who_can_send_mail?:
-                                        | 'ANYONE'
-                                        | 'ALL_INTERNAL_USERS'
-                                        | 'ALL_GROUP_MEMBERS'
-                                        | 'CUSTOM_MEMBERS';
+                                        | "ANYONE"
+                                        | "ALL_INTERNAL_USERS"
+                                        | "ALL_GROUP_MEMBERS"
+                                        | "CUSTOM_MEMBERS";
                                 }>;
                             };
                         }
@@ -41928,7 +41928,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -41954,10 +41954,10 @@ export default abstract class Client {
                         name?: string;
                         description?: string;
                         who_can_send_mail?:
-                            | 'ANYONE'
-                            | 'ALL_INTERNAL_USERS'
-                            | 'ALL_GROUP_MEMBERS'
-                            | 'CUSTOM_MEMBERS';
+                            | "ANYONE"
+                            | "ALL_INTERNAL_USERS"
+                            | "ALL_GROUP_MEMBERS"
+                            | "CUSTOM_MEMBERS";
                     };
                     path?: { mailgroup_id?: string };
                 },
@@ -41981,10 +41981,10 @@ export default abstract class Client {
                                 include_external_member?: boolean;
                                 include_all_company_member?: boolean;
                                 who_can_send_mail?:
-                                    | 'ANYONE'
-                                    | 'ALL_INTERNAL_USERS'
-                                    | 'ALL_GROUP_MEMBERS'
-                                    | 'CUSTOM_MEMBERS';
+                                    | "ANYONE"
+                                    | "ALL_INTERNAL_USERS"
+                                    | "ALL_GROUP_MEMBERS"
+                                    | "CUSTOM_MEMBERS";
                             };
                         }
                     >({
@@ -41992,7 +41992,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -42018,10 +42018,10 @@ export default abstract class Client {
                         name?: string;
                         description?: string;
                         who_can_send_mail?:
-                            | 'ANYONE'
-                            | 'ALL_INTERNAL_USERS'
-                            | 'ALL_GROUP_MEMBERS'
-                            | 'CUSTOM_MEMBERS';
+                            | "ANYONE"
+                            | "ALL_INTERNAL_USERS"
+                            | "ALL_GROUP_MEMBERS"
+                            | "CUSTOM_MEMBERS";
                     };
                     path?: { mailgroup_id?: string };
                 },
@@ -42045,10 +42045,10 @@ export default abstract class Client {
                                 include_external_member?: boolean;
                                 include_all_company_member?: boolean;
                                 who_can_send_mail?:
-                                    | 'ANYONE'
-                                    | 'ALL_INTERNAL_USERS'
-                                    | 'ALL_GROUP_MEMBERS'
-                                    | 'CUSTOM_MEMBERS';
+                                    | "ANYONE"
+                                    | "ALL_INTERNAL_USERS"
+                                    | "ALL_GROUP_MEMBERS"
+                                    | "CUSTOM_MEMBERS";
                             };
                         }
                     >({
@@ -42056,7 +42056,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -42087,19 +42087,19 @@ export default abstract class Client {
                         user_id?: string;
                         department_id?: string;
                         type?:
-                            | 'USER'
-                            | 'DEPARTMENT'
-                            | 'COMPANY'
-                            | 'EXTERNAL_USER'
-                            | 'MAIL_GROUP'
-                            | 'PUBLIC_MAILBOX'
-                            | 'OTHER_MEMBER';
+                            | "USER"
+                            | "DEPARTMENT"
+                            | "COMPANY"
+                            | "EXTERNAL_USER"
+                            | "MAIL_GROUP"
+                            | "PUBLIC_MAILBOX"
+                            | "OTHER_MEMBER";
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { mailgroup_id?: string };
                 },
@@ -42120,13 +42120,13 @@ export default abstract class Client {
                                 user_id?: string;
                                 department_id?: string;
                                 type?:
-                                    | 'USER'
-                                    | 'DEPARTMENT'
-                                    | 'COMPANY'
-                                    | 'EXTERNAL_USER'
-                                    | 'MAIL_GROUP'
-                                    | 'PUBLIC_MAILBOX'
-                                    | 'OTHER_MEMBER';
+                                    | "USER"
+                                    | "DEPARTMENT"
+                                    | "COMPANY"
+                                    | "EXTERNAL_USER"
+                                    | "MAIL_GROUP"
+                                    | "PUBLIC_MAILBOX"
+                                    | "OTHER_MEMBER";
                             };
                         }
                     >({
@@ -42134,7 +42134,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -42168,7 +42168,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members/:member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -42190,10 +42190,10 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { mailgroup_id?: string; member_id?: string };
                 },
@@ -42214,13 +42214,13 @@ export default abstract class Client {
                                 user_id?: string;
                                 department_id?: string;
                                 type?:
-                                    | 'USER'
-                                    | 'DEPARTMENT'
-                                    | 'COMPANY'
-                                    | 'EXTERNAL_USER'
-                                    | 'MAIL_GROUP'
-                                    | 'PUBLIC_MAILBOX'
-                                    | 'OTHER_MEMBER';
+                                    | "USER"
+                                    | "DEPARTMENT"
+                                    | "COMPANY"
+                                    | "EXTERNAL_USER"
+                                    | "MAIL_GROUP"
+                                    | "PUBLIC_MAILBOX"
+                                    | "OTHER_MEMBER";
                             };
                         }
                     >({
@@ -42228,7 +42228,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members/:member_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42241,10 +42241,10 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -42266,7 +42266,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -42314,18 +42314,18 @@ export default abstract class Client {
                                                     user_id?: string;
                                                     department_id?: string;
                                                     type?:
-                                                        | 'USER'
-                                                        | 'DEPARTMENT'
-                                                        | 'COMPANY'
-                                                        | 'EXTERNAL_USER'
-                                                        | 'MAIL_GROUP'
-                                                        | 'PUBLIC_MAILBOX'
-                                                        | 'OTHER_MEMBER';
+                                                        | "USER"
+                                                        | "DEPARTMENT"
+                                                        | "COMPANY"
+                                                        | "EXTERNAL_USER"
+                                                        | "MAIL_GROUP"
+                                                        | "PUBLIC_MAILBOX"
+                                                        | "OTHER_MEMBER";
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -42353,10 +42353,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -42382,13 +42382,13 @@ export default abstract class Client {
                                     user_id?: string;
                                     department_id?: string;
                                     type?:
-                                        | 'USER'
-                                        | 'DEPARTMENT'
-                                        | 'COMPANY'
-                                        | 'EXTERNAL_USER'
-                                        | 'MAIL_GROUP'
-                                        | 'PUBLIC_MAILBOX'
-                                        | 'OTHER_MEMBER';
+                                        | "USER"
+                                        | "DEPARTMENT"
+                                        | "COMPANY"
+                                        | "EXTERNAL_USER"
+                                        | "MAIL_GROUP"
+                                        | "PUBLIC_MAILBOX"
+                                        | "OTHER_MEMBER";
                                 }>;
                             };
                         }
@@ -42397,7 +42397,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42426,13 +42426,13 @@ export default abstract class Client {
                     data?: {
                         user_id?: string;
                         department_id?: string;
-                        type?: 'USER' | 'DEPARTMENT';
+                        type?: "USER" | "DEPARTMENT";
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: { mailgroup_id?: string };
                 },
@@ -42451,7 +42451,7 @@ export default abstract class Client {
                                 permission_member_id?: string;
                                 user_id?: string;
                                 department_id?: string;
-                                type?: 'USER' | 'DEPARTMENT';
+                                type?: "USER" | "DEPARTMENT";
                             };
                         }
                     >({
@@ -42459,7 +42459,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -42496,7 +42496,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members/:permission_member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -42518,10 +42518,10 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                     };
                     path?: {
                         mailgroup_id?: string;
@@ -42543,7 +42543,7 @@ export default abstract class Client {
                                 permission_member_id?: string;
                                 user_id?: string;
                                 department_id?: string;
-                                type?: 'USER' | 'DEPARTMENT';
+                                type?: "USER" | "DEPARTMENT";
                             };
                         }
                     >({
@@ -42551,7 +42551,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members/:permission_member_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42564,10 +42564,10 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -42589,7 +42589,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -42636,13 +42636,13 @@ export default abstract class Client {
                                                     user_id?: string;
                                                     department_id?: string;
                                                     type?:
-                                                        | 'USER'
-                                                        | 'DEPARTMENT';
+                                                        | "USER"
+                                                        | "DEPARTMENT";
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -42670,10 +42670,10 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
-                            | 'department_id'
-                            | 'open_department_id';
+                            | "department_id"
+                            | "open_department_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -42697,7 +42697,7 @@ export default abstract class Client {
                                     permission_member_id?: string;
                                     user_id?: string;
                                     department_id?: string;
-                                    type?: 'USER' | 'DEPARTMENT';
+                                    type?: "USER" | "DEPARTMENT";
                                 }>;
                             };
                         }
@@ -42706,7 +42706,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42758,7 +42758,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/aliases`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -42792,7 +42792,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/aliases/:alias_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -42838,7 +42838,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/aliases`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42888,7 +42888,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -42922,7 +42922,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -42967,7 +42967,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -42997,7 +42997,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/public_mailboxes`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -43046,8 +43046,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -43102,7 +43102,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -43148,7 +43148,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -43194,7 +43194,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -43233,7 +43233,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/clear`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -43254,9 +43254,9 @@ export default abstract class Client {
              */
             create: async (
                 payload?: {
-                    data?: { user_id?: string; type?: 'USER' };
+                    data?: { user_id?: string; type?: "USER" };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { public_mailbox_id?: string };
                 },
@@ -43274,7 +43274,7 @@ export default abstract class Client {
                             data?: {
                                 member_id?: string;
                                 user_id?: string;
-                                type?: 'USER';
+                                type?: "USER";
                             };
                         }
                     >({
@@ -43282,7 +43282,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -43316,7 +43316,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/:member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -43338,7 +43338,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { public_mailbox_id?: string; member_id?: string };
                 },
@@ -43356,7 +43356,7 @@ export default abstract class Client {
                             data?: {
                                 member_id?: string;
                                 user_id?: string;
-                                type?: 'USER';
+                                type?: "USER";
                             };
                         }
                     >({
@@ -43364,7 +43364,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/:member_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -43377,7 +43377,7 @@ export default abstract class Client {
             listWithIterator: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -43399,7 +43399,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -43444,12 +43444,12 @@ export default abstract class Client {
                                                 items?: Array<{
                                                     member_id?: string;
                                                     user_id?: string;
-                                                    type?: 'USER';
+                                                    type?: "USER";
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -43477,7 +43477,7 @@ export default abstract class Client {
             list: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                         page_token?: string;
                         page_size?: number;
                     };
@@ -43500,7 +43500,7 @@ export default abstract class Client {
                                 items?: Array<{
                                     member_id?: string;
                                     user_id?: string;
-                                    type?: 'USER';
+                                    type?: "USER";
                                 }>;
                             };
                         }
@@ -43509,7 +43509,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -43561,7 +43561,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/users/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -43613,7 +43613,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -43647,7 +43647,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases/:alias_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -43678,7 +43678,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -43724,8 +43724,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -43778,7 +43778,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -43818,7 +43818,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -43887,12 +43887,12 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/images/upload`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers: {
                             ...headers,
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     })
                     .catch((e) => {
@@ -43900,7 +43900,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, 'data', {});
+                return get(res, "data", {});
             },
         },
         /**
@@ -43922,10 +43922,10 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                         okr_ids: number;
                         lang?: string;
                     };
@@ -43956,7 +43956,7 @@ export default abstract class Client {
                                         weight?: number;
                                         progress_rate?: {
                                             percent?: number;
-                                            status?: '-1' | '0' | '1' | '2';
+                                            status?: "-1" | "0" | "1" | "2";
                                         };
                                         kr_list?: Array<{
                                             id?: string;
@@ -43966,7 +43966,7 @@ export default abstract class Client {
                                             kr_weight?: number;
                                             progress_rate?: {
                                                 percent?: number;
-                                                status?: '-1' | '0' | '1' | '2';
+                                                status?: "-1" | "0" | "1" | "2";
                                             };
                                             progress_record_list?: Array<{
                                                 id?: string;
@@ -44021,7 +44021,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/okrs/batch_get`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -44078,7 +44078,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/periods`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -44111,25 +44111,25 @@ export default abstract class Client {
                         target_type: number;
                         content: {
                             blocks?: Array<{
-                                type?: 'paragraph' | 'gallery';
+                                type?: "paragraph" | "gallery";
                                 paragraph?: {
                                     style?: {
                                         list?: Array<{
                                             type?:
-                                                | 'number'
-                                                | 'bullet'
-                                                | 'checkBox'
-                                                | 'checkedBox'
-                                                | 'indent';
+                                                | "number"
+                                                | "bullet"
+                                                | "checkBox"
+                                                | "checkedBox"
+                                                | "indent";
                                             indentLevel?: number;
                                             number?: number;
                                         }>;
                                     };
                                     elements?: Array<{
                                         type?:
-                                            | 'textRun'
-                                            | 'docsLink'
-                                            | 'person';
+                                            | "textRun"
+                                            | "docsLink"
+                                            | "person";
                                         textRun?: {
                                             text?: string;
                                             style?: {
@@ -44186,25 +44186,25 @@ export default abstract class Client {
                                     modify_time?: string;
                                     content?: {
                                         blocks?: Array<{
-                                            type?: 'paragraph' | 'gallery';
+                                            type?: "paragraph" | "gallery";
                                             paragraph?: {
                                                 style?: {
                                                     list?: Array<{
                                                         type?:
-                                                            | 'number'
-                                                            | 'bullet'
-                                                            | 'checkBox'
-                                                            | 'checkedBox'
-                                                            | 'indent';
+                                                            | "number"
+                                                            | "bullet"
+                                                            | "checkBox"
+                                                            | "checkedBox"
+                                                            | "indent";
                                                         indentLevel?: number;
                                                         number?: number;
                                                     }>;
                                                 };
                                                 elements?: Array<{
                                                     type?:
-                                                        | 'textRun'
-                                                        | 'docsLink'
-                                                        | 'person';
+                                                        | "textRun"
+                                                        | "docsLink"
+                                                        | "person";
                                                     textRun?: {
                                                         text?: string;
                                                         style?: {
@@ -44254,7 +44254,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/progress_records`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -44288,7 +44288,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -44327,25 +44327,25 @@ export default abstract class Client {
                                 modify_time?: string;
                                 content?: {
                                     blocks?: Array<{
-                                        type?: 'paragraph' | 'gallery';
+                                        type?: "paragraph" | "gallery";
                                         paragraph?: {
                                             style?: {
                                                 list?: Array<{
                                                     type?:
-                                                        | 'number'
-                                                        | 'bullet'
-                                                        | 'checkBox'
-                                                        | 'checkedBox'
-                                                        | 'indent';
+                                                        | "number"
+                                                        | "bullet"
+                                                        | "checkBox"
+                                                        | "checkedBox"
+                                                        | "indent";
                                                     indentLevel?: number;
                                                     number?: number;
                                                 }>;
                                             };
                                             elements?: Array<{
                                                 type?:
-                                                    | 'textRun'
-                                                    | 'docsLink'
-                                                    | 'person';
+                                                    | "textRun"
+                                                    | "docsLink"
+                                                    | "person";
                                                 textRun?: {
                                                     text?: string;
                                                     style?: {
@@ -44390,7 +44390,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -44414,25 +44414,25 @@ export default abstract class Client {
                     data: {
                         content: {
                             blocks?: Array<{
-                                type?: 'paragraph' | 'gallery';
+                                type?: "paragraph" | "gallery";
                                 paragraph?: {
                                     style?: {
                                         list?: Array<{
                                             type?:
-                                                | 'number'
-                                                | 'bullet'
-                                                | 'checkBox'
-                                                | 'checkedBox'
-                                                | 'indent';
+                                                | "number"
+                                                | "bullet"
+                                                | "checkBox"
+                                                | "checkedBox"
+                                                | "indent";
                                             indentLevel?: number;
                                             number?: number;
                                         }>;
                                     };
                                     elements?: Array<{
                                         type?:
-                                            | 'textRun'
-                                            | 'docsLink'
-                                            | 'person';
+                                            | "textRun"
+                                            | "docsLink"
+                                            | "person";
                                         textRun?: {
                                             text?: string;
                                             style?: {
@@ -44490,25 +44490,25 @@ export default abstract class Client {
                                     modify_time?: string;
                                     content?: {
                                         blocks?: Array<{
-                                            type?: 'paragraph' | 'gallery';
+                                            type?: "paragraph" | "gallery";
                                             paragraph?: {
                                                 style?: {
                                                     list?: Array<{
                                                         type?:
-                                                            | 'number'
-                                                            | 'bullet'
-                                                            | 'checkBox'
-                                                            | 'checkedBox'
-                                                            | 'indent';
+                                                            | "number"
+                                                            | "bullet"
+                                                            | "checkBox"
+                                                            | "checkedBox"
+                                                            | "indent";
                                                         indentLevel?: number;
                                                         number?: number;
                                                     }>;
                                                 };
                                                 elements?: Array<{
                                                     type?:
-                                                        | 'textRun'
-                                                        | 'docsLink'
-                                                        | 'person';
+                                                        | "textRun"
+                                                        | "docsLink"
+                                                        | "person";
                                                     textRun?: {
                                                         text?: string;
                                                         style?: {
@@ -44558,7 +44558,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -44588,10 +44588,10 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         user_id_type?:
-                            | 'user_id'
-                            | 'union_id'
-                            | 'open_id'
-                            | 'people_admin_id';
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
                         offset: string;
                         limit: string;
                         lang?: string;
@@ -44626,7 +44626,7 @@ export default abstract class Client {
                                         weight?: number;
                                         progress_rate?: {
                                             percent?: number;
-                                            status?: '-1' | '0' | '1' | '2';
+                                            status?: "-1" | "0" | "1" | "2";
                                         };
                                         kr_list?: Array<{
                                             id?: string;
@@ -44636,7 +44636,7 @@ export default abstract class Client {
                                             kr_weight?: number;
                                             progress_rate?: {
                                                 percent?: number;
-                                                status?: '-1' | '0' | '1' | '2';
+                                                status?: "-1" | "0" | "1" | "2";
                                             };
                                             progress_record_list?: Array<{
                                                 id?: string;
@@ -44691,7 +44691,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/okr/v1/users/:user_id/okrs`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -44744,7 +44744,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/optical_char_recognition/v1/image/basic_recognize`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -44777,7 +44777,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { user_ids?: Array<string> };
                     params?: {
-                        user_id_type?: 'open_id' | 'union_id' | 'user_id';
+                        user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                 },
                 options?: IRequestOptions
@@ -44804,7 +44804,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/passport/v1/sessions/query`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -44917,7 +44917,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -44951,7 +44951,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -45016,7 +45016,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -45050,7 +45050,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/search/v2/data_sources`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -45117,8 +45117,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -45195,7 +45195,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -45276,7 +45276,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -45305,9 +45305,9 @@ export default abstract class Client {
                     data: {
                         id: string;
                         acl: Array<{
-                            access?: 'allow' | 'deny';
+                            access?: "allow" | "deny";
                             value?: string;
-                            type?: 'user' | 'group' | 'open_id';
+                            type?: "user" | "group" | "open_id";
                         }>;
                         metadata: {
                             title: string;
@@ -45318,7 +45318,7 @@ export default abstract class Client {
                         };
                         structured_data: string;
                         content?: {
-                            format?: 'html' | 'plaintext';
+                            format?: "html" | "plaintext";
                             content_data?: string;
                         };
                     };
@@ -45335,7 +45335,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id/items`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -45369,7 +45369,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id/items/:item_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -45407,9 +45407,9 @@ export default abstract class Client {
                                 item: {
                                     id: string;
                                     acl: Array<{
-                                        access?: 'allow' | 'deny';
+                                        access?: "allow" | "deny";
                                         value?: string;
-                                        type?: 'user' | 'group' | 'open_id';
+                                        type?: "user" | "group" | "open_id";
                                     }>;
                                     metadata: {
                                         title: string;
@@ -45420,7 +45420,7 @@ export default abstract class Client {
                                     };
                                     structured_data: string;
                                     content?: {
-                                        format?: 'html' | 'plaintext';
+                                        format?: "html" | "plaintext";
                                         content_data?: string;
                                     };
                                 };
@@ -45431,7 +45431,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id/items/:item_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -45461,28 +45461,28 @@ export default abstract class Client {
                         properties: Array<{
                             name: string;
                             type:
-                                | 'text'
-                                | 'int'
-                                | 'tag'
-                                | 'timestamp'
-                                | 'double'
-                                | 'tinytext';
+                                | "text"
+                                | "int"
+                                | "tag"
+                                | "timestamp"
+                                | "double"
+                                | "tinytext";
                             is_searchable?: boolean;
                             is_sortable?: boolean;
                             is_returnable?: boolean;
                             sort_options?: {
                                 priority?: number;
-                                order?: 'asc' | 'desc';
+                                order?: "asc" | "desc";
                             };
                             type_definitions?: {
                                 tag?: Array<{
                                     name: string;
                                     color:
-                                        | 'red'
-                                        | 'green'
-                                        | 'blue'
-                                        | 'grey'
-                                        | 'yellow';
+                                        | "red"
+                                        | "green"
+                                        | "blue"
+                                        | "grey"
+                                        | "yellow";
                                     text: string;
                                 }>;
                             };
@@ -45495,7 +45495,7 @@ export default abstract class Client {
                             };
                         }>;
                         display: {
-                            card_key: 'search_common_card';
+                            card_key: "search_common_card";
                             fields_mapping?: Array<{
                                 display_field: string;
                                 data_field: string;
@@ -45521,28 +45521,28 @@ export default abstract class Client {
                                     properties: Array<{
                                         name: string;
                                         type:
-                                            | 'text'
-                                            | 'int'
-                                            | 'tag'
-                                            | 'timestamp'
-                                            | 'double'
-                                            | 'tinytext';
+                                            | "text"
+                                            | "int"
+                                            | "tag"
+                                            | "timestamp"
+                                            | "double"
+                                            | "tinytext";
                                         is_searchable?: boolean;
                                         is_sortable?: boolean;
                                         is_returnable?: boolean;
                                         sort_options?: {
                                             priority?: number;
-                                            order?: 'asc' | 'desc';
+                                            order?: "asc" | "desc";
                                         };
                                         type_definitions?: {
                                             tag?: Array<{
                                                 name: string;
                                                 color:
-                                                    | 'red'
-                                                    | 'green'
-                                                    | 'blue'
-                                                    | 'grey'
-                                                    | 'yellow';
+                                                    | "red"
+                                                    | "green"
+                                                    | "blue"
+                                                    | "grey"
+                                                    | "yellow";
                                                 text: string;
                                             }>;
                                         };
@@ -45555,7 +45555,7 @@ export default abstract class Client {
                                         };
                                     }>;
                                     display: {
-                                        card_key: 'search_common_card';
+                                        card_key: "search_common_card";
                                         fields_mapping?: Array<{
                                             display_field: string;
                                             data_field: string;
@@ -45570,7 +45570,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/schemas`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -45604,7 +45604,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/schemas/:schema_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -45643,28 +45643,28 @@ export default abstract class Client {
                                     properties: Array<{
                                         name: string;
                                         type:
-                                            | 'text'
-                                            | 'int'
-                                            | 'tag'
-                                            | 'timestamp'
-                                            | 'double'
-                                            | 'tinytext';
+                                            | "text"
+                                            | "int"
+                                            | "tag"
+                                            | "timestamp"
+                                            | "double"
+                                            | "tinytext";
                                         is_searchable?: boolean;
                                         is_sortable?: boolean;
                                         is_returnable?: boolean;
                                         sort_options?: {
                                             priority?: number;
-                                            order?: 'asc' | 'desc';
+                                            order?: "asc" | "desc";
                                         };
                                         type_definitions?: {
                                             tag?: Array<{
                                                 name: string;
                                                 color:
-                                                    | 'red'
-                                                    | 'green'
-                                                    | 'blue'
-                                                    | 'grey'
-                                                    | 'yellow';
+                                                    | "red"
+                                                    | "green"
+                                                    | "blue"
+                                                    | "grey"
+                                                    | "yellow";
                                                 text: string;
                                             }>;
                                         };
@@ -45677,7 +45677,7 @@ export default abstract class Client {
                                         };
                                     }>;
                                     display: {
-                                        card_key: 'search_common_card';
+                                        card_key: "search_common_card";
                                         fields_mapping?: Array<{
                                             display_field: string;
                                             data_field: string;
@@ -45692,7 +45692,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/schemas/:schema_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -45715,7 +45715,7 @@ export default abstract class Client {
                 payload?: {
                     data?: {
                         display?: {
-                            card_key: 'search_common_card';
+                            card_key: "search_common_card";
                             fields_mapping?: Array<{
                                 display_field: string;
                                 data_field: string;
@@ -45740,28 +45740,28 @@ export default abstract class Client {
                                     properties: Array<{
                                         name: string;
                                         type:
-                                            | 'text'
-                                            | 'int'
-                                            | 'tag'
-                                            | 'timestamp'
-                                            | 'double'
-                                            | 'tinytext';
+                                            | "text"
+                                            | "int"
+                                            | "tag"
+                                            | "timestamp"
+                                            | "double"
+                                            | "tinytext";
                                         is_searchable?: boolean;
                                         is_sortable?: boolean;
                                         is_returnable?: boolean;
                                         sort_options?: {
                                             priority?: number;
-                                            order?: 'asc' | 'desc';
+                                            order?: "asc" | "desc";
                                         };
                                         type_definitions?: {
                                             tag?: Array<{
                                                 name: string;
                                                 color:
-                                                    | 'red'
-                                                    | 'green'
-                                                    | 'blue'
-                                                    | 'grey'
-                                                    | 'yellow';
+                                                    | "red"
+                                                    | "green"
+                                                    | "blue"
+                                                    | "grey"
+                                                    | "yellow";
                                                 text: string;
                                             }>;
                                         };
@@ -45774,7 +45774,7 @@ export default abstract class Client {
                                         };
                                     }>;
                                     display: {
-                                        card_key: 'search_common_card';
+                                        card_key: "search_common_card";
                                         fields_mapping?: Array<{
                                             display_field: string;
                                             data_field: string;
@@ -45789,7 +45789,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/search/v2/schemas/:schema_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -45851,7 +45851,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -45901,7 +45901,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -45935,7 +45935,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -45989,7 +45989,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46033,7 +46033,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -46098,7 +46098,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46137,7 +46137,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions/:condition_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -46192,7 +46192,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions/:condition_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46246,7 +46246,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46306,7 +46306,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions/:condition_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -46365,7 +46365,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46403,7 +46403,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -46454,7 +46454,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46508,7 +46508,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -46555,7 +46555,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46617,7 +46617,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/find`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46659,7 +46659,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/move_dimension`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46717,7 +46717,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/replace`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46784,7 +46784,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -46822,7 +46822,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images/:float_image_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -46879,7 +46879,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images/:float_image_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46944,7 +46944,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images/:float_image_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -46997,7 +46997,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -47057,7 +47057,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/speech_to_text/v1/speech/file_recognize`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47113,7 +47113,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/speech_to_text/v1/speech/stream_recognize`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47154,7 +47154,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { id_list?: Array<string> };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -47176,7 +47176,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_collaborator`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47199,7 +47199,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { id_list?: Array<string> };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -47221,7 +47221,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/batch_delete_follower`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47255,7 +47255,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/complete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47298,7 +47298,7 @@ export default abstract class Client {
                         rich_description?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -47355,7 +47355,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47389,7 +47389,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -47411,7 +47411,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -47469,7 +47469,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -47487,7 +47487,7 @@ export default abstract class Client {
                         start_create_time?: string;
                         end_create_time?: string;
                         task_completed?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -47506,7 +47506,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/task/v1/tasks`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -47588,8 +47588,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -47622,7 +47622,7 @@ export default abstract class Client {
                         start_create_time?: string;
                         end_create_time?: string;
                         task_completed?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -47681,7 +47681,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -47735,7 +47735,7 @@ export default abstract class Client {
                         update_fields: Array<string>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -47793,7 +47793,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -47827,7 +47827,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/uncomplete`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47855,7 +47855,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { id?: string; id_list?: Array<string> };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -47882,7 +47882,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -47904,7 +47904,7 @@ export default abstract class Client {
             delete: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string; collaborator_id: string };
                 },
@@ -47919,7 +47919,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators/:collaborator_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -47934,7 +47934,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -47954,7 +47954,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -48002,8 +48002,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -48033,7 +48033,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -48062,7 +48062,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48123,7 +48123,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -48157,7 +48157,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments/:comment_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -48206,7 +48206,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments/:comment_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48241,7 +48241,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/comments`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -48292,8 +48292,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -48355,7 +48355,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48405,7 +48405,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments/:comment_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -48433,7 +48433,7 @@ export default abstract class Client {
                 payload?: {
                     data?: { id?: string; id_list?: Array<string> };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -48460,7 +48460,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/followers`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -48482,7 +48482,7 @@ export default abstract class Client {
             delete: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string; follower_id: string };
                 },
@@ -48497,7 +48497,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/followers/:follower_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -48512,7 +48512,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -48532,7 +48532,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/followers`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -48580,8 +48580,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -48611,7 +48611,7 @@ export default abstract class Client {
                     params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -48640,7 +48640,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/followers`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48692,7 +48692,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -48726,7 +48726,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders/:reminder_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -48757,7 +48757,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -48805,8 +48805,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -48861,7 +48861,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48922,7 +48922,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/tenant/v2/tenant/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -48975,7 +48975,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/translation/v1/text/detect`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49019,7 +49019,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/translation/v1/text/translate`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49074,7 +49074,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/exports/:task_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -49103,7 +49103,7 @@ export default abstract class Client {
                         room_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -49124,7 +49124,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/exports/meeting_list`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49153,7 +49153,7 @@ export default abstract class Client {
                         room_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -49174,7 +49174,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/exports/participant_list`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49204,7 +49204,7 @@ export default abstract class Client {
                         room_id?: string;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -49225,7 +49225,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/exports/participant_quality_list`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49266,7 +49266,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/end`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49292,7 +49292,7 @@ export default abstract class Client {
                     params?: {
                         with_participants?: boolean;
                         with_meeting_ability?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { meeting_id?: string };
                 },
@@ -49350,7 +49350,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -49377,7 +49377,7 @@ export default abstract class Client {
                         invitees: Array<{ id?: string; user_type?: number }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { meeting_id?: string };
                 },
@@ -49405,7 +49405,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/invite`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49433,7 +49433,7 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { meeting_id?: string };
                 },
@@ -49461,7 +49461,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/kickout`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -49497,7 +49497,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/vc/v1/meetings/list_by_no`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -49547,8 +49547,8 @@ export default abstract class Client {
                                                 }>;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -49610,7 +49610,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/list_by_no`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -49638,7 +49638,7 @@ export default abstract class Client {
                         old_host_user?: { id?: string; user_type?: number };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { meeting_id?: string };
                 },
@@ -49662,7 +49662,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/set_host`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49712,7 +49712,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -49743,7 +49743,7 @@ export default abstract class Client {
                         }>;
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { meeting_id?: string };
                 },
@@ -49758,7 +49758,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/set_permission`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49795,7 +49795,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/start`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49831,7 +49831,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/stop`,
                             path
                         ),
-                        method: 'PATCH',
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -49891,7 +49891,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reports/get_daily`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -49919,7 +49919,7 @@ export default abstract class Client {
                         end_time: string;
                         limit: number;
                         order_by: number;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -49948,7 +49948,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reports/get_top_user`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50003,7 +50003,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -50033,7 +50033,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reserves/apply`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -50069,7 +50069,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -50093,7 +50093,7 @@ export default abstract class Client {
             get: async (
                 payload?: {
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { reserve_id?: string };
                 },
@@ -50149,7 +50149,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50174,7 +50174,7 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         with_participants?: boolean;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { reserve_id?: string };
                 },
@@ -50232,7 +50232,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reserves/:reserve_id/get_active_meeting`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50282,7 +50282,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { reserve_id?: string };
                 },
@@ -50313,7 +50313,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -50348,7 +50348,7 @@ export default abstract class Client {
                         building_id?: string;
                         floor_name?: string;
                         room_id?: string;
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -50416,7 +50416,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/room_configs/query`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50495,7 +50495,7 @@ export default abstract class Client {
                         };
                     };
                     params?: {
-                        user_id_type?: 'user_id' | 'union_id' | 'open_id';
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -50509,7 +50509,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/vc/v1/room_configs/set`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -50560,8 +50560,8 @@ export default abstract class Client {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: 'team' | 'person';
-                                    visibility?: 'public' | 'private';
+                                    space_type?: "team" | "person";
+                                    visibility?: "public" | "private";
                                 };
                             };
                         }
@@ -50570,7 +50570,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -50611,8 +50611,8 @@ export default abstract class Client {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: 'team' | 'person';
-                                    visibility?: 'public' | 'private';
+                                    space_type?: "team" | "person";
+                                    visibility?: "public" | "private";
                                 };
                             };
                         }
@@ -50621,7 +50621,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50663,14 +50663,14 @@ export default abstract class Client {
                                     node_token?: string;
                                     obj_token?: string;
                                     obj_type:
-                                        | 'doc'
-                                        | 'sheet'
-                                        | 'mindnote'
-                                        | 'bitable'
-                                        | 'file'
-                                        | 'docx';
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx";
                                     parent_node_token?: string;
-                                    node_type: 'origin' | 'shortcut';
+                                    node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
                                     origin_space_id?: string;
                                     has_child?: boolean;
@@ -50688,7 +50688,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/get_node`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50718,7 +50718,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/wiki/v2/spaces`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -50763,18 +50763,18 @@ export default abstract class Client {
                                                     description?: string;
                                                     space_id?: string;
                                                     space_type?:
-                                                        | 'team'
-                                                        | 'person';
+                                                        | "team"
+                                                        | "person";
                                                     visibility?:
-                                                        | 'public'
-                                                        | 'private';
+                                                        | "public"
+                                                        | "private";
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -50821,8 +50821,8 @@ export default abstract class Client {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: 'team' | 'person';
-                                    visibility?: 'public' | 'private';
+                                    space_type?: "team" | "person";
+                                    visibility?: "public" | "private";
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -50833,7 +50833,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -50893,7 +50893,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -50943,7 +50943,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members/:member_id`,
                             path
                         ),
-                        method: 'DELETE',
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -50993,14 +50993,14 @@ export default abstract class Client {
                                     node_token?: string;
                                     obj_token?: string;
                                     obj_type:
-                                        | 'doc'
-                                        | 'sheet'
-                                        | 'mindnote'
-                                        | 'bitable'
-                                        | 'file'
-                                        | 'docx';
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx";
                                     parent_node_token?: string;
-                                    node_type: 'origin' | 'shortcut';
+                                    node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
                                     origin_space_id?: string;
                                     has_child?: boolean;
@@ -51018,7 +51018,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token/copy`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -51043,14 +51043,14 @@ export default abstract class Client {
                 payload?: {
                     data: {
                         obj_type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'mindnote'
-                            | 'bitable'
-                            | 'file'
-                            | 'docx';
+                            | "doc"
+                            | "sheet"
+                            | "mindnote"
+                            | "bitable"
+                            | "file"
+                            | "docx";
                         parent_node_token?: string;
-                        node_type: 'origin' | 'shortcut';
+                        node_type: "origin" | "shortcut";
                         origin_node_token?: string;
                         title?: string;
                         creator?: string;
@@ -51075,14 +51075,14 @@ export default abstract class Client {
                                     node_token?: string;
                                     obj_token?: string;
                                     obj_type:
-                                        | 'doc'
-                                        | 'sheet'
-                                        | 'mindnote'
-                                        | 'bitable'
-                                        | 'file'
-                                        | 'docx';
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx";
                                     parent_node_token?: string;
-                                    node_type: 'origin' | 'shortcut';
+                                    node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
                                     origin_space_id?: string;
                                     has_child?: boolean;
@@ -51100,7 +51100,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -51135,7 +51135,7 @@ export default abstract class Client {
                                 `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
                                 path
                             ),
-                            method: 'GET',
+                            method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                         })
@@ -51180,16 +51180,16 @@ export default abstract class Client {
                                                     node_token?: string;
                                                     obj_token?: string;
                                                     obj_type:
-                                                        | 'doc'
-                                                        | 'sheet'
-                                                        | 'mindnote'
-                                                        | 'bitable'
-                                                        | 'file'
-                                                        | 'docx';
+                                                        | "doc"
+                                                        | "sheet"
+                                                        | "mindnote"
+                                                        | "bitable"
+                                                        | "file"
+                                                        | "docx";
                                                     parent_node_token?: string;
                                                     node_type:
-                                                        | 'origin'
-                                                        | 'shortcut';
+                                                        | "origin"
+                                                        | "shortcut";
                                                     origin_node_token?: string;
                                                     origin_space_id?: string;
                                                     has_child?: boolean;
@@ -51204,8 +51204,8 @@ export default abstract class Client {
                                                 has_more?: boolean;
                                             };
                                         },
-                                        'data'
-                                    >(res, 'data') || {};
+                                        "data"
+                                    >(res, "data") || {};
 
                                 yield rest;
 
@@ -51258,14 +51258,14 @@ export default abstract class Client {
                                     node_token?: string;
                                     obj_token?: string;
                                     obj_type:
-                                        | 'doc'
-                                        | 'sheet'
-                                        | 'mindnote'
-                                        | 'bitable'
-                                        | 'file'
-                                        | 'docx';
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx";
                                     parent_node_token?: string;
-                                    node_type: 'origin' | 'shortcut';
+                                    node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
                                     origin_space_id?: string;
                                     has_child?: boolean;
@@ -51285,7 +51285,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -51331,14 +51331,14 @@ export default abstract class Client {
                                     node_token?: string;
                                     obj_token?: string;
                                     obj_type:
-                                        | 'doc'
-                                        | 'sheet'
-                                        | 'mindnote'
-                                        | 'bitable'
-                                        | 'file'
-                                        | 'docx';
+                                        | "doc"
+                                        | "sheet"
+                                        | "mindnote"
+                                        | "bitable"
+                                        | "file"
+                                        | "docx";
                                     parent_node_token?: string;
-                                    node_type: 'origin' | 'shortcut';
+                                    node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
                                     origin_space_id?: string;
                                     has_child?: boolean;
@@ -51356,7 +51356,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token/move`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -51384,12 +51384,12 @@ export default abstract class Client {
                     data: {
                         parent_wiki_token?: string;
                         obj_type:
-                            | 'doc'
-                            | 'sheet'
-                            | 'bitable'
-                            | 'mindnote'
-                            | 'docx'
-                            | 'file';
+                            | "doc"
+                            | "sheet"
+                            | "bitable"
+                            | "mindnote"
+                            | "docx"
+                            | "file";
                         obj_token: string;
                         apply?: boolean;
                     };
@@ -51417,7 +51417,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/move_docs_to_wiki`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -51454,7 +51454,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token/update_title`,
                             path
                         ),
-                        method: 'POST',
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -51513,7 +51513,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/setting`,
                             path
                         ),
-                        method: 'PUT',
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -51541,7 +51541,7 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
-                    params: { task_type: 'move' };
+                    params: { task_type: "move" };
                     path?: { task_id?: string };
                 },
                 options?: IRequestOptions
@@ -51564,14 +51564,14 @@ export default abstract class Client {
                                             node_token?: string;
                                             obj_token?: string;
                                             obj_type:
-                                                | 'doc'
-                                                | 'sheet'
-                                                | 'mindnote'
-                                                | 'bitable'
-                                                | 'file'
-                                                | 'docx';
+                                                | "doc"
+                                                | "sheet"
+                                                | "mindnote"
+                                                | "bitable"
+                                                | "file"
+                                                | "docx";
                                             parent_node_token?: string;
-                                            node_type: 'origin' | 'shortcut';
+                                            node_type: "origin" | "shortcut";
                                             origin_node_token?: string;
                                             origin_space_id?: string;
                                             has_child?: boolean;
@@ -51593,7 +51593,7 @@ export default abstract class Client {
                             `${this.domain}/open-apis/wiki/v2/tasks/:task_id`,
                             path
                         ),
-                        method: 'GET',
+                        method: "GET",
                         data,
                         params,
                         headers,
