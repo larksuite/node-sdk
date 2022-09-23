@@ -1730,7 +1730,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 事件
+         * 应用
          */
         applicationAppVersion: {
             /**
@@ -1879,6 +1879,372 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        page_size?: number;
+                        page_token?: string;
+                        order?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    app_id: string;
+                                                    version?: string;
+                                                    version_id: string;
+                                                    app_name?: string;
+                                                    avatar_url?: string;
+                                                    description?: string;
+                                                    scopes?: Array<{
+                                                        scope: string;
+                                                        description?: string;
+                                                        level?: number;
+                                                    }>;
+                                                    back_home_url?: string;
+                                                    i18n?: Array<{
+                                                        i18n_key:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        name?: string;
+                                                        description?: string;
+                                                        help_use?: string;
+                                                    }>;
+                                                    common_categories?: Array<string>;
+                                                    events?: Array<string>;
+                                                    status?: number;
+                                                    create_time?: string;
+                                                    publish_time?: string;
+                                                    ability?: {
+                                                        gadget?: {
+                                                            enable_pc_mode?: number;
+                                                            schema_urls?: Array<string>;
+                                                            pc_use_mobile_pkg?: boolean;
+                                                            pc_version?: string;
+                                                            mobile_version?: string;
+                                                            mobile_min_lark_version?: string;
+                                                            pc_min_lark_version?: string;
+                                                        };
+                                                        web_app?: {
+                                                            pc_url?: string;
+                                                            mobile_url?: string;
+                                                        };
+                                                        bot?: {
+                                                            card_request_url?: string;
+                                                        };
+                                                        workplace_widgets?: Array<{
+                                                            min_lark_version?: string;
+                                                        }>;
+                                                        navigate?: {
+                                                            pc?: {
+                                                                version?: string;
+                                                                image_url?: string;
+                                                                hover_image_url?: string;
+                                                            };
+                                                            mobile?: {
+                                                                version?: string;
+                                                                image_url?: string;
+                                                                hover_image_url?: string;
+                                                            };
+                                                        };
+                                                        cloud_doc?: {
+                                                            space_url?: string;
+                                                            i18n?: Array<{
+                                                                i18n_key:
+                                                                    | "zh_cn"
+                                                                    | "en_us"
+                                                                    | "ja_jp";
+                                                                name?: string;
+                                                                read_description?: string;
+                                                                write_description?: string;
+                                                            }>;
+                                                            icon_url?: string;
+                                                            mode?: number;
+                                                        };
+                                                        docs_blocks?: Array<{
+                                                            block_type_id?: string;
+                                                            i18n?: Array<{
+                                                                i18n_key?:
+                                                                    | "zh_cn"
+                                                                    | "en_us"
+                                                                    | "ja_jp";
+                                                                name?: string;
+                                                            }>;
+                                                            mobile_icon_url?: string;
+                                                            pc_icon_url?: string;
+                                                        }>;
+                                                        message_action?: {
+                                                            pc_app_link?: string;
+                                                            mobile_app_link?: string;
+                                                            i18n?: Array<{
+                                                                i18n_key?:
+                                                                    | "zh_cn"
+                                                                    | "en_us"
+                                                                    | "ja_jp";
+                                                                name?: string;
+                                                            }>;
+                                                        };
+                                                        plus_menu?: {
+                                                            pc_app_link?: string;
+                                                            mobile_app_link?: string;
+                                                        };
+                                                    };
+                                                    remark?: {
+                                                        remark?: string;
+                                                        update_remark?: string;
+                                                        visibility?: {
+                                                            is_all?: boolean;
+                                                            visible_list?: {
+                                                                open_ids?: Array<string>;
+                                                                department_ids?: Array<string>;
+                                                            };
+                                                            invisible_list?: {
+                                                                open_ids?: Array<string>;
+                                                                department_ids?: Array<string>;
+                                                            };
+                                                        };
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=application&resource=application.app_version&version=v6 document }
+             *
+             * 获取应用版本列表
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        lang: "zh_cn" | "en_us" | "ja_jp";
+                        page_size?: number;
+                        page_token?: string;
+                        order?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    app_id: string;
+                                    version?: string;
+                                    version_id: string;
+                                    app_name?: string;
+                                    avatar_url?: string;
+                                    description?: string;
+                                    scopes?: Array<{
+                                        scope: string;
+                                        description?: string;
+                                        level?: number;
+                                    }>;
+                                    back_home_url?: string;
+                                    i18n?: Array<{
+                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                                        name?: string;
+                                        description?: string;
+                                        help_use?: string;
+                                    }>;
+                                    common_categories?: Array<string>;
+                                    events?: Array<string>;
+                                    status?: number;
+                                    create_time?: string;
+                                    publish_time?: string;
+                                    ability?: {
+                                        gadget?: {
+                                            enable_pc_mode?: number;
+                                            schema_urls?: Array<string>;
+                                            pc_use_mobile_pkg?: boolean;
+                                            pc_version?: string;
+                                            mobile_version?: string;
+                                            mobile_min_lark_version?: string;
+                                            pc_min_lark_version?: string;
+                                        };
+                                        web_app?: {
+                                            pc_url?: string;
+                                            mobile_url?: string;
+                                        };
+                                        bot?: { card_request_url?: string };
+                                        workplace_widgets?: Array<{
+                                            min_lark_version?: string;
+                                        }>;
+                                        navigate?: {
+                                            pc?: {
+                                                version?: string;
+                                                image_url?: string;
+                                                hover_image_url?: string;
+                                            };
+                                            mobile?: {
+                                                version?: string;
+                                                image_url?: string;
+                                                hover_image_url?: string;
+                                            };
+                                        };
+                                        cloud_doc?: {
+                                            space_url?: string;
+                                            i18n?: Array<{
+                                                i18n_key:
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
+                                                name?: string;
+                                                read_description?: string;
+                                                write_description?: string;
+                                            }>;
+                                            icon_url?: string;
+                                            mode?: number;
+                                        };
+                                        docs_blocks?: Array<{
+                                            block_type_id?: string;
+                                            i18n?: Array<{
+                                                i18n_key?:
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
+                                                name?: string;
+                                            }>;
+                                            mobile_icon_url?: string;
+                                            pc_icon_url?: string;
+                                        }>;
+                                        message_action?: {
+                                            pc_app_link?: string;
+                                            mobile_app_link?: string;
+                                            i18n?: Array<{
+                                                i18n_key?:
+                                                    | "zh_cn"
+                                                    | "en_us"
+                                                    | "ja_jp";
+                                                name?: string;
+                                            }>;
+                                        };
+                                        plus_menu?: {
+                                            pc_app_link?: string;
+                                            mobile_app_link?: string;
+                                        };
+                                    };
+                                    remark?: {
+                                        remark?: string;
+                                        update_remark?: string;
+                                        visibility?: {
+                                            is_all?: boolean;
+                                            visible_list?: {
+                                                open_ids?: Array<string>;
+                                                department_ids?: Array<string>;
+                                            };
+                                            invisible_list?: {
+                                                open_ids?: Array<string>;
+                                                department_ids?: Array<string>;
+                                            };
+                                        };
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions`,
                             path
                         ),
                         method: "GET",
@@ -2422,7 +2788,7 @@ export default abstract class Client {
                             viewer_department_id?: string;
                         }>;
                         form: { form_content: string };
-                        node_list?: Array<{
+                        node_list: Array<{
                             id: string;
                             name?: string;
                             node_type?: "AND" | "OR" | "SEQUENTIAL";
@@ -2575,6 +2941,143 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        locale?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/approvals`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    approval_code: string;
+                                                    approval_name?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=approval&apiName=list&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=approval&resource=approval&version=v4 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        locale?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    approval_code: string;
+                                    approval_name?: string;
+                                }>;
+                                page_token?: string;
+                                has_more: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/approvals`,
                             path
                         ),
                         method: "GET",
@@ -2829,7 +3332,8 @@ export default abstract class Client {
                             | "REJECTED"
                             | "CANCELED"
                             | "DELETED"
-                            | "HIDDEN";
+                            | "HIDDEN"
+                            | "TERMINATED";
                         extra?: string;
                         instance_id: string;
                         links: { pc_link: string; mobile_link?: string };
@@ -2879,6 +3383,8 @@ export default abstract class Client {
                                 | "NORMAL"
                                 | "TRUSTEESHIP";
                             exclude_statistics?: boolean;
+                            node_id?: string;
+                            node_name?: string;
                         }>;
                         cc_list?: Array<{
                             cc_id: string;
@@ -2931,7 +3437,8 @@ export default abstract class Client {
                                         | "REJECTED"
                                         | "CANCELED"
                                         | "DELETED"
-                                        | "HIDDEN";
+                                        | "HIDDEN"
+                                        | "TERMINATED";
                                     extra?: string;
                                     instance_id: string;
                                     links: {
@@ -2993,6 +3500,8 @@ export default abstract class Client {
                                             | "NORMAL"
                                             | "TRUSTEESHIP";
                                         exclude_statistics?: boolean;
+                                        node_id?: string;
+                                        node_name?: string;
                                     }>;
                                     cc_list?: Array<{
                                         cc_id: string;
@@ -3253,7 +3762,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=add_sign&version=v4 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/ukTM5UjL5ETO14SOxkTN/approval-task-addsign document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_sign&project=approval&resource=instance&version=v4 document }
              */
             addSign: async (
                 payload?: {
@@ -3446,7 +3955,7 @@ export default abstract class Client {
              *
              * 获取单个审批实例详情
              *
-             * 通过审批实例 Instance Code  获取审批实例详情。Instance Code 由 [批量获取审批实例](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/list) 接口获取。
+             * 通过审批实例 Instance Code  获取审批实例详情。Instance Code 由 [批量获取审批实例](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/list) 接口获取。
              */
             get: async (
                 payload?: {
@@ -3721,7 +4230,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=preview&version=v4 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/ukTM5UjL5ETO14SOxkTN/approval-preview document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=preview&project=approval&resource=instance&version=v4 document }
              */
             preview: async (
                 payload?: {
@@ -5036,7 +5545,7 @@ export default abstract class Client {
      */
     attendance = {
         /**
-         * approval_info
+         * 假勤审批
          */
         approvalInfo: {
             /**
@@ -5377,6 +5886,8 @@ export default abstract class Client {
                                     remedy_period_custom_date?: number;
                                     punch_type?: number;
                                     effect_time?: string;
+                                    fixshift_effect_time?: string;
+                                    member_effect_time?: string;
                                     rest_clockIn_need_approval?: boolean;
                                     clockIn_need_photo?: boolean;
                                 };
@@ -5532,6 +6043,8 @@ export default abstract class Client {
                                 remedy_period_custom_date?: number;
                                 punch_type?: number;
                                 effect_time?: string;
+                                fixshift_effect_time?: string;
+                                member_effect_time?: string;
                                 rest_clockIn_need_approval?: boolean;
                                 clockIn_need_photo?: boolean;
                             };
@@ -6583,7 +7096,7 @@ export default abstract class Client {
             },
         },
         /**
-         * user_flow
+         * 考勤记录
          */
         userFlow: {
             /**
@@ -7021,7 +7534,7 @@ export default abstract class Client {
             },
         },
         /**
-         * user_stats_field
+         * 考勤统计
          */
         userStatsField: {
             /**
@@ -7087,7 +7600,7 @@ export default abstract class Client {
             },
         },
         /**
-         * user_stats_view
+         * 考勤统计
          */
         userStatsView: {
             /**
@@ -7406,7 +7919,7 @@ export default abstract class Client {
              *
              * 通知补卡审批发起
              *
-             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
+             * 对于只使用飞书考勤系统而未使用飞书审批系统的企业，可以通过该接口，将在三方审批系统中发起的补卡审批数据，写入到飞书考勤系统中，状态为审批中。写入后可以由[通知审批状态更新](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/approval_info/process) 进行状态更新
              */
             create: async (
                 payload?: {
@@ -7783,6 +8296,7 @@ export default abstract class Client {
                                 id: string;
                                 father_id?: string;
                             }>;
+                            images?: Array<{ token: string }>;
                         };
                         outer_info?: { provider: string; outer_id: string };
                         rich_text?: string;
@@ -7863,8 +8377,8 @@ export default abstract class Client {
                                                 name?: string;
                                                 father_id?: string;
                                             }>;
+                                            images?: Array<{ token: string }>;
                                         };
-                                        categories?: Array<string>;
                                         statistics?: {
                                             like_count: number;
                                             dislike_count: number;
@@ -7939,6 +8453,7 @@ export default abstract class Client {
                                 id: string;
                                 father_id?: string;
                             }>;
+                            images?: Array<{ token: string }>;
                         };
                         rich_text?: string;
                     };
@@ -8019,8 +8534,8 @@ export default abstract class Client {
                                                 name?: string;
                                                 father_id?: string;
                                             }>;
+                                            images?: Array<{ token: string }>;
                                         };
-                                        categories?: Array<string>;
                                         statistics?: {
                                             like_count: number;
                                             dislike_count: number;
@@ -8099,6 +8614,7 @@ export default abstract class Client {
                                 id: string;
                                 father_id?: string;
                             }>;
+                            images?: Array<{ token: string }>;
                         };
                         outer_info?: { provider: string; outer_id: string };
                         rich_text?: string;
@@ -8175,8 +8691,8 @@ export default abstract class Client {
                                             name?: string;
                                             father_id?: string;
                                         }>;
+                                        images?: Array<{ token: string }>;
                                     };
-                                    categories?: Array<string>;
                                     statistics?: {
                                         like_count: number;
                                         dislike_count: number;
@@ -8292,8 +8808,8 @@ export default abstract class Client {
                                             name?: string;
                                             father_id?: string;
                                         }>;
+                                        images?: Array<{ token: string }>;
                                     };
-                                    categories?: Array<string>;
                                     statistics?: {
                                         like_count: number;
                                         dislike_count: number;
@@ -8491,8 +9007,10 @@ export default abstract class Client {
                                                             name?: string;
                                                             father_id?: string;
                                                         }>;
+                                                        images?: Array<{
+                                                            token: string;
+                                                        }>;
                                                     };
-                                                    categories?: Array<string>;
                                                     statistics?: {
                                                         like_count: number;
                                                         dislike_count: number;
@@ -8609,8 +9127,8 @@ export default abstract class Client {
                                             name?: string;
                                             father_id?: string;
                                         }>;
+                                        images?: Array<{ token: string }>;
                                     };
-                                    categories?: Array<string>;
                                     statistics?: {
                                         like_count: number;
                                         dislike_count: number;
@@ -8808,8 +9326,10 @@ export default abstract class Client {
                                                             name?: string;
                                                             father_id?: string;
                                                         }>;
+                                                        images?: Array<{
+                                                            token: string;
+                                                        }>;
                                                     };
-                                                    categories?: Array<string>;
                                                     statistics?: {
                                                         like_count: number;
                                                         dislike_count: number;
@@ -8926,8 +9446,8 @@ export default abstract class Client {
                                             name?: string;
                                             father_id?: string;
                                         }>;
+                                        images?: Array<{ token: string }>;
                                     };
-                                    categories?: Array<string>;
                                     statistics?: {
                                         like_count: number;
                                         dislike_count: number;
@@ -9001,6 +9521,7 @@ export default abstract class Client {
                                 id: string;
                                 father_id?: string;
                             }>;
+                            images?: Array<{ token: string }>;
                         };
                         outer_info?: { provider: string; outer_id: string };
                         rich_text?: string;
@@ -9078,8 +9599,8 @@ export default abstract class Client {
                                             name?: string;
                                             father_id?: string;
                                         }>;
+                                        images?: Array<{ token: string }>;
                                     };
-                                    categories?: Array<string>;
                                     statistics?: {
                                         like_count: number;
                                         dislike_count: number;
@@ -9108,9 +9629,93 @@ export default abstract class Client {
                     });
             },
         },
+        /**
+         * file
+         */
+        file: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=download&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=baike&resource=file&version=v1 document }
+             */
+            download: async (
+                payload?: {
+                    path?: { file_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await http
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/files/:file_token/download`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        await res.pipe(fs.createWriteStream(filePath));
+                    },
+                };
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=file&apiName=upload&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=baike&resource=file&version=v1 document }
+             */
+            upload: async (
+                payload?: {
+                    data: { name: string; file: Buffer };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { file_token?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/files/upload`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return get(res, "data", {});
+            },
+        },
     };
     /**
-     * 云文档-多维表格
+     * 云文档-电子表格
      */
     bitable = {
         /**
@@ -10514,6 +11119,7 @@ export default abstract class Client {
                             location?: {
                                 input_type: "only_mobile" | "not_limit";
                             };
+                            formula_expression?: string;
                         };
                         description?: { disable_sync?: boolean; text?: string };
                     };
@@ -10565,6 +11171,7 @@ export default abstract class Client {
                                                 | "only_mobile"
                                                 | "not_limit";
                                         };
+                                        formula_expression?: string;
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -10738,6 +11345,7 @@ export default abstract class Client {
                                                                 | "only_mobile"
                                                                 | "not_limit";
                                                         };
+                                                        formula_expression?: string;
                                                     };
                                                     description?: {
                                                         disable_sync?: boolean;
@@ -10833,6 +11441,7 @@ export default abstract class Client {
                                                 | "only_mobile"
                                                 | "not_limit";
                                         };
+                                        formula_expression?: string;
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -10898,6 +11507,7 @@ export default abstract class Client {
                             location?: {
                                 input_type: "only_mobile" | "not_limit";
                             };
+                            formula_expression?: string;
                         };
                         description?: { disable_sync?: boolean; text?: string };
                     };
@@ -10953,6 +11563,7 @@ export default abstract class Client {
                                                 | "only_mobile"
                                                 | "not_limit";
                                         };
+                                        formula_expression?: string;
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -12574,7 +13185,7 @@ export default abstract class Client {
      */
     block = {
         /**
-         * 服务端 API
+         * entity
          */
         entity: {
             /**
@@ -12697,7 +13308,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 服务端 API
+         * message
          */
         message: {
             /**
@@ -12705,9 +13316,9 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/block-v2/message/create document }
              *
-             * Block协同数据推送
+             * Block消息推送
              *
-             * 根据BlockID向指定用户列表推送协同数据。
+             * 根据BlockID向指定用户列表推送消息。
              */
             create: async (
                 payload?: {
@@ -14144,9 +14755,9 @@ export default abstract class Client {
              *
              * 获取日程参与人列表
              *
-             * 获取日程的参与人列表，若参与者列表中有群组，请使用 [获取参与人群成员列表](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event-attendee-chat_member/list) 。
+             * 获取日程的参与人列表，若参与者列表中有群组，请使用 [获取参与人群成员列表](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event-attendee-chat_member/list) 。
              *
-             * - 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 当前身份必须有权限查看日程的参与人列表。
+             * - 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 当前身份必须有权限查看日程的参与人列表。
              */
             list: async (
                 payload?: {
@@ -14542,6 +15153,7 @@ export default abstract class Client {
                                         | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
+                                    create_time?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
@@ -14615,7 +15227,7 @@ export default abstract class Client {
              *
              * 该接口用于以当前身份（应用 / 用户）获取日历上的一个日程。;身份由 Header Authorization 的 Token 类型决定。
              *
-             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;- [例外日程](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/introduction#71c5ec78)可通过event_id的非0时间戳后缀，来获取修改的重复性日程的哪一天日程的时间信息。
+             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;- [例外日程](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-event/introduction#71c5ec78)可通过event_id的非0时间戳后缀，来获取修改的重复性日程的哪一天日程的时间信息。
              */
             get: async (
                 payload?: {
@@ -14684,6 +15296,7 @@ export default abstract class Client {
                                         | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
+                                    create_time?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
@@ -14720,7 +15333,7 @@ export default abstract class Client {
              *
              * 该接口用于以当前身份（应用 / 用户）获取日历下的日程列表。;身份由 Header Authorization 的 Token 类型决定。
              *
-             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 仅支持primary、shared和resource类型的日历获取日程列表。;;- 调用时首先使用 page_token 分页拉取存量数据，之后使用 sync_token 增量同步变更数据。;;- 为了确保调用方日程同步数据的一致性，在使用sync_token时，不能同时使用start_time和end_time，否则可能造成日程数据缺失。
+             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 仅支持primary、shared和resource类型的日历获取日程列表。;;- 调用时首先使用 page_token 分页拉取存量数据，之后使用 sync_token 增量同步变更数据。;;- 为了确保调用方日程同步数据的一致性，在使用sync_token时，不能同时使用start_time和end_time，否则可能造成日程数据缺失。
              */
             list: async (
                 payload?: {
@@ -14800,6 +15413,7 @@ export default abstract class Client {
                                         | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
+                                    create_time?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
@@ -14957,6 +15571,7 @@ export default abstract class Client {
                                         | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
+                                    create_time?: string;
                                     schemas?: Array<{
                                         ui_name?: string;
                                         ui_status?:
@@ -15165,7 +15780,7 @@ export default abstract class Client {
              *
              * 该接口用于以用户身份搜索某日历下的相关日程。;;身份由 Header Authorization 的 Token 类型决定。
              *
-             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
+             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
              */
             search: async (
                 payload?: {
@@ -15295,7 +15910,7 @@ export default abstract class Client {
              *
              * 该接口用于以用户身份订阅指定日历下的日程变更事件。
              *
-             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
+             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
              */
             subscription: async (
                 payload?: {
@@ -15331,7 +15946,7 @@ export default abstract class Client {
              *
              * 该接口用于以用户身份取消订阅指定日历下的日程变更事件。
              *
-             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
+             * 当前身份必须对日历有reader、writer或owner权限（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。
              */
             unsubscription: async (
                 payload?: {
@@ -15904,7 +16519,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 部门
+         * 部门管理
          */
         department: {
             childrenWithIterator: async (
@@ -16028,7 +16643,7 @@ export default abstract class Client {
              *
              * 获取子部门列表
              *
-             * 通过部门ID获取部门的子部门列表。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 通过部门ID获取部门的子部门列表。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * - 使用 user_access_token 时，返回该用户组织架构可见性范围（[登陆企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内的所有可见部门。当进行递归查询时，最多1000个部门对该用户可见。;;- 使用 ; tenant_access_token 则基于应用的通讯录权限范围进行权限校验与过滤。;如果部门ID为0，会检验应用是否有全员通讯录权限，如果是非0 部门ID，则会校验应用是否有该部门的通讯录权限。无部门权限返回无部门通讯录权限错误码，有权限则返回部门下子部门列表（根据fetch_child决定是否递归）。
              */
@@ -16105,7 +16720,7 @@ export default abstract class Client {
              *
              * 创建部门
              *
-             * 该接口用于向通讯录中创建部门。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于向通讯录中创建部门。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 只可在应用的通讯录权限范围内的部门下创建部门。若需要在根部门下创建子部门，则应用通讯录权限范围需要设置为“全部成员”。应用商店应用无权限调用此接口。
              */
@@ -16194,7 +16809,7 @@ export default abstract class Client {
              *
              * 删除部门
              *
-             * 该接口用于向通讯录中删除部门。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于向通讯录中删除部门。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 应用需要同时拥有待删除部门及其父部门的通讯录授权。应用商店应用无权限调用该接口。
              */
@@ -16235,7 +16850,7 @@ export default abstract class Client {
              *
              * 获取单个部门信息
              *
-             * 该接口用于向通讯录获取单个部门信息。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于向通讯录获取单个部门信息。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 使用tenant_access_token时，应用需要拥有待查询部门的通讯录授权。如果需要获取根部门信息，则需要拥有全员权限。;使用user_access_token时，用户需要有待查询部门的可见性，如果需要获取根部门信息，则要求员工可见所有人。
              */
@@ -16419,7 +17034,7 @@ export default abstract class Client {
              *
              * 获取部门信息列表
              *
-             * 该接口用于获取当前部门子部门列表。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于获取当前部门子部门列表。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * - 使用 user_access_token 时，返回该用户组织架构可见性范围（[登陆企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内的所有可见部门。当进行递归查询时，只筛查最多1000个部门的可见性。;;- 使用 ; tenant_access_token 则基于应用的通讯录权限范围进行权限校验与过滤。由于 ; parent_department_id 是非必填参数，填与不填存在<b>两种数据权限校验与返回</b>情况：;<br> <br>1、请求设置了 ; parent_department_id 为A（根部门0），会检验A是否在通讯录权限内，若在( parent_department_id=0 时会校验是否为全员权限），则返回部门下子部门列表（根据fetch_child决定是否递归），否则返回无部门通讯录权限错误码。;<br> <br>2、请求未带 ; parent_department_id 参数，如通讯录范围为全员权限，只返回根部门ID(部门ID为0)，否则返回根据通讯录范围配置的部门ID及子部门(根据 ; fetch_child 决定是否递归)。
              */
@@ -16607,7 +17222,7 @@ export default abstract class Client {
              *
              * 获取父部门信息
              *
-             * 该接口用来递归获取部门父部门的信息，并按照由子到父的顺序返回有权限的父部门信息列表。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用来递归获取部门父部门的信息，并按照由子到父的顺序返回有权限的父部门信息列表。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 使用tenant_access_token时,该接口只返回可见性范围内的父部门信息;;例如：A >>B>>C>>D四级部门，通讯录权限只到B，那么查询D部门的parent，会返回B和C两级部门。;使用user_access_token时,该接口只返回对于用户可见的父部门信息
              */
@@ -16682,7 +17297,7 @@ export default abstract class Client {
              *
              * 修改部分部门信息
              *
-             * 该接口用于更新通讯录中部门的信息中的任一个字段。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于更新通讯录中部门的信息中的任一个字段。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 调用该接口需要具有该部门以及更新操作涉及的部门的通讯录权限。应用商店应用无权限调用此接口。
              */
@@ -16883,7 +17498,7 @@ export default abstract class Client {
              *
              * 搜索部门
              *
-             * 搜索部门，用户通过关键词查询可见的部门数据，部门可见性需要管理员在后台配置。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 搜索部门，用户通过关键词查询可见的部门数据，部门可见性需要管理员在后台配置。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 部门存在，但用户搜索不到并不一定是搜索有问题，可能是管理员在后台配置了权限控制，导致用户无法搜索到该部门
              */
@@ -16998,7 +17613,7 @@ export default abstract class Client {
              *
              * 更新部门所有信息
              *
-             * 该接口用于更新当前部门所有信息。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于更新当前部门所有信息。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * - 调用该接口需要具有该部门以及更新操作涉及的部门的通讯录权限。应用商店应用无权限调用此接口。;; - 没有填写的字段会被置为空值（order字段除外）。
              */
@@ -17400,7 +18015,7 @@ export default abstract class Client {
              *
              * 创建用户组
              *
-             * 使用该接口创建用户组，请注意创建用户组时应用的通讯录权限范围需为“全部员工”，否则会创建失败，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 使用该接口创建用户组，请注意创建用户组时应用的通讯录权限范围需为“全部员工”，否则会创建失败，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             create: async (
                 payload?: {
@@ -17446,7 +18061,7 @@ export default abstract class Client {
              *
              * 删除用户组
              *
-             * 通过该接口可删除企业中的用户组，请注意删除用户组时应用的通讯录权限范围需为“全部员工”，否则会删除失败，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 通过该接口可删除企业中的用户组，请注意删除用户组时应用的通讯录权限范围需为“全部员工”，否则会删除失败，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             delete: async (
                 payload?: {
@@ -17480,7 +18095,7 @@ export default abstract class Client {
              *
              * 查询用户组
              *
-             * 根据用户组 ID 查询某个用户组的基本信息，支持查询普通用户组和动态用户组。请确保应用的通讯录权限范围里包括该用户组或者是“全部员工”，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 根据用户组 ID 查询某个用户组的基本信息，支持查询普通用户组和动态用户组。请确保应用的通讯录权限范围里包括该用户组或者是“全部员工”，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             get: async (
                 payload?: {
@@ -17529,7 +18144,7 @@ export default abstract class Client {
              *
              * 查询用户所属用户组
              *
-             * 通过该接口可查询该用户所属的用户组列表，可分别查询普通用户组和动态用户组。如果应用的通讯录权限范围是“全部员工”，则可获取该员工所属的全部用户组列表。如果应用的通讯录权限范围不是“全部员工”，则仅可获取通讯录权限范围内该员工所属的用户组。[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 通过该接口可查询该用户所属的用户组列表，可分别查询普通用户组和动态用户组。如果应用的通讯录权限范围是“全部员工”，则可获取该员工所属的全部用户组列表。如果应用的通讯录权限范围不是“全部员工”，则仅可获取通讯录权限范围内该员工所属的用户组。[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             memberBelong: async (
                 payload?: {
@@ -17580,7 +18195,7 @@ export default abstract class Client {
              *
              * 更新用户组
              *
-             * 使用该接口更新用户组信息，请注意更新用户组时应用的通讯录权限范围需为“全部员工”，否则会更新失败。[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 使用该接口更新用户组信息，请注意更新用户组时应用的通讯录权限范围需为“全部员工”，否则会更新失败。[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             patch: async (
                 payload?: {
@@ -17707,7 +18322,7 @@ export default abstract class Client {
              *
              * 查询用户组列表
              *
-             * 通过该接口可查询企业的用户组列表，可分别查询普通用户组或动态用户组。如果应用的通讯录权限范围是“全部员工”，则可获取企业全部用户组列表。如果应用的通讯录权限范围不是“全部员工”，则仅可获取通讯录权限范围内的用户组。[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 通过该接口可查询企业的用户组列表，可分别查询普通用户组或动态用户组。如果应用的通讯录权限范围是“全部员工”，则可获取企业全部用户组列表。如果应用的通讯录权限范围不是“全部员工”，则仅可获取通讯录权限范围内的用户组。[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             simplelist: async (
                 payload?: {
@@ -17767,7 +18382,7 @@ export default abstract class Client {
              *
              * 添加用户组成员
              *
-             * 向用户组中添加成员(目前成员仅支持用户，未来会支持部门)，如果应用的通讯录权限范围是“全部员工”，则可将任何成员添加到任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员添加到通讯录权限范围的用户组中，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 向用户组中添加成员(目前成员仅支持用户，未来会支持部门)，如果应用的通讯录权限范围是“全部员工”，则可将任何成员添加到任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员添加到通讯录权限范围的用户组中，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             add: async (
                 payload?: {
@@ -17806,7 +18421,7 @@ export default abstract class Client {
              *
              * 批量添加用户组成员
              *
-             * 向普通用户组中批量添加成员(目前仅支持添加用户，暂不支持添加部门），如果应用的通讯录权限范围是“全部员工”，则可将任何成员添加到任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员添加到通讯录权限范围的用户组中，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 向普通用户组中批量添加成员(目前仅支持添加用户，暂不支持添加部门），如果应用的通讯录权限范围是“全部员工”，则可将任何成员添加到任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员添加到通讯录权限范围的用户组中，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              *
              * 请求体中的member_type，目前仅支持user， 未来将支持department。
              */
@@ -17861,7 +18476,7 @@ export default abstract class Client {
              *
              * 批量移除用户组成员
              *
-             * 从普通用户组中批量移除成员 (目前仅支持移除用户，暂不支持移除部门）。如果应用的通讯录权限范围是“全部员工”，则可将任何成员移出任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员从通讯录权限范围的用户组中移除， [点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 从普通用户组中批量移除成员 (目前仅支持移除用户，暂不支持移除部门）。如果应用的通讯录权限范围是“全部员工”，则可将任何成员移出任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员从通讯录权限范围的用户组中移除， [点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              *
              * 请求体中的member_type，目前仅支持user， 未来将支持department。
              */
@@ -17904,7 +18519,7 @@ export default abstract class Client {
              *
              * 移除用户组成员
              *
-             * 从用户组中移除成员 (目前成员仅支持用户，未来会支持部门)，如果应用的通讯录权限范围是“全部员工”，则可将任何成员移出任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员从通讯录权限范围的用户组中移除， [点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 从用户组中移除成员 (目前成员仅支持用户，未来会支持部门)，如果应用的通讯录权限范围是“全部员工”，则可将任何成员移出任何用户组。如果应用的通讯录权限范围不是“全部员工”，则仅可将通讯录权限范围中的成员从通讯录权限范围的用户组中移除， [点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             remove: async (
                 payload?: {
@@ -17943,7 +18558,7 @@ export default abstract class Client {
              *
              * 查询用户组成员列表
              *
-             * 通过该接口可查询某个用户组的成员列表（支持查询成员中的用户和部门）, 本接口支持普通用户组和动态用户组。如果应用的通讯录权限范围是“全部员工”，则可查询企业内任何用户组的成员列表。如果应用的通讯录权限范围不是“全部员工”，则仅可查询通讯录权限范围中的用户组的成员列表，[点击了解通讯录权限范围](/ssl:ttdoc/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
+             * 通过该接口可查询某个用户组的成员列表（支持查询成员中的用户和部门）, 本接口支持普通用户组和动态用户组。如果应用的通讯录权限范围是“全部员工”，则可查询企业内任何用户组的成员列表。如果应用的通讯录权限范围不是“全部员工”，则仅可查询通讯录权限范围中的用户组的成员列表，[点击了解通讯录权限范围](https://open.feishu.cn/document/ukTMukTMukTM/uETNz4SM1MjLxUzM/v3/guides/scope_authority)。
              */
             simplelist: async (
                 payload?: {
@@ -18555,7 +19170,7 @@ export default abstract class Client {
              *
              * 创建用户
              *
-             * 使用该接口向通讯录创建一个用户，可以理解为员工入职。创建用户后只返回有数据权限的数据。具体的数据权限的与字段的对应关系请参照[应用权限](/ssl:ttdoc/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 使用该接口向通讯录创建一个用户，可以理解为员工入职。创建用户后只返回有数据权限的数据。具体的数据权限的与字段的对应关系请参照[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * - 新增用户的所有部门必须都在当前应用的通讯录授权范围内才允许新增用户，如果想要在根部门下新增用户，必须要有全员权限。;- 应用商店应用无权限调用此接口。;- 创建用户后，会给用户发送邀请短信/邮件，用户在操作同意后才可访问团队。;- 返回数据中不返回手机号，如果需要请重新查询用户信息获取手机号。
              */
@@ -18735,7 +19350,7 @@ export default abstract class Client {
              *
              * 删除用户
              *
-             * 该接口向通讯录删除一个用户信息，可以理解为员工离职。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口向通讯录删除一个用户信息，可以理解为员工离职。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * 若用户归属部门A、部门B，应用的通讯录权限范围必须包括部门A和部门B才可以删除用户。应用商店应用无权限调用接口。用户可以在删除员工时设置删除员工数据的接收者，如果不设置则由其leader接收，如果该员工没有leader，则会将该员工的数据删除。
              */
@@ -18957,7 +19572,7 @@ export default abstract class Client {
              *
              * 获取部门直属用户列表
              *
-             * 基于部门ID获取部门直属用户列表。;[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN).
+             * 基于部门ID获取部门直属用户列表。;[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN).
              *
              * - 使用 user_access_token 情况下根据个人组织架构的通讯录可见范围进行权限过滤，返回个人组织架构通讯录范围（[登录企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内可见的用户数据。;- 使用tenant_access_token，会根据应用通讯录的范围进行权限过滤。 如果请求的部门ID为0，则校验应用是否具有全员通讯录权限； 如果是非0的部门ID，则会验证应用是否具有该部门的通讯录权限。 无权限返回无权限错误码，有权限则返回对应部门下的直接用户列表。
              */
@@ -19088,7 +19703,7 @@ export default abstract class Client {
              *
              * 获取单个用户信息
              *
-             * 该接口用于获取通讯录中[单个用户的信息](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/field-overview)。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于获取通讯录中[单个用户的信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/field-overview)。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              */
             get: async (
                 payload?: {
@@ -19361,7 +19976,7 @@ export default abstract class Client {
              *
              * 获取用户列表
              *
-             * 基于部门ID获取部门下直属用户列表。;[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 基于部门ID获取部门下直属用户列表。;[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * - 使用 user_access_token 情况下根据个人组织架构的通讯录可见范围进行权限过滤，返回个人组织架构通讯录范围（[登陆企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内可见的用户数据。;-  tenant_access_token  基于应用通讯录范围进行权限鉴定。由于 department_id 是非必填参数，填与不填存在<b>两种数据权限校验与返回</b>情况：<br>1、请求设置了 department_id ;（根部门为0），会检验所带部门ID是否具有通讯录权限（如果带上 ; department_id=0 会校验是否有全员权限），有则返回部门下直属的成员列表, 否则提示无部门权限的错误码返回。<br>2、请求未带 ;  department_id 参数，则会返回权限范围内的独立用户（权限范围直接包含了某用户，则该用户视为权限范围内的独立用户）。
              */
@@ -19483,7 +20098,7 @@ export default abstract class Client {
              *
              * 修改用户部分信息
              *
-             * 该接口用于更新通讯录中用户的字段，未传递的参数不会更新。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于更新通讯录中用户的字段，未传递的参数不会更新。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              */
             patch: async (
                 payload?: {
@@ -19656,7 +20271,7 @@ export default abstract class Client {
              *
              * 更新用户所有信息
              *
-             * 该接口用于更新通讯录中用户的字段。[常见问题答疑](/ssl:ttdoc/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
+             * 该接口用于更新通讯录中用户的字段。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
              *
              * ;应用需要拥有待更新用户的通讯录授权，如果涉及到用户部门变更，还需要同时拥有所有新部门的通讯录授权。应用商店应用无权限调用此接口。
              */
@@ -25469,7 +26084,7 @@ export default abstract class Client {
             },
         },
         /**
-         * document.block.children
+         * 块
          */
         documentBlockChildren: {
             /**
@@ -29692,9 +30307,10 @@ export default abstract class Client {
             create: async (
                 payload?: {
                     data: {
-                        file_extension: "docx" | "pdf" | "xlsx";
+                        file_extension: "docx" | "pdf" | "xlsx" | "csv";
                         token: string;
                         type: "doc" | "sheet" | "bitable" | "docx";
+                        sub_id?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -29793,7 +30409,11 @@ export default abstract class Client {
                             msg?: string;
                             data?: {
                                 result?: {
-                                    file_extension: "docx" | "pdf" | "xlsx";
+                                    file_extension:
+                                        | "docx"
+                                        | "pdf"
+                                        | "xlsx"
+                                        | "csv";
                                     type: "doc" | "sheet" | "bitable" | "docx";
                                     file_name?: string;
                                     file_token?: string;
@@ -30485,7 +31105,7 @@ export default abstract class Client {
              *
              * 删除用户在云空间内的文件或者文件夹。文件或者文件夹被删除后，会进入用户回收站里。
              *
-             * 该接口不支持并发调用，且调用频率上限为5QPS。删除文件夹会异步执行并返回一个task_id，可以使用[task_check](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check)接口查询任务执行状态。
+             * 该接口不支持并发调用，且调用频率上限为5QPS。删除文件夹会异步执行并返回一个task_id，可以使用[task_check](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/task_check)接口查询任务执行状态。
              *
              * 要删除文件需要确保应用具有下述两种权限之一：;1. 该应用是文件所有者并且具有该文件所在父文件夹的编辑权限。;2. 该应用并非文件所有者，但是是该文件所在父文件夹的所有者或者拥有该父文件夹的所有权限（full access）。
              */
@@ -30789,7 +31409,7 @@ export default abstract class Client {
              *
              * 订阅云文档事件
              *
-             * 该接口仅支持**文档拥有者**订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。在调用该接口之前请确保正确[配置事件回调网址和订阅事件类型](/ssl:ttdoc/ukTMukTMukTM/uUTNz4SN1MjL1UzM#2eb3504a)，事件类型参考[事件列表](/ssl:ttdoc/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-list)。
+             * 该接口**仅支持文档拥有者**订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。在调用该接口之前请确保正确[配置事件回调网址和订阅事件类型](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM#2eb3504a)，事件类型参考[事件列表](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-list)。
              */
             subscribe: async (
                 payload?: {
@@ -30869,7 +31489,7 @@ export default abstract class Client {
              *
              * 该接口支持调用频率上限为5QPS
              *
-             * 请不要使用这个接口上传大于20MB的文件，如果有这个需求可以尝试使用[分片上传接口](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/multipart-upload-file-/introduction)。
+             * 请不要使用这个接口上传大于20MB的文件，如果有这个需求可以尝试使用[分片上传接口](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/multipart-upload-file-/introduction)。
              */
             uploadAll: async (
                 payload?: {
@@ -31061,7 +31681,7 @@ export default abstract class Client {
             },
         },
         /**
-         * file.statistics
+         * 文件
          */
         fileStatistics: {
             /**
@@ -31301,7 +31921,7 @@ export default abstract class Client {
              *
              * 创建导入任务
              *
-             * 创建导入任务。支持导入为 doc、docx、sheet、bitable，参考[导入用户指南](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)
+             * 创建导入任务。支持导入为 doc、docx、sheet、bitable，参考[导入用户指南](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/import_task/import-user-guide)
              */
             create: async (
                 payload?: {
@@ -31500,7 +32120,7 @@ export default abstract class Client {
              *
              * 该接口支持调用频率上限为5QPS
              *
-             * 请不要使用这个接口上传大于20MB的文件，如果有这个需求可以尝试使用[分片上传接口](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/multipart-upload-media/introduction)。
+             * 请不要使用这个接口上传大于20MB的文件，如果有这个需求可以尝试使用[分片上传接口](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/multipart-upload-media/introduction)。
              */
             uploadAll: async (
                 payload?: {
@@ -31714,7 +32334,7 @@ export default abstract class Client {
             },
         },
         /**
-         * meta
+         * 文件
          */
         meta: {
             /**
@@ -31929,7 +32549,7 @@ export default abstract class Client {
              *
              * 该接口用于根据 filetoken 更新文档协作者的权限。
              *
-             * 该接口要求文档协作者已存在，如还未对文档协作者授权请先调用[「增加权限」 ](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create)接口进行授权。
+             * 该接口要求文档协作者已存在，如还未对文档协作者授权请先调用[「增加权限」 ](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create)接口进行授权。
              */
             update: async (
                 payload?: {
@@ -32959,7 +33579,237 @@ export default abstract class Client {
     /**
          
          */
-    gray_test_open_sg = {};
+    gray_test_open_sg = {
+        /**
+         * moto
+         */
+        moto: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=gray_test_open_sg&resource=moto&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=gray_test_open_sg&resource=moto&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: { level?: string; body?: string; type?: string };
+                    params?: {
+                        department_id_type?: string;
+                        user_id_type?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                moto?: {
+                                    moto_id?: string;
+                                    id?: string;
+                                    user_name?: string;
+                                    type?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/gray_test_open_sg/v1/motos`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=gray_test_open_sg&resource=moto&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=gray_test_open_sg&resource=moto&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params?: { body_level?: string };
+                    path?: { moto_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                moto?: {
+                                    moto_id?: string;
+                                    id?: string;
+                                    user_name?: string;
+                                    type?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/gray_test_open_sg/v1/motos/:moto_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        level?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/gray_test_open_sg/v1/motos`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<string>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=gray_test_open_sg&resource=moto&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=gray_test_open_sg&resource=moto&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        level?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<string>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/gray_test_open_sg/v1/motos`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+    };
     /**
      * 服务台
      */
@@ -33187,7 +34037,7 @@ export default abstract class Client {
             },
         },
         /**
-         * agent_schedule
+         * 客服工作日程
          */
         agentSchedule: {
             /**
@@ -36153,7 +37003,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/create_application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/create document }
              *
              * 创建投递
              *
@@ -36195,7 +37045,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/get document }
              *
              * 获取投递信息
              *
@@ -36291,7 +37141,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application-list document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/list document }
              *
              * 获取投递列表
              *
@@ -36346,7 +37196,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=offer&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application-offer document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/offer document }
              *
              * 获取 Offer 信息
              *
@@ -36510,7 +37360,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=terminate&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/terminate-application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/terminate document }
              *
              * 终止投递
              *
@@ -36549,7 +37399,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=transfer_onboard&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uczM1YjL3MTN24yNzUjN document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/transfer_onboard document }
              *
              * 操作候选人入职
              *
@@ -36750,6 +37600,7 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
+                    params?: { type?: number };
                     path: { attachment_id: string };
                 },
                 options?: IRequestOptions
@@ -37032,7 +37883,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/job/get-job document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get document }
              *
              * 获取职位信息
              *
@@ -37197,7 +38048,7 @@ export default abstract class Client {
             },
         },
         /**
-         * job.manager
+         * 职位
          */
         jobManager: {
             /**
@@ -37234,8 +38085,8 @@ export default abstract class Client {
                             data?: {
                                 info?: {
                                     id?: string;
-                                    recruiter_id?: string;
-                                    hiring_manager_id_list?: Array<string>;
+                                    recruiter_id: string;
+                                    hiring_manager_id_list: Array<string>;
                                     assistant_id_list?: Array<string>;
                                 };
                             };
@@ -37263,7 +38114,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_process&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/jop-process/get-process document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_process/list document }
              *
              * 获取招聘流程信息
              *
@@ -37851,7 +38702,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUzM1YjL1MTN24SNzUjN/get-talent document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/get document }
              *
              * 获取人才信息
              *
@@ -37945,6 +38796,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                         modify_time?: string;
@@ -37988,6 +38845,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38029,6 +38892,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38069,6 +38938,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38106,6 +38981,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38143,6 +39024,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38179,6 +39066,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38215,6 +39108,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38264,6 +39163,12 @@ export default abstract class Client {
                                                 };
                                                 time?: string;
                                                 number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: string;
+                                                }>;
                                             };
                                         }>;
                                     }>;
@@ -38366,7 +39271,7 @@ export default abstract class Client {
              *
              * 批量撤回消息
              *
-             * 注意事项：;- 只能撤回通过[批量发送消息](/ssl:ttdoc/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息，单条消息的撤回请使用[撤回消息](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口;- 路径参数**batch_message_id**为[批量发送消息](/ssl:ttdoc/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口返回值中的**message_id**字段，用于标识一次批量发送消息请求，格式为：**bm-xxx**;- 一次调用涉及大量消息，所以为异步接口，会有一定延迟。
+             * 注意事项：;- 只能撤回通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息，单条消息的撤回请使用[撤回消息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/delete)接口;- 路径参数**batch_message_id**为[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口返回值中的**message_id**字段，用于标识一次批量发送消息请求，格式为：**bm-xxx**;- 一次调用涉及大量消息，所以为异步接口，会有一定延迟。
              */
             delete: async (
                 payload?: {
@@ -38402,7 +39307,7 @@ export default abstract class Client {
              *
              * 查询批量消息整体进度
              *
-             * 注意事项:;* 该接口是[查询批量消息推送和阅读人数](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user)接口的加强版;* 该接口返回的数据为查询时刻的快照数据
+             * 注意事项:;* 该接口是[查询批量消息推送和阅读人数](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/batch_message/read_user)接口的加强版;* 该接口返回的数据为查询时刻的快照数据
              */
             getProgress: async (
                 payload?: {
@@ -38455,7 +39360,7 @@ export default abstract class Client {
              *
              * 查询批量消息推送和阅读人数
              *
-             * 注意事项：;- 只能查询通过[批量发送消息](/ssl:ttdoc/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息;- 该接口返回的数据为查询时刻的快照数据。
+             * 注意事项：;- 只能查询通过[批量发送消息](https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM)接口产生的消息;- 该接口返回的数据为查询时刻的快照数据。
              */
             readUser: async (
                 payload?: {
@@ -38508,7 +39413,7 @@ export default abstract class Client {
              *
              * 获取会话中的群公告信息，公告信息格式与[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)
              */
             get: async (
                 payload?: {
@@ -38571,7 +39476,7 @@ export default abstract class Client {
              *
              * 更新会话中的群公告信息，更新公告信息的格式和更新[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
              */
             patch: async (
                 payload?: {
@@ -38613,7 +39518,7 @@ export default abstract class Client {
              *
              * 创建群并设置群头像、群名、群描述等。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 本接口支持在创建群的同时拉用户或机器人进群；如果仅需要拉用户或者机器人入群参考 [将用户或机器人拉入群聊](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 本接口只支持创建群，如果需要拉用户或者机器人入群参考 [将用户或机器人拉入群聊](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-members/create)接口;- 每次请求，最多拉 50 个用户或者 5 个机器人，并且群组最多容纳 15 个机器人; - 拉机器人入群请使用 ==app_id==
              */
             create: async (
                 payload?: {
@@ -38707,7 +39612,7 @@ export default abstract class Client {
              *
              * 解散群组
              *
-             * 注意事项：;- 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 如果使用tenant_access_token，需要机器人是群的创建者且具备==更新应用所创建群的群信息==权限才可解散群;- 如果使用user_access_token，需要对应的用户是群主才可解散群
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 如果使用tenant_access_token，需要机器人是群的创建者且具备==更新应用所创建群的群信息==权限才可解散群;- 如果使用user_access_token，需要对应的用户是群主才可解散群
              */
             delete: async (
                 payload?: {
@@ -38743,7 +39648,7 @@ export default abstract class Client {
              *
              * 获取群名称、群描述、群头像、群主 ID 等群基本信息。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）
              */
             get: async (
                 payload?: {
@@ -38799,6 +39704,56 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=link&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/link document }
+             *
+             * 获取群分享链接
+             *
+             * 获取指定群的分享链接
+             *
+             * 注意事项:;- 该接口遵守群分享权限管控;;- 单聊、密聊、团队群不支持分享群链接;;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用
+             */
+            link: async (
+                payload?: {
+                    data?: {
+                        validity_period?: "week" | "year" | "permanently";
+                    };
+                    path: { chat_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                share_link?: string;
+                                expire_time?: string;
+                                is_permanent?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/chats/:chat_id/link`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -38913,7 +39868,7 @@ export default abstract class Client {
              *
              * 获取用户或者机器人所在群列表。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填;- 请注意区分本接口和[获取群信息](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含p2p单聊群
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 查询参数  **user_id_type** 用于控制响应体中 owner_id 的类型，如果是获取机器人所在群列表该值可以不填;- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含p2p单聊群
              */
             list: async (
                 payload?: {
@@ -39071,7 +40026,7 @@ export default abstract class Client {
              *
              * 搜索对用户或机器人可见的群列表，包括：用户或机器人所在的群、对用户或机器人公开的群。;搜索可获得的群信息包括：群ID（chat_id）、群名称、群描述等。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)
              */
             search: async (
                 payload?: {
@@ -39133,7 +40088,7 @@ export default abstract class Client {
              *
              * 更新群头像、群名称、群描述、群配置、转让群主等。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置：; 	- 群主/群管理员 或 创建群组且具备==更新应用所创建群的群信息==权限的机器人，可更新所有信息; 	- 不满足上述条件的群成员或机器人，仅可更新群头像、群名称、群描述、群国际化名称信息 ;- 若群开启了==仅群主和群管理员可编辑群信息==配置：; 	- 群主/群管理员 或 创建群组且具备==更新应用所创建群的群信息==权限的机器人，可更新所有信息; 	- 不满足上述条件的群成员或者机器人，任何群信息都不能修改
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置：; 	- 群主/群管理员 或 创建群组且具备==更新应用所创建群的群信息==权限的机器人，可更新所有信息; 	- 不满足上述条件的群成员或机器人，仅可更新群头像、群名称、群描述、群国际化名称信息 ;- 若群开启了==仅群主和群管理员可编辑群信息==配置：; 	- 群主/群管理员 或 创建群组且具备==更新应用所创建群的群信息==权限的机器人，可更新所有信息; 	- 不满足上述条件的群成员或者机器人，任何群信息都不能修改
              */
             update: async (
                 payload?: {
@@ -39197,7 +40152,7 @@ export default abstract class Client {
              *
              * 将用户或机器人指定为群管理员。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以指定群管理员;- 对于普通群，最多指定 10 个管理员;- 对于超大群，最多指定 20 个管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 指定机器人类型的管理员请使用 ==app_id==
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以指定群管理员;- 对于普通群，最多指定 10 个管理员;- 对于超大群，最多指定 20 个管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 指定机器人类型的管理员请使用 ==app_id==
              */
             addManagers: async (
                 payload?: {
@@ -39251,7 +40206,7 @@ export default abstract class Client {
              *
              * 删除指定的群管理员（用户或机器人）
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以删除群管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 删除机器人类型的管理员请使用 ==app_id==
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以删除群管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 删除机器人类型的管理员请使用 ==app_id==
              */
             deleteManagers: async (
                 payload?: {
@@ -39310,7 +40265,7 @@ export default abstract class Client {
              *
              * 将用户或机器人拉入群聊。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app); - 如需拉用户进群，需要机器人对用户有可见性; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 如需拉用户进群，需要机器人对用户有可见性; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群; - 每次请求，最多拉50个用户或者5个机器人，并且群组最多容纳15个机器人; - 拉机器人入群请使用 ==app_id==
              */
             create: async (
                 payload?: {
@@ -39365,7 +40320,7 @@ export default abstract class Client {
              *
              * 将用户或机器人移出群聊。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人; - 每次请求，最多移除50个用户或者5个机器人;- 移除机器人请使用 ==app_id==
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人; - 每次请求，最多移除50个用户或者5个机器人;- 移除机器人请使用 ==app_id==
              */
             delete: async (
                 payload?: {
@@ -39509,7 +40464,7 @@ export default abstract class Client {
              *
              * 如果用户在群中，则返回该群的成员列表。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app); - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size
              */
             get: async (
                 payload?: {
@@ -39608,7 +40563,7 @@ export default abstract class Client {
              *
              * 用户或机器人主动加入群聊。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app); - 目前仅支持加入公开群
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 目前仅支持加入公开群
              */
             meJoin: async (
                 payload?: {
@@ -39637,7 +40592,7 @@ export default abstract class Client {
             },
         },
         /**
-         * chat.moderation
+         * 群组
          */
         chatModeration: {
             getWithIterator: async (
@@ -40188,7 +41143,7 @@ export default abstract class Client {
             },
         },
         /**
-         * chat.top_notice
+         * 群组
          */
         chatTopNotice: {
             /**
@@ -40279,7 +41234,7 @@ export default abstract class Client {
              *
              * 上传文件，可以上传视频，音频和常见的文件类型
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 不允许上传空文件;- 示例代码中需要自行替换文件路径和鉴权Token
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 不允许上传空文件;- 示例代码中需要自行替换文件路径和鉴权Token
              */
             create: async (
                 payload?: {
@@ -40339,7 +41294,7 @@ export default abstract class Client {
              *
              * 下载文件接口，只能下载应用自己上传的文件
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 只能下载机器人自己上传的文件;- 下载用户发送的资源，请使用[获取消息中的资源文件](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 只能下载机器人自己上传的文件;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
              */
             get: async (
                 payload?: {
@@ -40387,7 +41342,7 @@ export default abstract class Client {
              *
              * 上传图片接口，可以上传 JPEG、PNG、WEBP、GIF、TIFF、BMP、ICO格式图片
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 上传的图片大小不能超过10MB
              */
             create: async (
                 payload?: {
@@ -40435,7 +41390,7 @@ export default abstract class Client {
              *
              * 下载图片资源，只能下载应用自己上传且图片类型为message的图片
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 只能下载机器人自己上传且图片类型为message的图片，avatar类型暂不支持下载；;- 下载用户发送的资源，请使用[获取消息中的资源文件](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 只能下载机器人自己上传且图片类型为message的图片，avatar类型暂不支持下载；;- 下载用户发送的资源，请使用[获取消息中的资源文件](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-resource/get)接口
              */
             get: async (
                 payload?: {
@@ -40471,7 +41426,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 消息
+         * 加急操作
          */
         message: {
             /**
@@ -40481,16 +41436,16 @@ export default abstract class Client {
              *
              * 发送消息
              *
-             * 给指定用户或者会话发送消息，支持文本、富文本、可交互的[消息卡片](/ssl:ttdoc/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)、群名片、个人名片、图片、视频、音频、文件、表情包。
+             * 给指定用户或者会话发送消息，支持文本、富文本、可交互的[消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)、群名片、个人名片、图片、视频、音频、文件、表情包。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 给用户发送消息，需要机器人对用户有[可用性](/ssl:ttdoc/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群中
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群中;- 文本消息请求体最大不能超过150KB;- 卡片及富文本消息请求体最大不能超过30KB;- 消息卡片的 `update_multi`（是否为共享卡片）字段在卡片内容的`config`结构体中设置。详细参考文档[配置卡片属性](https://open.feishu.cn/document/ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)
              */
             create: async (
                 payload?: {
                     data: {
                         receive_id: string;
-                        content: string;
                         msg_type: string;
+                        content: string;
                         uuid?: string;
                     };
                     params: {
@@ -40564,7 +41519,7 @@ export default abstract class Client {
              *
              * 机器人撤回机器人自己发送的消息或群主撤回群内消息。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ，撤回消息时机器人仍需要在会话内;- 机器人可以撤回单聊和群组内，自己发送 且 发送时间不超过1天(24小时)的消息;- 若机器人要撤回群内他人发送的消息，则机器人必须是该群的群主、管理员 或者 创建者，且消息发送时间不超过1年;- 无法撤回通过「批量发送消息接口」发送的消息
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ，撤回消息时机器人仍需要在会话内;- 机器人可以撤回单聊和群组内，自己发送 且 发送时间不超过1天(24小时)的消息;- 若机器人要撤回群内他人发送的消息，则机器人必须是该群的群主、管理员 或者 创建者，且消息发送时间不超过1年;- 无法撤回通过「批量发送消息接口」发送的消息
              */
             delete: async (
                 payload?: {
@@ -40600,7 +41555,7 @@ export default abstract class Client {
              *
              * 通过 message_id 查询消息内容
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 机器人必须在群组中
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 机器人必须在群组中
              */
             get: async (
                 payload?: {
@@ -40778,13 +41733,13 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uADO3YjLwgzN24CM4cjN document }
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/list document }
              *
              * 获取会话历史消息
              *
              * 获取会话（包括单聊、群组）的历史消息（聊天记录）。
              *
-             * - 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 获取消息时，机器人必须在群组中
+             * - 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 获取消息时，机器人必须在群组中
              *
              * 接口级别权限默认只能获取单聊（p2p）消息，如果需要获取群组（group）消息，应用还必须拥有 ***获取群组中所有消息*** 权限
              */
@@ -40865,7 +41820,7 @@ export default abstract class Client {
              *
              * 更新应用已发送的消息卡片内容。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 当前仅支持更新 **卡片消息**;- **不支持更新批量消息**;- 只支持对所有人都更新的[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)，也即需要在卡片的`config`属性中，显式声明`"update_multi":true`。<br>如果你只想更新特定人的消息卡片，必须要用户在卡片操作交互后触发，开发文档参考[「独享卡片」](/ssl:ttdoc/ukTMukTMukTM/uYjNwUjL2YDM14iN2ATN#49904b71);- 单条消息更新频控为**5QPS**
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 当前仅支持更新 **卡片消息**;- **不支持更新批量消息**;- 只支持对所有人都更新的[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)，也即需要在卡片的`config`属性中，显式声明`"update_multi":true`。<br>如果你只想更新特定人的消息卡片，必须要用户在卡片操作交互后触发，开发文档参考[「独享卡片」](https://open.feishu.cn/document/ukTMukTMukTM/uYjNwUjL2YDM14iN2ATN#49904b71);- 单条消息更新频控为**5QPS**
              */
             patch: async (
                 payload?: {
@@ -40902,7 +41857,7 @@ export default abstract class Client {
              *
              * 查询消息的已读信息。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能查询机器人自己发送，且发送时间不超过7天的消息;- 查询消息已读信息时机器人仍需要在会话内;- 本接口不支持查询批量消息
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能查询机器人自己发送，且发送时间不超过7天的消息;- 查询消息已读信息时机器人仍需要在会话内;- 本接口不支持查询批量消息
              */
             readUsers: async (
                 payload?: {
@@ -40959,7 +41914,7 @@ export default abstract class Client {
              *
              * 回复指定消息，支持文本、富文本、卡片、群名片、个人名片、图片、视频、文件等多种消息类型。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 回复私聊消息，需要机器人对用户有可用性;- 回复群组消息，需要机器人在群中
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 回复私聊消息，需要机器人对用户有可用性;- 回复群组消息，需要机器人在群中
              */
             reply: async (
                 payload?: {
@@ -41028,7 +41983,7 @@ export default abstract class Client {
              *
              * 对指定消息进行应用内加急。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
              */
             urgentApp: async (
                 payload?: {
@@ -41075,7 +42030,7 @@ export default abstract class Client {
              *
              * 对指定消息进行应用内加急与电话加急
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
              *
              * 特别说明：;- 通过接口产生的电话加急将消耗企业的加急额度，请慎重调用。;- 通过租户管理后台-费用中心-短信/电话加急 可以查看当前额度。;- 默认接口限流为50 QPS，请谨慎调用。
              */
@@ -41124,7 +42079,7 @@ export default abstract class Client {
              *
              * 对指定消息进行应用内加急与短信加急。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能加急机器人自己发送的消息;- 加急时机器人仍需要在会话内
              *
              * 特别说明：;- 通过接口产生的短信加急将消耗企业的加急额度，请慎重调用。;- 通过租户管理后台-费用中心-短信/电话加急 可以查看当前额度。;- 默认接口限流为50 QPS，请谨慎调用。
              */
@@ -41178,7 +42133,7 @@ export default abstract class Client {
              *
              * 给指定消息添加指定类型的表情回复（reaction即表情回复，本说明文档统一用“reaction”代称）。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 待添加reaction的消息要真实存在，不能被撤回;- 给消息添加reaction，需要reaction的发送方（机器人或者用户）在消息所在的会话内
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 待添加reaction的消息要真实存在，不能被撤回;- 给消息添加reaction，需要reaction的发送方（机器人或者用户）在消息所在的会话内
              */
             create: async (
                 payload?: {
@@ -41230,7 +42185,7 @@ export default abstract class Client {
              *
              * 删除指定消息的表情回复（reaction即表情回复，本说明文档统一用“reaction”代称）。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能删除真实存在的reaction，并且删除reaction请求的操作者必须是reaction的原始添加者
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 只能删除真实存在的reaction，并且删除reaction请求的操作者必须是reaction的原始添加者
              */
             delete: async (
                 payload?: {
@@ -41381,7 +42336,7 @@ export default abstract class Client {
              *
              * 获取指定消息的特定类型表情回复列表（reaction即表情回复，本说明文档统一用“reaction”代称）。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 待获取reaction信息的消息要真实存在，不能被撤回;- 获取消息的reaction，需要request的授权主体（机器人或者用户）在消息所在的会话内
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 待获取reaction信息的消息要真实存在，不能被撤回;- 获取消息的reaction，需要request的授权主体（机器人或者用户）在消息所在的会话内
              */
             list: async (
                 payload?: {
@@ -41435,7 +42390,7 @@ export default abstract class Client {
             },
         },
         /**
-         * message.resource
+         * 消息
          */
         messageResource: {
             /**
@@ -41447,7 +42402,7 @@ export default abstract class Client {
              *
              * 获取消息中的资源文件，包括音频，视频，图片和文件，**暂不支持表情包资源下载**。当前仅支持 100M 以内的资源文件的下载。
              *
-             * 注意事项:;- 需要开启[机器人能力](/ssl:ttdoc/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人和消息需要在同一会话中;- 请求的 file_key 和 message_id 需要匹配;- 暂不支持获取合并转发消息中的子消息的资源文件;- 获取群组消息时，应用必须拥有 获取群组中所有的消息 权限
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人和消息需要在同一会话中;- 请求的 file_key 和 message_id 需要匹配;- 暂不支持获取合并转发消息中的子消息的资源文件;- 获取群组消息时，应用必须拥有 获取群组中所有的消息 权限
              */
             get: async (
                 payload?: {
@@ -41481,6 +42436,245 @@ export default abstract class Client {
                         await res.pipe(fs.createWriteStream(filePath));
                     },
                 };
+            },
+        },
+        /**
+         * 消息 - Pin
+         */
+        pin: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/create document }
+             *
+             * Pin消息
+             *
+             * Pin一条指定的消息
+             */
+            create: async (
+                payload?: {
+                    data: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                pin?: {
+                                    message_id: string;
+                                    chat_id?: string;
+                                    operator_id?: string;
+                                    operator_id_type?: string;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/pins`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/delete document }
+             *
+             * 移除Pin消息
+             *
+             * 移除一条指定消息的Pin
+             */
+            delete: async (
+                payload?: {
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/pins/:message_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        chat_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/pins`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    message_id: string;
+                                                    chat_id?: string;
+                                                    operator_id?: string;
+                                                    operator_id_type?: string;
+                                                    create_time?: string;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=pin&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/pin/list document }
+             *
+             * 获取群内Pin消息
+             *
+             * 获取所在群内指定时间范围内的所有Pin消息
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        chat_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    message_id: string;
+                                    chat_id?: string;
+                                    operator_id?: string;
+                                    operator_id_type?: string;
+                                    create_time?: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/pins`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
             },
         },
     };
@@ -42426,7 +43620,12 @@ export default abstract class Client {
                     data?: {
                         user_id?: string;
                         department_id?: string;
-                        type?: "USER" | "DEPARTMENT";
+                        email?: string;
+                        type?:
+                            | "USER"
+                            | "DEPARTMENT"
+                            | "MAIL_GROUP"
+                            | "PUBLIC_MAILBOX";
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -42451,7 +43650,12 @@ export default abstract class Client {
                                 permission_member_id?: string;
                                 user_id?: string;
                                 department_id?: string;
-                                type?: "USER" | "DEPARTMENT";
+                                email?: string;
+                                type?:
+                                    | "USER"
+                                    | "DEPARTMENT"
+                                    | "MAIL_GROUP"
+                                    | "PUBLIC_MAILBOX";
                             };
                         }
                     >({
@@ -42543,7 +43747,12 @@ export default abstract class Client {
                                 permission_member_id?: string;
                                 user_id?: string;
                                 department_id?: string;
-                                type?: "USER" | "DEPARTMENT";
+                                email?: string;
+                                type?:
+                                    | "USER"
+                                    | "DEPARTMENT"
+                                    | "MAIL_GROUP"
+                                    | "PUBLIC_MAILBOX";
                             };
                         }
                     >({
@@ -42635,9 +43844,12 @@ export default abstract class Client {
                                                     permission_member_id?: string;
                                                     user_id?: string;
                                                     department_id?: string;
+                                                    email?: string;
                                                     type?:
                                                         | "USER"
-                                                        | "DEPARTMENT";
+                                                        | "DEPARTMENT"
+                                                        | "MAIL_GROUP"
+                                                        | "PUBLIC_MAILBOX";
                                                 }>;
                                             };
                                         },
@@ -42697,7 +43909,12 @@ export default abstract class Client {
                                     permission_member_id?: string;
                                     user_id?: string;
                                     department_id?: string;
-                                    type?: "USER" | "DEPARTMENT";
+                                    email?: string;
+                                    type?:
+                                        | "USER"
+                                        | "DEPARTMENT"
+                                        | "MAIL_GROUP"
+                                        | "PUBLIC_MAILBOX";
                                 }>;
                             };
                         }
@@ -43916,7 +45133,7 @@ export default abstract class Client {
              *
              * 根据OKR id批量获取OKR
              *
-             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="/ssl:ttdoc/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
+             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
             batchGet: async (
                 payload?: {
@@ -44045,7 +45262,7 @@ export default abstract class Client {
              *
              * 获取OKR周期列表
              *
-             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="/ssl:ttdoc/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
+             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
             list: async (
                 payload?: {
@@ -44582,7 +45799,7 @@ export default abstract class Client {
              *
              * 根据用户的id获取OKR列表
              *
-             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="/ssl:ttdoc/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
+             * 使用<md-tag mode="inline" type="token-tenant">tenant_access_token</md-tag>需要额外申请权限<md-perm ;href="https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN">以应用身份访问OKR信息</md-perm>
              */
             list: async (
                 payload?: {
@@ -45861,6 +47078,92 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=sheets&resource=spreadsheet&apiName=get&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/get document }
+             *
+             * 获取电子表格信息
+             *
+             * 该接口用于获取电子表格的基础信息。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { spreadsheet_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                spreadsheet?: {
+                                    title?: string;
+                                    owner_id?: string;
+                                    token?: string;
+                                    url?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=sheets&resource=spreadsheet&apiName=patch&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet/patch document }
+             *
+             * 修改电子表格属性
+             *
+             * 该接口用于修改电子表格的属性
+             */
+            patch: async (
+                payload?: {
+                    data?: { title?: string };
+                    path?: { spreadsheet_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 筛选
@@ -45875,7 +47178,7 @@ export default abstract class Client {
              *
              * 在子表内创建筛选。
              *
-             * 参数值可参考[筛选指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/filter-user-guide)
+             * 参数值可参考[筛选指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/filter-user-guide)
              */
             create: async (
                 payload?: {
@@ -46008,7 +47311,7 @@ export default abstract class Client {
              *
              * 更新子表筛选范围中的列筛选条件。
              *
-             * 参数值可参考[筛选指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/filter-user-guide)
+             * 参数值可参考[筛选指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter/filter-user-guide)
              */
             update: async (
                 payload?: {
@@ -46057,7 +47360,7 @@ export default abstract class Client {
              *
              * 在筛选视图的筛选范围的某一列创建筛选条件。
              *
-             * 筛选条件参考 [筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选条件参考 [筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             create: async (
                 payload?: {
@@ -46156,7 +47459,7 @@ export default abstract class Client {
              *
              * 获取筛选视图某列的筛选条件信息。
              *
-             * 筛选条件含义参考 [筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选条件含义参考 [筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             get: async (
                 payload?: {
@@ -46211,7 +47514,7 @@ export default abstract class Client {
              *
              * 查询一个筛选视图的所有筛选条件，返回筛选视图的筛选范围内的筛选条件。
              *
-             * 筛选条件含义可参考 [筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选条件含义可参考 [筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             query: async (
                 payload?: {
@@ -46265,7 +47568,7 @@ export default abstract class Client {
              *
              * 更新筛选视图范围的某列的筛选条件，condition id 即为列的字母号。
              *
-             * 筛选条件参数可参考 [筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选条件参数可参考 [筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             update: async (
                 payload?: {
@@ -46330,7 +47633,7 @@ export default abstract class Client {
              *
              * 根据传入的参数创建一个筛选视图。Id 和 名字可选，不填的话会默认生成；range 必填。Id 长度为10，由 0-9、a-z、A-Z 组合生成。名字长度不超过100。单个子表内的筛选视图个数不超过 150。
              *
-             * 筛选范围的设置参考：[筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选范围的设置参考：[筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             create: async (
                 payload?: {
@@ -46473,7 +47776,7 @@ export default abstract class Client {
              *
              * 更新筛选视图的名字或者筛选范围。名字长度不超过100，不能重复即子表内唯一；筛选范围不超过子表的最大范围。
              *
-             * 筛选范围的设置参考：[筛选视图的筛选条件指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
+             * 筛选范围的设置参考：[筛选视图的筛选条件指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-filter_view-condition/filter-view-condition-user-guide)
              */
             patch: async (
                 payload?: {
@@ -46567,7 +47870,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 单元格
+         * 行列
          */
         spreadsheetSheet: {
             /**
@@ -46628,6 +47931,67 @@ export default abstract class Client {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=sheets&resource=spreadsheet.sheet&apiName=get&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/get document }
+             *
+             * 查询工作表
+             *
+             * 该接口用于通过工作表ID查询工作表属性信息。
+             */
+            get: async (
+                payload?: {
+                    path?: { spreadsheet_token?: string; sheet_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                sheet?: {
+                                    sheet_id?: string;
+                                    title?: string;
+                                    index?: number;
+                                    hidden?: boolean;
+                                    grid_properties?: {
+                                        frozen_row_count?: number;
+                                        frozen_column_count?: number;
+                                        row_count?: number;
+                                        column_count?: number;
+                                    };
+                                    resource_type?: string;
+                                    merges?: Array<{
+                                        start_row_index?: number;
+                                        end_row_index?: number;
+                                        start_column_index?: number;
+                                        end_column_index?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=sheets&resource=spreadsheet.sheet&apiName=move_dimension&version=v3 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/move_dimension document }
@@ -46660,6 +48024,67 @@ export default abstract class Client {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=sheets&resource=spreadsheet.sheet&apiName=query&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet/query document }
+             *
+             * 获取工作表
+             *
+             * 该接口用于获取电子表格下所有工作表及其属性。
+             */
+            query: async (
+                payload?: {
+                    path?: { spreadsheet_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                sheets?: Array<{
+                                    sheet_id?: string;
+                                    title?: string;
+                                    index?: number;
+                                    hidden?: boolean;
+                                    grid_properties?: {
+                                        frozen_row_count?: number;
+                                        frozen_column_count?: number;
+                                        row_count?: number;
+                                        column_count?: number;
+                                    };
+                                    resource_type?: string;
+                                    merges?: Array<{
+                                        start_row_index?: number;
+                                        end_row_index?: number;
+                                        start_column_index?: number;
+                                        end_column_index?: number;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/query`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -46739,9 +48164,9 @@ export default abstract class Client {
              *
              * 创建浮动图片
              *
-             * 根据传入的参数创建一张浮动图片。Float_image_token （[上传图片至表格后得到](/ssl:ttdoc/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)）和range（只支持一个单元格） 必填。Float_image_id 可选，不填的话会默认生成，长度为10，由 0-9、a-z、A-Z 组合生成。表格内不重复的图片（浮动图片+单元格图片）总数不超过4000。width 和 height 为图片展示的宽高，可选，不填的话会使用图片的真实宽高。offset_x 和 offset_y 为图片左上角距离所在单元格左上角的偏移，可选，默认为 0。
+             * 根据传入的参数创建一张浮动图片。Float_image_token （[上传图片至表格后得到](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/media/upload_all)）和range（只支持一个单元格） 必填。Float_image_id 可选，不填的话会默认生成，长度为10，由 0-9、a-z、A-Z 组合生成。表格内不重复的图片（浮动图片+单元格图片）总数不超过4000。width 和 height 为图片展示的宽高，可选，不填的话会使用图片的真实宽高。offset_x 和 offset_y 为图片左上角距离所在单元格左上角的偏移，可选，默认为 0。
              *
-             * 浮动图片的设置参考：[浮动图片指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
+             * 浮动图片的设置参考：[浮动图片指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
              */
             create: async (
                 payload?: {
@@ -46841,7 +48266,7 @@ export default abstract class Client {
              *
              * 根据 float_image_id 获取对应浮动图片的信息。
              *
-             * 浮动图片参考：[浮动图片指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
+             * 浮动图片参考：[浮动图片指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
              */
             get: async (
                 payload?: {
@@ -46898,7 +48323,7 @@ export default abstract class Client {
              *
              * 更新已有的浮动图片位置和宽高，包括 range、width、height、offset_x 和 offset_y，不包括 float_image_id 和 float_image_token。
              *
-             * 浮动图片更新参考：[浮动图片指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
+             * 浮动图片更新参考：[浮动图片指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
              */
             patch: async (
                 payload?: {
@@ -46963,7 +48388,7 @@ export default abstract class Client {
              *
              * 返回子表内所有的浮动图片信息。
              *
-             * 浮动图片参考：[浮动图片指南](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
+             * 浮动图片参考：[浮动图片指南](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/sheets-v3/spreadsheet-sheet-float_image/float-image-user-guide)
              */
             query: async (
                 payload?: {
@@ -47277,7 +48702,7 @@ export default abstract class Client {
             create: async (
                 payload?: {
                     data: {
-                        summary: string;
+                        summary?: string;
                         description?: string;
                         extra?: string;
                         due?: {
@@ -49040,9 +50465,214 @@ export default abstract class Client {
      */
     vc = {
         /**
+         * alert
+         */
+        alert: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        query_type?: number;
+                        query_value?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/alerts`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    alert_id?: string;
+                                                    resource_scope?: string;
+                                                    monitor_target?: number;
+                                                    alert_strategy?: string;
+                                                    alert_time?: string;
+                                                    alert_level?: number;
+                                                    contacts?: Array<{
+                                                        contact_type?: number;
+                                                        contact_name?: string;
+                                                    }>;
+                                                    notifyMethods?: Array<number>;
+                                                    alertRule?: string;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=alert&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=vc&resource=alert&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        query_type?: number;
+                        query_value?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    alert_id?: string;
+                                    resource_scope?: string;
+                                    monitor_target?: number;
+                                    alert_strategy?: string;
+                                    alert_time?: string;
+                                    alert_level?: number;
+                                    contacts?: Array<{
+                                        contact_type?: number;
+                                        contact_name?: string;
+                                    }>;
+                                    notifyMethods?: Array<number>;
+                                    alertRule?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/alerts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 导出
          */
         export: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=export&apiName=download&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download&project=vc&resource=export&version=v1 document }
+             */
+            download: async (
+                payload?: {
+                    params: { file_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await http
+                    .request<any, any>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/exports/download`,
+                            path
+                        ),
+                        method: "GET",
+                        headers,
+                        data,
+                        params,
+                        responseType: "stream",
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return {
+                    writeFile: async (filePath: string) => {
+                        await res.pipe(fs.createWriteStream(filePath));
+                    },
+                };
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=export&apiName=get&version=v1 click to debug }
              *
@@ -49067,7 +50697,12 @@ export default abstract class Client {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { status: number; url?: string };
+                            data?: {
+                                status: number;
+                                url?: string;
+                                file_token?: string;
+                                fail_msg?: string;
+                            };
                         }
                     >({
                         url: fillApiPath(
@@ -50000,6 +51635,10 @@ export default abstract class Client {
                                 };
                             };
                             auto_record?: boolean;
+                            assign_host_list?: Array<{
+                                user_type?: number;
+                                id?: string;
+                            }>;
                         };
                     };
                     params?: {
@@ -50025,6 +51664,9 @@ export default abstract class Client {
                                     app_link?: string;
                                     live_link?: string;
                                     end_time?: string;
+                                };
+                                reserve_correction_check_info?: {
+                                    invalid_host_id_list?: Array<string>;
                                 };
                             };
                         }
@@ -50140,6 +51782,10 @@ export default abstract class Client {
                                             };
                                         };
                                         auto_record?: boolean;
+                                        assign_host_list?: Array<{
+                                            user_type?: number;
+                                            id?: string;
+                                        }>;
                                     };
                                 };
                             };
@@ -50279,6 +51925,10 @@ export default abstract class Client {
                                 };
                             };
                             auto_record?: boolean;
+                            assign_host_list?: Array<{
+                                user_type?: number;
+                                id?: string;
+                            }>;
                         };
                     };
                     params?: {
@@ -50305,6 +51955,9 @@ export default abstract class Client {
                                     live_link?: string;
                                     end_time?: string;
                                     expire_status?: number;
+                                };
+                                reserve_correction_check_info?: {
+                                    invalid_host_id_list?: Array<string>;
                                 };
                             };
                         }
@@ -50797,7 +52450,7 @@ export default abstract class Client {
              *
              * 获取知识空间列表
              *
-             * 此接口用于获取有权限访问的知识空间列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。;;对于知识空间各项属性描述请参阅[获取知识空间信息](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get)
+             * 此接口用于获取有权限访问的知识空间列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。;;对于知识空间各项属性描述请参阅[获取知识空间信息](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get)
              *
              * 使用tenant access token调用时，请确认应用/机器人拥有部分知识空间的访问权限，否则返回列表容易为空。
              */
@@ -51053,8 +52706,6 @@ export default abstract class Client {
                         node_type: "origin" | "shortcut";
                         origin_node_token?: string;
                         title?: string;
-                        creator?: string;
-                        owner?: string;
                     };
                     path?: { space_id?: string };
                 },
@@ -51375,7 +53026,7 @@ export default abstract class Client {
              *
              * 该接口允许添加已有云文档至知识库，并挂载在指定父页面下
              *
-             * 仅支持文档所有者发起请求;;此接口为异步接口。若移动已完成（或节点已在Wiki中），则直接返回结果（Wiki token）。若尚未完成，则返回task id。请使用[获取任务结果](/ssl:ttdoc/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get)接口进行查询。;;知识库权限要求：;- 文档可管理权限;- 原文件夹编辑权限;- 目标父节点容器编辑权限
+             * 仅支持文档所有者发起请求;;此接口为异步接口。若移动已完成（或节点已在Wiki中），则直接返回结果（Wiki token）。若尚未完成，则返回task id。请使用[获取任务结果](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get)接口进行查询。;;知识库权限要求：;- 文档可管理权限;- 原文件夹编辑权限;- 目标父节点容器编辑权限
              *
              * ### 移动操作 ###;移动后，文档将从“我的空间”或“共享空间”转移至“知识库”，并将从以下功能入口消失：;- 云空间主页：最近访问、快速访问;- 我的空间;- 共享空间;- 收藏;;### 权限变更 ###;移动后，文档会向所有可查看“页面树”的用户显示，默认继承父页面的权限设置。;</md-alert
              */
