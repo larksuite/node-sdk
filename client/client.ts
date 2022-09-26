@@ -156,7 +156,9 @@ export class Client extends RequestTemplate {
             .request<T, T>({
                 ...rest,
                 ...{
-                    url: `${this.domain}/${formatUrl(url)}`,
+                    url: /^http/.test(url!)
+                        ? url
+                        : `${this.domain}/${formatUrl(url)}`,
                     headers: formatPayload.headers,
                     data: formatPayload.data,
                     params: formatPayload.params,
