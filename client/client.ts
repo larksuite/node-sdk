@@ -50,6 +50,7 @@ export class Client extends RequestTemplate {
 
         this.appId = params.appId;
         this.appSecret = params.appSecret;
+        this.disableTokenCache = params.disableTokenCache;
 
         assert(!this.appId, () => this.logger.error('appId is needed'));
         assert(!this.appSecret, () => this.logger.error('appSecret is needed'));

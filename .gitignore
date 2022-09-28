@@ -4,6 +4,10 @@
 
 node_modules
 
+# for tests
+local-tests
+.vscode
+
 # output assets
 **/es
 **/lib
