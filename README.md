@@ -443,6 +443,10 @@ import * as lark from '@larksuiteoapi/node-sdk';
 
 new lark.AESCipher('encrypt key').decrypt('content');
 ````
+
+## Blog
+[ISV Application Development Guide](https://bytedance.feishu.cn/docx/RUZKdGwdyoH4KexMJgDcITQnn0b)
+
 ## LICENSE
 MIT
 

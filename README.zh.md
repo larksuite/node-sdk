@@ -442,6 +442,10 @@ import * as lark from '@larksuiteoapi/node-sdk';
 
 new lark.AESCipher('encrypt key').decrypt('content');
 ```
+
+## Blog
+[ISV（商店应用）开发指南](https://bytedance.feishu.cn/docx/RUZKdGwdyoH4KexMJgDcITQnn0b)
+
 ## 许可协议
 MIT
 
