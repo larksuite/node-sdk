@@ -69,7 +69,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -330,7 +340,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -5648,7 +5668,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -9666,7 +9696,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -30378,7 +30418,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -31191,7 +31241,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -32105,7 +32165,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -32837,7 +32907,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -34956,7 +35036,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -36442,7 +36532,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -41324,7 +41424,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -41420,7 +41530,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -42433,7 +42553,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },
@@ -50669,7 +50799,17 @@ export default abstract class Client {
 
                 return {
                     writeFile: async (filePath: string) => {
-                        await res.pipe(fs.createWriteStream(filePath));
+                        return new Promise((resolve, reject) => {
+                            const writableStream =
+                                fs.createWriteStream(filePath);
+                            writableStream.on("finish", () => {
+                                resolve(filePath);
+                            });
+                            writableStream.on("error", (e) => {
+                                reject(e);
+                            });
+                            res.pipe(writableStream);
+                        });
                     },
                 };
             },

@@ -7,5 +7,6 @@ export * from './adaptor/express';
 export * from './adaptor/koa';
 export * from './adaptor/koa-router';
 export { AppType, Domain, LoggerLevel } from './typings';
+export { CAppTicket } from './consts';
 export { IHandles as EventHandles } from './code-gen/events-template';
 export { AESCipher } from './utils/aes-cipher';
