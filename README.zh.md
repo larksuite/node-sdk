@@ -402,6 +402,32 @@ const resule = await dispatcher.invoke(data);
 server.sendResult(result);
 ```
 
+#### challenge校验
+在配置事件请求地址时，开放平台会向请求地址推送一个`application/json`格式的 POST请求，该POST请求用于验证所配置的请求地址的合法性，请求体中会携带一个`challenge`字段，**应用需要在 1 秒内，将接收到的challenge值原样返回给飞书开放平台**。详见：[文档](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case)
+
+上面sdk提供出的适配器内部封装了这部分验证的逻辑，将options参数中的`autoChallenge`字段设为true即可启用：
+```typescript
+// adaptDefault
+lark.adaptDefault('/webhook/event', eventDispatcher, {
+    autoChallenge: true,
+});
+// express
+lark.adaptExpress(eventDispatcher, {
+    autoChallenge: true,
+});
+// koa
+lark.adaptKoa('/webhook/event', eventDispatcher, {
+    autoChallenge: true,
+});
+// koa-router
+router.post(
+    '/webhook/event',
+    lark.adaptKoaRouter(eventDispatcher, {
+        autoChallenge: true,
+    })
+);
+```
+
 ### [消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)
 对消息卡片的处理亦是对事件处理的一种，两者的不同点仅在于消息卡片的处理器用于响应用户与消息卡片交互所产生的事件，若处理器有返回值（*返回值的数据结构理应为符合[消息卡片结构](https://open.feishu.cn/document/ukTMukTMukTM/uEjNwUjLxYDM14SM2ATN)所定义的结构*），则返回值被用来更新被响应的消息卡片：
 
