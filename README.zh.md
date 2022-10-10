@@ -429,19 +429,26 @@ router.post(
 ```
 
 ### [消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)
+
 对消息卡片的处理亦是对事件处理的一种，两者的不同点仅在于消息卡片的处理器用于响应用户与消息卡片交互所产生的事件，若处理器有返回值（*返回值的数据结构理应为符合[消息卡片结构](https://open.feishu.cn/document/ukTMukTMukTM/uEjNwUjLxYDM14SM2ATN)所定义的结构*），则返回值被用来更新被响应的消息卡片：
 
 ```typescript
 import http from 'http';
 import * as lark from '@larksuiteoapi/node-sdk';
+import type { InteractiveCardActionEvent, InteractiveCard } from '@larksuiteoapi/node-sdk';
 
 const cardDispatcher = new lark.CardActionHandler(
     {
       encryptKey: 'encrypt key',
       verificationToken: 'verification token'
     },
-    async (data) => {
+    async (data: InteractiveCardActionEvent) => {
         console.log(data);
+        const newCard: InteractiveCard = {
+          // your new interactive card content
+          header: {},
+          elements: []
+        };
         return newCard;
     }
 );
@@ -450,6 +457,7 @@ const server = http.createServer();
 server.on('request', lark.adaptDefault('/webhook/card', cardDispatcher));
 server.listen(3000);
 ```
+
 #### `CardActionHandler`构造参数
 
 |  参数   | 描述  | 类型 | 必须 | 默认 |
