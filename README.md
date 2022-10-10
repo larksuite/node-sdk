@@ -403,7 +403,7 @@ const resule = await dispatcher.invoke(data);
 server.sendResult(result);
 ````
 
-#### challenge校验
+#### Challenge check
 When configuring the event request address, The Open Platform will push a POST request in `application/json` format to the request address. The POST request is used to verify the validity of the configured request address, and the request body will carry a `challenge` field , **The application needs to return the received challenge value to the Open Platform within 1 second**. See: [ Document](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case)
 
 The adapter provided by the sdk above encapsulates the verification logic. Set the `autoChallenge` field in the options parameter to true to enable:
