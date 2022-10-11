@@ -396,8 +396,8 @@ export interface IHandles extends IOtherEventHandles {
         operator_id?: { union_id?: string; user_id?: string; open_id?: string };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/event/app-availability-scope-extended document }
+     */
     "application.application.visibility.added_v6"?: (data: {
         event_id?: string;
         token?: string;
@@ -414,8 +414,8 @@ export interface IHandles extends IOtherEventHandles {
         source?: number;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/custom-approval-event document }
+     */
     "approval.approval.updated_v4"?: (data: {
         event_id?: string;
         token?: string;
@@ -581,7 +581,7 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/events/created document }
      *
-     * 部门创建事件
+     * 部门被创建
      *
      * 创建通讯录部门时发送该事件给订阅应用。
      *
@@ -649,9 +649,9 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/events/updated document }
      *
-     * 修改部门
+     * 部门信息被修改
      *
-     * 通过该事件订阅部门更新。old_object只展示被更新字段的原始值。应用身份访问通讯录的权限为历史版本，不推荐申请。
+     * 通过该事件订阅部门更新。`old_object`只展示被更新字段的原始值。应用身份访问通讯录的权限为历史版本，不推荐申请。
      *
      * 只有当应用拥有被改动字段的数据权限时，才会接收到事件。具体的数据权限与字段的关系请参考[应用权限](https://open.feishu.cn/document/ukTMukTMukTM/uQjN3QjL0YzN04CN2cDN)，或查看事件体参数列表的字段描述。
      */
@@ -1352,8 +1352,95 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
+     *
+     * 多维表格字段变更
+     *
+     * 多维表格字段变更
+     */
+    "drive.file.bitable_field_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        table_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        action_list?: Array<{
+            action: string;
+            field_id: string;
+            before_value?: {
+                id: string;
+                name: string;
+                type: number;
+                description: string;
+                property: {
+                    formatter?: string;
+                    date_formatter?: string;
+                    auto_fill?: boolean;
+                    multiple?: boolean;
+                    table_id?: string;
+                    table_name?: string;
+                    back_field_name?: string;
+                    input_type?: string;
+                    back_field_id?: string;
+                    auto_serial?: {
+                        type: string;
+                        options?: Array<{ type: string; value: string }>;
+                    };
+                    options?: Array<{
+                        name?: string;
+                        id?: string;
+                        color?: number;
+                    }>;
+                    formula_expression?: string;
+                };
+            };
+            after_value?: {
+                id: string;
+                name: string;
+                type: number;
+                description: string;
+                property: {
+                    formatter?: string;
+                    date_formatter?: string;
+                    auto_fill?: boolean;
+                    multiple?: boolean;
+                    table_id?: string;
+                    table_name?: string;
+                    back_field_name?: string;
+                    input_type?: string;
+                    back_field_id?: string;
+                    auto_serial?: {
+                        type: string;
+                        options?: Array<{ type: string; value: string }>;
+                    };
+                    options?: Array<{
+                        name?: string;
+                        id?: string;
+                        color?: number;
+                    }>;
+                    formula_expression?: string;
+                };
+            };
+        }>;
+        revision?: number;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-deleted-completely document }
+     */
     "drive.file.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1374,8 +1461,8 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-edited document }
+     */
     "drive.file.edit_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1401,8 +1488,8 @@ export interface IHandles extends IOtherEventHandles {
         sheet_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-collaborator-add document }
+     */
     "drive.file.permission_member_added_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1430,8 +1517,8 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-collaborator-remove document }
+     */
     "drive.file.permission_member_removed_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1459,8 +1546,8 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-read document }
+     */
     "drive.file.read_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1485,8 +1572,8 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-title-update document }
+     */
     "drive.file.title_updated_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1507,8 +1594,8 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/delete-file-to-trash-can document }
+     */
     "drive.file.trashed_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -1785,7 +1872,7 @@ export interface IHandles extends IOtherEventHandles {
      *
      * 用户进群
      *
-     * 新用户进群触发此事件。
+     * 新用户进群（包含话题群）触发此事件。
      *
      * 注意事项：;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 需要订阅 ==消息与群组== 分类下的 ==用户进群== 事件;- 事件会向群内订阅了该事件的机器人进行推送
      */
@@ -1986,7 +2073,7 @@ export interface IHandles extends IOtherEventHandles {
      *
      * 消息被添加某一个表情回复后触发此事件
      *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ，具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被添加表情回复事件
+     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被添加表情回复事件
      */
     "im.message.reaction.created_v1"?: (data: {
         event_id?: string;
@@ -2011,7 +2098,7 @@ export interface IHandles extends IOtherEventHandles {
      *
      * 消息被删除某一个表情回复后触发此事件
      *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ，具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被取消reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被删除表情回复事件
+     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 具备==获取单聊、群组消息== 或 ==获取与发送单聊、群组消息==权限，并订阅 ==消息与群组== 分类下的 ==消息被取消reaction== 事件才可接收推送;- 机器人只能收到所在群聊内的消息被删除表情回复事件
      */
     "im.message.reaction.deleted_v1"?: (data: {
         event_id?: string;
@@ -2036,7 +2123,7 @@ export interface IHandles extends IOtherEventHandles {
      *
      * 机器人接收到用户发送的消息后触发此事件。
      *
-     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ，并订阅 ==消息与群组== 分类下的 ==接收消息v2.0== 事件才可接收推送;- 同时，将根据应用具备的权限，判断可推送的信息：;	- 当具备==获取用户发给机器人的单聊消息==权限或者==读取用户发给机器人的单聊消息（历史权限）==，可接收与机器人单聊会话中用户发送的所有消息;	- 当具备==获取群组中所有消息== 权限时，可接收与机器人所在群聊会话中用户发送的所有消息;	- 当具备==获取用户在群组中@机器人的消息== 权限或者==获取用户在群聊中@机器人的消息（历史权限）==，可接收机器人所在群聊中用户 @ 机器人的消息
+     * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)，并订阅 ==消息与群组== 分类下的 ==接收消息v2.0== 事件才可接收推送;- 同时，将根据应用具备的权限，判断可推送的信息：;	- 当具备==获取用户发给机器人的单聊消息==权限或者==读取用户发给机器人的单聊消息（历史权限）==，可接收与机器人单聊会话中用户发送的所有消息;	- 当具备==获取群组中所有消息== 权限时，可接收与机器人所在群聊会话中用户发送的所有消息;	- 当具备==获取用户在群组中@机器人的消息== 权限或者==获取用户在群聊中@机器人的消息（历史权限）==，可接收机器人所在群聊中用户 @ 机器人的消息
      */
     "im.message.receive_v1"?: (data: {
         event_id?: string;
