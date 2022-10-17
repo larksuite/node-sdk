@@ -6,6 +6,7 @@ export * from './adaptor/default';
 export * from './adaptor/express';
 export * from './adaptor/koa';
 export * from './adaptor/koa-router';
+export * from './typings/card';
 export { AppType, Domain, LoggerLevel } from './typings';
 export { CAppTicket } from './consts';
 export { IHandles as EventHandles } from './code-gen/events-template';
