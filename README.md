@@ -478,6 +478,9 @@ import * as lark from '@larksuiteoapi/node-sdk';
 new lark.AESCipher('encrypt key').decrypt('content');
 ````
 
+## Examples
+[Rapidly develop auto-responder bot](https://github.com/larksuite/lark-samples/blob/main/react_and_nodejs/robot/README.zh.md)
+
 ## Blog
 [ISV Application Development Guide](https://bytedance.feishu.cn/docx/RUZKdGwdyoH4KexMJgDcITQnn0b)
 
