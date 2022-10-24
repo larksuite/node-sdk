@@ -1686,6 +1686,258 @@ export default abstract class Client {
      */
     application = {
         /**
+         * 推荐规则
+         */
+        appRecommendRule: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/app_recommend_rules`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                rules?: Array<{
+                                                    id?: string;
+                                                    name?: string;
+                                                    status?: "open" | "closed";
+                                                    visibility_info?: {
+                                                        is_all?: boolean;
+                                                        department_ids?: Array<string>;
+                                                        user_ids?: Array<string>;
+                                                        group_ids?: Array<string>;
+                                                    };
+                                                    recommend_item_infos?: Array<{
+                                                        item_id?: string;
+                                                        item_type?:
+                                                            | "application"
+                                                            | "link";
+                                                        name?: string;
+                                                        description?: string;
+                                                        link_url?: string;
+                                                        client_id?: string;
+                                                        icon_url?: string;
+                                                        default_locale?:
+                                                            | "zh_cn"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            zh_hk?: string;
+                                                            zh_tw?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    }>;
+                                                    distributed_recommend_item_infos?: Array<{
+                                                        item_id?: string;
+                                                        item_type?:
+                                                            | "application"
+                                                            | "link";
+                                                        name?: string;
+                                                        description?: string;
+                                                        link_url?: string;
+                                                        client_id?: string;
+                                                        icon_url?: string;
+                                                        default_locale?:
+                                                            | "zh_cn"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            zh_hk?: string;
+                                                            zh_tw?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_recommend_rule&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_recommend_rule/list document }
+             *
+             * 获取当前设置的推荐规则列表
+             *
+             * 获取当前设置的推荐规则列表。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rules?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    status?: "open" | "closed";
+                                    visibility_info?: {
+                                        is_all?: boolean;
+                                        department_ids?: Array<string>;
+                                        user_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                    recommend_item_infos?: Array<{
+                                        item_id?: string;
+                                        item_type?: "application" | "link";
+                                        name?: string;
+                                        description?: string;
+                                        link_url?: string;
+                                        client_id?: string;
+                                        icon_url?: string;
+                                        default_locale?:
+                                            | "zh_cn"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            zh_hk?: string;
+                                            zh_tw?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    }>;
+                                    distributed_recommend_item_infos?: Array<{
+                                        item_id?: string;
+                                        item_type?: "application" | "link";
+                                        name?: string;
+                                        description?: string;
+                                        link_url?: string;
+                                        client_id?: string;
+                                        icon_url?: string;
+                                        default_locale?:
+                                            | "zh_cn"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            zh_hk?: string;
+                                            zh_tw?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/app_recommend_rules`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 应用使用情况
          */
         applicationAppUsage: {
@@ -2780,7 +3032,7 @@ export default abstract class Client {
      */
     approval = {
         /**
-         * 原生审批定义
+         * 事件
          */
         approval: {
             /**
@@ -4215,7 +4467,7 @@ export default abstract class Client {
              *
              * 批量获取审批实例ID
              *
-             * 根据 approval_code 批量获取审批实例的 instance_code，用于拉取租户下某个审批定义的全部审批实例。默认以审批创建时间排序
+             * 根据 approval_code 批量获取审批实例的 instance_code，用于拉取租户下某个审批定义的全部审批实例。默认以审批创建时间先后顺序排列
              */
             list: async (
                 payload?: {
@@ -5050,7 +5302,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 审批查询
+         * 原生审批任务
          */
         task: {
             /**
@@ -9781,7 +10033,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 云文档-多维表格
+     * 云文档-电子表格
      */
     bitable = {
         /**
@@ -15399,7 +15651,7 @@ export default abstract class Client {
              *
              * 该接口用于以当前身份（应用 / 用户）获取日历下的日程列表。;身份由 Header Authorization 的 Token 类型决定。
              *
-             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 仅支持primary、shared和resource类型的日历获取日程列表。;;- 调用时首先使用 page_token 分页拉取存量数据，之后使用 sync_token 增量同步变更数据。;;- 为了确保调用方日程同步数据的一致性，在使用sync_token时，不能同时使用start_time和end_time，否则可能造成日程数据缺失。
+             * - 当前身份必须对日历有reader、writer或owner权限才会返回日程详细信息（调用[获取日历](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get)接口，role字段可查看权限）。;;- 仅支持primary、shared和resource类型的日历获取日程列表。;;- page_token 分页拉取存量数据，sync_token 增量同步变更数据；目前仅传anchor_time时，会返回page_token。;;- 为了确保调用方日程同步数据的一致性，在使用sync_token时，不能同时使用start_time和end_time，否则可能造成日程数据缺失。
              */
             list: async (
                 payload?: {
@@ -43604,9 +43856,9 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/list document }
              *
-             * 获取文档评论
+             * 分页获取文档评论
              *
-             * 根据文档token分页获取云文档中的评论。
+             * 该接口用于根据文档 token 分页获取文档评论。
              */
             list: async (
                 payload?: {
@@ -43821,7 +44073,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 下载
+         * 文件夹
          */
         file: {
             /**
@@ -44862,7 +45114,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -52399,7 +52651,7 @@ export default abstract class Client {
              *
              * 获取会话中的群公告信息，公告信息格式与[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 获取内部群信息时，操作者须与群组在同一租户下
              */
             get: async (
                 payload?: {
@@ -52462,7 +52714,7 @@ export default abstract class Client {
              *
              * 更新会话中的群公告信息，更新公告信息的格式和更新[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uAzM5YjLwMTO24CMzkjN)格式相同。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 操作者需要拥有群公告文档的阅读权限;- 获取内部群信息时，操作者须与群组在同一租户下;- 若群开启了 ==仅群主和群管理员可编辑群信息== 配置，群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新群公告;- 若群未开启 ==仅群主和群管理员可编辑群信息== 配置，所有成员可以更新群公告
              */
             patch: async (
                 payload?: {
@@ -52854,7 +53106,7 @@ export default abstract class Client {
              *
              * 获取用户或者机器人所在群列表。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含p2p单聊群
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 请注意区分本接口和[获取群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/get)的请求 URL;- 获取的群列表不包含P2P单聊
              */
             list: async (
                 payload?: {
@@ -53138,7 +53390,7 @@ export default abstract class Client {
              *
              * 将用户或机器人指定为群管理员。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以指定群管理员;- 对于普通群，最多指定 10 个管理员;- 对于超大群，最多指定 20 个管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 指定机器人类型的管理员请使用 ==app_id==
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以指定群管理员
              */
             addManagers: async (
                 payload?: {
@@ -53192,7 +53444,7 @@ export default abstract class Client {
              *
              * 删除指定的群管理员（用户或机器人）。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以删除群管理员;- 每次请求最多指定 50 个用户或者 5 个机器人;- 删除机器人类型的管理员请使用 ==app_id==
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 仅有群主可以删除群管理员
              */
             deleteManagers: async (
                 payload?: {
@@ -53306,7 +53558,7 @@ export default abstract class Client {
              *
              * 将用户或机器人移出群聊。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人; - 每次请求，最多移除50个用户或者5个机器人
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人;- 每次请求，最多移除50个用户或者5个机器人;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             delete: async (
                 payload?: {
@@ -53448,9 +53700,9 @@ export default abstract class Client {
              *
              * 获取群成员列表
              *
-             * 如果用户在群中，则返回该群的成员列表。
+             * 获取用户/机器人所在群的群成员列表。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中; - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size;- 获取内部群信息时，操作者须与群组在同一租户下;- 获取外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             get: async (
                 payload?: {
@@ -53507,6 +53759,8 @@ export default abstract class Client {
              * 判断用户或机器人是否在群里
              *
              * 根据使用的access_token判断对应的用户或者机器人是否在群里。
+             *
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 获取内部群信息时，操作者须与群组在同一租户下;- 获取外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             isInChat: async (
                 payload?: {
@@ -53549,7 +53803,7 @@ export default abstract class Client {
              *
              * 用户或机器人主动加入群聊。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 目前仅支持加入公开群
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 目前仅支持加入公开群;- 操作内部群时，操作者须与群组在同一租户下
              */
             meJoin: async (
                 payload?: {
@@ -53786,9 +54040,9 @@ export default abstract class Client {
              *
              * 添加会话标签页
              *
-             * 添加自定义会话标签页
+             * 添加自定义会话标签页。
              *
-             * 注意事项：;;- 只允许添加类型为doc和url的会话标签页;;- 创建时不需要设置tabID;;- 一个群内最多只允许添加20个自定义会话标签页;;- 会话标签页的名称不超过30个字符;;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 不需要填写请求体中的`tab_id`字段;- 只允许添加类型为`doc`和`url`的会话标签页;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             create: async (
                 payload?: {
@@ -53868,7 +54122,9 @@ export default abstract class Client {
              *
              * 删除会话标签页
              *
-             * 删除会话标签页
+             * 删除会话标签页。
+             *
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许删除类型为`doc`和`url`的会话标签页;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             deleteTabs: async (
                 payload?: {
@@ -53929,7 +54185,9 @@ export default abstract class Client {
              *
              * 拉取会话标签页
              *
-             * 拉取会话标签页
+             * 拉取会话标签页。
+             *
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             listTabs: async (
                 payload?: {
@@ -53989,9 +54247,9 @@ export default abstract class Client {
              *
              * 会话标签页排序
              *
-             * 会话标签页排序
+             * 会话标签页排序。
              *
-             * 注意事项：;;- 当前消息标签页固定为第一顺位，不参与排序，但是请求体中必须包含。;;- 请求体必须包含全部的TabID
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 消息标签页强制固定为第一顺位，不参与排序，但是请求体中必须包含该标签页的Tab ID;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             sortTabs: async (
                 payload?: {
@@ -54054,7 +54312,7 @@ export default abstract class Client {
              *
              * 更新会话标签页
              *
-             * 注意事项：;;- 只允许更新类型为doc和url的会话标签页;;- 会话标签页的名称不超过30个字符;;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许更新类型为`doc`和`url`的会话标签页;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
              */
             updateTabs: async (
                 payload?: {
@@ -54436,7 +54694,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 消息 - 消息卡片
+         * 消息
          */
         message: {
             /**
@@ -54751,7 +55009,7 @@ export default abstract class Client {
              *
              * - 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app)  ;- 获取消息时，机器人必须在群组中
              *
-             * 接口级别权限默认只能获取单聊（p2p）消息，如果需要获取群组（group）消息，应用还必须拥有 ***获取群组中所有消息*** 权限
+             * 接口级别权限默认只能获取单聊（p2p）消息，如果需要获取群组（group）消息，应用还必须拥有 **==获取群组中所有消息==** 权限
              */
             list: async (
                 payload?: {
@@ -54830,7 +55088,7 @@ export default abstract class Client {
              *
              * 更新应用已发送的消息卡片内容。
              *
-             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 若以user_access_token更新消息，该操作用户必须是卡片消息的发送者;- 对所有人更新[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)，需在卡片的config属性中，显式声明`"update_multi":true`。 更新特定人的卡片内容，必须在用户对卡片进行交互操作后触发调用，参考[「独享卡片」](https://open.feishu.cn/document/ukTMukTMukTM/uYjNwUjL2YDM14iN2ATN#49904b71)  ;- 当前仅支持更新未撤回的 **卡片消息**;- **不支持更新批量消息**;- 文本消息请求体最大不能超过150KB；卡片及富文本消息请求体最大不能超过30KB;- 仅支持修改14天内发送的消息;- 单条消息更新频控为**5QPS**
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 若以user_access_token更新消息，该操作用户必须是卡片消息的发送者;- 仅支持对所有人更新**未撤回**的[「共享卡片」](ukTMukTMukTM/uAjNwUjLwYDM14CM2ATN)消息，需在卡片的config属性中，显式声明 =="update_multi":true==。 ;- **不支持更新批量消息**;- 文本消息请求体最大不能超过150KB；卡片及富文本消息请求体最大不能超过30KB;- 仅支持修改14天内发送的消息;- 单条消息更新频控为**5QPS**
              */
             patch: async (
                 payload?: {
@@ -60065,7 +60323,7 @@ export default abstract class Client {
              *
              * 创建表格
              *
-             * 使用该接口可以在指定的目录下创建在线表格。
+             * 在指定目录下创建表格
              */
             create: async (
                 payload?: {
@@ -60898,7 +61156,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 行列
+         * 单元格
          */
         spreadsheetSheet: {
             /**
@@ -60908,7 +61166,7 @@ export default abstract class Client {
              *
              * 查找单元格
              *
-             * 按照指定的条件查找子表的某个范围内的数据符合条件的单元格位置。请求体中的 range 和 find 字段为必填。
+             * 在指定范围内查找符合查找条件的单元格。
              */
             find: async (
                 payload?: {
@@ -63916,6 +64174,54 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=export&apiName=resource_reservation_list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/export/resource_reservation_list document }
+             *
+             * 导出会议室预定数据
+             *
+             * 导出会议室预定数据，具体权限要求请参考「导出概述」
+             */
+            resourceReservationList: async (
+                payload?: {
+                    data: {
+                        room_level_id: string;
+                        need_topic?: boolean;
+                        start_time: string;
+                        end_time: string;
+                        room_ids?: Array<string>;
+                        is_exclude?: boolean;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { task_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/exports/resource_reservation_list`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 会议
@@ -65024,7 +65330,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 会议室预定范围
+         * reserve_config
          */
         reserveConfig: {
             /**

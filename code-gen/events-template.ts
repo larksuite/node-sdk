@@ -1899,7 +1899,7 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/deleted document }
      *
-     * 用户主动退群或被移出群聊
+     * 用户出群
      *
      * 用户主动退群或被移出群聊时推送事件。
      *
