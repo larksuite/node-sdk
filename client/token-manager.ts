@@ -76,7 +76,8 @@ export class TokenManager {
         await this.cache?.set(
             CTenantAccessToken,
             tenant_access_token,
-            new Date().getTime() + expire * 1000
+            // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
+            new Date().getTime() + expire * 1000 - 3 * 60 * 1000
         );
 
         return tenant_access_token;
@@ -136,7 +137,8 @@ export class TokenManager {
         await this.cache.set(
             `larkMarketAccessToken${tenantKey}`,
             tenant_access_token,
-            new Date().getTime() + expire * 1000
+            // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
+            new Date().getTime() + expire * 1000 - 3 * 60 * 1000
         );
 
         return tenant_access_token;
