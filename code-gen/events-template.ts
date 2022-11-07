@@ -875,6 +875,7 @@ export interface IHandles extends IOtherEventHandles {
                 member_count?: number;
                 status?: { is_deleted?: boolean };
                 leaders?: Array<{ leaderType: number; leaderID: string }>;
+                group_chat_employee_types?: Array<number>;
             }>;
             users?: Array<{
                 union_id?: string;
@@ -961,6 +962,7 @@ export interface IHandles extends IOtherEventHandles {
                 member_count?: number;
                 status?: { is_deleted?: boolean };
                 leaders?: Array<{ leaderType: number; leaderID: string }>;
+                group_chat_employee_types?: Array<number>;
             }>;
             users?: Array<{
                 union_id?: string;
@@ -1818,6 +1820,8 @@ export interface IHandles extends IOtherEventHandles {
         operator_id?: { union_id?: string; user_id?: string; open_id?: string };
         external?: boolean;
         operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-bot/events/added document }
@@ -1842,6 +1846,8 @@ export interface IHandles extends IOtherEventHandles {
         operator_id?: { union_id?: string; user_id?: string; open_id?: string };
         external?: boolean;
         operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-bot/events/deleted document }
@@ -1866,6 +1872,8 @@ export interface IHandles extends IOtherEventHandles {
         operator_id?: { union_id?: string; user_id?: string; open_id?: string };
         external?: boolean;
         operator_tenant_key?: string;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/added document }
@@ -1895,6 +1903,8 @@ export interface IHandles extends IOtherEventHandles {
             tenant_key?: string;
             user_id?: { union_id?: string; user_id?: string; open_id?: string };
         }>;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/deleted document }
@@ -1924,6 +1934,8 @@ export interface IHandles extends IOtherEventHandles {
             tenant_key?: string;
             user_id?: { union_id?: string; user_id?: string; open_id?: string };
         }>;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-member-user/events/withdrawn document }
@@ -1953,6 +1965,8 @@ export interface IHandles extends IOtherEventHandles {
             tenant_key?: string;
             user_id?: { union_id?: string; user_id?: string; open_id?: string };
         }>;
+        name?: string;
+        i18n_names?: { zh_cn?: string; en_us?: string; ja_jp?: string };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/updated document }
@@ -2117,6 +2131,32 @@ export interface IHandles extends IOtherEventHandles {
         action_time?: string;
     }) => Promise<any> | any;
     /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/recalled document }
+     *
+     * 消息撤回事件
+     *
+     * 消息被撤回后触发此事件。
+     */
+    "im.message.recalled_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        message_id?: string;
+        chat_id?: string;
+        recall_time?: string;
+        recall_type?:
+            | "message_owner"
+            | "group_owner"
+            | "group_manager"
+            | "enterprise_manager";
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive document }
      *
      * 接收消息
@@ -2162,14 +2202,8 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/created document }
-     *
-     * 会议室创建
-     *
-     * 会议室被创建将触发此事件。
-     *
-     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
-     */
+         
+         */
     "meeting_room.meeting_room.created_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -2184,14 +2218,8 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/deleted document }
-     *
-     * 会议室删除
-     *
-     * 会议室被删除将触发此事件。
-     *
-     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
-     */
+         
+         */
     "meeting_room.meeting_room.deleted_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -2206,14 +2234,8 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/status_changed document }
-     *
-     * 会议室状态信息变更
-     *
-     * 会议室状态信息变更将触发此事件。
-     *
-     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
-     */
+         
+         */
     "meeting_room.meeting_room.status_changed_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -2228,14 +2250,8 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/updated document }
-     *
-     * 会议室属性变更
-     *
-     * 会议室属性更新将触发此事件。
-     *
-     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
-     */
+         
+         */
     "meeting_room.meeting_room.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -2667,6 +2683,109 @@ export interface IHandles extends IOtherEventHandles {
             id?: { union_id?: string; user_id?: string; open_id?: string };
             user_role?: number;
             user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/created document }
+     *
+     * 创建会议室
+     *
+     * 当创建会议室时，会触发该事件
+     */
+    "vc.room.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: {
+            room_id?: string;
+            name?: string;
+            capacity?: number;
+            description?: string;
+            display_id?: string;
+            custom_room_id?: string;
+            room_level_id?: string;
+            path?: Array<string>;
+            room_status?: {
+                status: boolean;
+                schedule_status?: boolean;
+                disable_start_time?: string;
+                disable_end_time?: string;
+                disable_reason?: string;
+                contact_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                disable_notice?: boolean;
+                resume_notice?: boolean;
+            };
+        };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/deleted document }
+     *
+     * 删除会议室
+     *
+     * 当删除会议室时，会触发该事件
+     */
+    "vc.room.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: { room_id?: string };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/updated document }
+     *
+     * 更新会议室
+     *
+     * 当更新会议室时，会触发该事件
+     */
+    "vc.room.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room?: {
+            room_id?: string;
+            name?: string;
+            capacity?: number;
+            description?: string;
+            display_id?: string;
+            custom_room_id?: string;
+            room_level_id?: string;
+            path?: Array<string>;
+            room_status?: {
+                status: boolean;
+                schedule_status?: boolean;
+                disable_start_time?: string;
+                disable_end_time?: string;
+                disable_reason?: string;
+                contact_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                disable_notice?: boolean;
+                resume_notice?: boolean;
+            };
         };
     }) => Promise<any> | any;
 }

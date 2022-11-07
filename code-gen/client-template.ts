@@ -650,7 +650,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 管理后台-企业勋章
+     * 管理后台-数据报表
      */
     admin = {
         /**
@@ -3032,7 +3032,7 @@ export default abstract class Client {
      */
     approval = {
         /**
-         * 事件
+         * 原生审批定义
          */
         approval: {
             /**
@@ -7028,7 +7028,7 @@ export default abstract class Client {
              *
              * 由于部分企业使用的是自己的审批系统，而不是飞书审批系统，因此员工的请假、加班等数据无法流入到飞书考勤系统中，导致员工在请假时间段内依然收到打卡提醒，并且被记为缺卡。;;对于这些只使用飞书考勤系统，而未使用飞书审批系统的企业，可以通过考勤开放接口的形式，将三方审批结果数据回写到飞书考勤系统中。
              *
-             * 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)
+             * 目前支持写入加班、请假、出差和外出这四种审批结果，写入只会追加(insert)，不会覆盖(update)（开放接口导入的加班假期记录，在管理后台的假期加班里查不到，只能通过[获取审批通过数据](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_approval/query)来查询）
              */
             create: async (
                 payload?: {
@@ -9021,6 +9021,52 @@ export default abstract class Client {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=extract&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/extract document }
+             *
+             * 提取潜在的百科词条
+             *
+             * 提取文本中可能成为百科词条的词语，且不会过滤已经成为百科词条的词语。同时，会返回推荐的别名。
+             */
+            extract: async (
+                payload?: {
+                    data?: { text?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                entity_word: Array<{
+                                    name: string;
+                                    aliases?: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/baike/v1/entities/extract`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=baike&resource=entity&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/baike-v1/entity/get document }
@@ -10033,7 +10079,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 云文档-电子表格
+     * 云文档-多维表格
      */
     bitable = {
         /**
@@ -13297,6 +13343,30 @@ export default abstract class Client {
                                     view_id?: string;
                                     view_name?: string;
                                     view_type?: string;
+                                    property?: {
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreater"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                                condition_id?: string;
+                                                field_type?: string;
+                                            }>;
+                                            condition_omitted?: boolean;
+                                        };
+                                        hidden_fields?: Array<string>;
+                                    };
                                 };
                             };
                         }
@@ -13420,6 +13490,32 @@ export default abstract class Client {
                                                     view_id?: string;
                                                     view_name?: string;
                                                     view_type?: string;
+                                                    property?: {
+                                                        filter_info?: {
+                                                            conjunction:
+                                                                | "and"
+                                                                | "or";
+                                                            conditions: Array<{
+                                                                field_id: string;
+                                                                operator:
+                                                                    | "is"
+                                                                    | "isNot"
+                                                                    | "contains"
+                                                                    | "doesNotContain"
+                                                                    | "isEmpty"
+                                                                    | "isNotEmpty"
+                                                                    | "isGreater"
+                                                                    | "isGreater"
+                                                                    | "isLess"
+                                                                    | "isLessEqual";
+                                                                value?: string;
+                                                                condition_id?: string;
+                                                                field_type?: string;
+                                                            }>;
+                                                            condition_omitted?: boolean;
+                                                        };
+                                                        hidden_fields?: Array<string>;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -13475,6 +13571,30 @@ export default abstract class Client {
                                     view_id?: string;
                                     view_name?: string;
                                     view_type?: string;
+                                    property?: {
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreater"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                                condition_id?: string;
+                                                field_type?: string;
+                                            }>;
+                                            condition_omitted?: boolean;
+                                        };
+                                        hidden_fields?: Array<string>;
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -16934,6 +17054,7 @@ export default abstract class Client {
                                                         leaderType: number;
                                                         leaderID: string;
                                                     }>;
+                                                    group_chat_employee_types?: Array<number>;
                                                 }>;
                                             };
                                         },
@@ -17013,6 +17134,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 }>;
                             };
                         }
@@ -17061,6 +17183,7 @@ export default abstract class Client {
                             leaderType: number;
                             leaderID: string;
                         }>;
+                        group_chat_employee_types?: Array<number>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -17102,6 +17225,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 };
                             };
                         }
@@ -17214,6 +17338,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 };
                             };
                         }
@@ -17325,6 +17450,7 @@ export default abstract class Client {
                                                         leaderType: number;
                                                         leaderID: string;
                                                     }>;
+                                                    group_chat_employee_types?: Array<number>;
                                                 }>;
                                             };
                                         },
@@ -17348,13 +17474,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=contact&resource=department&apiName=list&version=v3 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/department/list document }
-             *
-             * 获取部门信息列表
-             *
-             * 该接口用于获取当前部门子部门列表。[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
-             *
-             * - 使用 user_access_token 时，返回该用户组织架构可见性范围（[登陆企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内的所有可见部门。当进行递归查询时，只筛查最多1000个部门的可见性。;;- 使用 ; tenant_access_token 则基于应用的通讯录权限范围进行权限校验与过滤。由于 ; parent_department_id 是非必填参数，填与不填存在<b>两种数据权限校验与返回</b>情况：;<br> <br>1、请求设置了 ; parent_department_id 为A（根部门0），会检验A是否在通讯录权限内，若在( parent_department_id=0 时会校验是否为全员权限），则返回部门下子部门列表（根据fetch_child决定是否递归），否则返回无部门通讯录权限错误码。;<br> <br>2、请求未带 ; parent_department_id 参数，如通讯录范围为全员权限，只返回根部门ID(部门ID为0)，否则返回根据通讯录范围配置的部门ID及子部门(根据 ; fetch_child 决定是否递归)。
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=contact&resource=department&version=v3 document }
              */
             list: async (
                 payload?: {
@@ -17403,6 +17523,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 }>;
                             };
                         }
@@ -17513,6 +17634,7 @@ export default abstract class Client {
                                                         leaderType: number;
                                                         leaderID: string;
                                                     }>;
+                                                    group_chat_employee_types?: Array<number>;
                                                 }>;
                                             };
                                         },
@@ -17590,6 +17712,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 }>;
                             };
                         }
@@ -17637,6 +17760,7 @@ export default abstract class Client {
                             leaderType: number;
                             leaderID: string;
                         }>;
+                        group_chat_employee_types?: Array<number>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -17678,6 +17802,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 };
                             };
                         }
@@ -17787,6 +17912,7 @@ export default abstract class Client {
                                                         leaderType: number;
                                                         leaderID: string;
                                                     }>;
+                                                    group_chat_employee_types?: Array<number>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more: boolean;
@@ -17865,6 +17991,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 }>;
                                 page_token?: string;
                                 has_more: boolean;
@@ -17953,6 +18080,7 @@ export default abstract class Client {
                             leaderType: number;
                             leaderID: string;
                         }>;
+                        group_chat_employee_types?: Array<number>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -17994,6 +18122,7 @@ export default abstract class Client {
                                         leaderType: number;
                                         leaderID: string;
                                     }>;
+                                    group_chat_employee_types?: Array<number>;
                                 };
                             };
                         }
@@ -20289,13 +20418,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=list&version=v3 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/list document }
-             *
-             * 获取用户列表
-             *
-             * 基于部门ID获取部门下直属用户列表。;[常见问题答疑](https://open.feishu.cn/document/ugTN1YjL4UTN24CO1UjN/uQzN1YjL0cTN24CN3UjN)。
-             *
-             * - 使用 user_access_token 情况下根据个人组织架构的通讯录可见范围进行权限过滤，返回个人组织架构通讯录范围（[登陆企业管理后台进行权限配置](https://www.feishu.cn/admin/security/permission/visibility)）内可见的用户数据。;-  tenant_access_token  基于应用通讯录范围进行权限鉴定。由于 department_id 是非必填参数，填与不填存在<b>两种数据权限校验与返回</b>情况：<br>1、请求设置了 department_id ;（根部门为0），会检验所带部门ID是否具有通讯录权限（如果带上 ; department_id=0 会校验是否有全员权限），有则返回部门下直属的成员列表, 否则提示无部门权限的错误码返回。<br>2、请求未带 ;  department_id 参数，则会返回权限范围内的独立用户（权限范围直接包含了某用户，则该用户视为权限范围内的独立用户）。
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=contact&resource=user&version=v3 document }
              */
             list: async (
                 payload?: {
@@ -43384,7 +43507,7 @@ export default abstract class Client {
              *
              * 创建导出任务
              *
-             * 创建导出任务，将云文档导出为文件
+             * 创建导出任务，将云文件导出为指定格式的本地文件。该接口为异步接口，需要通过轮询 [查询导出任务结果](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/get) 接口获取任务结果。
              */
             create: async (
                 payload?: {
@@ -43481,7 +43604,7 @@ export default abstract class Client {
              *
              * 查询导出任务结果
              *
-             * 根据创建导出任务的ticket查询导出任务的结果
+             * 根据[创建导出任务](/ssl::ttdoc//uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/create)的ticket查询导出任务的结果，前提条件需要先调用创建导出任务接口。;;通过该接口获取到下载文件的 token 后调用[下载导出文件接口](/ssl::ttdoc//uAjLw4CM/ukTMukTMukTM/reference/drive-v1/export_task/download)将文件进行下载
              */
             get: async (
                 payload?: {
@@ -43726,10 +43849,11 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         file_type: "doc" | "sheet" | "file" | "docx";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
-                        page_size?: number;
+                        page_size?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
                 },
@@ -43864,10 +43988,11 @@ export default abstract class Client {
                 payload?: {
                     params: {
                         file_type: "doc" | "sheet" | "file" | "docx";
-                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
-                        page_size?: number;
+                        page_size?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
                 },
@@ -44073,7 +44198,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 文件夹
+         * 下载
          */
         file: {
             /**
@@ -45114,7 +45239,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 分片上传
+         * 素材
          */
         media: {
             /**
@@ -50212,7 +50337,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/create_application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/create document }
              *
              * 创建投递
              *
@@ -50254,7 +50379,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/get document }
              *
              * 获取投递信息
              *
@@ -50350,7 +50475,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application-list document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/list document }
              *
              * 获取投递列表
              *
@@ -50405,7 +50530,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=offer&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/get-application-offer document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/offer document }
              *
              * 获取 Offer 信息
              *
@@ -50572,7 +50697,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=terminate&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQzM1YjL0MTN24CNzUjN/terminate-application document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/terminate document }
              *
              * 终止投递
              *
@@ -50611,7 +50736,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=transfer_onboard&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uczM1YjL3MTN24yNzUjN document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/transfer_onboard document }
              *
              * 操作候选人入职
              *
@@ -50688,17 +50813,13 @@ export default abstract class Client {
             },
         },
         /**
-         * 面试
+         * application.interview
          */
         applicationInterview: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application.interview&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application-interview/list document }
-             *
-             * 获取面试记录列表
-             *
-             * 根据投递 ID 获取面试记录列表
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=application.interview&version=v1 document }
              */
             list: async (
                 payload?: {
@@ -51111,7 +51232,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/job/get-job document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get document }
              *
              * 获取职位信息
              *
@@ -51345,7 +51466,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_process&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/jop-process/get-process document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_process/list document }
              *
              * 获取招聘流程信息
              *
@@ -51652,17 +51773,13 @@ export default abstract class Client {
             },
         },
         /**
-         * offer
+         * offer_schema
          */
         offerSchema: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_schema&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_schema/get document }
-             *
-             * 获取 Offer 申请表详细信息
-             *
-             * 根据 Offer 申请表 ID，获取 Offer 申请表的详细信息
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=offer_schema&version=v1 document }
              */
             get: async (
                 payload?: {
@@ -51933,7 +52050,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=get&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUzM1YjL1MTN24SNzUjN/get-talent document }
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/get document }
              *
              * 获取人才信息
              *
@@ -52850,7 +52967,7 @@ export default abstract class Client {
              *
              * 解散群组。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 如果使用tenant_access_token，需要机器人符合以下任一情况才可解散群：;    - 机器人是群主;    - 机器人是群的创建者且具备==更新应用所创建群的群信息==权限;- 如果使用user_access_token，需要对应的用户是群主才可解散群;- 解散外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 如果使用tenant_access_token，需要机器人符合以下任一情况才可解散群：;    - 机器人是群主;    - 机器人是群的创建者且具备==更新应用所创建群的群信息==权限;- 如果使用user_access_token，需要对应的用户是群主才可解散群
              */
             delete: async (
                 payload?: {
@@ -52886,7 +53003,7 @@ export default abstract class Client {
              *
              * 获取群名称、群描述、群头像、群主 ID 等群基本信息。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）;- 获取内部群信息时，操作者须与群组在同一租户下;- 获取外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群里（否则只会返回群名称、群头像等基本信息）;- 获取内部群信息时，操作者须与群组在同一租户下
              */
             get: async (
                 payload?: {
@@ -52960,7 +53077,7 @@ export default abstract class Client {
              *
              * 获取指定群的分享链接
              *
-             * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下;- 获取外部群分享链接时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下
              */
             link: async (
                 payload?: {
@@ -53326,7 +53443,7 @@ export default abstract class Client {
              *
              * 更新群头像、群名称、群描述、群配置、转让群主等。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 对于群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新所有信息;- 对于不满足上述权限条件的群成员或机器人：;    - 若未开启 ==仅群主和群管理员可编辑群信息== 配置，仅可更新群头像、群名称、群描述、群国际化名称信息;    - 若开启了 ==仅群主和群管理员可编辑群信息== 配置，任何群信息都不能修改;- 更新外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 对于群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新所有信息;- 对于不满足上述权限条件的群成员或机器人：;    - 若未开启 ==仅群主和群管理员可编辑群信息== 配置，仅可更新群头像、群名称、群描述、群国际化名称信息;    - 若开启了 ==仅群主和群管理员可编辑群信息== 配置，任何群信息都不能修改
              */
             update: async (
                 payload?: {
@@ -53349,6 +53466,7 @@ export default abstract class Client {
                         membership_approval?: string;
                         labels?: Array<string>;
                         toolkit_ids?: Array<string>;
+                        chat_type?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -53503,7 +53621,7 @@ export default abstract class Client {
              *
              * 将用户或机器人拉入群聊。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 如需拉用户进群，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability); - 机器人或授权用户必须在群组中;- 外部租户不能被加入到内部群中;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 如需拉用户进群，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability); - 机器人或授权用户必须在群组中;- 外部租户不能被加入到内部群中;- 操作内部群时，操作者须与群组在同一租户下; - 在开启 ==仅群主和群管理员可添加群成员== 的设置时，仅有群主/管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可以拉用户或者机器人进群; - 在未开启 ==仅群主和群管理员可添加群成员== 的设置时，所有群成员都可以拉用户或机器人进群
              */
             create: async (
                 payload?: {
@@ -53558,7 +53676,7 @@ export default abstract class Client {
              *
              * 将用户或机器人移出群聊。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人;- 每次请求，最多移除50个用户或者5个机器人;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 用户或机器人在任何条件下均可移除自己出群（即主动退群）;- 仅有群主/管理员 或 创建群组并且具备 ==更新应用所创建群的群信息== 权限的机器人，可以移除其他用户或者机器人;- 每次请求，最多移除50个用户或者5个机器人;- 操作内部群时，操作者须与群组在同一租户下
              */
             delete: async (
                 payload?: {
@@ -53702,7 +53820,7 @@ export default abstract class Client {
              *
              * 获取用户/机器人所在群的群成员列表。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中; - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size;- 获取内部群信息时，操作者须与群组在同一租户下;- 获取外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中; - 该接口不会返回群内的机器人成员; - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size; - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size;- 获取内部群信息时，操作者须与群组在同一租户下
              */
             get: async (
                 payload?: {
@@ -53760,7 +53878,7 @@ export default abstract class Client {
              *
              * 根据使用的access_token判断对应的用户或者机器人是否在群里。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 获取内部群信息时，操作者须与群组在同一租户下;- 获取外部群信息时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 获取内部群信息时，操作者须与群组在同一租户下
              */
             isInChat: async (
                 payload?: {
@@ -54042,13 +54160,12 @@ export default abstract class Client {
              *
              * 添加自定义会话标签页。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 不需要填写请求体中的`tab_id`字段;- 只允许添加类型为`doc`和`url`的会话标签页;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许添加类型为`doc`和`url`的会话标签页;- 添加doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- tab_config字段当前只对`url`类型的会话标签页生效;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以添加会话标签页;- 操作内部群时，操作者须与群组在同一租户下
              */
             create: async (
                 payload?: {
                     data: {
                         chat_tabs: Array<{
-                            tab_id?: string;
                             tab_name?: string;
                             tab_type:
                                 | "message"
@@ -54063,6 +54180,10 @@ export default abstract class Client {
                                 url?: string;
                                 doc?: string;
                                 meeting_minute?: string;
+                            };
+                            tab_config?: {
+                                icon_key?: string;
+                                is_built_in?: boolean;
                             };
                         }>;
                     };
@@ -54097,6 +54218,10 @@ export default abstract class Client {
                                         doc?: string;
                                         meeting_minute?: string;
                                     };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -54124,7 +54249,7 @@ export default abstract class Client {
              *
              * 删除会话标签页。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许删除类型为`doc`和`url`的会话标签页;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许删除类型为`doc`和`url`的会话标签页;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以删除会话标签页;- 操作内部群时，操作者须与群组在同一租户下
              */
             deleteTabs: async (
                 payload?: {
@@ -54160,6 +54285,10 @@ export default abstract class Client {
                                         doc?: string;
                                         meeting_minute?: string;
                                     };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -54187,7 +54316,7 @@ export default abstract class Client {
              *
              * 拉取会话标签页。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 操作内部群时，操作者须与群组在同一租户下
              */
             listTabs: async (
                 payload?: {
@@ -54222,6 +54351,10 @@ export default abstract class Client {
                                         doc?: string;
                                         meeting_minute?: string;
                                     };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -54249,7 +54382,7 @@ export default abstract class Client {
              *
              * 会话标签页排序。
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 消息标签页强制固定为第一顺位，不参与排序，但是请求体中必须包含该标签页的Tab ID;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 消息标签页强制固定为第一顺位，不参与排序，但是请求体中必须包含该标签页的Tab ID;- 操作内部群时，操作者须与群组在同一租户下
              */
             sortTabs: async (
                 payload?: {
@@ -54285,6 +54418,10 @@ export default abstract class Client {
                                         doc?: string;
                                         meeting_minute?: string;
                                     };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -54312,7 +54449,7 @@ export default abstract class Client {
              *
              * 更新会话标签页
              *
-             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许更新类型为`doc`和`url`的会话标签页;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 操作内部群时，操作者须与群组在同一租户下;- 操作外部群时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：;- 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app);- 机器人或授权用户必须在群里;- 只允许更新类型为`doc`和`url`的会话标签页;- 更新doc类型时，操作者（access token对应的身份）需要拥有对应文档的权限;- 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以更新会话标签页;- 操作内部群时，操作者须与群组在同一租户下
              */
             updateTabs: async (
                 payload?: {
@@ -54333,6 +54470,10 @@ export default abstract class Client {
                                 url?: string;
                                 doc?: string;
                                 meeting_minute?: string;
+                            };
+                            tab_config?: {
+                                icon_key?: string;
+                                is_built_in?: boolean;
                             };
                         }>;
                     };
@@ -54367,6 +54508,10 @@ export default abstract class Client {
                                         doc?: string;
                                         meeting_minute?: string;
                                     };
+                                    tab_config?: {
+                                        icon_key?: string;
+                                        is_built_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -54399,7 +54544,7 @@ export default abstract class Client {
              *
              * 撤销会话中的置顶。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 撤销内部群置顶时，操作者须与群组在同一租户下;- 撤销外部群置顶时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 撤销内部群置顶时，操作者须与群组在同一租户下
              */
             deleteTopNotice: async (
                 payload?: {
@@ -54435,7 +54580,7 @@ export default abstract class Client {
              *
              * 更新会话中的群置顶信息，可以将群中的某一条消息，或者群公告置顶显示。
              *
-             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 更新内部群置顶时，操作者须与群组在同一租户下;- 更新外部群置顶时，请先在[开发者后台](https://open.feishu.cn/app)—权限管理—权限配置页面申请 ==在外部群调用群聊的 API 及事件== 权限
+             * 注意事项：; - 应用需要开启[机器人能力](https://open.feishu.cn/document/home/develop-a-bot-in-5-minutes/create-an-app); - 机器人或授权用户必须在群组中;- 更新内部群置顶时，操作者须与群组在同一租户下
              */
             putTopNotice: async (
                 payload?: {
@@ -54694,7 +54839,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 消息
+         * 消息加急
          */
         message: {
             /**
@@ -55001,7 +55146,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=list&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uADO3YjLwgzN24CM4cjN document }
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/list document }
              *
              * 获取会话历史消息
              *
@@ -61156,7 +61301,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 单元格
+         * 工作表
          */
         spreadsheetSheet: {
             /**
@@ -61227,7 +61372,7 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
-                    path?: { spreadsheet_token?: string; sheet_id?: string };
+                    path: { spreadsheet_token: string; sheet_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -61949,7 +62094,7 @@ export default abstract class Client {
              *
              * 完成任务
              *
-             * 该接口用于将任务状态修改为”已完成“
+             * 该接口用于将任务状态修改为“已完成”。;完成任务是指整个任务全部完成，而不支持执行者分别完成任务，执行成功后，任务对所有关联用户都变为完成状态。
              */
             complete: async (
                 payload?: {
@@ -61983,7 +62128,7 @@ export default abstract class Client {
              *
              * 创建任务
              *
-             * 该接口可以创建一个任务（基本信息），如果需要绑定协作者等需要调用别的资源管理接口。其中查询字段 user_id_type 是用于控制返回体中 creator_id 的类型，不传时默认返回 open_id。当使用tenant_access_token 调用接口时，如果user_id_type为user_id，则不会返回creator_id。
+             * 该接口可以创建一个任务，支持填写任务的基本信息，包括任务的标题，描述及协作者等。;在此基础上，创建任务时可以设置截止时间和重复规则，将任务设置为定期执行的重复任务。通过添加协作者，则可以让其他用户协同完成该任务。;此外，接口也提供了一些支持自定义内容的字段，调用方可以实现定制化效果，如完成任务后跳转到指定结束界面。
              */
             create: async (
                 payload?: {
@@ -62042,7 +62187,6 @@ export default abstract class Client {
                                         platform_i18n_name: string;
                                         href?: { url?: string; title?: string };
                                     };
-                                    can_edit?: boolean;
                                     custom?: string;
                                     source?: number;
                                     followers?: Array<{
@@ -62480,7 +62624,6 @@ export default abstract class Client {
                                         platform_i18n_name: string;
                                         href?: { url?: string; title?: string };
                                     };
-                                    can_edit?: boolean;
                                     custom?: string;
                                     source?: number;
                                     followers?: Array<{
@@ -62560,7 +62703,7 @@ export default abstract class Client {
              *
              * 新增执行者
              *
-             * 该接口用于新增任务执行者，一次性可以添加多个执行者。新增的执行者必须是用户的ID。
+             * 该接口用于新增任务执行者，一次性可以添加多个执行者。;只有任务的创建者和执行者才能添加执行者，关注人无权限添加。
              */
             create: async (
                 payload?: {
@@ -62802,9 +62945,11 @@ export default abstract class Client {
                     data?: {
                         content?: string;
                         parent_id?: string;
-                        id?: string;
                         create_milli_time?: string;
                         rich_content?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { task_id: string };
                 },
@@ -62826,6 +62971,7 @@ export default abstract class Client {
                                     id?: string;
                                     create_milli_time?: string;
                                     rich_content?: string;
+                                    creator_id?: string;
                                 };
                             };
                         }
@@ -62889,6 +63035,9 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { task_id: string; comment_id: string };
                 },
                 options?: IRequestOptions
@@ -62909,6 +63058,7 @@ export default abstract class Client {
                                     id?: string;
                                     create_milli_time?: string;
                                     rich_content?: string;
+                                    creator_id?: string;
                                 };
                             };
                         }
@@ -62933,6 +63083,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         list_direction?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -62998,6 +63149,7 @@ export default abstract class Client {
                                                     id?: string;
                                                     create_milli_time?: string;
                                                     rich_content?: string;
+                                                    creator_id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -63035,6 +63187,7 @@ export default abstract class Client {
                         page_size?: number;
                         page_token?: string;
                         list_direction?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { task_id?: string };
                 },
@@ -63056,6 +63209,7 @@ export default abstract class Client {
                                     id?: string;
                                     create_milli_time?: string;
                                     rich_content?: string;
+                                    creator_id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -63088,6 +63242,9 @@ export default abstract class Client {
             update: async (
                 payload?: {
                     data?: { content?: string; rich_content?: string };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { task_id: string; comment_id: string };
                 },
                 options?: IRequestOptions
@@ -63108,6 +63265,7 @@ export default abstract class Client {
                                     id?: string;
                                     create_milli_time?: string;
                                     rich_content?: string;
+                                    creator_id?: string;
                                 };
                             };
                         }
@@ -65461,19 +65619,566 @@ export default abstract class Client {
             },
         },
         /**
-         * 会议室配置
+         * 会议室
+         */
+        room: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/create document }
+             *
+             * 创建会议室
+             *
+             * 该接口用于创建会议室
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        capacity: number;
+                        description?: string;
+                        custom_room_id?: string;
+                        room_level_id: string;
+                        room_status?: {
+                            status: boolean;
+                            schedule_status?: boolean;
+                            disable_start_time?: string;
+                            disable_end_time?: string;
+                            disable_reason?: string;
+                            contact_ids?: Array<string>;
+                            disable_notice?: boolean;
+                            resume_notice?: boolean;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                room?: {
+                                    room_id?: string;
+                                    name?: string;
+                                    capacity?: number;
+                                    description?: string;
+                                    display_id?: string;
+                                    custom_room_id?: string;
+                                    room_level_id?: string;
+                                    path?: Array<string>;
+                                    room_status?: {
+                                        status: boolean;
+                                        schedule_status?: boolean;
+                                        disable_start_time?: string;
+                                        disable_end_time?: string;
+                                        disable_reason?: string;
+                                        contact_ids?: Array<string>;
+                                        disable_notice?: boolean;
+                                        resume_notice?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/delete document }
+             *
+             * 删除会议室
+             *
+             * 该接口可以用来删除某个会议室
+             */
+            delete: async (
+                payload?: {
+                    path: { room_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms/:room_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/get document }
+             *
+             * 查询会议室详情
+             *
+             * 该接口可以使用会议室ID查询会议室详情
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { room_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                room?: {
+                                    room_id?: string;
+                                    name?: string;
+                                    capacity?: number;
+                                    description?: string;
+                                    display_id?: string;
+                                    custom_room_id?: string;
+                                    room_level_id?: string;
+                                    path?: Array<string>;
+                                    room_status?: {
+                                        status: boolean;
+                                        schedule_status?: boolean;
+                                        disable_start_time?: string;
+                                        disable_end_time?: string;
+                                        disable_reason?: string;
+                                        contact_ids?: Array<string>;
+                                        disable_notice?: boolean;
+                                        resume_notice?: boolean;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms/:room_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        room_level_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/rooms`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                rooms?: Array<{
+                                                    room_id?: string;
+                                                    name?: string;
+                                                    capacity?: number;
+                                                    description?: string;
+                                                    display_id?: string;
+                                                    custom_room_id?: string;
+                                                    room_level_id?: string;
+                                                    path?: Array<string>;
+                                                    room_status?: {
+                                                        status: boolean;
+                                                        schedule_status?: boolean;
+                                                        disable_start_time?: string;
+                                                        disable_end_time?: string;
+                                                        disable_reason?: string;
+                                                        contact_ids?: Array<string>;
+                                                        disable_notice?: boolean;
+                                                        resume_notice?: boolean;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/list document }
+             *
+             * 查询会议室列表
+             *
+             * 该接口可以用来查询某个会议室层级下会议室列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        room_level_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rooms?: Array<{
+                                    room_id?: string;
+                                    name?: string;
+                                    capacity?: number;
+                                    description?: string;
+                                    display_id?: string;
+                                    custom_room_id?: string;
+                                    room_level_id?: string;
+                                    path?: Array<string>;
+                                    room_status?: {
+                                        status: boolean;
+                                        schedule_status?: boolean;
+                                        disable_start_time?: string;
+                                        disable_end_time?: string;
+                                        disable_reason?: string;
+                                        contact_ids?: Array<string>;
+                                        disable_notice?: boolean;
+                                        resume_notice?: boolean;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=mget&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/mget document }
+             *
+             * 批量查询会议室详情
+             *
+             * 该接口可以使用会议室ID批量查询会议室详情
+             */
+            mget: async (
+                payload?: {
+                    data: { room_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    room_id?: string;
+                                    name?: string;
+                                    capacity?: number;
+                                    description?: string;
+                                    display_id?: string;
+                                    custom_room_id?: string;
+                                    room_level_id?: string;
+                                    path?: Array<string>;
+                                    room_status?: {
+                                        status: boolean;
+                                        schedule_status?: boolean;
+                                        disable_start_time?: string;
+                                        disable_end_time?: string;
+                                        disable_reason?: string;
+                                        contact_ids?: Array<string>;
+                                        disable_notice?: boolean;
+                                        resume_notice?: boolean;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms/mget`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/patch document }
+             *
+             * 更新会议室
+             *
+             * 该接口可以用来更新某个会议室的信息
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        name?: string;
+                        capacity?: number;
+                        description?: string;
+                        custom_room_id?: string;
+                        room_level_id?: string;
+                        room_status?: {
+                            status: boolean;
+                            schedule_status?: boolean;
+                            disable_start_time?: string;
+                            disable_end_time?: string;
+                            disable_reason?: string;
+                            contact_ids?: Array<string>;
+                            disable_notice?: boolean;
+                            resume_notice?: boolean;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { room_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms/:room_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/search document }
+             *
+             * 搜索会议室
+             *
+             * 该接口可以用来搜索会议室，支持使用关键词进行搜索，也支持使用自定义会议室ID进行查询
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        custom_room_ids?: Array<string>;
+                        keyword?: string;
+                        room_level_id?: string;
+                        search_level_name?: boolean;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rooms?: Array<{
+                                    room_id?: string;
+                                    name?: string;
+                                    capacity?: number;
+                                    description?: string;
+                                    display_id?: string;
+                                    custom_room_id?: string;
+                                    room_level_id?: string;
+                                    path?: Array<string>;
+                                    room_status?: {
+                                        status: boolean;
+                                        schedule_status?: boolean;
+                                        disable_start_time?: string;
+                                        disable_end_time?: string;
+                                        disable_reason?: string;
+                                        contact_ids?: Array<string>;
+                                        disable_notice?: boolean;
+                                        resume_notice?: boolean;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/rooms/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * room_config
          */
         roomConfig: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=query&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_config/query document }
-             *
-             * 查询会议室配置
-             *
-             * 查询一个范围内的会议室配置。
-             *
-             * 根据查询范围传入对应的参数
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=vc&resource=room_config&version=v1 document }
              */
             query: async (
                 payload?: {
@@ -65565,13 +66270,7 @@ export default abstract class Client {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_config&apiName=set&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_config/set document }
-             *
-             * 设置会议室配置
-             *
-             * 设置一个范围内的会议室配置。
-             *
-             * 根据设置范围传入对应的参数
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set&project=vc&resource=room_config&version=v1 document }
              */
             set: async (
                 payload?: {
@@ -65646,6 +66345,671 @@ export default abstract class Client {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 会议室层级
+         */
+        roomLevel: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/create document }
+             *
+             * 创建会议室层级
+             *
+             * 该接口用于创建会议室层级
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        parent_id: string;
+                        custom_group_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                room_level?: {
+                                    room_level_id?: string;
+                                    name?: string;
+                                    parent_id?: string;
+                                    path?: Array<string>;
+                                    has_child?: boolean;
+                                    custom_group_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=del&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/del document }
+             *
+             * 删除会议室层级
+             *
+             * 该接口可以用来删除某个会议室层级
+             */
+            del: async (
+                payload?: {
+                    data: { room_level_id: string; delete_child?: boolean };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels/del`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/get document }
+             *
+             * 查询会议室层级详情
+             *
+             * 该接口可以使用会议室层级ID查询会议室层级详情
+             */
+            get: async (
+                payload?: {
+                    path: { room_level_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                room_level?: {
+                                    room_level_id?: string;
+                                    name?: string;
+                                    parent_id?: string;
+                                    path?: Array<string>;
+                                    has_child?: boolean;
+                                    custom_group_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels/:room_level_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        room_level_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/room_levels`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    room_level_id?: string;
+                                                    name?: string;
+                                                    parent_id?: string;
+                                                    path?: Array<string>;
+                                                    has_child?: boolean;
+                                                    custom_group_id?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/list document }
+             *
+             * 查询会议室层级列表
+             *
+             * 该接口用来查询某个会议室层级下的子层级列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        room_level_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    room_level_id?: string;
+                                    name?: string;
+                                    parent_id?: string;
+                                    path?: Array<string>;
+                                    has_child?: boolean;
+                                    custom_group_id?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=mget&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/mget document }
+             *
+             * 批量查询会议室层级详情
+             *
+             * 该接口可以使用会议室层级ID批量查询会议室层级详情
+             */
+            mget: async (
+                payload?: {
+                    data: { level_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    room_level_id?: string;
+                                    name?: string;
+                                    parent_id?: string;
+                                    path?: Array<string>;
+                                    has_child?: boolean;
+                                    custom_group_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels/mget`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/patch document }
+             *
+             * 更新会议室层级
+             *
+             * 该接口可以用来更新某个会议室层级的信息
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        parent_id: string;
+                        custom_group_id?: string;
+                    };
+                    path: { room_level_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels/:room_level_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=room_level&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room_level/search document }
+             *
+             * 搜索会议室层级
+             *
+             * 该接口可以用来搜索会议室层级，支持使用自定义会议室层级ID进行查询
+             */
+            search: async (
+                payload?: {
+                    params: { custom_level_ids: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { level_ids?: Array<string> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/room_levels/search`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 会议室配置
+         */
+        scopeConfig: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=scope_config&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/scope_config/create document }
+             *
+             * 设置会议室配置
+             *
+             * 该接口可以用来设置某个会议层级范围下或者某个会议室的配置
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        scope_type: number;
+                        scope_id: string;
+                        scope_config?: {
+                            room_background?: string;
+                            display_background?: string;
+                            digital_signage?: {
+                                enable?: boolean;
+                                mute?: boolean;
+                                start_display?: number;
+                                stop_display?: number;
+                                materials?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    material_type?: number;
+                                    url?: string;
+                                    duration?: number;
+                                    cover?: string;
+                                    md5?: string;
+                                    vid?: string;
+                                    size?: string;
+                                }>;
+                            };
+                            room_box_digital_signage?: {
+                                enable?: boolean;
+                                mute?: boolean;
+                                start_display?: number;
+                                stop_display?: number;
+                                materials?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    material_type?: number;
+                                    url?: string;
+                                    duration?: number;
+                                    cover?: string;
+                                    md5?: string;
+                                    vid?: string;
+                                    size?: string;
+                                }>;
+                            };
+                            room_status?: {
+                                status: boolean;
+                                schedule_status?: boolean;
+                                disable_start_time?: string;
+                                disable_end_time?: string;
+                                disable_reason?: string;
+                                contact_ids?: Array<string>;
+                                disable_notice?: boolean;
+                                resume_notice?: boolean;
+                            };
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/scope_config`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=scope_config&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/scope_config/get document }
+             *
+             * 查询会议室配置
+             *
+             * 该接口可以用来查询某个会议层级范围下或者某个会议室的配置
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        scope_type: number;
+                        scope_id: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                current_config?: {
+                                    scope_type: number;
+                                    scope_id: string;
+                                    scope_config?: {
+                                        room_background?: string;
+                                        display_background?: string;
+                                        digital_signage?: {
+                                            enable?: boolean;
+                                            mute?: boolean;
+                                            start_display?: number;
+                                            stop_display?: number;
+                                            materials?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                material_type?: number;
+                                                url?: string;
+                                                duration?: number;
+                                                cover?: string;
+                                                md5?: string;
+                                                vid?: string;
+                                                size?: string;
+                                            }>;
+                                        };
+                                        room_box_digital_signage?: {
+                                            enable?: boolean;
+                                            mute?: boolean;
+                                            start_display?: number;
+                                            stop_display?: number;
+                                            materials?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                material_type?: number;
+                                                url?: string;
+                                                duration?: number;
+                                                cover?: string;
+                                                md5?: string;
+                                                vid?: string;
+                                                size?: string;
+                                            }>;
+                                        };
+                                        room_status?: {
+                                            status: boolean;
+                                            schedule_status?: boolean;
+                                            disable_start_time?: string;
+                                            disable_end_time?: string;
+                                            disable_reason?: string;
+                                            contact_ids?: Array<string>;
+                                            disable_notice?: boolean;
+                                            resume_notice?: boolean;
+                                        };
+                                    };
+                                };
+                                origin_configs?: Array<{
+                                    scope_type: number;
+                                    scope_id: string;
+                                    scope_config?: {
+                                        room_background?: string;
+                                        display_background?: string;
+                                        digital_signage?: {
+                                            enable?: boolean;
+                                            mute?: boolean;
+                                            start_display?: number;
+                                            stop_display?: number;
+                                            materials?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                material_type?: number;
+                                                url?: string;
+                                                duration?: number;
+                                                cover?: string;
+                                                md5?: string;
+                                                vid?: string;
+                                                size?: string;
+                                            }>;
+                                        };
+                                        room_box_digital_signage?: {
+                                            enable?: boolean;
+                                            mute?: boolean;
+                                            start_display?: number;
+                                            stop_display?: number;
+                                            materials?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                material_type?: number;
+                                                url?: string;
+                                                duration?: number;
+                                                cover?: string;
+                                                md5?: string;
+                                                vid?: string;
+                                                size?: string;
+                                            }>;
+                                        };
+                                        room_status?: {
+                                            status: boolean;
+                                            schedule_status?: boolean;
+                                            disable_start_time?: string;
+                                            disable_end_time?: string;
+                                            disable_reason?: string;
+                                            contact_ids?: Array<string>;
+                                            disable_notice?: boolean;
+                                            resume_notice?: boolean;
+                                        };
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/scope_config`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -65772,11 +67136,11 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space/get_node document }
              *
-             * 获取节点信息
+             * 获取知识空间节点信息
              *
-             * 获取节点信息
+             * 获取知识空间节点信息
              *
-             * 知识库权限要求：;- 节点阅读权限
+             * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 节点阅读权限
              */
             getNode: async (
                 payload?: {
@@ -65991,9 +67355,9 @@ export default abstract class Client {
              *
              * 添加知识空间成员
              *
-             * 添加知识空间成员（管理员）。;;- 公开知识空间（visibility为public）对租户所有用户可见，因此不支持再添加成员，但可以添加管理员。;;  相关错误：131101 public wiki space can't create member.;- 个人知识空间 （type为person）为个人管理的知识空间，不支持添加其他管理员（包括应用/机器人）。但可以添加成员。;;  相关错误：131101 person wiki space can't create admin.
+             * 添加知识空间成员或管理员。
              *
-             * 知识库权限要求;- 为知识空间管理员
+             * 知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再添加成员，但可以添加管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持添加其他管理员（包括应用/机器人）。但可以添加成员。;;;知识空间权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 为知识空间管理员
              */
             create: async (
                 payload?: {
@@ -66046,9 +67410,9 @@ export default abstract class Client {
              *
              * 删除知识空间成员
              *
-             * 此接口用于删除知识空间成员。;;- 公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;;- 个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。
+             * 此接口用于删除知识空间成员或管理员。
              *
-             * 知识库权限要求;- 为知识空间管理员
+             * 知识空间具有[类型](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)和[可见性](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)的概念。不同的类型或可见性可以对本操作做出限制：;- 可见性限制：公开知识空间（visibility为public）对租户所有用户可见，因此不支持再删除成员，但可以删除管理员。;- 类型限制：个人知识空间 （type为person）为个人管理的知识空间，不支持删除管理员。但可以删除成员。;;;知识空间权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 为知识空间管理员
              */
             delete: async (
                 payload?: {
@@ -66099,9 +67463,9 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/copy document }
              *
-             * 创建节点副本
+             * 创建知识空间节点副本
              *
-             * 此接口用于创建节点副本到指定地点。
+             * 此接口用于在知识空间创建节点副本到指定位置。
              */
             copy: async (
                 payload?: {
@@ -66169,11 +67533,11 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/create document }
              *
-             * 创建节点
+             * 创建知识空间节点
              *
-             * 此接口用于在知识库里创建节点。
+             * 此接口用于在知识节点里创建[节点](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-overview)到指定位置。
              *
-             * 知识库权限要求：;- **父节点**容器编辑权限
+             * 知识空间权限要求，当前使用的 access token 所代表的应用或用户拥有：;- **父节点**容器编辑权限
              */
             create: async (
                 payload?: {
@@ -66360,11 +67724,11 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/list document }
              *
-             * 获取子节点列表
+             * 获取知识空间子节点列表
              *
              * 此接口用于分页获取Wiki节点的子节点列表。;;此接口为分页接口。由于权限过滤，可能返回列表为空，但分页标记（has_more）为true，可以继续分页请求。
              *
-             * 知识库权限要求：;- 父节点阅读权限
+             * 知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 父节点阅读权限
              */
             list: async (
                 payload?: {
@@ -66505,13 +67869,13 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move_docs_to_wiki document }
              *
-             * 添加已有云文档至知识库
+             * 移动云空间文档至知识空间
              *
-             * 该接口允许添加已有云文档至知识库，并挂载在指定父页面下
+             * 该接口允许移动云空间文档至知识空间，并挂载在指定位置
              *
-             * 仅支持文档所有者发起请求;;此接口为异步接口。若移动已完成（或节点已在Wiki中），则直接返回结果（Wiki token）。若尚未完成，则返回task id。请使用[获取任务结果](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get)接口进行查询。;;知识库权限要求：;- 文档可管理权限;- 原文件夹编辑权限;- 目标父节点容器编辑权限
+             * 此接口为异步接口。若移动已完成（或文档已在Wiki中），则直接返回结果（Wiki token）。若尚未完成，则返回task id。请使用[获取任务结果](https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/task/get)接口进行查询。;;知识库权限要求，当前使用的 access token 所代表的应用或用户拥有：;- 文档可管理权限;- 原文件夹编辑权限;- 目标父节点容器编辑权限
              *
-             * ### 移动操作 ###;移动后，文档将从“我的空间”或“共享空间”转移至“知识库”，并将从以下功能入口消失：;- 云空间主页：最近访问、快速访问;- 我的空间;- 共享空间;- 收藏;;### 权限变更 ###;移动后，文档会向所有可查看“页面树”的用户显示，默认继承父页面的权限设置。;</md-alert
+             * ### 移动操作 ###;移动后，文档将从“我的空间”或“共享空间”转移至“知识库”后，无法从下列入口查看到文档：;- 云空间主页：快速访问;- 我的空间;- 共享空间;;### 权限变更 ###;移动后，文档会向所有可查看“页面树”的用户显示，默认继承父页面的权限设置。;</md-alert
              */
             moveDocsToWiki: async (
                 payload?: {
@@ -66671,7 +68035,7 @@ export default abstract class Client {
              *
              * 该方法用于获取wiki异步任务的结果
              *
-             * 知识库权限要求：;- 为任务创建者（用户或应用/机器人）
+             * 知识库权限要求，当前 access token 所代表的用户或应用（机器人）：;- 为任务创建者
              */
             get: async (
                 payload?: {
