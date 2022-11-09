@@ -44,10 +44,12 @@ export default class RequestHandle {
 
         // v1和v2版事件的区别：https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM
         if ('schema' in targetData) {
+            const { header, event, ...rest } = targetData;
             return {
                 [CEventType]: get(targetData, 'header.event_type'),
-                ...get(targetData, 'header', {}),
-                ...get(targetData, 'event', {}),
+                ...rest,
+                ...header,
+                ...event,
             };
         }
         const { event, ...rest } = targetData;
