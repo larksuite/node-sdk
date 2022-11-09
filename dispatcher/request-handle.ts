@@ -31,15 +31,20 @@ export default class RequestHandle {
 
     parse(data: any) {
         const targetData = (() => {
-            if ('encrypt' in data) {
+            const { encrypt, ...rest } = data || {};
+            if (encrypt) {
                 try {
-                    return JSON.parse(this.aesCipher?.decrypt(data.encrypt)!);
+                    return {
+                        ...JSON.parse(this.aesCipher?.decrypt(encrypt)!),
+                        ...rest,
+                    };
                 } catch (e) {
                     this.logger.error('parse encrypt data failed');
-                    return '';
+                    return {};
                 }
             }
-            return data;
+
+            return rest;
         })();
 
         // v1和v2版事件的区别：https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM
