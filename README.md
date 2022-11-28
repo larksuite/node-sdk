@@ -61,7 +61,7 @@ const res = await client.im.message.create({
     },
     data: {
         receive_id: 'receive_id',
-        content: 'hello world',
+        content: JSON.stringify({text: 'hello world'}),
         msg_type: 'text',
   },
 });
@@ -99,7 +99,7 @@ client.im.message.create({
     },
     data: {
         receive_id: 'chat_id',
-        content: 'hello world',
+        content: JSON.stringify({text: 'hello world'}),
         msg_type: 'text'
     },
 }, lark.withTenantKey('tenant key'));
@@ -194,7 +194,7 @@ await client.im.message.create({
     },
     data: {
         receive_id: 'receive_id',
-        content: 'hello world',
+        content: JSON.stringify({text: 'hello world'}),
         msg_type: 'text',
     },
 }, {
@@ -220,7 +220,7 @@ await client.im.message.create({
     },
     data: {
         receive_id: 'receive_id',
-        content: 'hello world',
+        content: JSON.stringify({text: 'hello world'}),
         msg_type: 'text',
     },
 }, lark.withTenantToken('tenant token'));
@@ -231,7 +231,7 @@ await client.im.message.create({
     },
     data: {
         receive_id: 'receive_id',
-        content: 'hello world',
+        content: JSON.stringify({text: 'hello world'}),
         msg_type: 'text',
     },
 }, lark.withAll([
@@ -265,7 +265,7 @@ const eventDispatcher = new lark.EventDispatcher({
             },
             data: {
                 receive_id: chatId,
-                content: 'hello world',
+                content: JSON.stringify({text: 'hello world'}),
                 msg_type: 'text'
             },
         });
@@ -312,7 +312,7 @@ const eventDispatcher = new lark.EventDispatcher({
             },
             data: {
                 receive_id: chatId,
-                content: 'hello world',
+                content: JSON.stringify({text: 'hello world'}),
                 msg_type: 'text'
             },
         });
@@ -345,7 +345,7 @@ const eventDispatcher = new lark.EventDispatcher({
             },
             data: {
                 receive_id: open_chat_id,
-                content: 'hello world',
+                content: JSON.stringify({text: 'hello world'}),
                 msg_type: 'text'
             },
         });
@@ -381,7 +381,7 @@ onst eventDispatcher = new lark.EventDispatcher({
             },
             data: {
                 receive_id: open_chat_id,
-                content: 'hello world',
+                content: JSON.stringify({text: 'hello world'}),
                 msg_type: 'text'
             },
         });
