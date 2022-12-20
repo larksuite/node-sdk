@@ -6,9 +6,9 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record/events/created document }
      *
-     * 门禁访问记录
+     * 新增门禁访问记录
      *
-     * 门禁设备识别用户成功后发送该事件给订阅应用
+     * 门禁设备识别用户成功后发送该事件给订阅应用。
      */
     "acs.access_record.created_v1"?: (data: {
         event_id?: string;
@@ -30,9 +30,9 @@ export interface IHandles extends IOtherEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/user/events/updated document }
      *
-     * 智能门禁用户变更
+     * 用户信息变更
      *
-     * 智能门禁用户特征值变化时，发送此事件
+     * 智能门禁用户特征值变化时，发送此事件。
      */
     "acs.user.updated_v1"?: (data: {
         event_id?: string;
@@ -2234,8 +2234,14 @@ export interface IHandles extends IOtherEventHandles {
         room_id?: string;
     }) => Promise<any> | any;
     /**
-         
-         */
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/meeting_room-v1/meeting_room/events/status_changed document }
+     *
+     * 会议室状态信息变更
+     *
+     * 会议室状态信息变更将触发此事件。
+     *
+     * 了解事件订阅的使用场景和配置流程，请点击查看 [事件订阅概述](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM)
+     */
     "meeting_room.meeting_room.status_changed_v1"?: (data: {
         event_id?: string;
         token?: string;

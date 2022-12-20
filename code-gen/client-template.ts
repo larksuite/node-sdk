@@ -29,7 +29,7 @@ export default abstract class Client {
      */
     acs = {
         /**
-         * 识别图片
+         * access_record.access_photo
          */
         accessRecordAccessPhoto: {
             /**
@@ -37,9 +37,9 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record-access_photo/get document }
              *
-             * 下载人脸识别图片
+             * 下载开门时的人脸识别图片
              *
-             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片
+             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录，对于使用人脸识别方式进行开门的识别记录，还会有抓拍图。;;可以用该接口下载开门时的人脸识别照片。
              */
             get: async (
                 payload?: {
@@ -193,7 +193,7 @@ export default abstract class Client {
              *
              * 获取门禁记录列表
              *
-             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录。;;该接口返回满足查询参数的识别记录
+             * 用户在门禁考勤机上成功开门或打卡后，智能门禁应用都会生成一条门禁记录。;;该接口返回满足查询参数的识别记录。
              */
             list: async (
                 payload?: {
@@ -257,9 +257,9 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/device/list document }
              *
-             * 获取设备列表
+             * 获取门禁设备列表
              *
-             * 使用该接口获取租户内所有设备
+             * 使用该接口获取租户内所有门禁设备。
              */
             list: async (payload?: {}, options?: IRequestOptions) => {
                 const { headers, params, data, path } =
@@ -296,7 +296,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 人脸图片
+         * user.face
          */
         userFace: {
             /**
@@ -306,7 +306,7 @@ export default abstract class Client {
              *
              * 下载人脸图片
              *
-             * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片
+             * 对于已经录入人脸图片的用户，可以使用该接口下载用户人脸图片。
              */
             get: async (
                 payload?: {
@@ -403,7 +403,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 用户
+         * 用户管理
          */
         user: {
             /**
@@ -559,9 +559,9 @@ export default abstract class Client {
              *
              * 获取用户列表
              *
-             * 使用该接口获取智能门禁中所有用户信息
+             * 使用该接口获取智能门禁中所有用户信息。
              *
-             * 只能获取已加入智能门禁权限组的用户
+             * 只能获取已加入智能门禁权限组的用户。
              */
             list: async (
                 payload?: {
@@ -1708,7 +1708,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 密码
+         * 登录密码管理
          */
         password: {
             /**
@@ -1758,7 +1758,7 @@ export default abstract class Client {
      */
     application = {
         /**
-         * 推荐规则
+         * 我的常用推荐规则
          */
         appRecommendRule: {
             listWithIterator: async (
@@ -2084,7 +2084,7 @@ export default abstract class Client {
              *
              * 获取应用版本信息
              *
-             * 根据 app_id，version_id 获取对应应用版本的信息
+             * 根据应用 ID 和应用版本 ID 来获取同租户下的应用版本的信息
              */
             get: async (
                 payload?: {
@@ -3124,7 +3124,7 @@ export default abstract class Client {
                         approval_name: string;
                         approval_code?: string;
                         description?: string;
-                        viewers?: Array<{
+                        viewers: Array<{
                             viewer_type?:
                                 | "TENANT"
                                 | "DEPARTMENT"
@@ -3233,7 +3233,11 @@ export default abstract class Client {
              */
             get: async (
                 payload?: {
-                    params?: { locale?: "zh-CN" | "en-US" | "ja-JP" };
+                    params?: {
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        with_admin_id?: boolean;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { approval_code: string };
                 },
                 options?: IRequestOptions
@@ -3282,6 +3286,7 @@ export default abstract class Client {
                                     id?: string;
                                     user_id?: string;
                                 }>;
+                                approval_admin_ids?: Array<string>;
                             };
                         }
                     >({
@@ -4246,7 +4251,7 @@ export default abstract class Client {
                     data: {
                         approval_code: string;
                         user_id?: string;
-                        open_id: string;
+                        open_id?: string;
                         department_id?: string;
                         form: string;
                         node_approver_user_id_list?: Array<{
@@ -5374,7 +5379,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 审批查询
+         * 原生审批任务
          */
         task: {
             /**
@@ -10166,6 +10171,48 @@ export default abstract class Client {
          * 仪表盘
          */
         appDashboard: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.dashboard&apiName=copy&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-dashboard/copy document }
+             *
+             * 复制仪表盘
+             *
+             * 该接口用于根据现有仪表盘复制出新的仪表盘
+             */
+            copy: async (
+                payload?: {
+                    data: { name: string };
+                    path: { app_token: string; block_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { block_id?: string; name?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/dashboards/:block_id/copy`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             listWithIterator: async (
                 payload?: {
                     params?: { page_size?: number; page_token?: string };
@@ -13505,6 +13552,81 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.view&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/get document }
+             *
+             * 检索视图
+             *
+             * 该接口根据 view_id 检索现有视图
+             */
+            get: async (
+                payload?: {
+                    path?: {
+                        app_token?: string;
+                        table_id?: string;
+                        view_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id?: string;
+                                    view_name?: string;
+                                    view_type?: string;
+                                    property?: {
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreater"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                                condition_id?: string;
+                                                field_type?: string;
+                                            }>;
+                                            condition_omitted?: boolean;
+                                        };
+                                        hidden_fields?: Array<string>;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views/:view_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             listWithIterator: async (
                 payload?: {
                     params?: { page_size?: number; page_token?: string };
@@ -13696,6 +13818,105 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.view&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app-table-view/patch document }
+             *
+             * 更新视图
+             *
+             * 该接口用于增量修改视图信息
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        view_name?: string;
+                        property?: {
+                            filter_info?: {
+                                conjunction: "and" | "or";
+                                conditions: Array<{
+                                    field_id: string;
+                                    operator:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty"
+                                        | "isGreater"
+                                        | "isGreater"
+                                        | "isLess"
+                                        | "isLessEqual";
+                                    value?: string;
+                                }>;
+                            };
+                            hidden_fields?: Array<string>;
+                        };
+                    };
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        view_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                view?: {
+                                    view_id?: string;
+                                    view_name?: string;
+                                    view_type?: string;
+                                    property?: {
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreater"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                                condition_id?: string;
+                                                field_type?: string;
+                                            }>;
+                                            condition_omitted?: boolean;
+                                        };
+                                        hidden_fields?: Array<string>;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views/:view_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
     };
     /**
@@ -13876,7 +14097,7 @@ export default abstract class Client {
      */
     calendar = {
         /**
-         * 用户访问控制
+         * 日历访问控制
          */
         calendarAcl: {
             /**
@@ -14213,7 +14434,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 日历
+         * 日历管理
          */
         calendar: {
             /**
@@ -14221,7 +14442,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/create document }
              *
-             * 创建日历
+             * 创建共享日历
              *
              * 该接口用于为当前身份（应用 / 用户）创建一个共享日历。;;身份由 Header Authorization 的 Token 类型决定。
              */
@@ -14298,7 +14519,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/delete document }
              *
-             * 删除日历
+             * 删除共享日历
              *
              * 该接口用于以当前身份（应用 / 用户）删除一个共享日历。;;身份由 Header Authorization 的 Token 类型决定。
              *
@@ -14334,7 +14555,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/get document }
              *
-             * 获取日历
+             * 查询日历信息
              *
              * 该接口用于以当前身份（应用 / 用户）根据日历 ID 获取日历信息。;;身份由 Header Authorization 的 Token 类型决定。
              *
@@ -14402,7 +14623,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/list document }
              *
-             * 获取日历列表
+             * 查询日历列表
              *
              * 该接口用于分页获得当前身份（应用 / 用户）的日历列表。;;身份由 Header Authorization 的 Token 类型决定。
              *
@@ -14479,7 +14700,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/patch document }
              *
-             * 更新日历
+             * 更新日历信息
              *
              * 该接口用于以当前身份（应用 / 用户）修改日历信息。;;身份由 Header Authorization 的 Token 类型决定。
              *
@@ -14559,7 +14780,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/primary document }
              *
-             * 获取主日历
+             * 查询主日历信息
              *
              * 获取当前身份的主日历信息。
              */
@@ -16652,7 +16873,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 忙闲
+         * freebusy
          */
         freebusy: {
             /**
@@ -16660,7 +16881,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/freebusy/list document }
              *
-             * 查询忙闲
+             * 查询主日历忙闲信息
              *
              * 查询用户主日历或会议室的忙闲信息。
              */
@@ -17331,9 +17552,9 @@ export default abstract class Client {
              *
              * 删除部门
              *
-             * 该接口用于向通讯录中删除部门。
+             * 该接口用于从通讯录中删除部门。
              *
-             * 应用需要同时拥有待删除部门及其父部门的通讯录授权。应用商店应用无权限调用该接口。
+             * 应用需要同时拥有待删除部门及其父部门的通讯录授权。
              */
             delete: async (
                 payload?: {
@@ -17818,9 +18039,9 @@ export default abstract class Client {
              *
              * 修改部门部分信息
              *
-             * 该接口用于更新通讯录中部门的信息中的任一个字段。
+             * 该接口用于更新通讯录中部门的信息。
              *
-             * 调用该接口需要具有该部门以及更新操作涉及的部门的通讯录权限。应用商店应用无权限调用此接口。
+             * 调用该接口需要具有该部门以及更新操作涉及的部门的通讯录权限。
              */
             patch: async (
                 payload?: {
@@ -18140,7 +18361,7 @@ export default abstract class Client {
              *
              * 该接口用于更新当前部门所有信息。
              *
-             * - 调用该接口需要具有该部门以及更新操作涉及的部门的通讯录权限。应用商店应用无权限调用此接口。;; - 没有填写的字段会被置为空值（order字段除外）。
+             * - 调用该接口需要具有该部门与更新部门信息涉及的通讯录权限。;; - 没有填写的字段会被置为空值（order字段除外）。
              */
             update: async (
                 payload?: {
@@ -19299,7 +19520,7 @@ export default abstract class Client {
              *
              * 建立部门与单位的绑定关系
              *
-             * 通过该接口建立部门与单位的绑定关系，需更新单位的权限，需对应部门的通讯录权限。由于单位是旗舰版付费功能，企业需开通相关版本，否则会绑定失败
+             * 通过该接口建立部门与单位的绑定关系。由于单位是旗舰版付费功能，企业需开通相关版本，否则会绑定失败，不同版本请参考[飞书版本对比](https://www.feishu.cn/service)
              */
             bindDepartment: async (
                 payload?: {
@@ -19339,7 +19560,7 @@ export default abstract class Client {
              *
              * 创建单位
              *
-             * 使用该接口创建单位，需要有更新单位的权限。注意：单位功能属于旗舰版付费功能，企业需开通对应版本才可以创建单位。
+             * 该接口用于创建单位。注意：单位功能属于旗舰版付费功能，企业需开通对应版本才可以创建单位，不同版本请参考[飞书版本对比](https://www.feishu.cn/service)。
              */
             create: async (
                 payload?: {
@@ -19414,7 +19635,7 @@ export default abstract class Client {
              *
              * 获取单位信息
              *
-             * 调用该接口获取单位信息，需有获取单位的权限
+             * 该接口用于获取单位信息
              */
             get: async (
                 payload?: {
@@ -19877,9 +20098,9 @@ export default abstract class Client {
              *
              * 删除用户
              *
-             * 该接口向通讯录删除一个用户信息，可以理解为员工离职。
+             * 该接口用于从通讯录删除一个用户信息，可以理解为员工离职。
              *
-             * - 若用户归属部门A、部门B，应用的通讯录权限范围必须包括部门A和部门B才可以删除用户。;- 应用商店应用无权限调用接口。;- 用户可以在删除员工时设置删除员工数据的接收者，如果不设置则由其leader接收，如果该员工没有leader，则会将该员工的数据删除。
+             * - 若用户归属部门A、部门B，应用的通讯录权限范围必须包括部门A和部门B才可以删除用户。;- 用户可以在删除员工时设置删除员工数据（如文档）的接收者，如果不设置则由其leader接收，如果该员工没有leader，则会将该员工的数据删除。
              */
             delete: async (
                 payload?: {
@@ -20793,7 +21014,7 @@ export default abstract class Client {
              *
              * 该接口用于更新通讯录中用户的字段。
              *
-             * 应用需要拥有待更新用户的通讯录授权，如果涉及到用户部门变更，还需要同时拥有所有新部门的通讯录授权。应用商店应用无权限调用此接口。
+             * 应用需要拥有待更新用户的通讯录授权，如果涉及到用户部门变更，还需要同时拥有变更前、后所有新部门的通讯录授权。
              */
             update: async (
                 payload?: {
@@ -20970,9 +21191,102 @@ export default abstract class Client {
          */
     contract = {};
     /**
-         
+     * CoreHR
+     */
+    corehr = {
+        /**
+         * 休假管理
          */
-    corehr = {};
+        leave: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=leave&apiName=leave_request_history&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/leave/leave_request_history document }
+             *
+             * 批量查询员工请假记录
+             *
+             * 批量获取员工的请假记录数据
+             */
+            leaveRequestHistory: async (
+                payload?: {
+                    params: {
+                        page_token?: string;
+                        page_size: string;
+                        employment_id_list?: number;
+                        initiator_id_list?: number;
+                        leave_request_status?: number;
+                        leave_type_id_list?: number;
+                        leave_start_date_min?: string;
+                        leave_start_date_max?: string;
+                        leave_end_date_min?: string;
+                        leave_end_date_max?: string;
+                        leave_submit_date_min?: string;
+                        leave_submit_date_max?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_corehr_id";
+                        leave_update_time_min?: string;
+                        leave_update_time_max?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                leave_request_list?: Array<{
+                                    leave_request_id: string;
+                                    employment_id: string;
+                                    employment_name: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    leave_type_id: string;
+                                    leave_type_name: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    start_time: string;
+                                    end_time: string;
+                                    leave_duration: string;
+                                    leave_duration_unit: number;
+                                    leave_request_status: number;
+                                    grant_source: string;
+                                    return_time: string;
+                                    submitted_at: string;
+                                    submitted_by: string;
+                                    notes: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/leaves/leave_request_history`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+    };
     /**
          
          */
@@ -43932,7 +44246,7 @@ export default abstract class Client {
                         is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
-                        page_size?: string;
+                        page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
@@ -44071,7 +44385,7 @@ export default abstract class Client {
                         is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
-                        page_size?: string;
+                        page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string };
@@ -44278,7 +44592,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 事件
+         * 下载
          */
         file: {
             /**
@@ -44714,7 +45028,7 @@ export default abstract class Client {
              *
              * 订阅云文档事件
              *
-             * 该接口仅支持**文档拥有者**订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。在调用该接口之前请确保正确[配置事件回调网址和订阅事件类型](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM#2eb3504a)，事件类型参考[事件列表](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-list)。
+             * 该接口仅支持**文档拥有者**订阅自己文档的通知事件，可订阅的文档类型为**旧版文档**、**新版文档**、**电子表格**和**多维表格**。在调用该接口之前请确保正确[配置事件回调网址和订阅事件类型](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM#2eb3504a)(暂不支持单独订阅文档维度的某类事件)，事件类型参考[事件列表](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-list)。
              */
             subscribe: async (
                 payload?: {
@@ -45319,7 +45633,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -45760,7 +46074,8 @@ export default abstract class Client {
                             | "bitable"
                             | "docx"
                             | "folder"
-                            | "mindnote";
+                            | "mindnote"
+                            | "minutes";
                         need_notification?: boolean;
                     };
                     path: { token: string };
@@ -45824,7 +46139,8 @@ export default abstract class Client {
                             | "bitable"
                             | "docx"
                             | "folder"
-                            | "mindnote";
+                            | "mindnote"
+                            | "minutes";
                         member_type:
                             | "email"
                             | "openid"
@@ -45876,7 +46192,8 @@ export default abstract class Client {
                             | "wiki"
                             | "bitable"
                             | "docx"
-                            | "mindnote";
+                            | "mindnote"
+                            | "minutes";
                         fields?: string;
                     };
                     path: { token: string };
@@ -45955,7 +46272,8 @@ export default abstract class Client {
                             | "wiki"
                             | "bitable"
                             | "docx"
-                            | "mindnote";
+                            | "mindnote"
+                            | "minutes";
                     };
                     path: { token: string; member_id: string };
                 },
@@ -46021,7 +46339,9 @@ export default abstract class Client {
                             | "file"
                             | "wiki"
                             | "bitable"
-                            | "docx";
+                            | "docx"
+                            | "mindnote"
+                            | "minutes";
                     };
                     path: { token: string };
                 },
@@ -46113,7 +46433,9 @@ export default abstract class Client {
                             | "file"
                             | "wiki"
                             | "bitable"
-                            | "docx";
+                            | "docx"
+                            | "mindnote"
+                            | "minutes";
                     };
                     path: { token: string };
                 },
@@ -46179,7 +46501,7 @@ export default abstract class Client {
      */
     ehr = {
         /**
-         * 附件
+         * 飞书人事（标准版)
          */
         attachment: {
             /**
@@ -46237,7 +46559,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 员工
+         * 飞书人事（标准版)
          */
         employee: {
             listWithIterator: async (
@@ -51095,6 +51417,50 @@ export default abstract class Client {
             },
         },
         /**
+         * 导入 e-HR
+         */
+        ehrImportTask: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=ehr_import_task&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/ehr_import_task/patch document }
+             *
+             * 更新 e-HR 导入任务结果
+             *
+             * 在处理完导入 e-HR 事件后，可调用该接口，更新  e-HR 导入任务结果
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        fail_reason?: string;
+                        redirect_url?: string;
+                        state: number;
+                    };
+                    path: { ehr_import_task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/ehr_import_tasks/:ehr_import_task_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 入职
          */
         employee: {
@@ -51310,6 +51676,336 @@ export default abstract class Client {
          */
         job: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=combined_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/combined_create document }
+             *
+             * 新建职位
+             *
+             * 新建职位，字段的是否必填，以系统中的「职位字段管理」中的设置为准。
+             */
+            combinedCreate: async (
+                payload?: {
+                    data: {
+                        code?: string;
+                        experience?: number;
+                        expiry_time: number;
+                        customized_data_list?: Array<{
+                            object_id?: string;
+                            value?: string;
+                        }>;
+                        min_level_id?: string;
+                        min_salary?: number;
+                        title: string;
+                        job_managers: {
+                            id?: string;
+                            recruiter_id: string;
+                            hiring_manager_id_list: Array<string>;
+                            assistant_id_list?: Array<string>;
+                        };
+                        job_process_id: string;
+                        process_type: number;
+                        subject_id?: string;
+                        job_function_id?: string;
+                        department_id: string;
+                        head_count?: number;
+                        is_never_expired: boolean;
+                        max_salary?: number;
+                        requirement?: string;
+                        address_id?: string;
+                        description?: string;
+                        highlight_list?: Array<string>;
+                        job_type_id: string;
+                        max_level_id?: string;
+                        recruitment_type_id: string;
+                        required_degree?: number;
+                        job_category_id?: string;
+                        address_id_list?: Array<string>;
+                        job_attribute?: number;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                default_job_post?: { id?: string };
+                                job?: {
+                                    id?: string;
+                                    title?: string;
+                                    description?: string;
+                                    code?: string;
+                                    requirement?: string;
+                                    recruitment_type?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    department?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    city?: {
+                                        city_code?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    highlight_list?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    }>;
+                                    job_category?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    active_status?: number;
+                                    create_user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    process_type?: number;
+                                    process_id?: string;
+                                    process_name?: string;
+                                    process_en_name?: string;
+                                    customized_data_list?: Array<{
+                                        object_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        value?: {
+                                            content?: string;
+                                            option?: {
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            option_list?: Array<{
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            time_range?: {
+                                                start_time?: string;
+                                                end_time?: string;
+                                            };
+                                            time?: string;
+                                            number?: string;
+                                        };
+                                    }>;
+                                    job_function?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    subject?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    head_count?: number;
+                                    experience?: number;
+                                    expiry_time?: number;
+                                    min_salary?: number;
+                                    max_salary?: number;
+                                    required_degree?: number;
+                                    city_list?: Array<{
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    job_attribute?: number;
+                                };
+                                job_manager?: {
+                                    id?: string;
+                                    recruiter_id: string;
+                                    hiring_manager_id_list: Array<string>;
+                                    assistant_id_list?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/combined_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=config&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/config document }
+             *
+             * 获取职位设置
+             *
+             * 获取职位设置
+             */
+            config: async (
+                payload?: {
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                job_config?: {
+                                    offer_apply_schema?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    offer_process_conf?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    recommended_evaluator_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    assessment_template?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    id?: string;
+                                    interview_round_list?: Array<{
+                                        interviewer_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        round?: number;
+                                    }>;
+                                    job_requirement_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    interview_round_type_list?: Array<{
+                                        assessment_round?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        assessment_template?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    related_job_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    job_attribute?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/config`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get document }
@@ -51470,6 +52166,157 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=update_config&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/update_config document }
+             *
+             * 更新职位设置
+             *
+             * 更新职位设置，包括面试评价表、Offer 申请表等。接口将按照所选择的「更新选项」进行设置参数校验和更新。
+             */
+            updateConfig: async (
+                payload?: {
+                    data: {
+                        offer_apply_schema_id?: string;
+                        offer_process_conf?: string;
+                        recommended_evaluator_id_list?: Array<string>;
+                        update_option_list: Array<number>;
+                        assessment_template_biz_id?: string;
+                        interview_round_conf_list?: Array<{
+                            interviewer_id_list?: Array<string>;
+                            round?: number;
+                        }>;
+                        jr_id_list?: Array<string>;
+                        interview_round_type_conf_list?: Array<{
+                            round_biz_id?: string;
+                            assessment_template_biz_id?: string;
+                        }>;
+                        related_job_id_list?: Array<string>;
+                        interview_appointment_config?: {
+                            enable_interview_appointment_by_interviewer?: boolean;
+                            config?: {
+                                interview_type?: number;
+                                talent_timezone_code?: string;
+                                contact_user_id?: string;
+                                contact_mobile?: string;
+                                contact_email?: string;
+                                address_id?: string;
+                                video_type?: number;
+                                cc?: Array<string>;
+                                remark?: string;
+                                interview_notification_template_id?: string;
+                                appointment_notification_template_id?: string;
+                                cancel_interview_notification_template_id?: string;
+                            };
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                job_config?: {
+                                    offer_apply_schema?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    offer_process_conf?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    recommended_evaluator_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    assessment_template?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    id?: string;
+                                    interview_round_list?: Array<{
+                                        interviewer_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        round?: number;
+                                    }>;
+                                    job_requirement_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    interview_round_type_list?: Array<{
+                                        assessment_round?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        assessment_template?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    related_job_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    job_attribute?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/update_config`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -52129,6 +52976,62 @@ export default abstract class Client {
          */
         talent: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=batch_get_id&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/batch_get_id document }
+             *
+             * 通过人才信息获取人才 ID
+             *
+             * 通过人才信息获取人才 ID
+             */
+            batchGetId: async (
+                payload?: {
+                    data?: {
+                        mobile_code?: string;
+                        mobile_number_list?: Array<string>;
+                        email_list?: Array<string>;
+                        identification_type?: number;
+                        identification_number_list?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                talent?: Array<{
+                                    talent_id?: string;
+                                    mobile_code?: string;
+                                    mobile_number?: string;
+                                    email?: string;
+                                    identification_type?: number;
+                                    identification_number?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/batch_get_id`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/get document }
@@ -52634,7 +53537,7 @@ export default abstract class Client {
      */
     human_authentication = {
         /**
-         * 身份
+         * 实名认证
          */
         identity: {
             /**
@@ -52691,7 +53594,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 消息卡片
+     * 消息与群组
      */
     im = {
         /**
@@ -53053,7 +53956,7 @@ export default abstract class Client {
              */
             delete: async (
                 payload?: {
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53092,7 +53995,7 @@ export default abstract class Client {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53159,7 +54062,7 @@ export default abstract class Client {
              *
              * 获取指定群的分享链接。
              *
-             * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - 机器人或授权用户必须在群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下
+             * 注意事项:;- 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability); - access_token所对应的 **机器人** 或 **授权用户** 必须在`chat_id`参数指定的群组中;- 单聊、密聊、团队群不支持分享群链接;- 当Bot被停用或Bot退出群组时，Bot生成的群链接也将停用;- 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅**群主**和**群管理员**可以获取群分享链接;- 获取内部群分享链接时，操作者须与群组在同一租户下
              */
             link: async (
                 payload?: {
@@ -53553,7 +54456,7 @@ export default abstract class Client {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53602,7 +54505,7 @@ export default abstract class Client {
                             | "open_id"
                             | "app_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53656,7 +54559,7 @@ export default abstract class Client {
                             | "open_id"
                             | "app_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53716,7 +54619,7 @@ export default abstract class Client {
                             | "app_id";
                         succeed_type?: number;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53770,7 +54673,7 @@ export default abstract class Client {
                             | "open_id"
                             | "app_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53807,7 +54710,7 @@ export default abstract class Client {
                         page_token?: string;
                         page_size?: number;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53911,7 +54814,7 @@ export default abstract class Client {
                         page_token?: string;
                         page_size?: number;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -53964,7 +54867,7 @@ export default abstract class Client {
              */
             isInChat: async (
                 payload?: {
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54007,7 +54910,7 @@ export default abstract class Client {
              */
             meJoin: async (
                 payload?: {
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54042,7 +54945,7 @@ export default abstract class Client {
                         page_token?: string;
                         page_size?: number;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54145,7 +55048,7 @@ export default abstract class Client {
                         page_token?: string;
                         page_size?: number;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54205,7 +55108,7 @@ export default abstract class Client {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54269,7 +55172,7 @@ export default abstract class Client {
                             };
                         }>;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54336,7 +55239,7 @@ export default abstract class Client {
             deleteTabs: async (
                 payload?: {
                     data: { tab_ids: Array<string> };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54402,7 +55305,7 @@ export default abstract class Client {
              */
             listTabs: async (
                 payload?: {
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54469,7 +55372,7 @@ export default abstract class Client {
             sortTabs: async (
                 payload?: {
                     data?: { tab_ids?: Array<string> };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54559,7 +55462,7 @@ export default abstract class Client {
                             };
                         }>;
                     };
-                    path?: { chat_id?: string };
+                    path: { chat_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -54921,7 +55824,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 消息加急
+         * 消息
          */
         message: {
             /**
@@ -55118,8 +56021,8 @@ export default abstract class Client {
                         container_id: string;
                         start_time?: string;
                         end_time?: string;
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -55245,8 +56148,8 @@ export default abstract class Client {
                         container_id: string;
                         start_time?: string;
                         end_time?: string;
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -58632,403 +59535,6 @@ export default abstract class Client {
             },
         },
         /**
-         * 指标库
-         */
-        metricSource: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source/list document }
-             *
-             * 获取指标库
-             *
-             * 获取租户下全部 OKR 指标库（仅限 OKR 企业版使用）
-             */
-            list: async (
-                payload?: {
-                    params?: { page_token?: string; page_size?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                total: number;
-                                has_more: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    metric_source_id: string;
-                                    metric_source_name: string;
-                                    metric_name: string;
-                                    metric_unit: {
-                                        zh_cn: string;
-                                        en_us: string;
-                                        ja_jp: string;
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 指标项
-         */
-        metricSourceTableItem: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=batch_update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source-table-item/batch_update document }
-             *
-             * 批量更新指标项
-             *
-             * - 该接口用于批量更新多项指标，单次调用最多更新 100 条记录。接口仅限 OKR 企业版使用。;;  更新成功后 OKR 系统会给以下人员发送消息通知：;;    - 首次更新目标值的人员 ;;    - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
-             */
-            batchUpdate: async (
-                payload?: {
-                    data: {
-                        items: Array<{
-                            metric_item_id: string;
-                            metric_initial_value?: number;
-                            metric_target_value?: number;
-                            metric_current_value?: number;
-                            supported_user_id?: string;
-                        }>;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: { metric_source_id: string; metric_table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                items?: Array<{
-                                    metric_item_id: string;
-                                    user_id: string;
-                                    period_id: string;
-                                    metric_unit: {
-                                        zh_cn: string;
-                                        en_us: string;
-                                        ja_jp: string;
-                                    };
-                                    metric_initial_value: number;
-                                    metric_target_value?: number;
-                                    metric_current_value: number;
-                                    supported_user_id?: string;
-                                    kr_id?: string;
-                                    updated_at: string;
-                                    updated_by?: string;
-                                }>;
-                                failed_items?: Array<{
-                                    metric_item_id: string;
-                                    reason: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/batch_update`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source-table-item/get document }
-             *
-             * 获取指标项详情
-             *
-             * 获取某项指标的具体内容（仅限 OKR 企业版使用）
-             */
-            get: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: {
-                        metric_source_id: string;
-                        metric_table_id: string;
-                        metric_item_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                metric_item_id: string;
-                                user_id: string;
-                                period_id: string;
-                                metric_unit: {
-                                    zh_cn: string;
-                                    en_us: string;
-                                    ja_jp: string;
-                                };
-                                metric_initial_value: number;
-                                metric_target_value?: number;
-                                metric_current_value: number;
-                                supported_user_id?: string;
-                                kr_id?: string;
-                                updated_at: string;
-                                updated_by?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source-table-item/list document }
-             *
-             * 获取指标项
-             *
-             * 获取指定指标表下的所有指标项（仅限 OKR 企业版使用）
-             */
-            list: async (
-                payload?: {
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                        page_token?: string;
-                        page_size?: string;
-                    };
-                    path: { metric_source_id: string; metric_table_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                total: number;
-                                has_more: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    metric_item_id: string;
-                                    user_id: string;
-                                    period_id: string;
-                                    metric_unit: {
-                                        zh_cn: string;
-                                        en_us: string;
-                                        ja_jp: string;
-                                    };
-                                    metric_initial_value: number;
-                                    metric_target_value?: number;
-                                    metric_current_value: number;
-                                    supported_user_id?: string;
-                                    kr_id?: string;
-                                    updated_at: string;
-                                    updated_by?: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table.item&apiName=patch&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source-table-item/patch document }
-             *
-             * 更新指标项
-             *
-             * - 该接口用于更新某项指标，接口仅限 OKR 企业版使用。;;    更新成功后 OKR 系统会给以下人员发送消息通知：;;    - 首次更新目标值的人员 ;;    - 已经将指标添加为 KR、且本次目标值/起始值/支撑的上级有变更的人员，不包含仅更新了进度值的人员
-             */
-            patch: async (
-                payload?: {
-                    data?: {
-                        metric_initial_value?: number;
-                        metric_target_value?: number;
-                        metric_current_value?: number;
-                        supported_user_id?: string;
-                    };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
-                    path: {
-                        metric_source_id: string;
-                        metric_table_id: string;
-                        metric_item_id: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                metric_item_id: string;
-                                user_id: string;
-                                period_id: string;
-                                metric_unit: {
-                                    zh_cn: string;
-                                    en_us: string;
-                                    ja_jp: string;
-                                };
-                                metric_initial_value: number;
-                                metric_target_value?: number;
-                                metric_current_value: number;
-                                supported_user_id?: string;
-                                kr_id?: string;
-                                updated_at: string;
-                                updated_by?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables/:metric_table_id/items/:metric_item_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 指标表
-         */
-        metricSourceTable: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=metric_source.table&apiName=list&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/metric_source-table/list document }
-             *
-             * 获取指标表
-             *
-             * 获取指定指标库下有哪些指标表（仅限 OKR 企业版使用）
-             */
-            list: async (
-                payload?: {
-                    params?: { page_token?: string; page_size?: string };
-                    path: { metric_source_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                total: number;
-                                has_more: boolean;
-                                page_token?: string;
-                                items?: Array<{
-                                    metric_table_id: string;
-                                    metric_table_name: string;
-                                    period_id: string;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/metric_sources/:metric_source_id/tables`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
          * OKR
          */
         okr: {
@@ -59681,78 +60187,6 @@ export default abstract class Client {
                             path
                         ),
                         method: "PUT",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 复盘（灰度租户可见）
-         */
-        review: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/review/query document }
-             *
-             * 查询复盘信息
-             *
-             * 根据周期和用户查询复盘信息。
-             */
-            query: async (
-                payload?: {
-                    params: {
-                        user_id_type?:
-                            | "user_id"
-                            | "union_id"
-                            | "open_id"
-                            | "people_admin_id";
-                        user_ids: number;
-                        period_ids: number;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                review_list?: Array<{
-                                    user_id?: {
-                                        open_id?: string;
-                                        user_id?: string;
-                                    };
-                                    review_period_list?: Array<{
-                                        period_id?: string;
-                                        cycle_review_list?: Array<{
-                                            url?: string;
-                                            create_time?: string;
-                                        }>;
-                                        progress_report_list?: Array<{
-                                            url?: string;
-                                            create_time?: string;
-                                        }>;
-                                    }>;
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/okr/v1/reviews/query`,
-                            path
-                        ),
-                        method: "GET",
                         data,
                         params,
                         headers,
@@ -60647,7 +61081,7 @@ export default abstract class Client {
              *
              * 创建数据范式
              *
-             * 创建一个数据源
+             * 创建一个数据范式
              */
             create: async (
                 payload?: {
@@ -61847,7 +62281,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 行列
+         * 单元格
          */
         spreadsheetSheet: {
             /**
@@ -64293,7 +64727,7 @@ export default abstract class Client {
      */
     tenant = {
         /**
-         * 企业
+         * 企业信息
          */
         tenant: {
             /**
@@ -68345,7 +68779,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/move document }
              *
-             * 移动节点
+             * 移动知识空间节点
              *
              * 此方法用于在Wiki内移动节点，支持跨知识空间移动。如果有子节点，会携带子节点一起移动。
              *
@@ -68477,7 +68911,7 @@ export default abstract class Client {
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/wiki-v2/space-node/update_title document }
              *
-             * 更新标题
+             * 更新知识空间节点标题
              *
              * 此接口用于更新节点标题
              *
