@@ -88,7 +88,7 @@ export interface InteractiveCardField {
 
 export interface InteractiveCardDivElement {
     tag: 'div';
-    text: InteractiveCardTextItem;
+    text?: InteractiveCardTextItem;
     fields?: InteractiveCardField[];
     extra?: any;
 }
