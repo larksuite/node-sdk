@@ -399,7 +399,7 @@ If you want to adapt to services written by other libraries, you currently need 
 
 ```typescript
 const data = server.getData();
-const resule = await dispatcher.invoke(data);
+const result = await dispatcher.invoke(data);
 server.sendResult(result);
 ````
 
