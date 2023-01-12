@@ -1,7 +1,7 @@
 # 飞书开放接口SDK
 [English](https://github.com/larksuite/node-sdk/blob/main/README.md)
 ## 概述
-[飞书开放平台](https://open.feishu.cn/document/ukTMukTMukTM/uITNz4iM1MjLyUzM)提供了一系列服务端的原子api来实现多元化的功能，但在实际编码过程中感受不是很顺畅，原因在于使用这些api完成功能时，需要考虑很多额外的工作，如token的获取及其维护、数据加解密、请求的验签等等；在者，在实际编码过程中，少了函数调用的语义化描述，类型系统的支持，使得心智负担过重。
+[飞书开放平台](https://open.feishu.cn/document/ukTMukTMukTM/uITNz4iM1MjLyUzM)提供了一系列服务端的原子api来实现多元化的功能，但在实际编码过程中感受不是很顺畅，原因在于使用这些api完成功能时，需要考虑很多额外的工作，如token的获取及其维护、数据加解密、请求的验签等等；再者，在实际编码过程中，少了函数调用的语义化描述，类型系统的支持，使得心智负担过重。
 
 凡此种种，都使得整体的开发体验不佳，基于此，为了让开放能力变得易用，我们编写了该SDK，将所有冗长的逻辑内置处理，提供完备的类型系统，对外提供语义化的编程接口，提高编码体验。😙
 
@@ -398,7 +398,7 @@ server.listen(3000);
 
 ```typescript
 const data = server.getData();
-const resule = await dispatcher.invoke(data);
+const result = await dispatcher.invoke(data);
 server.sendResult(result);
 ```
 
