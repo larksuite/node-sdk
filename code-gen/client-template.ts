@@ -12466,7 +12466,7 @@ export default abstract class Client {
                                 email?: string;
                             };
                             last_modified_time?: number;
-                            fields: Map<
+                            fields: Record<
                                 string,
                                 | string
                                 | boolean
@@ -12531,7 +12531,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
@@ -12658,7 +12658,7 @@ export default abstract class Client {
                                 email?: string;
                             };
                             last_modified_time?: number;
-                            fields: Map<
+                            fields: Record<
                                 string,
                                 | string
                                 | boolean
@@ -12723,7 +12723,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
@@ -12785,7 +12785,7 @@ export default abstract class Client {
             create: async (
                 payload?: {
                     data: {
-                        fields: Map<
+                        fields: Record<
                             string,
                             | string
                             | boolean
@@ -12849,7 +12849,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
@@ -12997,7 +12997,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
@@ -13136,7 +13136,7 @@ export default abstract class Client {
                                                         email?: string;
                                                     };
                                                     last_modified_time?: number;
-                                                    fields: Map<
+                                                    fields: Record<
                                                         string,
                                                         | string
                                                         | boolean
@@ -13247,7 +13247,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
@@ -13309,7 +13309,7 @@ export default abstract class Client {
             update: async (
                 payload?: {
                     data: {
-                        fields: Map<
+                        fields: Record<
                             string,
                             | string
                             | boolean
@@ -13377,7 +13377,7 @@ export default abstract class Client {
                                         email?: string;
                                     };
                                     last_modified_time?: number;
-                                    fields: Map<
+                                    fields: Record<
                                         string,
                                         | string
                                         | boolean
