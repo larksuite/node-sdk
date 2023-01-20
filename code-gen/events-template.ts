@@ -608,6 +608,11 @@ export interface IHandles extends IOtherEventHandles {
             unit_ids?: Array<string>;
             status?: { is_deleted?: boolean };
             leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
         };
     }) => Promise<any> | any;
     /**
@@ -640,6 +645,11 @@ export interface IHandles extends IOtherEventHandles {
             unit_ids?: Array<string>;
             status?: { is_deleted?: boolean };
             leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
         };
         old_object?: {
             status?: { is_deleted?: boolean };
@@ -676,6 +686,11 @@ export interface IHandles extends IOtherEventHandles {
             unit_ids?: Array<string>;
             status?: { is_deleted?: boolean };
             leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
         };
         old_object?: {
             name: string;
@@ -688,6 +703,11 @@ export interface IHandles extends IOtherEventHandles {
             unit_ids?: Array<string>;
             status?: { is_deleted?: boolean };
             leaders?: Array<{ leaderType: number; leaderID: string }>;
+            department_hrbps?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
         };
     }) => Promise<any> | any;
     /**
@@ -939,6 +959,8 @@ export interface IHandles extends IOtherEventHandles {
                 };
                 is_frozen?: boolean;
                 geo?: string;
+                job_level_id?: string;
+                job_family_id?: string;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1026,6 +1048,8 @@ export interface IHandles extends IOtherEventHandles {
                 };
                 is_frozen?: boolean;
                 geo?: string;
+                job_level_id?: string;
+                job_family_id?: string;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1118,6 +1142,8 @@ export interface IHandles extends IOtherEventHandles {
                     generic_user?: { id: string; type: number };
                 };
             }>;
+            job_level_id?: string;
+            job_family_id?: string;
         };
     }) => Promise<any> | any;
     /**
@@ -1202,6 +1228,8 @@ export interface IHandles extends IOtherEventHandles {
                     generic_user?: { id: string; type: number };
                 };
             }>;
+            job_level_id?: string;
+            job_family_id?: string;
         };
         old_object?: { department_ids?: Array<string>; open_id?: string };
     }) => Promise<any> | any;
@@ -1287,6 +1315,8 @@ export interface IHandles extends IOtherEventHandles {
                     generic_user?: { id: string; type: number };
                 };
             }>;
+            job_level_id?: string;
+            job_family_id?: string;
         };
         old_object?: {
             open_id?: string;
@@ -1351,6 +1381,8 @@ export interface IHandles extends IOtherEventHandles {
                     generic_user?: { id: string; type: number };
                 };
             }>;
+            job_level_id?: string;
+            job_family_id?: string;
         };
     }) => Promise<any> | any;
     /**
@@ -1760,7 +1792,11 @@ export interface IHandles extends IOtherEventHandles {
             };
             ticket_type?: number;
             status?: number;
-            dissatisfaction_reason?: Array<string>;
+            dissatisfaction_reason?: {
+                zh_cn?: string;
+                en_us?: string;
+                ja_jp?: string;
+            };
             customized_fields?: Array<{
                 id?: string;
                 value?: string;
@@ -2341,6 +2377,80 @@ export interface IHandles extends IOtherEventHandles {
         obj_type?: number;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "vc.meeting.all_meeting_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.meeting.all_meeting_started_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/join_meeting document }
      *
      * 加入会议
@@ -2361,6 +2471,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2401,6 +2512,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2442,6 +2554,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2482,6 +2595,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2522,6 +2636,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2564,6 +2679,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             owner?: {
                 id?: { union_id?: string; user_id?: string; open_id?: string };
             };
@@ -2592,6 +2708,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2632,6 +2749,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2672,6 +2790,7 @@ export interface IHandles extends IOtherEventHandles {
             id?: string;
             topic?: string;
             meeting_no?: string;
+            meeting_source?: number;
             start_time?: string;
             end_time?: string;
             host_user?: {
@@ -2731,6 +2850,7 @@ export interface IHandles extends IOtherEventHandles {
                 disable_notice?: boolean;
                 resume_notice?: boolean;
             };
+            device?: Array<{ name: string }>;
         };
     }) => Promise<any> | any;
     /**
@@ -2792,6 +2912,7 @@ export interface IHandles extends IOtherEventHandles {
                 disable_notice?: boolean;
                 resume_notice?: boolean;
             };
+            device?: Array<{ name: string }>;
         };
     }) => Promise<any> | any;
 }
