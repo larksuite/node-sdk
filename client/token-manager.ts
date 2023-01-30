@@ -51,7 +51,10 @@ export class TokenManager {
 
     async getCustomTenantAccessToken() {
         const cachedTenantAccessToken = await this.cache?.get(
-            CTenantAccessToken
+            CTenantAccessToken,
+            {
+                namespace: this.appId
+            }
         );
 
         if (cachedTenantAccessToken) {
@@ -77,7 +80,10 @@ export class TokenManager {
             CTenantAccessToken,
             tenant_access_token,
             // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
-            new Date().getTime() + expire * 1000 - 3 * 60 * 1000
+            new Date().getTime() + expire * 1000 - 3 * 60 * 1000,
+            {
+                namespace: this.appId
+            }
         );
 
         return tenant_access_token;
@@ -90,7 +96,10 @@ export class TokenManager {
         }
 
         const tenantAccessToken = await this.cache?.get(
-            `larkMarketAccessToken${tenantKey}`
+            `larkMarketAccessToken${tenantKey}`,
+            {
+                namespace: this.appId
+            }
         );
 
         if (tenantAccessToken) {
@@ -138,7 +147,10 @@ export class TokenManager {
             `larkMarketAccessToken${tenantKey}`,
             tenant_access_token,
             // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
-            new Date().getTime() + expire * 1000 - 3 * 60 * 1000
+            new Date().getTime() + expire * 1000 - 3 * 60 * 1000,
+            {
+                namespace: this.appId
+            }
         );
 
         return tenant_access_token;

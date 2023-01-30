@@ -53,10 +53,12 @@ export class EventDispatcher {
     private registerAppTicketHandle() {
         this.register({
             app_ticket: async (data) => {
-                const { app_ticket } = data;
+                const { app_ticket, app_id } = data;
 
                 if (app_ticket) {
-                    await this.cache.set(CAppTicket, app_ticket);
+                    await this.cache.set(CAppTicket, app_ticket, undefined ,{
+                        namespace: app_id
+                    });
                     this.logger.debug('set app ticket');
                 } else {
                     this.logger.warn('response not include app ticket');

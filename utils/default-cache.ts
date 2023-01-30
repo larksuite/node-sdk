@@ -1,3 +1,4 @@
+import get from 'lodash.get';
 import { Cache } from '@node-sdk/typings';
 
 export class DefaultCache implements Cache {
@@ -6,15 +7,26 @@ export class DefaultCache implements Cache {
         {
             value: any;
             expiredTime?: number;
-        }
+        } 
     >;
 
     constructor() {
         this.values = new Map();
     }
 
-    async get(key: string | Symbol) {
-        const data = this.values.get(key);
+    // When there is a namespace, splice the namespace and key to form a new key
+    private getCacheKey(key: string | Symbol, namespace?: string) {
+        if (namespace) {
+            return `${namespace}/${key.toString()}`;
+        }
+        return key;
+    }
+
+    async get(key: string | Symbol, options?: {
+        namespace?: string
+    }) {
+        const cacheKey = this.getCacheKey(key, get(options, 'namespace'));
+        const data = this.values.get(cacheKey);
 
         if (data) {
             const { value, expiredTime } = data;
@@ -26,8 +38,11 @@ export class DefaultCache implements Cache {
         return undefined;
     }
 
-    async set(key: string | Symbol, value: string, expiredTime?: number) {
-        this.values.set(key, {
+    async set(key: string | Symbol, value: string, expiredTime?: number, options?: {
+        namespace?: string
+    }) {
+        const cacheKey = this.getCacheKey(key, get(options, 'namespace'));
+        this.values.set(cacheKey, {
             value,
             expiredTime,
         });

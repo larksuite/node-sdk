@@ -38,7 +38,9 @@ export default class AppTicketManager {
 
     async checkAppTicket() {
         if (this.appType === AppType.ISV) {
-            const appTicket = await this.cache?.get(CAppTicket);
+            const appTicket = await this.cache?.get(CAppTicket, {
+                namespace: this.appId
+            });
             if (!appTicket) {
                 this.requestAppTicket();
             }
@@ -58,7 +60,9 @@ export default class AppTicketManager {
     }
 
     async getAppTicket() {
-        const appTicket = await this.cache?.get(CAppTicket);
+        const appTicket = await this.cache?.get(CAppTicket, {
+            namespace: this.appId
+        });
 
         if (appTicket) {
             this.logger.debug('use cache app ticket');
