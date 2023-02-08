@@ -2811,6 +2811,53 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "vc.reserve_config.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        scope_id?: string;
+        scope_type?: number;
+        approve_config?: {
+            approval_switch?: number;
+            approval_condition?: number;
+            meeting_duration?: number;
+            approvers?: Array<{
+                user_id?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+            }>;
+        };
+        time_config?: {
+            time_switch: number;
+            days_in_advance?: number;
+            opening_hour?: string;
+            start_time?: string;
+            end_time?: string;
+            max_duration?: number;
+        };
+        reserve_scope_config?: {
+            allow_all_users?: number;
+            allow_users?: Array<{
+                user_id?: {
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                };
+            }>;
+            allow_depts?: Array<{ department_id: string }>;
+        };
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/room/events/created document }
      *
      * 创建会议室
@@ -2913,6 +2960,66 @@ export interface IHandles extends IOtherEventHandles {
                 resume_notice?: boolean;
             };
             device?: Array<{ name: string }>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.room_level.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_level?: {
+            room_level_id?: string;
+            name?: string;
+            parent_id?: string;
+            path?: Array<string>;
+            has_child?: boolean;
+            custom_group_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.room_level.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_level_id: string;
+        delete_child?: boolean;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.room_level.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        room_level?: {
+            room_level_id?: string;
+            name?: string;
+            parent_id?: string;
+            path?: Array<string>;
+            has_child?: boolean;
+            custom_group_id?: string;
         };
     }) => Promise<any> | any;
 }

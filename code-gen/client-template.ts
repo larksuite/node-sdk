@@ -650,7 +650,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 管理后台-密码
+     * 管理后台-企业勋章
      */
     admin = {
         /**
@@ -3104,7 +3104,7 @@ export default abstract class Client {
      */
     approval = {
         /**
-         * 原生审批定义
+         * 事件
          */
         approval: {
             /**
@@ -4111,7 +4111,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 审批查询
+         * 原生审批实例
          */
         instance: {
             /**
@@ -10353,6 +10353,164 @@ export default abstract class Client {
      */
     bitable = {
         /**
+         * 多维表格
+         */
+        app: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=bitable&resource=app&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: { name?: string; folder_token?: string };
+                    params?: {
+                        customized_config?: boolean;
+                        source_app_token?: string;
+                        copy_types?: number;
+                        api_type?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    revision?: number;
+                                    folder_token?: string;
+                                    url?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/get document }
+             *
+             * 获取多维表格元数据
+             *
+             * 获取指定多维表格的元数据信息，包括多维表格名称，多维表格版本号，多维表格是否开启高级权限等。
+             *
+             * 该接口支持调用频率上限为 20 QPS（Query Per Second，每秒请求率）
+             */
+            get: async (
+                payload?: {
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    revision?: number;
+                                    is_advanced?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update document }
+             *
+             * 更新多维表格元数据
+             *
+             * 通过 app_token 更新多维表格元数据
+             *
+             * 该接口支持调用频率上限为 10 QPS
+             *
+             * - 飞书文档、飞书表格、知识库中的多维表格不支持开启高级权限;- 此接口非原子操作，先修改多维表格名字，后开关高级权限。可能存在部分成功的情况
+             */
+            update: async (
+                payload?: {
+                    data?: { name?: string; is_advanced?: boolean };
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    is_advanced?: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 仪表盘
          */
         appDashboard: {
@@ -10526,113 +10684,6 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 多维表格
-         */
-        app: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/get document }
-             *
-             * 获取多维表格元数据
-             *
-             * 获取指定多维表格的元数据信息，包括多维表格名称，多维表格版本号，多维表格是否开启高级权限等。
-             *
-             * 该接口支持调用频率上限为 20 QPS（Query Per Second，每秒请求率）
-             */
-            get: async (
-                payload?: {
-                    path: { app_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app?: {
-                                    app_token?: string;
-                                    name?: string;
-                                    revision?: number;
-                                    is_advanced?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=update&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/bitable-v1/app/update document }
-             *
-             * 更新多维表格元数据
-             *
-             * 通过 app_token 更新多维表格元数据
-             *
-             * 该接口支持调用频率上限为 10 QPS
-             *
-             * - 飞书文档、飞书表格、知识库中的多维表格不支持开启高级权限;- 此接口非原子操作，先修改多维表格名字，后开关高级权限。可能存在部分成功的情况
-             */
-            update: async (
-                payload?: {
-                    data?: { name?: string; is_advanced?: boolean };
-                    path: { app_token: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                app?: {
-                                    app_token?: string;
-                                    name?: string;
-                                    is_advanced?: boolean;
-                                };
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/bitable/v1/apps/:app_token`,
-                            path
-                        ),
-                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -13799,6 +13850,11 @@ export default abstract class Client {
                                         };
                                         hidden_fields?: Array<string>;
                                     };
+                                    view_public_level?:
+                                        | "Public"
+                                        | "Locked"
+                                        | "Private";
+                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -13914,6 +13970,11 @@ export default abstract class Client {
                                         };
                                         hidden_fields?: Array<string>;
                                     };
+                                    view_public_level?:
+                                        | "Public"
+                                        | "Locked"
+                                        | "Private";
+                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -13934,7 +13995,11 @@ export default abstract class Client {
             },
             listWithIterator: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path?: { app_token?: string; table_id?: string };
                 },
                 options?: IRequestOptions
@@ -14023,6 +14088,11 @@ export default abstract class Client {
                                                         };
                                                         hidden_fields?: Array<string>;
                                                     };
+                                                    view_public_level?:
+                                                        | "Public"
+                                                        | "Locked"
+                                                        | "Private";
+                                                    view_private_owner_id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -14059,7 +14129,11 @@ export default abstract class Client {
              */
             list: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path?: { app_token?: string; table_id?: string };
                 },
                 options?: IRequestOptions
@@ -14102,6 +14176,11 @@ export default abstract class Client {
                                         };
                                         hidden_fields?: Array<string>;
                                     };
+                                    view_public_level?:
+                                        | "Public"
+                                        | "Locked"
+                                        | "Private";
+                                    view_private_owner_id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -14158,10 +14237,10 @@ export default abstract class Client {
                             hidden_fields?: Array<string>;
                         };
                     };
-                    path: {
-                        app_token: string;
-                        table_id: string;
-                        view_id: string;
+                    path?: {
+                        app_token?: string;
+                        table_id?: string;
+                        view_id?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -14204,6 +14283,11 @@ export default abstract class Client {
                                         };
                                         hidden_fields?: Array<string>;
                                     };
+                                    view_public_level?:
+                                        | "Public"
+                                        | "Locked"
+                                        | "Private";
+                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -23990,6 +24074,11 @@ export default abstract class Client {
                                         component_id?: string;
                                         component_type_id?: string;
                                     };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
+                                    };
                                     mindnote?: { token?: string };
                                     sheet?: {
                                         token?: string;
@@ -26407,6 +26496,11 @@ export default abstract class Client {
                                     isv?: {
                                         component_id?: string;
                                         component_type_id?: string;
+                                    };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
                                     };
                                     mindnote?: { token?: string };
                                     sheet?: { token?: string };
@@ -29098,6 +29192,11 @@ export default abstract class Client {
                                                         component_id?: string;
                                                         component_type_id?: string;
                                                     };
+                                                    add_ons?: {
+                                                        component_id?: string;
+                                                        component_type_id: string;
+                                                        record?: string;
+                                                    };
                                                     mindnote?: {
                                                         token?: string;
                                                     };
@@ -31551,6 +31650,11 @@ export default abstract class Client {
                                     isv?: {
                                         component_id?: string;
                                         component_type_id?: string;
+                                    };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
                                     };
                                     mindnote?: { token?: string };
                                     sheet?: { token?: string };
@@ -34231,6 +34335,11 @@ export default abstract class Client {
                                         component_id?: string;
                                         component_type_id?: string;
                                     };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
+                                    };
                                     mindnote?: { token?: string };
                                     sheet?: {
                                         token?: string;
@@ -36491,6 +36600,12 @@ export default abstract class Client {
                                 };
                             };
                             image?: {};
+                            isv?: {};
+                            add_ons?: {
+                                component_id?: string;
+                                component_type_id: string;
+                                record?: string;
+                            };
                             sheet?: { row_size?: number; column_size?: number };
                             table?: {
                                 property: {
@@ -38577,6 +38692,11 @@ export default abstract class Client {
                                     isv?: {
                                         component_id?: string;
                                         component_type_id?: string;
+                                    };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
                                     };
                                     mindnote?: { token?: string };
                                     sheet?: {
@@ -41278,6 +41398,11 @@ export default abstract class Client {
                                                         component_id?: string;
                                                         component_type_id?: string;
                                                     };
+                                                    add_ons?: {
+                                                        component_id?: string;
+                                                        component_type_id: string;
+                                                        record?: string;
+                                                    };
                                                     mindnote?: {
                                                         token?: string;
                                                     };
@@ -43731,6 +43856,11 @@ export default abstract class Client {
                                     isv?: {
                                         component_id?: string;
                                         component_type_id?: string;
+                                    };
+                                    add_ons?: {
+                                        component_id?: string;
+                                        component_type_id: string;
+                                        record?: string;
                                     };
                                     mindnote?: { token?: string };
                                     sheet?: { token?: string };
@@ -48083,108 +48213,9 @@ export default abstract class Client {
          */
     exam = {};
     /**
-     * AI能力
-     */
-    face_detection = {
-        /**
-         * 图片
+         
          */
-        image: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=face_detection&resource=image&apiName=detect_face_attributes&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/ai/face_detection-v1/image/detect_face_attributes document }
-             *
-             * 人脸检测和属性分析
-             *
-             * 检测图片中的人脸属性和质量等信息
-             *
-             * 注意：返回值为 -1 表示该功能还暂未实现
-             */
-            detectFaceAttributes: async (
-                payload?: {
-                    data?: { image?: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return http
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                image_info: { width?: number; height?: number };
-                                face_infos: Array<{
-                                    position?: {
-                                        upper_left: { x: number; y: number };
-                                        lower_right: { x: number; y: number };
-                                    };
-                                    attribute?: {
-                                        gender?: {
-                                            type: number;
-                                            probability: number;
-                                        };
-                                        age?: number;
-                                        emotion?: {
-                                            type: number;
-                                            probability: number;
-                                        };
-                                        beauty?: number;
-                                        pose?: {
-                                            pitch?: number;
-                                            yaw?: number;
-                                            roll?: number;
-                                        };
-                                        hat?: {
-                                            type: number;
-                                            probability: number;
-                                        };
-                                        glass?: {
-                                            type: number;
-                                            probability: number;
-                                        };
-                                        mask?: {
-                                            type: number;
-                                            probability: number;
-                                        };
-                                    };
-                                    quality?: {
-                                        sharpness?: number;
-                                        brightness?: number;
-                                        occlude?: {
-                                            eyebrow?: number;
-                                            nose?: number;
-                                            cheek?: number;
-                                            mouth?: number;
-                                            chin?: number;
-                                            left_eye?: number;
-                                            right_eye?: number;
-                                        };
-                                    };
-                                }>;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/face_detection/v1/image/detect_face_attributes`,
-                            path
-                        ),
-                        method: "POST",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-    };
+    face_detection = {};
     /**
          
          */
@@ -51638,7 +51669,7 @@ export default abstract class Client {
      */
     hire = {
         /**
-         * 入职
+         * 投递
          */
         application: {
             /**
@@ -68102,6 +68133,642 @@ export default abstract class Client {
             },
         },
         /**
+         * meeting_list
+         */
+        meetingList: {
+            getWithIterator: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        meeting_no?: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meeting_list`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                meeting_list?: Array<{
+                                                    meeting_id?: string;
+                                                    meeting_topic?: string;
+                                                    organizer?: string;
+                                                    department?: string;
+                                                    user_id?: string;
+                                                    employee_id?: string;
+                                                    email?: string;
+                                                    mobile?: string;
+                                                    meeting_start_time?: string;
+                                                    meeting_end_time?: string;
+                                                    meeting_duration?: string;
+                                                    number_of_participants?: string;
+                                                    audio?: boolean;
+                                                    video?: boolean;
+                                                    sharing?: boolean;
+                                                    recording?: boolean;
+                                                    telephone?: boolean;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting_list&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=meeting_list&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        meeting_no?: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                meeting_list?: Array<{
+                                    meeting_id?: string;
+                                    meeting_topic?: string;
+                                    organizer?: string;
+                                    department?: string;
+                                    user_id?: string;
+                                    employee_id?: string;
+                                    email?: string;
+                                    mobile?: string;
+                                    meeting_start_time?: string;
+                                    meeting_end_time?: string;
+                                    meeting_duration?: string;
+                                    number_of_participants?: string;
+                                    audio?: boolean;
+                                    video?: boolean;
+                                    sharing?: boolean;
+                                    recording?: boolean;
+                                    telephone?: boolean;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meeting_list`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * participant_list
+         */
+        participantList: {
+            getWithIterator: async (
+                payload?: {
+                    params: {
+                        meeting_start_time: string;
+                        meeting_end_time: string;
+                        meeting_no: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/participant_list`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                participants?: Array<{
+                                                    participant_name?: string;
+                                                    department?: string;
+                                                    user_id?: string;
+                                                    employee_id?: string;
+                                                    phone?: string;
+                                                    email?: string;
+                                                    device?: string;
+                                                    app_version?: string;
+                                                    public_ip?: string;
+                                                    internal_ip?: string;
+                                                    use_rtc_proxy?: boolean;
+                                                    location?: string;
+                                                    network_type?: string;
+                                                    protocol?: string;
+                                                    microphone?: string;
+                                                    speaker?: string;
+                                                    camera?: string;
+                                                    audio?: boolean;
+                                                    video?: boolean;
+                                                    sharing?: boolean;
+                                                    join_time?: string;
+                                                    leave_time?: string;
+                                                    time_in_meeting?: string;
+                                                    leave_reason?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=participant_list&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=participant_list&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        meeting_start_time: string;
+                        meeting_end_time: string;
+                        meeting_no: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                participants?: Array<{
+                                    participant_name?: string;
+                                    department?: string;
+                                    user_id?: string;
+                                    employee_id?: string;
+                                    phone?: string;
+                                    email?: string;
+                                    device?: string;
+                                    app_version?: string;
+                                    public_ip?: string;
+                                    internal_ip?: string;
+                                    use_rtc_proxy?: boolean;
+                                    location?: string;
+                                    network_type?: string;
+                                    protocol?: string;
+                                    microphone?: string;
+                                    speaker?: string;
+                                    camera?: string;
+                                    audio?: boolean;
+                                    video?: boolean;
+                                    sharing?: boolean;
+                                    join_time?: string;
+                                    leave_time?: string;
+                                    time_in_meeting?: string;
+                                    leave_reason?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/participant_list`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * participant_quality_list
+         */
+        participantQualityList: {
+            getWithIterator: async (
+                payload?: {
+                    params: {
+                        meeting_start_time: string;
+                        meeting_end_time: string;
+                        meeting_no: string;
+                        join_time: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/participant_quality_list`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                participant_quality_list?: Array<{
+                                                    network?: {
+                                                        time?: string;
+                                                        network_delay?: string;
+                                                        bitrate_received?: string;
+                                                        packet_loss_avg_received?: string;
+                                                        packet_loss_max_received?: string;
+                                                        bitrate_sent?: string;
+                                                        packet_loss_avg_sent?: string;
+                                                        packet_loss_max_sent?: string;
+                                                    };
+                                                    audio?: {
+                                                        time?: string;
+                                                        mic_input_volume?: string;
+                                                        speaker_volume?: string;
+                                                        bitrate_received?: string;
+                                                        latency_received?: string;
+                                                        jitter_received?: string;
+                                                        bitrate_sent?: string;
+                                                        latency_sent?: string;
+                                                        jitter_sent?: string;
+                                                    };
+                                                    video?: {
+                                                        time?: string;
+                                                        bitrate_received?: string;
+                                                        latency_received?: string;
+                                                        jitter_received?: string;
+                                                        maximum_resolution_received?: string;
+                                                        framerate_received?: string;
+                                                        bitrate_sent?: string;
+                                                        latency_sent?: string;
+                                                        jitter_sent?: string;
+                                                        maximum_resolution_sent?: string;
+                                                        framerate_sent?: string;
+                                                    };
+                                                    screen_sharing?: {
+                                                        time?: string;
+                                                        bitrate_received?: string;
+                                                        latency_received?: string;
+                                                        jitter_received?: string;
+                                                        maximum_resolution_received?: string;
+                                                        framerate_received?: string;
+                                                        bitrate_sent?: string;
+                                                        latency_sent?: string;
+                                                        jitter_sent?: string;
+                                                        maximum_resolution_sent?: string;
+                                                        framerate_sent?: string;
+                                                    };
+                                                    cpu_usage?: {
+                                                        time?: string;
+                                                        client_avg_cpu_usage?: string;
+                                                        client_max_cpu_usage?: string;
+                                                        system_avg_cpu_usage?: string;
+                                                        system_max_cpu_usage?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=participant_quality_list&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=participant_quality_list&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        meeting_start_time: string;
+                        meeting_end_time: string;
+                        meeting_no: string;
+                        join_time: string;
+                        user_id?: string;
+                        room_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                participant_quality_list?: Array<{
+                                    network?: {
+                                        time?: string;
+                                        network_delay?: string;
+                                        bitrate_received?: string;
+                                        packet_loss_avg_received?: string;
+                                        packet_loss_max_received?: string;
+                                        bitrate_sent?: string;
+                                        packet_loss_avg_sent?: string;
+                                        packet_loss_max_sent?: string;
+                                    };
+                                    audio?: {
+                                        time?: string;
+                                        mic_input_volume?: string;
+                                        speaker_volume?: string;
+                                        bitrate_received?: string;
+                                        latency_received?: string;
+                                        jitter_received?: string;
+                                        bitrate_sent?: string;
+                                        latency_sent?: string;
+                                        jitter_sent?: string;
+                                    };
+                                    video?: {
+                                        time?: string;
+                                        bitrate_received?: string;
+                                        latency_received?: string;
+                                        jitter_received?: string;
+                                        maximum_resolution_received?: string;
+                                        framerate_received?: string;
+                                        bitrate_sent?: string;
+                                        latency_sent?: string;
+                                        jitter_sent?: string;
+                                        maximum_resolution_sent?: string;
+                                        framerate_sent?: string;
+                                    };
+                                    screen_sharing?: {
+                                        time?: string;
+                                        bitrate_received?: string;
+                                        latency_received?: string;
+                                        jitter_received?: string;
+                                        maximum_resolution_received?: string;
+                                        framerate_received?: string;
+                                        bitrate_sent?: string;
+                                        latency_sent?: string;
+                                        jitter_sent?: string;
+                                        maximum_resolution_sent?: string;
+                                        framerate_sent?: string;
+                                    };
+                                    cpu_usage?: {
+                                        time?: string;
+                                        client_avg_cpu_usage?: string;
+                                        client_max_cpu_usage?: string;
+                                        system_avg_cpu_usage?: string;
+                                        system_max_cpu_usage?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/participant_quality_list`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 会议报告
          */
         report: {
@@ -68603,6 +69270,97 @@ export default abstract class Client {
             },
         },
         /**
+         * reserve_config.admin
+         */
+        reserveConfigAdmin: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve_config.admin&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=reserve_config.admin&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        scope_type: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { reserve_config_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                reserve_admin_config: {
+                                    depts?: Array<{ department_id: string }>;
+                                    users?: Array<{ user_id: string }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/reserve_configs/:reserve_config_id/admin`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=reserve_config.admin&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=vc&resource=reserve_config.admin&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        scope_type: number;
+                        reserve_admin_config: {
+                            depts?: Array<{ department_id: string }>;
+                            users?: Array<{ user_id: string }>;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { reserve_config_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/reserve_configs/:reserve_config_id/admin`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * reserve_config
          */
         reserveConfig: {
@@ -68720,6 +69478,186 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/reserve_configs/reserve_scope`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * resource_reservation_list
+         */
+        resourceReservationList: {
+            getWithIterator: async (
+                payload?: {
+                    params: {
+                        room_level_id: string;
+                        need_topic?: boolean;
+                        start_time: string;
+                        end_time: string;
+                        room_ids?: number;
+                        is_exclude?: boolean;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await http
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/resource_reservation_list`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                room_reservation_list?: Array<{
+                                                    room_name?: string;
+                                                    event_title?: string;
+                                                    reserver?: string;
+                                                    department_of_reserver?: string;
+                                                    guests_number?: string;
+                                                    accepted_number?: string;
+                                                    event_start_time?: string;
+                                                    event_end_time?: string;
+                                                    event_duration?: string;
+                                                    reservation_status?: string;
+                                                    check_in_device?: string;
+                                                    room_check_in_status?: string;
+                                                    check_in_time?: string;
+                                                    is_release_early?: string;
+                                                    releasing_person?: string;
+                                                    releasing_time?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=resource_reservation_list&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=resource_reservation_list&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        room_level_id: string;
+                        need_topic?: boolean;
+                        start_time: string;
+                        end_time: string;
+                        room_ids?: number;
+                        is_exclude?: boolean;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                room_reservation_list?: Array<{
+                                    room_name?: string;
+                                    event_title?: string;
+                                    reserver?: string;
+                                    department_of_reserver?: string;
+                                    guests_number?: string;
+                                    accepted_number?: string;
+                                    event_start_time?: string;
+                                    event_end_time?: string;
+                                    event_duration?: string;
+                                    reservation_status?: string;
+                                    check_in_device?: string;
+                                    room_check_in_status?: string;
+                                    check_in_time?: string;
+                                    is_release_early?: string;
+                                    releasing_person?: string;
+                                    releasing_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/resource_reservation_list`,
                             path
                         ),
                         method: "GET",
