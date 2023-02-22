@@ -3164,10 +3164,21 @@ export default abstract class Client {
                                 writable: Array<string>;
                                 readable: Array<string>;
                             };
+                            approver_chosen_multi?: boolean;
+                            approver_chosen_range?: Array<{
+                                type?: "ALL" | "PERSONAL" | "ROLE";
+                                id_list?: Array<string>;
+                            }>;
+                            starter_assignee?:
+                                | "STARTER"
+                                | "AUTO_PASS"
+                                | "SUPERVISOR"
+                                | "DEPARTMENT_MANAGER";
                         }>;
                         settings?: {
                             revert_interval?: number;
                             revert_option?: number;
+                            reject_option?: number;
                         };
                         config?: {
                             can_update_viewer: boolean;
@@ -4274,6 +4285,12 @@ export default abstract class Client {
                         allow_resubmit?: boolean;
                         allow_submit_again?: boolean;
                         cancel_bot_notification?: string;
+                        forbid_revoke?: boolean;
+                        i18n_resources?: Array<{
+                            locale: "zh-CN" | "en-US" | "ja-JP";
+                            texts: Array<{ key: string; value: string }>;
+                            is_default: boolean;
+                        }>;
                     };
                 },
                 options?: IRequestOptions
@@ -5841,6 +5858,7 @@ export default abstract class Client {
                                         };
                                         task_id?: string;
                                         update_time?: string;
+                                        task_external_id?: string;
                                     };
                                 }>;
                                 page_token?: string;
@@ -8471,6 +8489,180 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/user_task_remedys/query_user_allowed_remedys`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+    };
+    /**
+         
+         */
+    auth = {
+        /**
+         * app_access_token
+         */
+        appAccessToken: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=auth&resource=app_access_token&apiName=create&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=auth&resource=app_access_token&version=v3 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        app_id: string;
+                        app_secret: string;
+                        app_ticket: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/auth/v3/app_access_token`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=auth&resource=app_access_token&apiName=internal&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=internal&project=auth&resource=app_access_token&version=v3 document }
+             */
+            internal: async (
+                payload?: {
+                    data: { app_id: string; app_secret: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/auth/v3/app_access_token/internal`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * app_ticket
+         */
+        appTicket: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=auth&resource=app_ticket&apiName=resend&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=resend&project=auth&resource=app_ticket&version=v3 document }
+             */
+            resend: async (
+                payload?: {
+                    data: { app_id: string; app_secret: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/auth/v3/app_ticket/resend`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * tenant_access_token
+         */
+        tenantAccessToken: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=auth&resource=tenant_access_token&apiName=create&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=auth&resource=tenant_access_token&version=v3 document }
+             */
+            create: async (
+                payload?: {
+                    data: { app_access_token: string; tenant_key: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/auth/v3/tenant_access_token`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=auth&resource=tenant_access_token&apiName=internal&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=internal&project=auth&resource=tenant_access_token&version=v3 document }
+             */
+            internal: async (
+                payload?: {
+                    data: { app_id: string; app_secret: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return http
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/auth/v3/tenant_access_token/internal`,
                             path
                         ),
                         method: "POST",
@@ -11966,6 +12158,7 @@ export default abstract class Client {
                             formula_expression?: string;
                         };
                         description?: { disable_sync?: boolean; text?: string };
+                        ui_type?: string;
                     };
                     params?: { client_token?: string };
                     path: { app_token: string; table_id: string };
@@ -12022,6 +12215,8 @@ export default abstract class Client {
                                         disable_sync?: boolean;
                                         text?: string;
                                     };
+                                    is_primary?: boolean;
+                                    ui_type?: string;
                                 };
                             };
                         }
@@ -12196,6 +12391,8 @@ export default abstract class Client {
                                                         disable_sync?: boolean;
                                                         text?: string;
                                                     };
+                                                    is_primary?: boolean;
+                                                    ui_type?: string;
                                                 }>;
                                             };
                                         },
@@ -12292,6 +12489,8 @@ export default abstract class Client {
                                         disable_sync?: boolean;
                                         text?: string;
                                     };
+                                    is_primary?: boolean;
+                                    ui_type?: string;
                                 }>;
                             };
                         }
@@ -12355,6 +12554,7 @@ export default abstract class Client {
                             formula_expression?: string;
                         };
                         description?: { disable_sync?: boolean; text?: string };
+                        ui_type?: string;
                     };
                     path: {
                         app_token: string;
@@ -12414,6 +12614,8 @@ export default abstract class Client {
                                         disable_sync?: boolean;
                                         text?: string;
                                     };
+                                    is_primary?: boolean;
+                                    ui_type?: string;
                                 };
                             };
                         }
@@ -12811,6 +13013,7 @@ export default abstract class Client {
                                 name?: string;
                                 en_name?: string;
                                 email?: string;
+                                avatar_url?: string;
                             };
                             created_time?: number;
                             last_modified_by?: {
@@ -12818,6 +13021,7 @@ export default abstract class Client {
                                 name?: string;
                                 en_name?: string;
                                 email?: string;
+                                avatar_url?: string;
                             };
                             last_modified_time?: number;
                             fields: Record<
@@ -12840,6 +13044,7 @@ export default abstract class Client {
                                       name?: string;
                                       en_name?: string;
                                       email?: string;
+                                      avatar_url?: string;
                                   }>
                                 | Array<{
                                       file_token?: string;
@@ -12877,6 +13082,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -12884,6 +13090,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -12906,6 +13113,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -13004,6 +13212,7 @@ export default abstract class Client {
                                 name?: string;
                                 en_name?: string;
                                 email?: string;
+                                avatar_url?: string;
                             };
                             created_time?: number;
                             last_modified_by?: {
@@ -13011,6 +13220,7 @@ export default abstract class Client {
                                 name?: string;
                                 en_name?: string;
                                 email?: string;
+                                avatar_url?: string;
                             };
                             last_modified_time?: number;
                             fields: Record<
@@ -13033,6 +13243,7 @@ export default abstract class Client {
                                       name?: string;
                                       en_name?: string;
                                       email?: string;
+                                      avatar_url?: string;
                                   }>
                                 | Array<{
                                       file_token?: string;
@@ -13069,6 +13280,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -13076,6 +13288,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -13098,6 +13311,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -13196,6 +13410,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -13203,6 +13418,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -13225,6 +13441,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -13344,6 +13561,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -13351,6 +13569,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -13373,6 +13592,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -13483,6 +13703,7 @@ export default abstract class Client {
                                                         name?: string;
                                                         en_name?: string;
                                                         email?: string;
+                                                        avatar_url?: string;
                                                     };
                                                     created_time?: number;
                                                     last_modified_by?: {
@@ -13490,6 +13711,7 @@ export default abstract class Client {
                                                         name?: string;
                                                         en_name?: string;
                                                         email?: string;
+                                                        avatar_url?: string;
                                                     };
                                                     last_modified_time?: number;
                                                     fields: Record<
@@ -13515,6 +13737,7 @@ export default abstract class Client {
                                                               name?: string;
                                                               en_name?: string;
                                                               email?: string;
+                                                              avatar_url?: string;
                                                           }>
                                                         | Array<{
                                                               file_token?: string;
@@ -13594,6 +13817,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -13601,6 +13825,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -13623,6 +13848,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -13724,6 +13950,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     created_time?: number;
                                     last_modified_by?: {
@@ -13731,6 +13958,7 @@ export default abstract class Client {
                                         name?: string;
                                         en_name?: string;
                                         email?: string;
+                                        avatar_url?: string;
                                     };
                                     last_modified_time?: number;
                                     fields: Record<
@@ -13753,6 +13981,7 @@ export default abstract class Client {
                                               name?: string;
                                               en_name?: string;
                                               email?: string;
+                                              avatar_url?: string;
                                           }>
                                         | Array<{
                                               file_token?: string;
@@ -16255,6 +16484,7 @@ export default abstract class Client {
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
+                                        live_link?: string;
                                     };
                                     visibility?:
                                         | "default"
@@ -16398,6 +16628,7 @@ export default abstract class Client {
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
+                                        live_link?: string;
                                     };
                                     visibility?:
                                         | "default"
@@ -16515,6 +16746,7 @@ export default abstract class Client {
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
+                                        live_link?: string;
                                     };
                                     visibility?:
                                         | "default"
@@ -16673,6 +16905,7 @@ export default abstract class Client {
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
+                                        live_link?: string;
                                     };
                                     visibility?:
                                         | "default"
@@ -16839,6 +17072,7 @@ export default abstract class Client {
                                                             | "default";
                                                         description?: string;
                                                         meeting_url?: string;
+                                                        live_link?: string;
                                                     };
                                                     visibility?:
                                                         | "default"
@@ -16975,6 +17209,7 @@ export default abstract class Client {
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
+                                        live_link?: string;
                                     };
                                     visibility?:
                                         | "default"
@@ -20380,6 +20615,7 @@ export default abstract class Client {
                         geo?: string;
                         job_level_id?: string;
                         job_family_id?: string;
+                        subscription_ids?: Array<string>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -20953,6 +21189,18 @@ export default abstract class Client {
                                     geo?: string;
                                     job_level_id?: string;
                                     job_family_id?: string;
+                                    assign_info?: Array<{
+                                        subscription_id?: string;
+                                        license_plan_key?: string;
+                                        product_name?: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            ja_jp?: string;
+                                            en_us?: string;
+                                        };
+                                        start_time?: string;
+                                        end_time?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -21110,6 +21358,18 @@ export default abstract class Client {
                                                     geo?: string;
                                                     job_level_id?: string;
                                                     job_family_id?: string;
+                                                    assign_info?: Array<{
+                                                        subscription_id?: string;
+                                                        license_plan_key?: string;
+                                                        product_name?: string;
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            ja_jp?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        start_time?: string;
+                                                        end_time?: string;
+                                                    }>;
                                                 }>;
                                             };
                                         },
@@ -21230,6 +21490,18 @@ export default abstract class Client {
                                     geo?: string;
                                     job_level_id?: string;
                                     job_family_id?: string;
+                                    assign_info?: Array<{
+                                        subscription_id?: string;
+                                        license_plan_key?: string;
+                                        product_name?: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            ja_jp?: string;
+                                            en_us?: string;
+                                        };
+                                        start_time?: string;
+                                        end_time?: string;
+                                    }>;
                                 }>;
                             };
                         }
@@ -21308,6 +21580,7 @@ export default abstract class Client {
                         geo?: string;
                         job_level_id?: string;
                         job_family_id?: string;
+                        subscription_ids?: Array<string>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -44353,7 +44626,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 云文档-文件管理
+     * 云文档-文档
      */
     drive = {
         /**
@@ -45058,7 +45331,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 文件夹
+         * 事件
          */
         file: {
             /**
@@ -46555,7 +46828,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -46941,6 +47214,7 @@ export default abstract class Client {
                                     latest_modify_user: string;
                                     latest_modify_time: string;
                                     url: string;
+                                    sec_label_name?: string;
                                 }>;
                                 failed_list?: Array<{
                                     token: string;
@@ -51669,7 +51943,7 @@ export default abstract class Client {
      */
     hire = {
         /**
-         * 投递
+         * 入职
          */
         application: {
             /**
@@ -62838,6 +63112,7 @@ export default abstract class Client {
                             ja_jp?: string;
                         };
                         schema_id?: string;
+                        app_id?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -62874,6 +63149,7 @@ export default abstract class Client {
                                         ja_jp?: string;
                                     };
                                     schema_id?: string;
+                                    app_id?: string;
                                 };
                             };
                         }
@@ -62973,6 +63249,7 @@ export default abstract class Client {
                                         ja_jp?: string;
                                     };
                                     schema_id?: string;
+                                    app_id?: string;
                                 };
                             };
                         }
@@ -63079,6 +63356,7 @@ export default abstract class Client {
                                                         ja_jp?: string;
                                                     };
                                                     schema_id?: string;
+                                                    app_id?: string;
                                                 }>;
                                             };
                                         },
@@ -63152,6 +63430,7 @@ export default abstract class Client {
                                         ja_jp?: string;
                                     };
                                     schema_id?: string;
+                                    app_id?: string;
                                 }>;
                             };
                         }
@@ -63233,6 +63512,7 @@ export default abstract class Client {
                                         ja_jp?: string;
                                     };
                                     schema_id?: string;
+                                    app_id?: string;
                                 };
                             };
                         }
@@ -69502,7 +69782,7 @@ export default abstract class Client {
                         need_topic?: boolean;
                         start_time: string;
                         end_time: string;
-                        room_ids?: number;
+                        room_ids: number;
                         is_exclude?: boolean;
                         page_size?: number;
                         page_token?: string;
@@ -69615,7 +69895,7 @@ export default abstract class Client {
                         need_topic?: boolean;
                         start_time: string;
                         end_time: string;
-                        room_ids?: number;
+                        room_ids: number;
                         is_exclude?: boolean;
                         page_size?: number;
                         page_token?: string;

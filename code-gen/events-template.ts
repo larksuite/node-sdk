@@ -961,6 +961,19 @@ export interface IHandles extends IOtherEventHandles {
                 geo?: string;
                 job_level_id?: string;
                 job_family_id?: string;
+                subscription_ids?: Array<string>;
+                assign_info?: Array<{
+                    subscription_id?: string;
+                    license_plan_key?: string;
+                    product_name?: string;
+                    i18n_name?: {
+                        zh_cn?: string;
+                        ja_jp?: string;
+                        en_us?: string;
+                    };
+                    start_time?: string;
+                    end_time?: string;
+                }>;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1050,6 +1063,19 @@ export interface IHandles extends IOtherEventHandles {
                 geo?: string;
                 job_level_id?: string;
                 job_family_id?: string;
+                subscription_ids?: Array<string>;
+                assign_info?: Array<{
+                    subscription_id?: string;
+                    license_plan_key?: string;
+                    product_name?: string;
+                    i18n_name?: {
+                        zh_cn?: string;
+                        ja_jp?: string;
+                        en_us?: string;
+                    };
+                    start_time?: string;
+                    end_time?: string;
+                }>;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1832,6 +1858,24 @@ export interface IHandles extends IOtherEventHandles {
             image_keys?: Array<string>;
             image_key?: string;
         };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/application-stage-changed document }
+     */
+    "hire.application.stage_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        application_id?: string;
+        origin_stage_id?: string;
+        target_stage_id?: string;
+        update_time?: number;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/disbanded document }
