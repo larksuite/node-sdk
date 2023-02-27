@@ -369,7 +369,7 @@ const server = new Koa();
 const router = new Router();
 server.use(koaBody());
 
-onst eventDispatcher = new lark.EventDispatcher({
+const eventDispatcher = new lark.EventDispatcher({
     encryptKey: 'encryptKey',
 }).register({
     'im.message.receive_v1': async (data) => {
