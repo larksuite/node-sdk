@@ -1,8 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
+import { HttpInstance } from '@node-sdk/typings/http';
 
-let httpInstance = axios.create();
+let defaultHttpInstance: AxiosInstance = axios.create();
 
-httpInstance.interceptors.request.use(
+defaultHttpInstance.interceptors.request.use(
     (req) => {
         if (req.headers) {
             req.headers['User-Agent'] = 'oapi-node-sdk/1.0.0';
@@ -13,13 +14,15 @@ httpInstance.interceptors.request.use(
     { synchronous: true }
 );
 
-httpInstance.interceptors.response.use((resp) => resp.data);
+defaultHttpInstance.interceptors.response.use((resp) => resp.data);
 
-const setHttpInstance = (val: AxiosInstance) => {
+let httpInstance: HttpInstance = defaultHttpInstance;
+const setHttpInstance = (val: HttpInstance) => {
     httpInstance = val;
 };
 
 export {
+    httpInstance,
     setHttpInstance
 };
 

@@ -1,5 +1,5 @@
 import get from 'lodash.get';
-import http, { AxiosRequestConfig } from '@node-sdk/http';
+import http from '@node-sdk/http';
 import { Cache, AppType, Domain, LoggerLevel, Logger } from '@node-sdk/typings';
 import {
     CTenantKey,
@@ -18,6 +18,7 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { IRequestOptions, IClientParams, IPayload } from './types';
 import { TokenManager } from './token-manager';
+import { HttpRequestOptions } from '@node-sdk/typings/http';
 
 export class Client extends RequestTemplate {
     appId: string = '';
@@ -138,8 +139,8 @@ export class Client extends RequestTemplate {
         };
     }
 
-    async request<T = any>(
-        payload: AxiosRequestConfig,
+    async request<T extends Record<string, any>>(
+        payload: HttpRequestOptions<T>,
         options?: IRequestOptions
     ) {
         const { data, params, headers, url, ...rest } = payload;
