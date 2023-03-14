@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const httpInstance = axios.create();
+let httpInstance = axios.create();
 
 httpInstance.interceptors.request.use(
     (req) => {
@@ -15,6 +15,14 @@ httpInstance.interceptors.request.use(
 
 httpInstance.interceptors.response.use((resp) => resp.data);
 
-export { AxiosRequestConfig, AxiosError } from 'axios';
+const setHttpInstance = (val: AxiosInstance) => {
+    httpInstance = val;
+};
+
+export {
+    setHttpInstance
+};
+
+export { AxiosRequestConfig, AxiosError, AxiosInstance } from 'axios';
 
 export default httpInstance;
