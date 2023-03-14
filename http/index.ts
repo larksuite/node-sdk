@@ -26,6 +26,6 @@ export {
     setHttpInstance
 };
 
-export { AxiosRequestConfig, AxiosError, AxiosInstance } from 'axios';
+export { AxiosRequestConfig, AxiosError } from 'axios';
 
 export default httpInstance;
