@@ -5,12 +5,13 @@ export interface HttpInstance {
 export type ResponseType =
   | 'arraybuffer'
   | 'blob'
+  | 'document'
   | 'json'
   | 'text'
   | 'stream';
 
 export interface HttpRequestOptions<D> {
-	url: string;
+	url?: string;
 	method?: string;
 	headers?: Record<string, any>;
 	params?: Record<string, any>;
