@@ -1,9 +1,9 @@
 import get from 'lodash.get';
 import { CTenantKey, CTenantAccessToken } from '@node-sdk/consts';
 import { Cache, AppType, Logger } from '@node-sdk/typings';
-import http from '@node-sdk/http';
 import { assert } from '@node-sdk/utils';
 import AppTicketManager from './app-ticket-manager';
+import { HttpInstance } from '@node-sdk/typings/http';
 
 interface IParams {
     appId: string;
@@ -12,6 +12,7 @@ interface IParams {
     domain: string;
     logger: Logger;
     appType: AppType;
+    httpInstance: HttpInstance;
 }
 
 export class TokenManager {
@@ -29,6 +30,8 @@ export class TokenManager {
 
     appType: AppType;
 
+    httpInstance: HttpInstance;
+
     constructor(params: IParams) {
         this.appId = params.appId;
         this.appSecret = params.appSecret;
@@ -36,6 +39,7 @@ export class TokenManager {
         this.domain = params.domain;
         this.logger = params.logger;
         this.appType = params.appType;
+        this.httpInstance = params.httpInstance;
 
         this.appTicketManager = new AppTicketManager({
             appId: this.appId,
@@ -44,6 +48,7 @@ export class TokenManager {
             domain: this.domain,
             logger: this.logger,
             appType: this.appType,
+            httpInstance: this.httpInstance,
         });
 
         this.logger.debug('token manager is ready');
@@ -64,7 +69,7 @@ export class TokenManager {
 
         this.logger.debug('request token');
         // @ts-ignore
-        const { tenant_access_token, expire } = await http
+        const { tenant_access_token, expire } = await this.httpInstance
             .post(
                 `${this.domain}/open-apis/auth/v3/tenant_access_token/internal`,
                 {
@@ -118,7 +123,7 @@ export class TokenManager {
         this.logger.debug('get app access token');
         // 获取app_access_token
         // @ts-ignore
-        const { app_access_token } = await http
+        const { app_access_token } = await this.httpInstance
             .post<{
                 app_access_token: string;
             }>(`${this.domain}/open-apis/auth/v3/app_access_token`, {
@@ -133,7 +138,7 @@ export class TokenManager {
         this.logger.debug('get tenant access token');
         // 获取tenant_access_token
         // @ts-ignore
-        const { tenant_access_token, expire } = await http
+        const { tenant_access_token, expire } = await this.httpInstance
             .post(`${this.domain}/open-apis/auth/v3/tenant_access_token`, {
                 app_access_token,
                 tenant_key: tenantKey,

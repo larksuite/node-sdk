@@ -1,6 +1,6 @@
-import http from '@node-sdk/http';
 import { Cache, Logger, AppType } from '@node-sdk/typings';
 import { CAppTicket } from '@node-sdk/consts';
+import { HttpInstance } from '@node-sdk/typings/http';
 
 export interface IParams {
     appId: string;
@@ -9,6 +9,7 @@ export interface IParams {
     domain: string;
     logger: Logger;
     appType: AppType;
+    httpInstance: HttpInstance;
 }
 export default class AppTicketManager {
     appId: string;
@@ -23,6 +24,8 @@ export default class AppTicketManager {
 
     appType: AppType;
 
+    httpInstance: HttpInstance;
+
     constructor(params: IParams) {
         this.appId = params.appId;
         this.appSecret = params.appSecret;
@@ -30,6 +33,7 @@ export default class AppTicketManager {
         this.domain = params.domain;
         this.logger = params.logger;
         this.appType = params.appType;
+        this.httpInstance = params.httpInstance;
 
         this.logger.debug('app ticket manager is ready');
 
@@ -49,7 +53,7 @@ export default class AppTicketManager {
 
     async requestAppTicket() {
         this.logger.debug('request app ticket');
-        await http
+        await this.httpInstance
             .post(`${this.domain}/open-apis/auth/v3/app_ticket/resend`, {
                 app_id: this.appId,
                 app_secret: this.appSecret,

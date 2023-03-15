@@ -29,6 +29,7 @@ export interface IClientParams {
     appType?: AppType;
     helpDeskId?: string;
     helpDeskToken?: string;
+    httpInstance?: string;
 }
 
 export interface IPayload {

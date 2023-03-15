@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { HttpInstance } from '@node-sdk/typings/http';
 
 let defaultHttpInstance: AxiosInstance = axios.create();
 
@@ -16,16 +15,6 @@ defaultHttpInstance.interceptors.request.use(
 
 defaultHttpInstance.interceptors.response.use((resp) => resp.data);
 
-let httpInstance: HttpInstance = defaultHttpInstance;
-const setHttpInstance = (val: HttpInstance) => {
-    httpInstance = val;
-};
-
-export {
-    httpInstance,
-    setHttpInstance
-};
-
 export { AxiosRequestConfig, AxiosError } from 'axios';
 
-export default httpInstance;
+export default defaultHttpInstance;

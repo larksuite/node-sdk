@@ -13,4 +13,3 @@ export { AppType, Domain, LoggerLevel, Cache } from './typings';
 export { CAppTicket, CTenantAccessToken } from './consts';
 export { IHandles as EventHandles } from './code-gen/events-template';
 export { AESCipher } from './utils/aes-cipher';
-export { setHttpInstance, httpInstance } from './http';
