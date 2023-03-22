@@ -111,6 +111,7 @@ client.im.message.create({
 | appId | app id | string | yes | - |
 | appSecret | app secret | string | yes | - |
 | domain | The domain of the application, divided into Feishu (https://open.feishu.cn), lark (https://open.larksuite.com), others (the complete domain name needs to be passed) | Domain &#124; string | no | Domain.Feishu |
+| httpInstance | The http instance of the sdk sending request。*By default, the sdk uses axios.create() to construct a defaultHttpInstance to make http calls.* | HttpInstance | No | defaultHttpInstance。*It can be imported from sdk and add interceptors on it.* |
 | loggerLevel | Log Level | LoggerLevel | No | info |
 | logger | - | Logger | No | - |
 | cache | Cache | Cache | No | - |

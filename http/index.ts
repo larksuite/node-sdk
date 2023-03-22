@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-let defaultHttpInstance: AxiosInstance = axios.create();
+const defaultHttpInstance: AxiosInstance = axios.create();
 
 defaultHttpInstance.interceptors.request.use(
     (req) => {

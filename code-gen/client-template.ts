@@ -7,7 +7,7 @@ import { Logger } from "@node-sdk/typings";
 import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "./types";
 import { IPayload } from "../client/types";
-import { HttpInstance } from '@node-sdk/typings/http';
+import { HttpInstance } from "@node-sdk/typings/http";
 
 // auto gen
 export default abstract class Client {
