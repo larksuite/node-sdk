@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const httpInstance = axios.create();
+let defaultHttpInstance: AxiosInstance = axios.create();
 
-httpInstance.interceptors.request.use(
+defaultHttpInstance.interceptors.request.use(
     (req) => {
         if (req.headers) {
             req.headers['User-Agent'] = 'oapi-node-sdk/1.0.0';
@@ -13,8 +13,8 @@ httpInstance.interceptors.request.use(
     { synchronous: true }
 );
 
-httpInstance.interceptors.response.use((resp) => resp.data);
+defaultHttpInstance.interceptors.response.use((resp) => resp.data);
 
 export { AxiosRequestConfig, AxiosError } from 'axios';
 
-export default httpInstance;
+export default defaultHttpInstance;

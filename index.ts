@@ -8,6 +8,7 @@ export * from './adaptor/koa';
 export * from './adaptor/koa-router';
 export { generateChallenge } from './adaptor/services/challenge';
 export * from './typings/card';
+export * from './typings/http';
 export { AppType, Domain, LoggerLevel, Cache } from './typings';
 export { CAppTicket, CTenantAccessToken } from './consts';
 export { IHandles as EventHandles } from './code-gen/events-template';

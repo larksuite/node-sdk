@@ -1,5 +1,5 @@
 import get from 'lodash.get';
-import http, { AxiosRequestConfig } from '@node-sdk/http';
+import defaultHttpInstance, { AxiosRequestConfig } from '@node-sdk/http';
 import { Cache, AppType, Domain, LoggerLevel, Logger } from '@node-sdk/typings';
 import {
     CTenantKey,
@@ -18,6 +18,7 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { IRequestOptions, IClientParams, IPayload } from './types';
 import { TokenManager } from './token-manager';
+import { HttpInstance } from '@node-sdk/typings/http';
 
 export class Client extends RequestTemplate {
     appId: string = '';
@@ -39,6 +40,8 @@ export class Client extends RequestTemplate {
     appType: AppType = AppType.SelfBuild;
 
     domain: string;
+
+    httpInstance: HttpInstance;
 
     constructor(params: IClientParams) {
         super();
@@ -63,6 +66,7 @@ export class Client extends RequestTemplate {
         this.logger.debug(`use domain url: ${this.domain}`);
 
         this.cache = params.cache || internalCache;
+        this.httpInstance = params.httpInstance || defaultHttpInstance;
 
         this.tokenManager = new TokenManager({
             appId: this.appId,
@@ -71,6 +75,7 @@ export class Client extends RequestTemplate {
             domain: this.domain,
             logger: this.logger,
             appType: this.appType,
+            httpInstance: this.httpInstance,
         });
 
         this.logger.info('client ready');
@@ -153,7 +158,7 @@ export class Client extends RequestTemplate {
         );
 
         this.logger.trace(`send request [${payload.method}]: ${payload.url}`);
-        const res = await http
+        const res = await this.httpInstance
             .request<T, T>({
                 ...rest,
                 ...{
