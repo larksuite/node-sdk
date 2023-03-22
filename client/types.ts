@@ -4,6 +4,7 @@ import {
     CWithHelpdeskAuthorization,
     CWithUserAccessToken,
 } from '@node-sdk/consts';
+import { HttpInstance } from '@node-sdk/typings/http';
 
 // 和axios保持一致
 export interface IRequestOptions {
@@ -29,6 +30,7 @@ export interface IClientParams {
     appType?: AppType;
     helpDeskId?: string;
     helpDeskToken?: string;
+    httpInstance?: HttpInstance;
 }
 
 export interface IPayload {

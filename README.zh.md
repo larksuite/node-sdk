@@ -110,6 +110,7 @@ client.im.message.create({
 | appId  | 应用的id | string | 是 | - |
 | appSecret  | 应用的密码 | string | 是 | - |
 | domain  | 应用的域，分为飞书（https://open.feishu.cn）、lark（https://open.larksuite.com）、其它（需要传递完整的域名） | Domain &#124; string | 否 | Domain.Feishu |
+| httpInstance | sdk发送请求的http实例。*sdk内部默认使用axios.create()构造出一个defaultHttpInstance来进行http调用。*| HttpInstance | 否 | defaultHttpInstance。*可以从sdk中import它，在其上添加interceptors来完成业务需求。* |
 | loggerLevel  | 日志级别 | LoggerLevel | 否 | info |
 | logger  | - | Logger | 否 | - |
 | cache  | 缓存器 | Cache | 否 | - |

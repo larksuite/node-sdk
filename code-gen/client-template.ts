@@ -1,4 +1,3 @@
-import http from "@node-sdk/http";
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
 import get from "lodash.get";
@@ -8,6 +7,7 @@ import { Logger } from "@node-sdk/typings";
 import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "./types";
 import { IPayload } from "../client/types";
+import { HttpInstance } from "@node-sdk/typings/http";
 
 // auto gen
 export default abstract class Client {
@@ -16,6 +16,8 @@ export default abstract class Client {
     declare domain;
 
     declare logger: Logger;
+
+    declare httpInstance: HttpInstance;
 
     abstract formatPayload(
         // eslint-disable-next-line no-unused-vars
@@ -50,7 +52,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/acs/v1/access_records/:access_record_id/access_photo`,
@@ -109,7 +111,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/acs/v1/access_records`,
@@ -211,7 +213,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -265,7 +267,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -321,7 +323,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
@@ -380,7 +382,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/acs/v1/users/:user_id/face`,
@@ -429,7 +431,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -478,7 +480,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/acs/v1/users`,
@@ -576,7 +578,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -631,7 +633,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/acs/v1/users/:user_id`,
@@ -687,7 +689,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -783,7 +785,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -872,7 +874,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -931,7 +933,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -990,7 +992,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/admin/v1/badges`,
@@ -1096,7 +1098,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1173,7 +1175,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1258,7 +1260,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1317,7 +1319,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants/:grant_id`,
@@ -1357,7 +1359,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1421,7 +1423,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/admin/v1/badges/:badge_id/grants`,
@@ -1532,7 +1534,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1614,7 +1616,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -1678,7 +1680,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -1735,7 +1737,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/admin/v1/password/reset`,
@@ -1779,7 +1781,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/app_recommend_rules`,
@@ -1927,7 +1929,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2044,7 +2046,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2099,7 +2101,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2256,7 +2258,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions`,
@@ -2465,7 +2467,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2627,7 +2629,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id`,
@@ -2675,7 +2677,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2742,7 +2744,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
@@ -2785,7 +2787,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -2867,7 +2869,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/application/v6/applications/:app_id`,
@@ -2902,7 +2904,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/applications/underauditlist`,
@@ -3033,7 +3035,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3207,7 +3209,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3256,7 +3258,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3334,7 +3336,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/approvals`,
@@ -3427,7 +3429,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3475,7 +3477,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code/subscribe`,
@@ -3509,7 +3511,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/approvals/:approval_code/unsubscribe`,
@@ -3593,7 +3595,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3648,7 +3650,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3790,7 +3792,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -3952,7 +3954,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/external_tasks`,
@@ -4071,7 +4073,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4148,7 +4150,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/add_sign`,
@@ -4189,7 +4191,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/cancel`,
@@ -4232,7 +4234,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/cc`,
@@ -4298,7 +4300,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4344,7 +4346,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4482,7 +4484,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances`,
@@ -4574,7 +4576,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4626,7 +4628,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4698,7 +4700,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances/query`,
@@ -4842,7 +4844,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -4937,7 +4939,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5036,7 +5038,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/specified_rollback`,
@@ -5091,7 +5093,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5136,7 +5138,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5179,7 +5181,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances/:instance_id/comments`,
@@ -5296,7 +5298,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5370,7 +5372,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5429,7 +5431,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/approve`,
@@ -5465,7 +5467,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/tasks/query`,
@@ -5601,7 +5603,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5692,7 +5694,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/reject`,
@@ -5736,7 +5738,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/resubmit`,
@@ -5796,7 +5798,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -5908,7 +5910,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/transfer`,
@@ -5958,7 +5960,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6015,7 +6017,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/files/:file_id/download`,
@@ -6067,7 +6069,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -6201,7 +6203,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6322,7 +6324,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/groups/:group_id`,
@@ -6360,7 +6362,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6474,7 +6476,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/groups`,
@@ -6563,7 +6565,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6613,7 +6615,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6695,7 +6697,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6768,7 +6770,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/shifts/:shift_id`,
@@ -6802,7 +6804,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -6869,7 +6871,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/shifts`,
@@ -6985,7 +6987,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7060,7 +7062,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7188,7 +7190,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7300,7 +7302,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7413,7 +7415,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7467,7 +7469,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7553,7 +7555,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7629,7 +7631,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7707,7 +7709,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7789,7 +7791,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7837,7 +7839,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7899,7 +7901,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -7965,7 +7967,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8030,7 +8032,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8105,7 +8107,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8181,7 +8183,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8343,7 +8345,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8409,7 +8411,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8466,7 +8468,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8529,7 +8531,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/auth/v3/app_access_token`,
@@ -8559,7 +8561,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/auth/v3/app_access_token/internal`,
@@ -8594,7 +8596,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/auth/v3/app_ticket/resend`,
@@ -8629,7 +8631,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/auth/v3/tenant_access_token`,
@@ -8659,7 +8661,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/auth/v3/tenant_access_token/internal`,
@@ -8699,7 +8701,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8761,7 +8763,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8818,7 +8820,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -8884,7 +8886,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/baike/v1/classifications`,
@@ -8973,7 +8975,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9072,7 +9074,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9229,7 +9231,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9390,7 +9392,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9500,7 +9502,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9553,7 +9555,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9663,7 +9665,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9711,7 +9713,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/baike/v1/entities`,
@@ -9872,7 +9874,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -9983,7 +9985,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10030,7 +10032,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/baike/v1/entities/search`,
@@ -10191,7 +10193,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10344,7 +10346,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10459,7 +10461,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/baike/v1/files/:file_token/download`,
@@ -10510,7 +10512,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -10568,7 +10570,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10619,7 +10621,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10672,7 +10674,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10725,7 +10727,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10763,7 +10765,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/dashboards`,
@@ -10855,7 +10857,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -10938,7 +10940,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11013,7 +11015,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id`,
@@ -11044,7 +11046,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles`,
@@ -11166,7 +11168,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11276,7 +11278,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11368,7 +11370,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_create`,
@@ -11414,7 +11416,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/batch_delete`,
@@ -11458,7 +11460,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
@@ -11505,7 +11507,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members/:member_id`,
@@ -11536,7 +11538,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/roles/:role_id/members`,
@@ -11637,7 +11639,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11746,7 +11748,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11790,7 +11792,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/batch_delete`,
@@ -11866,7 +11868,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -11913,7 +11915,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id`,
@@ -11944,7 +11946,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables`,
@@ -12038,7 +12040,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12085,7 +12087,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12168,7 +12170,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12259,7 +12261,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12302,7 +12304,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/fields`,
@@ -12439,7 +12441,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12567,7 +12569,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12658,7 +12660,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/fields`,
@@ -12758,7 +12760,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12824,7 +12826,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12884,7 +12886,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -12953,7 +12955,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13068,7 +13070,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13163,7 +13165,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13266,7 +13268,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13396,7 +13398,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13494,7 +13496,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13547,7 +13549,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13647,7 +13649,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records`,
@@ -13800,7 +13802,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -13936,7 +13938,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14044,7 +14046,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14126,7 +14128,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views/:view_id`,
@@ -14164,7 +14166,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14241,7 +14243,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/views`,
@@ -14370,7 +14372,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14477,7 +14479,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14576,7 +14578,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14647,7 +14649,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/block/v2/entities/:block_id`,
@@ -14692,7 +14694,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/block/v2/message`,
@@ -14750,7 +14752,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14802,7 +14804,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/:acl_id`,
@@ -14837,7 +14839,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls`,
@@ -14942,7 +14944,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -14998,7 +15000,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/subscription`,
@@ -15034,7 +15036,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/acls/unsubscription`,
@@ -15082,7 +15084,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15152,7 +15154,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id`,
@@ -15188,7 +15190,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15260,7 +15262,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15343,7 +15345,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15413,7 +15415,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15481,7 +15483,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/search`,
@@ -15592,7 +15594,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15663,7 +15665,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15726,7 +15728,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/subscription`,
@@ -15762,7 +15764,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/unsubscribe`,
@@ -15791,7 +15793,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/unsubscription`,
@@ -15848,7 +15850,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/batch_delete`,
@@ -15909,7 +15911,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -15995,7 +15997,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees`,
@@ -16130,7 +16132,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16227,7 +16229,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/attendees/:attendee_id/chat_members`,
@@ -16336,7 +16338,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16451,7 +16453,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16560,7 +16562,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
@@ -16596,7 +16598,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16711,7 +16713,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16872,7 +16874,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -16997,7 +16999,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/search`,
@@ -17176,7 +17178,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17284,7 +17286,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/subscription`,
@@ -17320,7 +17322,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/unsubscription`,
@@ -17368,7 +17370,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17422,7 +17424,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/exchange_bindings/:exchange_binding_id`,
@@ -17461,7 +17463,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17526,7 +17528,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17577,7 +17579,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17638,7 +17640,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17687,7 +17689,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/timeoff_events/:timeoff_event_id`,
@@ -17731,7 +17733,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/custom_attrs`,
@@ -17837,7 +17839,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -17908,7 +17910,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/departments/:department_id/children`,
@@ -18030,7 +18032,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18126,7 +18128,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18198,7 +18200,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/departments/:department_id`,
@@ -18240,7 +18242,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18310,7 +18312,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/departments`,
@@ -18425,7 +18427,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18496,7 +18498,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/departments/parent`,
@@ -18616,7 +18618,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18710,7 +18712,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18779,7 +18781,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/departments/search`,
@@ -18900,7 +18902,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -18973,7 +18975,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/departments/unbind_department_chat`,
@@ -19033,7 +19035,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19110,7 +19112,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19163,7 +19165,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/employee_type_enums/:enum_id`,
@@ -19193,7 +19195,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/employee_type_enums`,
@@ -19289,7 +19291,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19353,7 +19355,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19416,7 +19418,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19457,7 +19459,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/group/:group_id`,
@@ -19491,7 +19493,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19546,7 +19548,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19592,7 +19594,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/group/:group_id`,
@@ -19626,7 +19628,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/group/simplelist`,
@@ -19722,7 +19724,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19783,7 +19785,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/add`,
@@ -19826,7 +19828,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -19881,7 +19883,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/batch_remove`,
@@ -19920,7 +19922,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/group/:group_id/member/remove`,
@@ -19964,7 +19966,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20021,7 +20023,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/scopes`,
@@ -20116,7 +20118,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20174,7 +20176,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/unit/bind_department`,
@@ -20208,7 +20210,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20249,7 +20251,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/unit/:unit_id`,
@@ -20283,7 +20285,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20330,7 +20332,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20386,7 +20388,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20435,7 +20437,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/unit/:unit_id`,
@@ -20475,7 +20477,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/unit/unbind_department`,
@@ -20519,7 +20521,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20630,7 +20632,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -20769,7 +20771,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/contact/v3/users/:user_id`,
@@ -20807,7 +20809,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/users/find_by_department`,
@@ -20984,7 +20986,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -21113,7 +21115,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -21241,7 +21243,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/contact/v3/users`,
@@ -21412,7 +21414,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -21595,7 +21597,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -21772,7 +21774,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -21929,7 +21931,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -22295,7 +22297,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -24721,7 +24723,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -27128,7 +27130,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks`,
@@ -29875,7 +29877,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -32556,7 +32558,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -34988,7 +34990,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -36914,7 +36916,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -39334,7 +39336,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/docx/v1/documents/:document_id/blocks/:block_id/children`,
@@ -42081,7 +42083,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44497,7 +44499,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44548,7 +44550,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44600,7 +44602,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44656,7 +44658,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44697,7 +44699,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/export_tasks/file/:file_token/download`,
@@ -44749,7 +44751,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44846,7 +44848,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -44923,7 +44925,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45000,7 +45002,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/comments`,
@@ -45134,7 +45136,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45217,7 +45219,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id`,
@@ -45261,7 +45263,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
@@ -45313,7 +45315,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
@@ -45366,7 +45368,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45421,7 +45423,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45477,7 +45479,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45520,7 +45522,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/download`,
@@ -45571,7 +45573,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files`,
@@ -45671,7 +45673,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45737,7 +45739,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45779,7 +45781,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/subscribe`,
@@ -45813,7 +45815,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45865,7 +45867,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -45913,7 +45915,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -45962,7 +45964,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/upload_part`,
@@ -46010,7 +46012,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46070,7 +46072,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46131,7 +46133,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46185,7 +46187,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46237,7 +46239,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46305,7 +46307,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46365,7 +46367,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/versions/:version_id`,
@@ -46401,7 +46403,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/versions/:version_id`,
@@ -46508,7 +46510,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46566,7 +46568,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/versions`,
@@ -46677,7 +46679,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46752,7 +46754,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46793,7 +46795,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46851,7 +46853,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -46900,7 +46902,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/medias/:file_token/download`,
@@ -46974,7 +46976,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -47022,7 +47024,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47071,7 +47073,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/medias/upload_part`,
@@ -47131,7 +47133,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47198,7 +47200,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47275,7 +47277,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47339,7 +47341,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47409,7 +47411,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members/:member_id`,
@@ -47457,7 +47459,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47526,7 +47528,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/permissions/:token/members/transfer_owner`,
@@ -47583,7 +47585,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47651,7 +47653,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47745,7 +47747,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -47825,7 +47827,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/ehr/v1/attachments/:token`,
@@ -47887,7 +47889,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/ehr/v1/employees`,
@@ -48148,7 +48150,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48365,7 +48367,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/event/v1/outbound_ip`,
@@ -48453,7 +48455,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48520,7 +48522,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48565,7 +48567,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48613,7 +48615,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/gray_test_open_sg/v1/motos`,
@@ -48699,7 +48701,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48749,7 +48751,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48791,7 +48793,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id`,
@@ -48830,7 +48832,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
@@ -48864,7 +48866,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -48937,7 +48939,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agents/:agent_id/schedules`,
@@ -48986,7 +48988,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agent_schedules`,
@@ -49020,7 +49022,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49097,7 +49099,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49138,7 +49140,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
@@ -49172,7 +49174,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49228,7 +49230,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49288,7 +49290,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/agent_skills/:agent_skill_id`,
@@ -49322,7 +49324,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49384,7 +49386,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49434,7 +49436,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49484,7 +49486,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
@@ -49518,7 +49520,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49569,7 +49571,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49620,7 +49622,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/categories/:id`,
@@ -49659,7 +49661,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/events/subscribe`,
@@ -49693,7 +49695,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/events/unsubscribe`,
@@ -49740,7 +49742,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49821,7 +49823,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
@@ -49855,7 +49857,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id/image/:image_key`,
@@ -49906,7 +49908,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -49989,7 +49991,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/helpdesk/v1/faqs`,
@@ -50121,7 +50123,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -50215,7 +50217,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/faqs/:id`,
@@ -50250,7 +50252,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/helpdesk/v1/faqs/search`,
@@ -50379,7 +50381,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -50467,7 +50469,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_approve`,
@@ -50502,7 +50504,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/cancel_send`,
@@ -50578,7 +50580,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -50623,7 +50625,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/execute_send`,
@@ -50660,7 +50662,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -50789,7 +50791,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id`,
@@ -50823,7 +50825,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/notifications/:notification_id/preview`,
@@ -50858,7 +50860,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -50908,7 +50910,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id/answer_user_query`,
@@ -50942,7 +50944,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51032,7 +51034,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51179,7 +51181,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51314,7 +51316,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51359,7 +51361,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/ticket_images`,
@@ -51423,7 +51425,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/tickets/:ticket_id`,
@@ -51463,7 +51465,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51510,7 +51512,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51579,7 +51581,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
@@ -51613,7 +51615,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields/:ticket_customized_field_id`,
@@ -51647,7 +51649,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51717,7 +51719,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields`,
@@ -51836,7 +51838,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -51920,7 +51922,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/helpdesk/v1/ticket_customized_fields/:ticket_customized_field_id`,
@@ -51969,7 +51971,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         { code?: number; msg?: string; data?: { id?: string } }
@@ -52006,7 +52008,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52112,7 +52114,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52163,7 +52165,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52329,7 +52331,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/terminate`,
@@ -52382,7 +52384,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52451,7 +52453,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52557,7 +52559,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52606,7 +52608,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         { code?: number; msg?: string; data?: { url: string } }
@@ -52653,7 +52655,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/ehr_import_tasks/:ehr_import_task_id`,
@@ -52699,7 +52701,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52765,7 +52767,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52839,7 +52841,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -52946,7 +52948,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53158,7 +53160,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53335,7 +53337,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53459,7 +53461,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53659,7 +53661,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53785,7 +53787,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53838,7 +53840,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53912,7 +53914,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -53971,7 +53973,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54032,7 +54034,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54094,7 +54096,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54147,7 +54149,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54218,7 +54220,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54274,7 +54276,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/resume_sources`,
@@ -54366,7 +54368,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54428,7 +54430,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54485,7 +54487,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -54997,7 +54999,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55050,7 +55052,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/batch_messages/:batch_message_id`,
@@ -55086,7 +55088,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55139,7 +55141,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55195,7 +55197,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55256,7 +55258,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/announcement`,
@@ -55322,7 +55324,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55392,7 +55394,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id`,
@@ -55431,7 +55433,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55505,7 +55507,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55550,7 +55552,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/chats`,
@@ -55652,7 +55654,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55708,7 +55710,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/chats/search`,
@@ -55811,7 +55813,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55892,7 +55894,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id`,
@@ -55941,7 +55943,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -55995,7 +55997,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56055,7 +56057,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56109,7 +56111,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56151,7 +56153,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/chats/:chat_id/members`,
@@ -56250,7 +56252,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56303,7 +56305,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56346,7 +56348,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/members/me_join`,
@@ -56409,7 +56411,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56517,7 +56519,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56608,7 +56610,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56698,7 +56700,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56789,7 +56791,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -56883,7 +56885,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
@@ -56981,7 +56983,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57041,7 +57043,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/moderation`,
@@ -57105,7 +57107,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57172,7 +57174,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57238,7 +57240,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57305,7 +57307,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57395,7 +57397,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57466,7 +57468,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/delete_top_notice`,
@@ -57508,7 +57510,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/chats/:chat_id/top_notice/put_top_notice`,
@@ -57561,7 +57563,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -57609,7 +57611,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/files/:file_key`,
@@ -57667,7 +57669,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -57715,7 +57717,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/images/:image_key`,
@@ -57786,7 +57788,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57854,7 +57856,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/messages/:message_id`,
@@ -57890,7 +57892,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -57961,7 +57963,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/messages`,
@@ -58083,7 +58085,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58156,7 +58158,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/messages/:message_id`,
@@ -58197,7 +58199,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58250,7 +58252,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58324,7 +58326,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58373,7 +58375,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58422,7 +58424,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58471,7 +58473,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58522,7 +58524,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58573,7 +58575,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/messages/:message_id/reactions`,
@@ -58679,7 +58681,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58740,7 +58742,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/messages/:message_id/resources/:file_key`,
@@ -58798,7 +58800,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -58849,7 +58851,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/pins/:message_id`,
@@ -58885,7 +58887,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/pins`,
@@ -58985,7 +58987,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59047,7 +59049,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59093,7 +59095,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/aliases/:alias_id`,
@@ -59127,7 +59129,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59187,7 +59189,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59241,7 +59243,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id`,
@@ -59275,7 +59277,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59330,7 +59332,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/mailgroups`,
@@ -59434,7 +59436,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59502,7 +59504,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59566,7 +59568,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59643,7 +59645,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59696,7 +59698,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members/batch_delete`,
@@ -59749,7 +59751,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59803,7 +59805,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members/:member_id`,
@@ -59843,7 +59845,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -59901,7 +59903,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/members`,
@@ -60008,7 +60010,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60086,7 +60088,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60136,7 +60138,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members/batch_delete`,
@@ -60186,7 +60188,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60240,7 +60242,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members/:permission_member_id`,
@@ -60283,7 +60285,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60338,7 +60340,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/mailgroups/:mailgroup_id/permission_members`,
@@ -60442,7 +60444,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60503,7 +60505,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60549,7 +60551,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/aliases/:alias_id`,
@@ -60583,7 +60585,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60634,7 +60636,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60679,7 +60681,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id`,
@@ -60713,7 +60715,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60754,7 +60756,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/public_mailboxes`,
@@ -60844,7 +60846,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60894,7 +60896,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60940,7 +60942,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -60996,7 +60998,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61040,7 +61042,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/batch_delete`,
@@ -61074,7 +61076,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/clear`,
@@ -61112,7 +61114,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61157,7 +61159,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members/:member_id`,
@@ -61194,7 +61196,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61240,7 +61242,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/members`,
@@ -61335,7 +61337,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61389,7 +61391,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61442,7 +61444,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61488,7 +61490,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases/:alias_id`,
@@ -61519,7 +61521,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/aliases`,
@@ -61607,7 +61609,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61659,7 +61661,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
@@ -61719,7 +61721,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<
                         any,
                         {
@@ -61770,7 +61772,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61842,7 +61844,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61912,7 +61914,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -61974,7 +61976,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62049,7 +62051,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62112,7 +62114,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62177,7 +62179,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62298,7 +62300,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62419,7 +62421,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62521,7 +62523,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/okr/v1/progress_records/:progress_id`,
@@ -62558,7 +62560,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62723,7 +62725,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62843,7 +62845,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -62970,7 +62972,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63024,7 +63026,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63120,7 +63122,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63186,7 +63188,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id`,
@@ -63220,7 +63222,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63286,7 +63288,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/search/v2/data_sources`,
@@ -63399,7 +63401,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63483,7 +63485,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63574,7 +63576,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id/items`,
@@ -63608,7 +63610,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/search/v2/data_sources/:data_source_id/items/:item_id`,
@@ -63642,7 +63644,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63755,7 +63757,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63843,7 +63845,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/search/v2/schemas/:schema_id`,
@@ -63877,7 +63879,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -63974,7 +63976,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64076,7 +64078,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64127,7 +64129,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64176,7 +64178,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token`,
@@ -64226,7 +64228,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
@@ -64260,7 +64262,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
@@ -64294,7 +64296,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64358,7 +64360,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter`,
@@ -64409,7 +64411,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64462,7 +64464,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id/conditions/:condition_id`,
@@ -64503,7 +64505,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64557,7 +64559,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64617,7 +64619,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64677,7 +64679,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64728,7 +64730,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/filter_views/:filter_view_id`,
@@ -64766,7 +64768,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64820,7 +64822,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64867,7 +64869,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64929,7 +64931,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -64976,7 +64978,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65045,7 +65047,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/move_dimension`,
@@ -65079,7 +65081,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65151,7 +65153,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65214,7 +65216,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65269,7 +65271,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/sheets/v3/spreadsheets/:spreadsheet_token/sheets/:sheet_id/float_images/:float_image_id`,
@@ -65309,7 +65311,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65374,7 +65376,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65427,7 +65429,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65497,7 +65499,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65549,7 +65551,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65616,7 +65618,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65661,7 +65663,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65702,7 +65704,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/complete`,
@@ -65759,7 +65761,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65835,7 +65837,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id`,
@@ -65872,7 +65874,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -65952,7 +65954,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v1/tasks`,
@@ -66082,7 +66084,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66196,7 +66198,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66272,7 +66274,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/uncomplete`,
@@ -66315,7 +66317,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66364,7 +66366,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators/:collaborator_id`,
@@ -66399,7 +66401,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/collaborators`,
@@ -66493,7 +66495,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66555,7 +66557,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66605,7 +66607,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/comments/:comment_id`,
@@ -66642,7 +66644,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66694,7 +66696,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/comments`,
@@ -66793,7 +66795,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66849,7 +66851,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66908,7 +66910,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -66957,7 +66959,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/followers/:follower_id`,
@@ -66992,7 +66994,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/followers`,
@@ -67086,7 +67088,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67140,7 +67142,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67186,7 +67188,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders/:reminder_id`,
@@ -67217,7 +67219,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v1/tasks/:task_id/reminders`,
@@ -67307,7 +67309,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67362,7 +67364,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67428,7 +67430,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67476,7 +67478,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         { code?: number; msg?: string; data?: { text: string } }
@@ -67527,7 +67529,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                const res = await http
+                const res = await this.httpInstance
                     .request<any, any>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/exports/download`,
@@ -67578,7 +67580,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67633,7 +67635,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67683,7 +67685,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67734,7 +67736,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67782,7 +67784,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67830,7 +67832,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/end`,
@@ -67871,7 +67873,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -67956,7 +67958,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68012,7 +68014,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68061,7 +68063,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/meetings/list_by_no`,
@@ -68158,7 +68160,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68217,7 +68219,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68267,7 +68269,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68322,7 +68324,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/set_permission`,
@@ -68359,7 +68361,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/start`,
@@ -68395,7 +68397,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/meetings/:meeting_id/recording/stop`,
@@ -68439,7 +68441,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/meeting_list`,
@@ -68548,7 +68550,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68621,7 +68623,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/participant_list`,
@@ -68737,7 +68739,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -68818,7 +68820,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/participant_quality_list`,
@@ -68965,7 +68967,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69072,7 +69074,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69133,7 +69135,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69222,7 +69224,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69277,7 +69279,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/reserves/:reserve_id`,
@@ -69316,7 +69318,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69401,7 +69403,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69513,7 +69515,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69571,7 +69573,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69623,7 +69625,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/reserve_configs/:reserve_config_id/admin`,
@@ -69687,7 +69689,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/reserve_configs/:reserve_config_id`,
@@ -69725,7 +69727,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69798,7 +69800,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/resource_reservation_list`,
@@ -69906,7 +69908,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -69993,7 +69995,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70056,7 +70058,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/rooms/:room_id`,
@@ -70093,7 +70095,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70157,7 +70159,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/rooms`,
@@ -70270,7 +70272,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70338,7 +70340,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70422,7 +70424,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/rooms/:room_id`,
@@ -70466,7 +70468,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70540,7 +70542,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70681,7 +70683,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/room_configs/set`,
@@ -70724,7 +70726,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70774,7 +70776,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/room_levels/del`,
@@ -70808,7 +70810,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -70858,7 +70860,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/room_levels`,
@@ -70955,7 +70957,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71007,7 +71009,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71062,7 +71064,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/room_levels/:room_level_id`,
@@ -71096,7 +71098,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71196,7 +71198,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/scope_config`,
@@ -71234,7 +71236,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71392,7 +71394,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71443,7 +71445,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71494,7 +71496,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71555,7 +71557,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/wiki/v2/spaces`,
@@ -71653,7 +71655,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71717,7 +71719,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71767,7 +71769,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71824,7 +71826,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71904,7 +71906,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -71970,7 +71972,7 @@ export default abstract class Client {
                     params: any;
                     data: any;
                 }) => {
-                    const res = await http
+                    const res = await this.httpInstance
                         .request<any, any>({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes`,
@@ -72087,7 +72089,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -72160,7 +72162,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -72241,7 +72243,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -72289,7 +72291,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/wiki/v2/spaces/:space_id/nodes/:node_token/update_title`,
@@ -72335,7 +72337,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
@@ -72390,7 +72392,7 @@ export default abstract class Client {
                 const { headers, params, data, path } =
                     await this.formatPayload(payload, options);
 
-                return http
+                return this.httpInstance
                     .request<
                         any,
                         {
