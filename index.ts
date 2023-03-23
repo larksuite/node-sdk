@@ -14,4 +14,4 @@ export { IHandles as EventHandles } from './code-gen/events-template';
 export { AESCipher } from './utils/aes-cipher';
 // default http client & types
 export { default as defaultHttpInstance } from './http';
-export { HttpInstance } from './typings/http';
+export { HttpInstance, HttpRequestOptions } from './typings/http';
