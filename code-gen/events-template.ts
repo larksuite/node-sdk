@@ -974,6 +974,28 @@ export interface IHandles extends IOtherEventHandles {
                     start_time?: string;
                     end_time?: string;
                 }>;
+                department_path?: Array<{
+                    department_id?: string;
+                    department_name?: {
+                        name?: string;
+                        i18n_name?: {
+                            zh_cn?: string;
+                            ja_jp?: string;
+                            en_us?: string;
+                        };
+                    };
+                    department_path?: {
+                        department_ids?: Array<string>;
+                        department_path_name?: {
+                            name?: string;
+                            i18n_name?: {
+                                zh_cn?: string;
+                                ja_jp?: string;
+                                en_us?: string;
+                            };
+                        };
+                    };
+                }>;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1075,6 +1097,28 @@ export interface IHandles extends IOtherEventHandles {
                     };
                     start_time?: string;
                     end_time?: string;
+                }>;
+                department_path?: Array<{
+                    department_id?: string;
+                    department_name?: {
+                        name?: string;
+                        i18n_name?: {
+                            zh_cn?: string;
+                            ja_jp?: string;
+                            en_us?: string;
+                        };
+                    };
+                    department_path?: {
+                        department_ids?: Array<string>;
+                        department_path_name?: {
+                            name?: string;
+                            i18n_name?: {
+                                zh_cn?: string;
+                                ja_jp?: string;
+                                en_us?: string;
+                            };
+                        };
+                    };
                 }>;
             }>;
             user_groups?: Array<{
