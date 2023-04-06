@@ -185,6 +185,74 @@ const res = await client. request({
     params: {},
 });
 ````
+#### Message Card
+When sending [message card](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)， it will first be in the [message card builder](https://open.feishu.cn/document/ukTMukTMukTM/uYzM3QjL2MzN04iNzcDN/message-card-builder) to build a message card template, get the generated template json, replace the content-related parts with data, and use the result as a parameter to support the message card api. Such as sending a simple message card with `title` and `content`:
+```typescript
+client.im.message.create({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    content: JSON.stringify({
+        "config": {
+          "wide_screen_mode": true
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "Card Content"
+          }
+        ],
+        "header": {
+          "template": "blue",
+          "title": {
+            "content": "Card Title",
+            "tag": "plain_text"
+          }
+        }
+      }
+    ),
+    msg_type: 'interactive'
+  }
+})
+```
+![](doc/msg-card.png)
+There will be a problem: **If the content of the message card is relatively rich, the generated template json is relatively large, and there will be more content that needs to be filled with data, and manual maintenance is more cumbersome**. To solve this problem, The Open-Platform provides the ability of [Template Message](https://open.feishu.cn/document/tools-and-resources/message-card-builder#3e1f2c7c).When sending a message card, you only need to provide the template id and the data content of the template. The sdk encapsulates this ability in terms of calling, and the interface that supports message cards will synchronously add a ByCard calling method, only need to pass `template_id` and `template_variable`. The above call can be rewritten as:
+```typescript
+client.im.message.createByCard({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    template_id: 'your template_id',
+    template_variable: {
+      content: "Card Content",
+      title: "Card Title"
+    }
+  }
+});
+```
+If you want to quickly experience Message Card, you can use a basic card built into the sdk:
+```typescript
+import * as lark from '@larksuiteoapi/node-sdk';
+
+client.im.message.create({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    content: lark.messageCard.defaultCard({
+      title: 'Card Title',
+      content: 'Card Content'
+    }),
+    msg_type: 'interactive'
+  }
+})
+```
+![](doc/msg-card.png)
 
 #### Configure request options
 If you want to modify the parameters of the request during the API call, such as carrying some headers, custom tenantToken, etc., you can use the second parameter of the request method to modify:

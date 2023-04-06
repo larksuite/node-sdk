@@ -59961,6 +59961,182 @@ export default abstract class Client {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create document }
+             *
+             * 通过模版消息卡片发送消息
+             *
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 给用户发送消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 给群组发送消息，需要机器人在群组中
+             */
+            createByCard: async (
+                payload?: {
+                    data: {
+                        receive_id: string;
+                        uuid?: string;
+                        template_id: string;
+                        template_variable?: Record<string, any>;
+                    };
+                    params: {
+                        receive_id_type:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const { template_id, template_variable, ...rest } = data;
+                const targetData = {
+                    msg_type: "interactive",
+                    content: JSON.stringify({
+                        type: "template",
+                        data: {
+                            template_id: template_id,
+                            template_variable: template_variable,
+                        },
+                    }),
+                    ...rest,
+                };
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages`,
+                            path
+                        ),
+                        method: "POST",
+                        data: targetData,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=reply&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/reply document }
+             *
+             * 通过模版消息卡片回复消息
+             *
+             * 注意事项:;- 需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)  ;- 回复私聊消息，需要机器人对用户有[可用性](https://open.feishu.cn/document/home/introduction-to-scope-and-authorization/availability);- 回复群组消息，需要机器人在群中
+             */
+            replyByCard: async (
+                payload?: {
+                    data: {
+                        uuid?: string;
+                        template_id: string;
+                        template_variable?: Record<string, any>;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const { template_id, template_variable, ...rest } = data;
+                const targetData = {
+                    msg_type: "interactive",
+                    content: JSON.stringify({
+                        type: "template",
+                        data: {
+                            template_id: template_id,
+                            template_variable: template_variable,
+                        },
+                    }),
+                    ...rest,
+                };
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                            path
+                        ),
+                        method: "POST",
+                        data: targetData,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 消息 - 表情回复

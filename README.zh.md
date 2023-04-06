@@ -184,6 +184,75 @@ const res = await client.request({
     params: {},
 });
 ```
+#### 消息卡片
+在发送[消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)信息时，会先在[消息卡片搭建工具](https://open.feishu.cn/document/ukTMukTMukTM/uYzM3QjL2MzN04iNzcDN/message-card-builder)中搭建出消息卡片的模版，拿到生成的模版json，用数据替换其中内容相关的部分，将结果作为支持消息卡片api的参数来使用。如发送一个简单的具有`title`和`content`的消息卡片：
+```typescript
+client.im.message.create({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    content: JSON.stringify({
+        "config": {
+          "wide_screen_mode": true
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "Card Content"
+          }
+        ],
+        "header": {
+          "template": "blue",
+          "title": {
+            "content": "Card Title",
+            "tag": "plain_text"
+          }
+        }
+      }
+    ),
+    msg_type: 'interactive'
+  }
+})
+```
+![](doc/msg-card.png)
+这样使用会有一个问题：**如果消息卡片内容比较丰富，生成的模版json比较大，与之相关需要数据填充的内容部分也会比较多，手动维护比较繁琐**。针对这个问题，开放平台提供了[模版消息](https://open.feishu.cn/document/tools-and-resources/message-card-builder#3e1f2c7c)的能力，发送消息卡片时只需要提供模版id和模版的数据内容即可。sdk对这个能力进行了调用上的封装，支持消息卡片的接口会同步的增加一个ByCard的调用方式，只需要传递`template_id`和`template_variable`即可。如上面的调用可以改写成：
+```typescript
+client.im.message.createByCard({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    template_id: 'your template_id',
+    template_variable: {
+      content: "Card Content",
+      title: "Card Title"
+    }
+  }
+});
+```
+如果想要快速体验消息卡片，可以使用sdk中内置的一个基础卡片:
+```typescript
+import * as lark from '@larksuiteoapi/node-sdk';
+
+client.im.message.create({
+  params: {
+    receive_id_type: 'chat_id',
+  },
+  data: {
+    receive_id: 'your receive_id',
+    content: lark.messageCard.defaultCard({
+      title: 'Card Title',
+      content: 'Card Content'
+    }),
+    msg_type: 'interactive'
+  }
+})
+```
+效果同上：
+![](doc/msg-card.png)
 
 #### 配置请求选项
 如果想在api调用过程中修改请求的参数，如携带一些header，自定义tenantToken等，则可以使用请求方法的第二个参数来进行修改：
