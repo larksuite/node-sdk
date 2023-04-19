@@ -652,7 +652,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 管理后台-密码
+     * 管理后台-数据报表
      */
     admin = {
         /**
@@ -2080,6 +2080,63 @@ export default abstract class Client {
          */
         applicationAppVersion: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=contacts_range_suggest&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_suggest&project=application&resource=application.app_version&version=v6 document }
+             *
+             * 获取应用版本通讯录权限范围建议
+             */
+            contactsRangeSuggest: async (
+                payload?: {
+                    params?: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { app_id: string; version_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                contacts_range?: {
+                                    contacts_scope_type?:
+                                        | "equal_to_availability"
+                                        | "some"
+                                        | "all";
+                                    visible_list?: {
+                                        open_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_versions/:version_id/contacts_range_suggest`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=get&version=v6 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/get document }
@@ -2653,28 +2710,23 @@ export default abstract class Client {
             },
         },
         /**
-         * 应用反馈
+         * 应用
          */
-        applicationFeedback: {
+        application: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=contacts_range_configuration&version=v6 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/list document }
-             *
-             * 获取应用反馈列表
-             *
-             * 查询应用的反馈数据
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=contacts_range_configuration&project=application&resource=application&version=v6 document }
              */
-            list: async (
+            contactsRangeConfiguration: async (
                 payload?: {
                     params?: {
-                        from_date?: string;
-                        to_date?: string;
-                        feedback_type?: number;
-                        status?: number;
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { app_id: string };
                 },
@@ -2690,31 +2742,24 @@ export default abstract class Client {
                             code?: number;
                             msg?: string;
                             data?: {
-                                feedback_list?: Array<{
-                                    feedback_id: string;
-                                    app_id: string;
-                                    feedback_time: string;
-                                    tenant_name?: string;
-                                    feedback_type: number;
-                                    status: number;
-                                    fault_type?: Array<number>;
-                                    fault_time?: string;
-                                    source?: number;
-                                    contact?: string;
-                                    update_time?: string;
-                                    description: string;
-                                    user_id?: string;
-                                    operator_id?: string;
-                                    images?: Array<string>;
-                                    feedback_path?: string;
-                                }>;
-                                has_more: boolean;
+                                contacts_range?: {
+                                    contacts_scope_type?:
+                                        | "equal_to_availability"
+                                        | "some"
+                                        | "all";
+                                    visible_list?: {
+                                        open_ids?: Array<string>;
+                                        department_ids?: Array<string>;
+                                        group_ids?: Array<string>;
+                                    };
+                                };
+                                has_more?: boolean;
                                 page_token?: string;
                             };
                         }
                     >({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/contacts_range_configuration`,
                             path
                         ),
                         method: "GET",
@@ -2727,50 +2772,6 @@ export default abstract class Client {
                         throw e;
                     });
             },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/patch document }
-             *
-             * 更新应用反馈
-             *
-             * 更新应用的反馈数据
-             */
-            patch: async (
-                payload?: {
-                    params: {
-                        user_id_type?: "open_id" | "union_id" | "user_id";
-                        status: number;
-                        operator_id: string;
-                    };
-                    path: { app_id: string; feedback_id: string };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
-                            path
-                        ),
-                        method: "PATCH",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
-         * 应用
-         */
-        application: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=get&version=v6 click to debug }
              *
@@ -3106,13 +3107,198 @@ export default abstract class Client {
                     });
             },
         },
+        /**
+         * 应用反馈
+         */
+        applicationFeedback: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/list document }
+             *
+             * 获取应用反馈列表
+             *
+             * 查询应用的反馈数据
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        from_date?: string;
+                        to_date?: string;
+                        feedback_type?: number;
+                        status?: number;
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                feedback_list?: Array<{
+                                    feedback_id: string;
+                                    app_id: string;
+                                    feedback_time: string;
+                                    tenant_name?: string;
+                                    feedback_type: number;
+                                    status: number;
+                                    fault_type?: Array<number>;
+                                    fault_time?: string;
+                                    source?: number;
+                                    contact?: string;
+                                    update_time?: string;
+                                    description: string;
+                                    user_id?: string;
+                                    operator_id?: string;
+                                    images?: Array<string>;
+                                    feedback_path?: string;
+                                }>;
+                                has_more: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=patch&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/patch document }
+             *
+             * 更新应用反馈
+             *
+             * 更新应用的反馈数据
+             */
+            patch: async (
+                payload?: {
+                    params: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        status: number;
+                        operator_id: string;
+                    };
+                    path: { app_id: string; feedback_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/feedbacks/:feedback_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 事件
+         */
+        applicationVisibility: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=check_white_black_list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check_white_black_list&project=application&resource=application.visibility&version=v6 document }
+             */
+            checkWhiteBlackList: async (
+                payload?: {
+                    data?: {
+                        user_ids?: Array<string>;
+                        department_ids?: Array<string>;
+                        group_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_visibility_list?: Array<{
+                                    user_id?: string;
+                                    in_white_list?: boolean;
+                                    in_black_list?: boolean;
+                                    in_paid_list?: boolean;
+                                }>;
+                                department_visibility_list?: Array<{
+                                    department_id?: string;
+                                    in_white_list?: boolean;
+                                    in_black_list?: boolean;
+                                }>;
+                                group_visibility_list?: Array<{
+                                    group_id?: string;
+                                    in_white_list?: boolean;
+                                    in_black_list?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/visibility/check_white_black_list`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
     };
     /**
      * 审批
      */
     approval = {
         /**
-         * 事件
+         * 原生审批定义
          */
         approval: {
             /**
@@ -4159,6 +4345,8 @@ export default abstract class Client {
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
+                        title?: string;
+                        title_display_method?: number;
                     };
                 },
                 options?: IRequestOptions
@@ -6056,6 +6244,12 @@ export default abstract class Client {
                             punch_type?: number;
                             rest_clockIn_need_approval?: boolean;
                             clockIn_need_photo?: boolean;
+                            member_status_change?: {
+                                onboarding_on_no_need_punch?: boolean;
+                                onboarding_off_no_need_punch?: boolean;
+                                offboarding_on_no_need_punch?: boolean;
+                                offboarding_off_no_need_punch?: boolean;
+                            };
                         };
                         operator_id?: string;
                     };
@@ -6154,6 +6348,12 @@ export default abstract class Client {
                                     member_effect_time?: string;
                                     rest_clockIn_need_approval?: boolean;
                                     clockIn_need_photo?: boolean;
+                                    member_status_change?: {
+                                        onboarding_on_no_need_punch?: boolean;
+                                        onboarding_off_no_need_punch?: boolean;
+                                        offboarding_on_no_need_punch?: boolean;
+                                        offboarding_off_no_need_punch?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -6311,6 +6511,12 @@ export default abstract class Client {
                                 member_effect_time?: string;
                                 rest_clockIn_need_approval?: boolean;
                                 clockIn_need_photo?: boolean;
+                                member_status_change?: {
+                                    onboarding_on_no_need_punch?: boolean;
+                                    onboarding_off_no_need_punch?: boolean;
+                                    offboarding_on_no_need_punch?: boolean;
+                                    offboarding_off_no_need_punch?: boolean;
+                                };
                             };
                         }
                     >({
@@ -8973,7 +9179,9 @@ export default abstract class Client {
                                             };
                                         }>;
                                         description?: string;
+                                        creator?: string;
                                         create_time?: string;
+                                        updater?: string;
                                         update_time?: string;
                                         related_meta?: {
                                             users?: Array<{
@@ -9018,6 +9226,7 @@ export default abstract class Client {
                                             outer_id: string;
                                         };
                                         rich_text?: string;
+                                        source?: number;
                                     };
                                 };
                             };
@@ -9130,7 +9339,9 @@ export default abstract class Client {
                                             };
                                         }>;
                                         description?: string;
+                                        creator?: string;
                                         create_time?: string;
+                                        updater?: string;
                                         update_time?: string;
                                         related_meta?: {
                                             users?: Array<{
@@ -9175,6 +9386,7 @@ export default abstract class Client {
                                             outer_id: string;
                                         };
                                         rich_text?: string;
+                                        source?: number;
                                     };
                                 };
                             };
@@ -9289,7 +9501,9 @@ export default abstract class Client {
                                         };
                                     }>;
                                     description?: string;
+                                    creator?: string;
                                     create_time?: string;
+                                    updater?: string;
                                     update_time?: string;
                                     related_meta?: {
                                         users?: Array<{
@@ -9332,6 +9546,7 @@ export default abstract class Client {
                                         outer_id: string;
                                     };
                                     rich_text?: string;
+                                    source?: number;
                                 };
                             };
                         }
@@ -9452,7 +9667,9 @@ export default abstract class Client {
                                         };
                                     }>;
                                     description?: string;
+                                    creator?: string;
                                     create_time?: string;
+                                    updater?: string;
                                     update_time?: string;
                                     related_meta?: {
                                         users?: Array<{
@@ -9495,6 +9712,7 @@ export default abstract class Client {
                                         outer_id: string;
                                     };
                                     rich_text?: string;
+                                    source?: number;
                                 };
                             };
                         }
@@ -9649,7 +9867,9 @@ export default abstract class Client {
                                                         };
                                                     }>;
                                                     description?: string;
+                                                    creator?: string;
                                                     create_time?: string;
+                                                    updater?: string;
                                                     update_time?: string;
                                                     related_meta?: {
                                                         users?: Array<{
@@ -9696,6 +9916,7 @@ export default abstract class Client {
                                                         outer_id: string;
                                                     };
                                                     rich_text?: string;
+                                                    source?: number;
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -9771,7 +9992,9 @@ export default abstract class Client {
                                         };
                                     }>;
                                     description?: string;
+                                    creator?: string;
                                     create_time?: string;
+                                    updater?: string;
                                     update_time?: string;
                                     related_meta?: {
                                         users?: Array<{
@@ -9814,6 +10037,7 @@ export default abstract class Client {
                                         outer_id: string;
                                     };
                                     rich_text?: string;
+                                    source?: number;
                                 }>;
                                 page_token?: string;
                             };
@@ -9881,10 +10105,18 @@ export default abstract class Client {
             },
             searchWithIterator: async (
                 payload?: {
-                    data: { query: string };
+                    data?: {
+                        query?: string;
+                        classification_filter?: {
+                            include?: Array<string>;
+                            exclude?: Array<string>;
+                        };
+                        sources?: Array<number>;
+                        creators?: Array<string>;
+                    };
                     params?: {
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -9968,7 +10200,9 @@ export default abstract class Client {
                                                         };
                                                     }>;
                                                     description?: string;
+                                                    creator?: string;
                                                     create_time?: string;
+                                                    updater?: string;
                                                     update_time?: string;
                                                     related_meta?: {
                                                         users?: Array<{
@@ -10015,6 +10249,7 @@ export default abstract class Client {
                                                         outer_id: string;
                                                     };
                                                     rich_text?: string;
+                                                    source?: number;
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -10047,10 +10282,18 @@ export default abstract class Client {
              */
             search: async (
                 payload?: {
-                    data: { query: string };
+                    data?: {
+                        query?: string;
+                        classification_filter?: {
+                            include?: Array<string>;
+                            exclude?: Array<string>;
+                        };
+                        sources?: Array<number>;
+                        creators?: Array<string>;
+                    };
                     params?: {
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -10090,7 +10333,9 @@ export default abstract class Client {
                                         };
                                     }>;
                                     description?: string;
+                                    creator?: string;
                                     create_time?: string;
+                                    updater?: string;
                                     update_time?: string;
                                     related_meta?: {
                                         users?: Array<{
@@ -10133,6 +10378,7 @@ export default abstract class Client {
                                         outer_id: string;
                                     };
                                     rich_text?: string;
+                                    source?: number;
                                 }>;
                                 page_token?: string;
                             };
@@ -10243,7 +10489,9 @@ export default abstract class Client {
                                         };
                                     }>;
                                     description?: string;
+                                    creator?: string;
                                     create_time?: string;
+                                    updater?: string;
                                     update_time?: string;
                                     related_meta?: {
                                         users?: Array<{
@@ -10286,6 +10534,7 @@ export default abstract class Client {
                                         outer_id: string;
                                     };
                                     rich_text?: string;
+                                    source?: number;
                                 };
                             };
                         }
@@ -10416,6 +10665,56 @@ export default abstract class Client {
          * 多维表格
          */
         app: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=copy&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=copy&project=bitable&resource=app&version=v1 document }
+             */
+            copy: async (
+                payload?: {
+                    data?: {
+                        name?: string;
+                        folder_token?: string;
+                        without_content?: boolean;
+                    };
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app?: {
+                                    app_token?: string;
+                                    name?: string;
+                                    revision?: number;
+                                    folder_token?: string;
+                                    url?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/copy`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app&apiName=create&version=v1 click to debug }
              *
@@ -12027,6 +12326,7 @@ export default abstract class Client {
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?: string;
+                        is_hidden?: boolean;
                     };
                     params?: { client_token?: string };
                     path: { app_token: string; table_id: string };
@@ -12085,6 +12385,7 @@ export default abstract class Client {
                                     };
                                     is_primary?: boolean;
                                     ui_type?: string;
+                                    is_hidden?: boolean;
                                 };
                             };
                         }
@@ -12261,6 +12562,7 @@ export default abstract class Client {
                                                     };
                                                     is_primary?: boolean;
                                                     ui_type?: string;
+                                                    is_hidden?: boolean;
                                                 }>;
                                             };
                                         },
@@ -12359,6 +12661,7 @@ export default abstract class Client {
                                     };
                                     is_primary?: boolean;
                                     ui_type?: string;
+                                    is_hidden?: boolean;
                                 }>;
                             };
                         }
@@ -12423,6 +12726,7 @@ export default abstract class Client {
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?: string;
+                        is_hidden?: boolean;
                     };
                     path: {
                         app_token: string;
@@ -12484,6 +12788,7 @@ export default abstract class Client {
                                     };
                                     is_primary?: boolean;
                                     ui_type?: string;
+                                    is_hidden?: boolean;
                                 };
                             };
                         }
@@ -15799,6 +16104,7 @@ export default abstract class Client {
                         need_notification?: boolean;
                         instance_start_time_admin?: string;
                         is_enable_admin?: boolean;
+                        add_operator_to_attendee?: boolean;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -17882,6 +18188,7 @@ export default abstract class Client {
                                                     }>;
                                                     group_chat_employee_types?: Array<number>;
                                                     department_hrbps?: Array<string>;
+                                                    primary_member_count?: number;
                                                 }>;
                                             };
                                         },
@@ -17963,6 +18270,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 }>;
                             };
                         }
@@ -18056,6 +18364,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 };
                             };
                         }
@@ -18170,6 +18479,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 };
                             };
                         }
@@ -18283,6 +18593,7 @@ export default abstract class Client {
                                                     }>;
                                                     group_chat_employee_types?: Array<number>;
                                                     department_hrbps?: Array<string>;
+                                                    primary_member_count?: number;
                                                 }>;
                                             };
                                         },
@@ -18357,6 +18668,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 }>;
                             };
                         }
@@ -18469,6 +18781,7 @@ export default abstract class Client {
                                                     }>;
                                                     group_chat_employee_types?: Array<number>;
                                                     department_hrbps?: Array<string>;
+                                                    primary_member_count?: number;
                                                 }>;
                                             };
                                         },
@@ -18548,6 +18861,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 }>;
                             };
                         }
@@ -18640,6 +18954,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 };
                             };
                         }
@@ -18751,6 +19066,7 @@ export default abstract class Client {
                                                     }>;
                                                     group_chat_employee_types?: Array<number>;
                                                     department_hrbps?: Array<string>;
+                                                    primary_member_count?: number;
                                                 }>;
                                                 page_token?: string;
                                                 has_more: boolean;
@@ -18831,6 +19147,7 @@ export default abstract class Client {
                                     }>;
                                     group_chat_employee_types?: Array<number>;
                                     department_hrbps?: Array<string>;
+                                    primary_member_count?: number;
                                 }>;
                                 page_token?: string;
                                 has_more: boolean;
@@ -18962,6 +19279,7 @@ export default abstract class Client {
                                         leaderID: string;
                                     }>;
                                     group_chat_employee_types?: Array<number>;
+                                    primary_member_count?: number;
                                 };
                             };
                         }
@@ -21861,6 +22179,7 @@ export default abstract class Client {
                             department_id?: string;
                             user_order?: number;
                             department_order?: number;
+                            is_primary_dept?: boolean;
                         }>;
                         custom_attrs?: Array<{
                             type?: string;
@@ -21975,6 +22294,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -22215,6 +22535,7 @@ export default abstract class Client {
                                                         department_id?: string;
                                                         user_order?: number;
                                                         department_order?: number;
+                                                        is_primary_dept?: boolean;
                                                     }>;
                                                     custom_attrs?: Array<{
                                                         type?: string;
@@ -22375,6 +22696,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -22523,6 +22845,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -22714,6 +23037,7 @@ export default abstract class Client {
                                                         department_id?: string;
                                                         user_order?: number;
                                                         department_order?: number;
+                                                        is_primary_dept?: boolean;
                                                     }>;
                                                     custom_attrs?: Array<{
                                                         type?: string;
@@ -22868,6 +23192,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -22984,6 +23309,7 @@ export default abstract class Client {
                             department_id?: string;
                             user_order?: number;
                             department_order?: number;
+                            is_primary_dept?: boolean;
                         }>;
                         custom_attrs?: Array<{
                             type?: string;
@@ -23094,6 +23420,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -23167,6 +23494,56 @@ export default abstract class Client {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=resurrect&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/resurrect document }
+             *
+             * 恢复已删除用户
+             *
+             * 该接口用于恢复已删除用户（已离职的成员），仅自建应用可申请，应用商店应用无权调用接口。
+             *
+             * - 仅支持恢复离职 30 天内的成员。恢复后，部分用户数据仍不可恢复，请谨慎调用。;- 待恢复成员的用户 ID 不能被企业内其他成员使用。如有重复，请先离职对应的成员，否则接口会报错。;- 待恢复成员的手机号和邮箱不能被企业内其他成员使用。如有重复，请先修改对应成员的信息，否则接口会报错。
+             */
+            resurrect: async (
+                payload?: {
+                    data?: {
+                        departments?: Array<{
+                            department_id: string;
+                            user_order?: number;
+                            department_order?: number;
+                        }>;
+                        subscription_ids?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { user_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/contact/v3/users/:user_id/resurrect`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=update&version=v3 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/user/update document }
@@ -23208,6 +23585,7 @@ export default abstract class Client {
                             department_id?: string;
                             user_order?: number;
                             department_order?: number;
+                            is_primary_dept?: boolean;
                         }>;
                         custom_attrs?: Array<{
                             type?: string;
@@ -23315,6 +23693,7 @@ export default abstract class Client {
                                         department_id?: string;
                                         user_order?: number;
                                         department_order?: number;
+                                        is_primary_dept?: boolean;
                                     }>;
                                     custom_attrs?: Array<{
                                         type?: string;
@@ -26187,6 +26566,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -28602,6 +28982,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 };
                             };
                         }
@@ -31337,6 +31718,10 @@ export default abstract class Client {
                                                     };
                                                     okr_progress?: {};
                                                     comment_ids?: Array<string>;
+                                                    jira_issue?: {
+                                                        id?: string;
+                                                        key?: string;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -33756,6 +34141,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -36448,6 +36834,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 };
                                 document_revision_id?: number;
                                 client_token: string;
@@ -40806,6 +41193,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -43543,6 +43931,10 @@ export default abstract class Client {
                                                     };
                                                     okr_progress?: {};
                                                     comment_ids?: Array<string>;
+                                                    jira_issue?: {
+                                                        id?: string;
+                                                        key?: string;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -45962,6 +46354,7 @@ export default abstract class Client {
                                     };
                                     okr_progress?: {};
                                     comment_ids?: Array<string>;
+                                    jira_issue?: { id?: string; key?: string };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -46138,7 +46531,7 @@ export default abstract class Client {
         },
     };
     /**
-     * 云文档-文档
+     * 云文档-文件管理
      */
     drive = {
         /**
@@ -46303,6 +46696,90 @@ export default abstract class Client {
          * 评论
          */
         fileComment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment/batch_query document }
+             *
+             * 批量获取评论
+             *
+             * 该接口用于根据评论 ID 列表批量获取评论。
+             */
+            batchQuery: async (
+                payload?: {
+                    data: { comment_ids: Array<string> };
+                    params: {
+                        file_type: "doc" | "sheet" | "file" | "docx";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { file_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    comment_id?: string;
+                                    user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    is_solved?: boolean;
+                                    solved_time?: number;
+                                    solver_user_id?: string;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    is_whole?: boolean;
+                                    quote?: string;
+                                    reply_list?: {
+                                        replies: Array<{
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
+                                            content: {
+                                                elements: Array<{
+                                                    type:
+                                                        | "text_run"
+                                                        | "docs_link"
+                                                        | "person";
+                                                    text_run?: { text: string };
+                                                    docs_link?: { url: string };
+                                                    person?: {
+                                                        user_id: string;
+                                                    };
+                                                }>;
+                                            };
+                                            extra?: {
+                                                image_list?: Array<string>;
+                                            };
+                                        }>;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment&apiName=create&version=v1 click to debug }
              *
@@ -46843,7 +47320,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 分片上传
+         * 文件
          */
         file: {
             /**
@@ -46944,6 +47421,67 @@ export default abstract class Client {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/create_folder`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=create_shortcut&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_shortcut&project=drive&resource=file&version=v1 document }
+             */
+            createShortcut: async (
+                payload?: {
+                    data: {
+                        parent_token: string;
+                        refer_entity: {
+                            refer_token: string;
+                            refer_type:
+                                | "file"
+                                | "docx"
+                                | "bitable"
+                                | "doc"
+                                | "sheet"
+                                | "mindnote";
+                        };
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                succ_shortcut_node?: {
+                                    token: string;
+                                    name: string;
+                                    type: string;
+                                    parent_token?: string;
+                                    url?: string;
+                                    shortcut_info?: {
+                                        target_type: string;
+                                        target_token: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/create_shortcut`,
                             path
                         ),
                         method: "POST",
@@ -48340,7 +48878,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -49294,6 +49832,148 @@ export default abstract class Client {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * permission.public.password
+         */
+        permissionPublicPassword: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public.password&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=permission.public.password&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    params: {
+                        type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "mindnote"
+                            | "minutes";
+                    };
+                    path?: { token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { password?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/public/password`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public.password&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=drive&resource=permission.public.password&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    params: {
+                        type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "mindnote"
+                            | "minutes";
+                    };
+                    path?: { token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/public/password`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public.password&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=drive&resource=permission.public.password&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    params: {
+                        type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "mindnote"
+                            | "minutes";
+                    };
+                    path?: { token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { password?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/public/password`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -54394,6 +55074,285 @@ export default abstract class Client {
             },
         },
         /**
+         * 导入外部系统信息（灰度租户可见）
+         */
+        externalApplication: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_application&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/external_application/create document }
+             *
+             * 创建外部投递
+             *
+             * 导入来自其他系统的投递信息，创建为外部投递
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        external_id?: string;
+                        job_recruitment_type?: number;
+                        job_title?: string;
+                        resume_source?: string;
+                        stage?: string;
+                        talent_id: string;
+                        termination_reason?: string;
+                        delivery_type?: number;
+                        modify_time?: number;
+                        termination_type?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_application?: {
+                                    id?: string;
+                                    external_id?: string;
+                                    job_recruitment_type?: number;
+                                    job_title?: string;
+                                    resume_source?: string;
+                                    stage?: string;
+                                    talent_id: string;
+                                    termination_reason?: string;
+                                    delivery_type?: number;
+                                    modify_time?: number;
+                                    termination_type?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_applications`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 导入外部系统信息（灰度租户可见）
+         */
+        externalBackgroundCheck: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_background_check&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/external_background_check/create document }
+             *
+             * 创建外部背调
+             *
+             * 导入来自其他系统的背调信息，创建为外部背调
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        external_id?: string;
+                        external_application_id: string;
+                        date?: number;
+                        name?: string;
+                        result?: string;
+                        attachment_id_list?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_background_check?: {
+                                    id?: string;
+                                    external_id?: string;
+                                    external_application_id: string;
+                                    date?: number;
+                                    name?: string;
+                                    result?: string;
+                                    attachment_id_list?: Array<string>;
+                                    attachment_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        size?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_background_checks`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 导入外部系统信息（灰度租户可见）
+         */
+        externalInterview: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_interview&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/external_interview/create document }
+             *
+             * 创建外部面试
+             *
+             * 导入来自其他系统的面试信息，创建为外部面试
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        external_id?: string;
+                        external_application_id: string;
+                        participate_status?: number;
+                        begin_time?: number;
+                        end_time?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_interview?: {
+                                    external_id?: string;
+                                    external_application_id: string;
+                                    id?: string;
+                                    participate_status?: number;
+                                    begin_time?: number;
+                                    end_time?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_interviews`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 导入外部系统信息（灰度租户可见）
+         */
+        externalInterviewAssessment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_interview_assessment&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/external_interview_assessment/create document }
+             *
+             * 创建外部面评
+             *
+             * 导入来自其他系统的面评信息，创建为外部面评
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        external_id?: string;
+                        username?: string;
+                        conclusion?: number;
+                        assessment_dimension_list?: Array<{
+                            score?: number;
+                            option?: string;
+                            options?: Array<string>;
+                            content?: string;
+                            assessment_type?: number;
+                            title?: string;
+                            description?: string;
+                        }>;
+                        content?: string;
+                        external_interview_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_interview_assessment?: {
+                                    id?: string;
+                                    external_id?: string;
+                                    username?: string;
+                                    conclusion?: number;
+                                    assessment_dimension_list?: Array<{
+                                        score?: number;
+                                        option?: string;
+                                        options?: Array<string>;
+                                        content?: string;
+                                        assessment_type?: number;
+                                        title?: string;
+                                        description?: string;
+                                    }>;
+                                    content?: string;
+                                    external_interview_id: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_interview_assessments`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 职位
          */
         job: {
@@ -54445,6 +55404,7 @@ export default abstract class Client {
                         address_id_list?: Array<string>;
                         job_attribute?: number;
                         expiry_timestamp?: string;
+                        interview_registration_schema_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -54593,6 +55553,10 @@ export default abstract class Client {
                                     hiring_manager_id_list: Array<string>;
                                     assistant_id_list?: Array<string>;
                                 };
+                                interview_registration_schema_info?: {
+                                    id?: string;
+                                    name?: string;
+                                };
                             };
                         }
                     >({
@@ -54656,6 +55620,7 @@ export default abstract class Client {
                         address_id_list?: Array<string>;
                         job_attribute?: number;
                         expiry_timestamp?: string;
+                        interview_registration_schema_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -54804,6 +55769,10 @@ export default abstract class Client {
                                     recruiter_id: string;
                                     hiring_manager_id_list: Array<string>;
                                     assistant_id_list?: Array<string>;
+                                };
+                                interview_registration_schema_info?: {
+                                    id?: string;
+                                    name?: string;
                                 };
                             };
                         }
@@ -54901,6 +55870,10 @@ export default abstract class Client {
                                             en_us?: string;
                                         };
                                     }>;
+                                    interview_registration_schema?: {
+                                        id?: string;
+                                        name?: string;
+                                    };
                                     interview_round_type_list?: Array<{
                                         assessment_round?: {
                                             id?: string;
@@ -55138,6 +56111,7 @@ export default abstract class Client {
                             round?: number;
                         }>;
                         jr_id_list?: Array<string>;
+                        interview_registration_schema_id?: string;
                         interview_round_type_conf_list?: Array<{
                             round_biz_id?: string;
                             assessment_template_biz_id?: string;
@@ -55225,6 +56199,10 @@ export default abstract class Client {
                                             en_us?: string;
                                         };
                                     }>;
+                                    interview_registration_schema?: {
+                                        id?: string;
+                                        name?: string;
+                                    };
                                     interview_round_type_list?: Array<{
                                         assessment_round?: {
                                             id?: string;
@@ -55917,6 +56895,53 @@ export default abstract class Client {
          */
         talent: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=add_to_folder&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/add_to_folder document }
+             *
+             * 将人才加入指定文件夹
+             *
+             * 将人才加入指定文件夹
+             */
+            addToFolder: async (
+                payload?: {
+                    data?: {
+                        talent_id_list?: Array<string>;
+                        folder_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                talent_id_list?: Array<string>;
+                                folder_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/add_to_folder`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=batch_get_id&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/batch_get_id document }
@@ -56454,12 +57479,169 @@ export default abstract class Client {
                                         }>;
                                     }>;
                                     top_degree?: number;
+                                    first_degree?: number;
                                 };
                             };
                         }
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/talents/:talent_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * talent_folder
+         */
+        talentFolder: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talent_folders`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    name: string;
+                                                    folder_id?: string;
+                                                    owner_id?: string;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_folder&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent_folder/list document }
+             *
+             * 获取人才文件夹信息
+             *
+             * 用于获取招聘系统中人才文件夹信息
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    name: string;
+                                    folder_id?: string;
+                                    owner_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talent_folders`,
                             path
                         ),
                         method: "GET",
@@ -56823,6 +58005,18 @@ export default abstract class Client {
                         membership_approval?: string;
                         labels?: Array<string>;
                         toolkit_ids?: Array<string>;
+                        restricted_mode_setting?: {
+                            status?: boolean;
+                            screenshot_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            download_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            message_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                        };
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -56868,6 +58062,18 @@ export default abstract class Client {
                                 moderation_permission?: string;
                                 labels?: Array<string>;
                                 toolkit_ids?: Array<string>;
+                                restricted_mode_setting?: {
+                                    status?: boolean;
+                                    screenshot_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    download_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    message_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                };
                             };
                         }
                     >({
@@ -56980,6 +58186,18 @@ export default abstract class Client {
                                 bot_count?: string;
                                 labels?: Array<string>;
                                 toolkit_ids?: Array<string>;
+                                restricted_mode_setting?: {
+                                    status?: boolean;
+                                    screenshot_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    download_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                    message_has_permission_setting?:
+                                        | "all_members"
+                                        | "not_anyone";
+                                };
                             };
                         }
                     >({
@@ -57395,6 +58613,18 @@ export default abstract class Client {
                         membership_approval?: string;
                         labels?: Array<string>;
                         toolkit_ids?: Array<string>;
+                        restricted_mode_setting?: {
+                            status?: boolean;
+                            screenshot_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            download_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                            message_has_permission_setting?:
+                                | "all_members"
+                                | "not_anyone";
+                        };
                         chat_type?: string;
                     };
                     params?: {
@@ -57652,8 +58882,8 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         member_id_type?: "user_id" | "union_id" | "open_id";
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { chat_id: string };
                 },
@@ -57756,8 +58986,8 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         member_id_type?: "user_id" | "union_id" | "open_id";
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { chat_id: string };
                 },
@@ -58384,8 +59614,8 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { chat_id: string };
                 },
@@ -58487,8 +59717,8 @@ export default abstract class Client {
                 payload?: {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { chat_id: string };
                 },
@@ -59266,7 +60496,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 消息
+         * 消息加急
          */
         message: {
             /**
@@ -64770,6 +66000,57 @@ export default abstract class Client {
      */
     search = {
         /**
+         * app
+         */
+        app: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=search&resource=app&apiName=create&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=search&resource=app&version=v2 document }
+             */
+            create: async (
+                payload?: {
+                    data: { query: string };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<string>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/search/v2/app`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 数据源
          */
         dataSource: {
@@ -65242,7 +66523,16 @@ export default abstract class Client {
                         acl: Array<{
                             access?: "allow" | "deny";
                             value?: string;
-                            type?: "user" | "group" | "open_id";
+                            type?:
+                                | "user_id"
+                                | "open_id"
+                                | "union_id"
+                                | "department_id"
+                                | "open_department_id"
+                                | "group_id"
+                                | "app_group_id"
+                                | "user"
+                                | "group";
                         }>;
                         metadata: {
                             title: string;
@@ -65344,7 +66634,16 @@ export default abstract class Client {
                                     acl: Array<{
                                         access?: "allow" | "deny";
                                         value?: string;
-                                        type?: "user" | "group" | "open_id";
+                                        type?:
+                                            | "user_id"
+                                            | "open_id"
+                                            | "union_id"
+                                            | "department_id"
+                                            | "open_department_id"
+                                            | "group_id"
+                                            | "app_group_id"
+                                            | "user"
+                                            | "group";
                                     }>;
                                     metadata: {
                                         title: string;
@@ -65367,6 +66666,67 @@ export default abstract class Client {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * message
+         */
+        message: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=search&resource=message&apiName=create&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=search&resource=message&version=v2 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        query: string;
+                        from_ids?: Array<string>;
+                        chat_ids?: Array<string>;
+                        message_type?: "file" | "image" | "media";
+                        at_chatter_ids?: Array<string>;
+                        from_type?: "bot" | "user";
+                        chat_type?: "group_chat" | "p2p_chat";
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<string>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/search/v2/message`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -66588,7 +67948,7 @@ export default abstract class Client {
             },
         },
         /**
-         * 单元格
+         * 工作表
          */
         spreadsheetSheet: {
             /**

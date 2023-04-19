@@ -414,6 +414,34 @@ export interface IHandles extends IOtherEventHandles {
         source?: number;
     }) => Promise<any> | any;
     /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/bot/events/menu document }
+     *
+     * 机器人自定义菜单
+     *
+     * 当用户点击类型为事件的机器人菜单时触发
+     */
+    "application.bot.menu_v6"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operator?: {
+            operator_name?: string;
+            operator_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+        };
+        event_key?: string;
+        timestamp?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/custom-approval-event document }
      */
     "approval.approval.updated_v4"?: (data: {
@@ -896,6 +924,7 @@ export interface IHandles extends IOtherEventHandles {
                 status?: { is_deleted?: boolean };
                 leaders?: Array<{ leaderType: number; leaderID: string }>;
                 group_chat_employee_types?: Array<number>;
+                primary_member_count?: number;
             }>;
             users?: Array<{
                 union_id?: string;
@@ -1020,6 +1049,7 @@ export interface IHandles extends IOtherEventHandles {
                 status?: { is_deleted?: boolean };
                 leaders?: Array<{ leaderType: number; leaderID: string }>;
                 group_chat_employee_types?: Array<number>;
+                primary_member_count?: number;
             }>;
             users?: Array<{
                 union_id?: string;
@@ -1196,6 +1226,7 @@ export interface IHandles extends IOtherEventHandles {
                 department_id?: string;
                 user_order?: number;
                 department_order?: number;
+                is_primary_dept?: boolean;
             }>;
             time_zone?: string;
             custom_attrs?: Array<{
@@ -1282,6 +1313,7 @@ export interface IHandles extends IOtherEventHandles {
                 department_id?: string;
                 user_order?: number;
                 department_order?: number;
+                is_primary_dept?: boolean;
             }>;
             time_zone?: string;
             custom_attrs?: Array<{
@@ -1369,6 +1401,7 @@ export interface IHandles extends IOtherEventHandles {
                 department_id?: string;
                 user_order?: number;
                 department_order?: number;
+                is_primary_dept?: boolean;
             }>;
             time_zone?: string;
             custom_attrs?: Array<{
@@ -1435,6 +1468,7 @@ export interface IHandles extends IOtherEventHandles {
                 department_id?: string;
                 user_order?: number;
                 department_order?: number;
+                is_primary_dept?: boolean;
             }>;
             time_zone?: string;
             custom_attrs?: Array<{
@@ -2134,6 +2168,14 @@ export interface IHandles extends IOtherEventHandles {
                 open_id?: string;
             };
             labels?: Array<string>;
+            restricted_mode_setting?: {
+                status?: boolean;
+                screenshot_has_permission_setting?:
+                    | "all_members"
+                    | "not_anyone";
+                download_has_permission_setting?: "all_members" | "not_anyone";
+                message_has_permission_setting?: "all_members" | "not_anyone";
+            };
         };
         before_change?: {
             avatar?: string;
@@ -2154,6 +2196,14 @@ export interface IHandles extends IOtherEventHandles {
                 open_id?: string;
             };
             labels?: Array<string>;
+            restricted_mode_setting?: {
+                status?: boolean;
+                screenshot_has_permission_setting?:
+                    | "all_members"
+                    | "not_anyone";
+                download_has_permission_setting?: "all_members" | "not_anyone";
+                message_has_permission_setting?: "all_members" | "not_anyone";
+            };
         };
         moderator_list?: {
             added_member_list?: Array<{
@@ -2494,6 +2544,7 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            calendar_event_id?: string;
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -2531,6 +2582,7 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            calendar_event_id?: string;
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -2655,6 +2707,7 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            calendar_event_id?: string;
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -2696,6 +2749,7 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            calendar_event_id?: string;
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
