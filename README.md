@@ -463,8 +463,63 @@ router.post('/webhook/event', lark.adaptKoaRouter(eventDispatcher));
 server.use(router.routes());
 server.listen(3000);
 ````
+#### Combined with NextJS
+```typescript
+// pages/api/webhook.ts
+import * as lark from '@larksuiteoapi/node-sdk';
+
+const client = new lark.Client({
+    appId: 'xxxxxxxxxxxxxxxxxxxxxxx',
+    appSecret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    appType: lark.AppType.SelfBuild
+});
+
+const eventDispatcher = new lark.EventDispatcher({
+    verificationToken: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    encryptKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+}).register({
+    'im.message.receive_v1': async (data) => {
+        const chatId = data.message.chat_id;
+
+        const res = await client.im.message.create({
+            params: {
+                receive_id_type: 'chat_id',
+            },
+            data: {
+                receive_id: chatId,
+                content: JSON.stringify({text: 'hello world'}),
+                msg_type: 'text'
+            },
+        });
+        return res;
+    }
+});
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    await lark.adaptNextjs(eventDispatcher, {
+        autoChallenge: true,
+    })(req, res);   
+};
+```
+
 #### Custom adapter
-If you want to adapt to services written by other libraries, you currently need to encapsulate the corresponding adapter yourself. Pass the received event data to the invoke method of the instantiated `eventDispatcher` for event processing:
+If you need to adapt a service written in another library, you can refer to the following approach to call the encapsulated custom adapter.
+
+```typescript
+// Taking NextJS as an example:
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    const result = await lark.adaptCustom(eventDispatcher, {
+        autoChallenge: true,
+    })(req.headers, req.body);
+    res.end(result);
+};
+```
+
+If the call fails or an error occurs, please check if the req.headers and req.body formats match the following image by setting breakpoints:
+
+![](doc/request-body.png)
+
+If you need to encapsulate it yourself, you can refer to the following logic. Pass the received event data to the invoke method of the instantiated `eventDispatcher` for event processing:
 
 ```typescript
 const data = server.getData();
