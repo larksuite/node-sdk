@@ -401,7 +401,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
         },
         /**
@@ -1706,7 +1706,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
         },
         /**
@@ -6149,7 +6149,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
         },
         /**
@@ -10653,7 +10653,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
         },
     };
@@ -47941,7 +47941,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
@@ -48031,7 +48031,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_prepare&version=v1 click to debug }
@@ -49050,7 +49050,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
@@ -49140,7 +49140,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
@@ -60333,7 +60333,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
@@ -60439,7 +60439,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
@@ -64667,7 +64667,7 @@ export default abstract class Client {
                         throw e;
                     });
 
-                return get(res, "data", {});
+                return get(res, "data", null);
             },
         },
         /**
