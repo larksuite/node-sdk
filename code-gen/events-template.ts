@@ -1956,6 +1956,25 @@ export interface IHandles extends IOtherEventHandles {
         update_time?: number;
     }) => Promise<any> | any;
     /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer/events/status_changed document }
+     *
+     * Offer 状态变更
+     *
+     * 当 Offer 状态发生变更时将触发该事件。
+     */
+    "hire.offer.status_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        offer_id?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/disbanded document }
      *
      * 群解散
