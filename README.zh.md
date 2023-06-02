@@ -5,6 +5,14 @@
 
 凡此种种，都使得整体的开发体验不佳，基于此，为了让开放能力变得易用，我们编写了该SDK，将所有冗长的逻辑内置处理，提供完备的类型系统，对外提供语义化的编程接口，提高编码体验。😙
 
+以下是一些基于该sdk的官方教程：
+* [快速开发互动卡片](https://open.feishu.cn/document/home/quickly-develop-interactive-cards/introduction)
+* [快速开发人员及考勤管理系统](https://open.feishu.cn/document/home/quick-start-of-personnel-and-attendance-management-system/overview)
+* [快速接入多维表格](https://open.feishu.cn/document/home/quick-access-to-base/preparation)
+* [基于网页应用实现部门人员管理](https://open.feishu.cn/document/home/quick-access-to-base/department-personnel-management-based-on-web-app/overview)
+* [快速接入通讯录](https://open.feishu.cn/document/home/quick-access-to-contact-api/introduction)
+* [基于审批实现自动考勤管理](https://open.feishu.cn/document/home/automatic-attendance-management-based-on-approval/introduction)
+
 ## 概念
 - 开发文档：开放平台的开放接口的参考，**开发者必看，可以使用搜索功能，高效的查询文档**。[更多介绍说明](https://open.feishu.cn/document/) 。
 

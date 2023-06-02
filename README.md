@@ -6,6 +6,14 @@
 
 All of these make the overall development experience poor. In order to make the open capability easy to use, we have written this SDK, which integrates all the verbose logic into built-in processing, provides a complete type hints, and provides external semantics. Programming interface to improve coding experience. 
 
+Here are some official tutorials based on the sdk:
+* [Quickly develop interactive cards](https://open.feishu.cn/document/home/quickly-develop-interactive-cards/introduction)
+* [Quick Start of Personnel and Attendance Management System](https://open.feishu.cn/document/home/quick-start-of-personnel-and-attendance-management-system/overview)
+* [Quick access to Base](https://open.feishu.cn/document/home/quick-access-to-base/preparation)
+* [Department personnel management based on web app](https://open.feishu.cn/document/home/quick-access-to-base/department-personnel-management-based-on-web-app/overview)
+* [Quick access to Contact API](https://open.feishu.cn/document/home/quick-access-to-contact-api/introduction)
+* [Automatic attendance management based on approval](https://open.feishu.cn/document/home/automatic-attendance-management-based-on-approval/introduction)
+
 ## Concept
 - Development documentation: A reference to the open interface of the open platform, **a must-see for developers, you can use the search function to query documents efficiently**. [More introduction instructions](https://open.feishu.cn/document/) .
 
