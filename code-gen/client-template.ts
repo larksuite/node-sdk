@@ -368,7 +368,7 @@ export default abstract class Client {
             update: async (
                 payload?: {
                     data: {
-                        files: Buffer;
+                        files: Buffer | fs.ReadStream;
                         file_type: string;
                         file_name: string;
                     };
@@ -1673,7 +1673,10 @@ export default abstract class Client {
              */
             create: async (
                 payload?: {
-                    data: { image_file: Buffer; image_type: number };
+                    data: {
+                        image_file: Buffer | fs.ReadStream;
+                        image_type: number;
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -6133,7 +6136,7 @@ export default abstract class Client {
              */
             upload: async (
                 payload?: {
-                    data?: { file?: Buffer };
+                    data?: { file?: Buffer | fs.ReadStream };
                     params: { file_name: string };
                 },
                 options?: IRequestOptions
@@ -10639,7 +10642,7 @@ export default abstract class Client {
              */
             upload: async (
                 payload?: {
-                    data: { name: string; file: Buffer };
+                    data: { name: string; file: Buffer | fs.ReadStream };
                 },
                 options?: IRequestOptions
             ) => {
@@ -47926,7 +47929,7 @@ export default abstract class Client {
                         parent_node: string;
                         size: number;
                         checksum?: string;
-                        file: Buffer;
+                        file: Buffer | fs.ReadStream;
                     };
                 },
                 options?: IRequestOptions
@@ -48023,7 +48026,7 @@ export default abstract class Client {
                         seq: number;
                         size: number;
                         checksum?: string;
-                        file: Buffer;
+                        file: Buffer | fs.ReadStream;
                     };
                 },
                 options?: IRequestOptions
@@ -49035,7 +49038,7 @@ export default abstract class Client {
                         size: number;
                         checksum?: string;
                         extra?: string;
-                        file: Buffer;
+                        file: Buffer | fs.ReadStream;
                     };
                 },
                 options?: IRequestOptions
@@ -49132,7 +49135,7 @@ export default abstract class Client {
                         seq: number;
                         size: number;
                         checksum?: string;
-                        file: Buffer;
+                        file: Buffer | fs.ReadStream;
                     };
                 },
                 options?: IRequestOptions
@@ -61136,7 +61139,7 @@ export default abstract class Client {
                             | "stream";
                         file_name: string;
                         duration?: number;
-                        file: Buffer;
+                        file: Buffer | fs.ReadStream;
                     };
                 },
                 options?: IRequestOptions
@@ -61243,7 +61246,10 @@ export default abstract class Client {
              */
             create: async (
                 payload?: {
-                    data: { image_type: "message" | "avatar"; image: Buffer };
+                    data: {
+                        image_type: "message" | "avatar";
+                        image: Buffer | fs.ReadStream;
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -65621,7 +65627,7 @@ export default abstract class Client {
             upload: async (
                 payload?: {
                     data: {
-                        data: Buffer;
+                        data: Buffer | fs.ReadStream;
                         target_id: string;
                         target_type: number;
                     };
