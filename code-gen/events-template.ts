@@ -1490,6 +1490,356 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "corehr.contract.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/created document }
+     *
+     * 部门创建
+     *
+     * 飞书人事中「部门被创建」时将触发此事件。触发时间为部门实际生效时间，如在 2022-01-01 创建部门，部门生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.department.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/deleted document }
+     *
+     * 部门删除
+     *
+     * 飞书人事中「部门被删除」时将触发此事件
+     */
+    "corehr.department.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/updated document }
+     *
+     * 部门更新
+     *
+     * 飞书人事中「部门信息被更新」时将触发此事件。触发时间为部门更新实际生效时间，如在 2022-01-01 更新部门，部门更新生效时间设置为 2022-05-01，事件将在 2022-05-01 进行推送。
+     */
+    "corehr.department.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/converted document }
+     *
+     * 员工转正
+     *
+     * 员工在飞书人事转正完成后将触发该事件
+     */
+    "corehr.employment.converted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/created document }
+     *
+     * 雇佣信息创建
+     *
+     * 员工在飞书人事的「雇佣信息被创建」时将触发此事件
+     */
+    "corehr.employment.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/deleted document }
+     *
+     * 雇佣信息删除
+     *
+     * 员工在飞书人事的「雇佣信息被删除」时将触发此事件
+     */
+    "corehr.employment.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/resigned document }
+     *
+     * 员工完成离职
+     *
+     * 员工完成离职，即离职日期的次日凌晨时，员工雇佣状态更改为“离职”后触发该事件
+     */
+    "corehr.employment.resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/employment/events/updated document }
+     *
+     * 雇佣信息更新
+     *
+     * 员工在飞书人事的「雇佣信息被更新」时将触发此事件
+     */
+    "corehr.employment.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_change/events/updated document }
+     *
+     * 异动状态变更事件
+     *
+     * 在异动发起审批和产生审批结果时触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝
+     */
+    "corehr.job_change.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        job_change_id?: string;
+        transfer_mode?: number;
+        transfer_type_unique_identifier?: string;
+        process_id?: string;
+        effective_date?: string;
+        status?: number;
+        transfer_key?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/changed document }
+     *
+     * 员工异动
+     *
+     * 员工在飞书人事异动完成后将触发该事件
+     */
+    "corehr.job_data.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/employed document }
+     *
+     * 员工完成入职
+     *
+     * 在「飞书人事」将待入职员工手动操作“完成入职”后，触发该事件
+     */
+    "corehr.job_data.employed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated document }
+     *
+     * 离职状态变更事件
+     *
+     * 在离职发起审批和产生审批结果时触发该事件，审批结果产生的场景包括撤销、审批通过、审批拒绝
+     */
+    "corehr.offboarding.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        process_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.org_role_authorization.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        role_id?: string;
+        management_scope_list?: Array<{
+            management_dimension: string;
+            obj_id: string;
+        }>;
+        employment_id_list?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.person.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.person.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_id?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/events/updated document }
+     *
+     * 个人信息更新
+     *
+     * 员工在飞书人事的「个人信息被更新」时将触发此事件
+     */
+    "corehr.person.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        person_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
      *
      * 多维表格字段变更
@@ -1954,6 +2304,63 @@ export interface IHandles extends IOtherEventHandles {
         origin_stage_id?: string;
         target_stage_id?: string;
         update_time?: number;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/import-ehr document }
+     */
+    "hire.ehr_import_task.imported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        application_id?: string;
+        ehr_department_id?: string;
+        ehr_requirement_id?: string;
+        operator_id?: string;
+        operator_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        ehr_department?: {
+            department_id?: string;
+            open_department_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "hire.ehr_import_task_for_internship_offer.imported_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        task_id?: string;
+        application_id?: string;
+        offer_id?: string;
+        pre_onboard_id?: string;
+        ehr_department_id?: string;
+        operator_id?: string;
+        operator_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        ehr_department?: {
+            department_id?: string;
+            open_department_id?: string;
+        };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer/events/status_changed document }
