@@ -73,8 +73,10 @@ const res = await client.im.message.create({
   },
 });
 ```
-> tips: 如果想调试某个api，可以点击注释中的链接进入api调试台进行调试：
-![](doc/debugger-tip.png)
+> tips: 
+> * 如果想调试某个api，可以点击注释中的链接进入api调试台进行调试：
+> ![](doc/debugger-tip.png)
+> * 如何获取语义化调用接口：[点击这里](https://github.com/larksuite/node-sdk/issues/42)
 
 #### 创建client
 对于自建应用，可以使用下面的代码创建一个client：

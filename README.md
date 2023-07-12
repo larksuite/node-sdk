@@ -74,8 +74,10 @@ const res = await client.im.message.create({
   },
 });
 ````
-> tips: If you want to debug an API, you can click the link in the comment to enter the API debugging platform for debugging:
-![](doc/debugger-tip.png)
+> tips: 
+> * If you want to debug an API, you can click the link in the comment to enter the API debugging platform for debugging:
+> ![](doc/debugger-tip.png)
+> * How to obtain the semantic call interface：[Click here](https://github.com/larksuite/node-sdk/issues/42)
 
 #### Create Client
 For self-built applications, you can use the following code to create a client:
