@@ -27,7 +27,7 @@ interface InteractiveCardConfig {
     wide_screen_mode?: boolean; // deprecated after 2021/03/22
 }
 
-type InteractiveCardHeaderTemplate =
+export type InteractiveCardHeaderTemplate =
     | 'blue'
     | 'wathet'
     | 'turquoise'
@@ -40,7 +40,7 @@ type InteractiveCardHeaderTemplate =
     | 'purple'
     | 'indigo'
     | 'grey';
-interface InteractiveCardHeader {
+export interface InteractiveCardHeader {
     title: InteractiveCardTitle;
     template?: InteractiveCardHeaderTemplate;
 }
