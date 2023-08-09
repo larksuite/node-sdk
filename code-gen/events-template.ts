@@ -439,7 +439,7 @@ export interface IHandles extends IOtherEventHandles {
             };
         };
         event_key?: string;
-        timestamp?: string;
+        timestamp?: number;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDO24iM4YjLygjN/event/custom-approval-event document }
@@ -1722,6 +1722,12 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         job_data_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/employed document }
@@ -1741,6 +1747,12 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         job_data_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated document }
