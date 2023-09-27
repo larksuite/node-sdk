@@ -1025,6 +1025,7 @@ export interface IHandles extends IOtherEventHandles {
                         };
                     };
                 }>;
+                dotted_line_leader_user_ids?: Array<string>;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1150,6 +1151,7 @@ export interface IHandles extends IOtherEventHandles {
                         };
                     };
                 }>;
+                dotted_line_leader_user_ids?: Array<string>;
             }>;
             user_groups?: Array<{
                 user_group_id: string;
@@ -1245,6 +1247,7 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             job_level_id?: string;
             job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
         };
     }) => Promise<any> | any;
     /**
@@ -1332,6 +1335,7 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             job_level_id?: string;
             job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
         };
         old_object?: { department_ids?: Array<string>; open_id?: string };
     }) => Promise<any> | any;
@@ -1420,6 +1424,7 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             job_level_id?: string;
             job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
         };
         old_object?: {
             open_id?: string;
@@ -1487,6 +1492,7 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             job_level_id?: string;
             job_family_id?: string;
+            dotted_line_leader_user_ids?: Array<string>;
         };
     }) => Promise<any> | any;
     /**
@@ -2801,6 +2807,7 @@ export interface IHandles extends IOtherEventHandles {
             root_id?: string;
             parent_id?: string;
             create_time: string;
+            update_time?: string;
             chat_id: string;
             chat_type: string;
             message_type: string;
@@ -2811,6 +2818,7 @@ export interface IHandles extends IOtherEventHandles {
                 name: string;
                 tenant_key?: string;
             }>;
+            user_agent?: string;
         };
     }) => Promise<any> | any;
     /**
@@ -3418,6 +3426,7 @@ export interface IHandles extends IOtherEventHandles {
             }>;
         };
         time_config?: {
+            if_cover_child_scope?: boolean;
             time_switch: number;
             days_in_advance?: number;
             opening_hour?: string;
