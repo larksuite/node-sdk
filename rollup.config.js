@@ -61,7 +61,11 @@ export default [{
                 {find: '@node-sdk', replacement: path.resolve(__dirname)}
             ]
         }),
-        dts(),
+        dts({
+            compilerOptions: {
+                noUnusedLocals: false
+            }
+        }),
         license({
             banner: {
                 content: {
