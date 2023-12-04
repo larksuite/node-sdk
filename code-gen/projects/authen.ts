@@ -94,57 +94,6 @@ export default abstract class Client extends auth {
             },
         },
         /**
-         * authorize
-         */
-        authorize: {
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=authen&resource=authorize&apiName=get&version=v1 click to debug }
-             *
-             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=authen&resource=authorize&version=v1 document }
-             */
-            get: async (
-                payload?: {
-                    params: {
-                        app_id: string;
-                        redirect_uri: string;
-                        scope?: string;
-                        state?: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                redirect_uri?: string;
-                                code?: string;
-                                state?: string;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/authen/v1/authorize`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-        },
-        /**
          * oidc.access_token
          */
         oidcAccessToken: {
@@ -409,57 +358,6 @@ export default abstract class Client extends auth {
                                 path
                             ),
                             method: "POST",
-                            data,
-                            params,
-                            headers,
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-            },
-            /**
-             * authorize
-             */
-            authorize: {
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=authen&resource=authorize&apiName=get&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=authen&resource=authorize&version=v1 document }
-                 */
-                get: async (
-                    payload?: {
-                        params: {
-                            app_id: string;
-                            redirect_uri: string;
-                            scope?: string;
-                            state?: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    redirect_uri?: string;
-                                    code?: string;
-                                    state?: string;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/authen/v1/authorize`,
-                                path
-                            ),
-                            method: "GET",
                             data,
                             params,
                             headers,

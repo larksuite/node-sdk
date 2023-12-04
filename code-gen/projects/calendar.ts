@@ -2699,6 +2699,82 @@ export default abstract class Client extends block {
             },
         },
         /**
+         * calendar.event.meeting_chat
+         */
+        calendarEventMeetingChat: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_chat&apiName=create&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=calendar&resource=calendar.event.meeting_chat&version=v4 document }
+             */
+            create: async (
+                payload?: {
+                    path: { calendar_id: string; event_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                meeting_chat_id?: string;
+                                applink?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_chat&apiName=delete&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=calendar&resource=calendar.event.meeting_chat&version=v4 document }
+             */
+            delete: async (
+                payload?: {
+                    params: { meeting_chat_id: string };
+                    path: { calendar_id: string; event_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * Exchange绑定
          */
         exchangeBinding: {
@@ -2877,6 +2953,8 @@ export default abstract class Client extends block {
                         time_max: string;
                         user_id?: string;
                         room_id?: string;
+                        include_external_calendar?: boolean;
+                        only_busy?: boolean;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -5802,6 +5880,85 @@ export default abstract class Client extends block {
                 },
             },
             /**
+             * calendar.event.meeting_chat
+             */
+            calendarEventMeetingChat: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_chat&apiName=create&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=calendar&resource=calendar.event.meeting_chat&version=v4 document }
+                 */
+                create: async (
+                    payload?: {
+                        path: { calendar_id: string; event_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    meeting_chat_id?: string;
+                                    applink?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_chat&apiName=delete&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=calendar&resource=calendar.event.meeting_chat&version=v4 document }
+                 */
+                delete: async (
+                    payload?: {
+                        params: { meeting_chat_id: string };
+                        path: { calendar_id: string; event_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_chat`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * Exchange绑定
              */
             exchangeBinding: {
@@ -5983,6 +6140,8 @@ export default abstract class Client extends block {
                             time_max: string;
                             user_id?: string;
                             room_id?: string;
+                            include_external_calendar?: boolean;
+                            only_busy?: boolean;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";

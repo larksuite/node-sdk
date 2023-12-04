@@ -3032,6 +3032,9 @@ export default abstract class Client extends human_authentication {
              */
             get: async (
                 payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { message_id: string };
                 },
                 options?: IRequestOptions
@@ -7610,6 +7613,9 @@ export default abstract class Client extends human_authentication {
                  */
                 get: async (
                     payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                         path: { message_id: string };
                     },
                     options?: IRequestOptions

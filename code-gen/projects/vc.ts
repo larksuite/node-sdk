@@ -324,6 +324,7 @@ export default abstract class Client extends unified_kms_log {
                     data: {
                         start_time: string;
                         end_time: string;
+                        meeting_status?: number;
                         meeting_no?: string;
                         user_id?: string;
                         room_id?: string;
@@ -374,6 +375,7 @@ export default abstract class Client extends unified_kms_log {
                     data: {
                         meeting_start_time: string;
                         meeting_end_time: string;
+                        meeting_status?: number;
                         meeting_no: string;
                         user_id?: string;
                         room_id?: string;
@@ -1126,6 +1128,7 @@ export default abstract class Client extends unified_kms_log {
                     params: {
                         start_time: string;
                         end_time: string;
+                        meeting_status?: number;
                         meeting_no?: string;
                         user_id?: string;
                         room_id?: string;
@@ -1240,6 +1243,7 @@ export default abstract class Client extends unified_kms_log {
                     params: {
                         start_time: string;
                         end_time: string;
+                        meeting_status?: number;
                         meeting_no?: string;
                         user_id?: string;
                         room_id?: string;
@@ -1308,6 +1312,7 @@ export default abstract class Client extends unified_kms_log {
                     params: {
                         meeting_start_time: string;
                         meeting_end_time: string;
+                        meeting_status?: number;
                         meeting_no: string;
                         user_id?: string;
                         room_id?: string;
@@ -1376,6 +1381,7 @@ export default abstract class Client extends unified_kms_log {
                                                     participant_name?: string;
                                                     department?: string;
                                                     user_id?: string;
+                                                    meeting_room_id?: string;
                                                     employee_id?: string;
                                                     phone?: string;
                                                     email?: string;
@@ -1429,6 +1435,7 @@ export default abstract class Client extends unified_kms_log {
                     params: {
                         meeting_start_time: string;
                         meeting_end_time: string;
+                        meeting_status?: number;
                         meeting_no: string;
                         user_id?: string;
                         room_id?: string;
@@ -1453,6 +1460,7 @@ export default abstract class Client extends unified_kms_log {
                                     participant_name?: string;
                                     department?: string;
                                     user_id?: string;
+                                    meeting_room_id?: string;
                                     employee_id?: string;
                                     phone?: string;
                                     email?: string;
@@ -2784,6 +2792,7 @@ export default abstract class Client extends unified_kms_log {
                                                     room_name?: string;
                                                     event_title?: string;
                                                     reserver?: string;
+                                                    reserver_user_id?: string;
                                                     department_of_reserver?: string;
                                                     guests_number?: string;
                                                     accepted_number?: string;
@@ -2854,6 +2863,7 @@ export default abstract class Client extends unified_kms_log {
                                     room_name?: string;
                                     event_title?: string;
                                     reserver?: string;
+                                    reserver_user_id?: string;
                                     department_of_reserver?: string;
                                     guests_number?: string;
                                     accepted_number?: string;
@@ -4694,6 +4704,7 @@ export default abstract class Client extends unified_kms_log {
                         data: {
                             start_time: string;
                             end_time: string;
+                            meeting_status?: number;
                             meeting_no?: string;
                             user_id?: string;
                             room_id?: string;
@@ -4744,6 +4755,7 @@ export default abstract class Client extends unified_kms_log {
                         data: {
                             meeting_start_time: string;
                             meeting_end_time: string;
+                            meeting_status?: number;
                             meeting_no: string;
                             user_id?: string;
                             room_id?: string;
@@ -5517,6 +5529,7 @@ export default abstract class Client extends unified_kms_log {
                         params: {
                             start_time: string;
                             end_time: string;
+                            meeting_status?: number;
                             meeting_no?: string;
                             user_id?: string;
                             room_id?: string;
@@ -5631,6 +5644,7 @@ export default abstract class Client extends unified_kms_log {
                         params: {
                             start_time: string;
                             end_time: string;
+                            meeting_status?: number;
                             meeting_no?: string;
                             user_id?: string;
                             room_id?: string;
@@ -5699,6 +5713,7 @@ export default abstract class Client extends unified_kms_log {
                         params: {
                             meeting_start_time: string;
                             meeting_end_time: string;
+                            meeting_status?: number;
                             meeting_no: string;
                             user_id?: string;
                             room_id?: string;
@@ -5767,6 +5782,7 @@ export default abstract class Client extends unified_kms_log {
                                                         participant_name?: string;
                                                         department?: string;
                                                         user_id?: string;
+                                                        meeting_room_id?: string;
                                                         employee_id?: string;
                                                         phone?: string;
                                                         email?: string;
@@ -5820,6 +5836,7 @@ export default abstract class Client extends unified_kms_log {
                         params: {
                             meeting_start_time: string;
                             meeting_end_time: string;
+                            meeting_status?: number;
                             meeting_no: string;
                             user_id?: string;
                             room_id?: string;
@@ -5844,6 +5861,7 @@ export default abstract class Client extends unified_kms_log {
                                         participant_name?: string;
                                         department?: string;
                                         user_id?: string;
+                                        meeting_room_id?: string;
                                         employee_id?: string;
                                         phone?: string;
                                         email?: string;
@@ -7200,6 +7218,7 @@ export default abstract class Client extends unified_kms_log {
                                                         room_name?: string;
                                                         event_title?: string;
                                                         reserver?: string;
+                                                        reserver_user_id?: string;
                                                         department_of_reserver?: string;
                                                         guests_number?: string;
                                                         accepted_number?: string;
@@ -7270,6 +7289,7 @@ export default abstract class Client extends unified_kms_log {
                                         room_name?: string;
                                         event_title?: string;
                                         reserver?: string;
+                                        reserver_user_id?: string;
                                         department_of_reserver?: string;
                                         guests_number?: string;
                                         accepted_number?: string;

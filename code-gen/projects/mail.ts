@@ -8,10 +8,10 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
-import im from "./im";
+import lingo from "./lingo";
 
 // auto gen
-export default abstract class Client extends im {
+export default abstract class Client extends lingo {
     declare tokenManager;
 
     declare domain;

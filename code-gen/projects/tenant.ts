@@ -120,6 +120,7 @@ export default abstract class Client extends task {
                                         avatar_240?: string;
                                         avatar_640?: string;
                                     };
+                                    domain?: string;
                                 };
                             };
                         }
@@ -229,6 +230,7 @@ export default abstract class Client extends task {
                                             avatar_240?: string;
                                             avatar_640?: string;
                                         };
+                                        domain?: string;
                                     };
                                 };
                             }

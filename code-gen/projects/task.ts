@@ -3564,6 +3564,337 @@ export default abstract class Client extends sup_project {
         },
         v2: {
             /**
+             * attachment
+             */
+            attachment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=attachment&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=task&resource=attachment&version=v2 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { attachment_guid?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/attachments/:attachment_guid`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=attachment&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=task&resource=attachment&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: { user_id_type?: string };
+                        path: { attachment_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    attachment?: {
+                                        guid?: string;
+                                        file_token?: string;
+                                        name?: string;
+                                        size?: number;
+                                        resource?: {
+                                            type?: string;
+                                            id?: string;
+                                        };
+                                        uploader?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        };
+                                        is_cover?: boolean;
+                                        uploaded_at?: string;
+                                        url?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/attachments/:attachment_guid`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            resource_type?: string;
+                            resource_id: string;
+                            user_id_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/attachments`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        file_token?: string;
+                                                        name?: string;
+                                                        size?: number;
+                                                        resource?: {
+                                                            type?: string;
+                                                            id?: string;
+                                                        };
+                                                        uploader?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                        };
+                                                        is_cover?: boolean;
+                                                        uploaded_at?: string;
+                                                        url?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=attachment&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=task&resource=attachment&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            resource_type?: string;
+                            resource_id: string;
+                            user_id_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        file_token?: string;
+                                        name?: string;
+                                        size?: number;
+                                        resource?: {
+                                            type?: string;
+                                            id?: string;
+                                        };
+                                        uploader?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        };
+                                        is_cover?: boolean;
+                                        uploaded_at?: string;
+                                        url?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/attachments`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=attachment&apiName=upload&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload&project=task&resource=attachment&version=v2 document }
+                 */
+                upload: async (
+                    payload?: {
+                        data: {
+                            resource_type?: string;
+                            resource_id: string;
+                            file: Buffer | fs.ReadStream;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        file_token?: string;
+                                        name?: string;
+                                        size?: number;
+                                        resource?: {
+                                            type?: string;
+                                            id?: string;
+                                        };
+                                        uploader?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        };
+                                        is_cover?: boolean;
+                                        uploaded_at?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/attachments/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return get(res, "data", null);
+                },
+            },
+            /**
              * comment
              */
             comment: {
@@ -5971,6 +6302,7 @@ export default abstract class Client extends sup_project {
                                 multi_select_value?: Array<string>;
                                 text_value?: string;
                             }>;
+                            docx_source?: { token: string; block_id: string };
                         };
                         params?: { user_id_type?: string };
                     },
@@ -7888,6 +8220,7 @@ export default abstract class Client extends sup_project {
                                 multi_select_value?: Array<string>;
                                 text_value?: string;
                             }>;
+                            docx_source?: { token: string; block_id: string };
                         };
                         params?: { user_id_type?: string };
                         path: { task_guid: string };
@@ -8504,6 +8837,285 @@ export default abstract class Client extends sup_project {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tasklist.activity_subscription
+             */
+            tasklistActivitySubscription: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist.activity_subscription&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=task&resource=tasklist.activity_subscription&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            subscribers: Array<{ id?: string; type?: string }>;
+                            include_keys: Array<number>;
+                            disabled?: boolean;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    activity_subscription?: {
+                                        guid?: string;
+                                        name?: string;
+                                        subscribers?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        }>;
+                                        include_keys?: Array<number>;
+                                        disabled?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_subscriptions`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist.activity_subscription&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=task&resource=tasklist.activity_subscription&version=v2 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: {
+                            tasklist_guid: string;
+                            activity_subscription_guid: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_subscriptions/:activity_subscription_guid`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist.activity_subscription&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=task&resource=tasklist.activity_subscription&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: {
+                            tasklist_guid: string;
+                            activity_subscription_guid: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    activity_subscription?: {
+                                        guid?: string;
+                                        name?: string;
+                                        subscribers?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        }>;
+                                        include_keys?: Array<number>;
+                                        disabled?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_subscriptions/:activity_subscription_guid`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist.activity_subscription&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=task&resource=tasklist.activity_subscription&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            limit?: number;
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { tasklist_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        name?: string;
+                                        subscribers?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        }>;
+                                        include_keys?: Array<number>;
+                                        disabled?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_subscriptions`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist.activity_subscription&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=task&resource=tasklist.activity_subscription&version=v2 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            activity_subscription: {
+                                name?: string;
+                                subscribers?: Array<{
+                                    id?: string;
+                                    type?: string;
+                                }>;
+                                include_keys?: Array<number>;
+                                disabled?: boolean;
+                            };
+                            update_fields: Array<
+                                | "name"
+                                | "include_keys"
+                                | "subscribers"
+                                | "disabled"
+                            >;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: {
+                            tasklist_guid: string;
+                            activity_subscription_guid: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    activity_subscription?: {
+                                        guid?: string;
+                                        name?: string;
+                                        subscribers?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                        }>;
+                                        include_keys?: Array<number>;
+                                        disabled?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/activity_subscriptions/:activity_subscription_guid`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,

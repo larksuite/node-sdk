@@ -577,6 +577,7 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         }>;
+        calendar_event_id?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr_event/events/updated document }
@@ -1511,6 +1512,36 @@ export interface IHandles extends IOtherEventHandles {
         contract_id?: string;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "corehr.contract.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.contract.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        contract_id?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/created document }
      *
      * 部门创建
@@ -1856,6 +1887,45 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         person_id?: string;
         field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.pre_hire.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        pre_hire_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.probation.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        probation_status?:
+            | "pending"
+            | "rejected"
+            | "waiting"
+            | "approved"
+            | "converted"
+            | "offboarded";
+        actual_probation_end_date?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
@@ -2324,6 +2394,107 @@ export interface IHandles extends IOtherEventHandles {
         update_time?: number;
     }) => Promise<any> | any;
     /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account/events/created document }
+     *
+     * 帐号绑定
+     *
+     * 招聘管理员添加三方服务商帐号时，系统会推送事件给应用开发者，开发者可根据事件获取用户添加的帐号类型（背调 或 笔试）和 帐号自定义字段信息，并根据这些信息识别用户在服务商处的身份，完成三方服务商帐号 和 招聘帐号之间的绑定，并根据用户服务商身份推送对应的背调套餐或试卷列表。
+     */
+    "hire.eco_account.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        scope?: number;
+        account_id?: string;
+        account_name?: string;
+        usage_list?: Array<number>;
+        custom_field_list?: Array<{ key?: string; value?: string }>;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/events/canceled document }
+     *
+     * 终止背调
+     *
+     * 用户在招聘系统终止背调后，系统会推送事件给对应的应用开发者。开发者可根据事件获取背调 ID，完成在三方服务商处的订单取消等后续操作。
+     */
+    "hire.eco_background_check.canceled_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        background_check_id?: string;
+        termination_reason?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/events/created document }
+     *
+     * 创建背调
+     *
+     * 用户在招聘系统安排背调后，系统会推送事件给对应的应用开发者。开发者可根据事件获取候选人信息、委托人信息和自定义字段信息，并根据这些信息完成在三方服务商处的背调订单创建。
+     */
+    "hire.eco_background_check.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        background_check_id?: string;
+        account_id?: string;
+        package_id?: string;
+        additional_item_id_list?: Array<string>;
+        comment?: string;
+        candidate_info?: {
+            name?: string;
+            mobile?: { code?: string; number?: string };
+            email?: string;
+            first_name?: string;
+            last_name?: string;
+        };
+        client_contact_info?: {
+            name?: string;
+            mobile?: { code?: string; number?: string };
+            email?: string;
+        };
+        custom_field_list?: Array<{ key?: string; value?: string }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "hire.eco_exam.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        exam_id?: string;
+        account_id?: string;
+        paper_id?: string;
+        candidate_info?: {
+            name?: string;
+            mobile?: { code?: string; number?: string };
+            email?: string;
+        };
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/import-ehr document }
      */
     "hire.ehr_import_task.imported_v1"?: (data: {
@@ -2398,6 +2569,27 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         offer_id?: string;
+        offer_status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "hire.referral_account.assets_update_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        account_id?: string;
+        assets?: {
+            confirmed_bonus?: { point_bonus?: number };
+            paid_bonus?: { point_bonus?: number };
+        };
+        modify_time?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/disbanded document }
@@ -3118,6 +3310,11 @@ export interface IHandles extends IOtherEventHandles {
             user_type?: number;
         };
         leave_reason?: number;
+        leave_user?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/meeting_ended document }

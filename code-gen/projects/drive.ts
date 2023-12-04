@@ -998,7 +998,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 事件
+         * 分片上传
          */
         file: {
             /**
@@ -1022,7 +1022,8 @@ export default abstract class Client extends docx {
                             | "sheet"
                             | "bitable"
                             | "docx"
-                            | "mindnote";
+                            | "mindnote"
+                            | "slides";
                         folder_token: string;
                         extra?: Array<{ key: string; value: string }>;
                     };
@@ -1134,7 +1135,8 @@ export default abstract class Client extends docx {
                                 | "bitable"
                                 | "doc"
                                 | "sheet"
-                                | "mindnote";
+                                | "mindnote"
+                                | "slides";
                         };
                     };
                     params?: {
@@ -1208,7 +1210,8 @@ export default abstract class Client extends docx {
                             | "doc"
                             | "sheet"
                             | "mindnote"
-                            | "shortcut";
+                            | "shortcut"
+                            | "slides";
                     };
                     path?: { file_token?: string };
                 },
@@ -1563,7 +1566,8 @@ export default abstract class Client extends docx {
                             | "doc"
                             | "sheet"
                             | "mindnote"
-                            | "folder";
+                            | "folder"
+                            | "slides";
                         folder_token?: string;
                     };
                     path: { file_token: string };
@@ -1974,12 +1978,10 @@ export default abstract class Client extends docx {
                             code?: number;
                             msg?: string;
                             data?: {
-                                subscription?: {
-                                    subscription_id?: string;
-                                    subscription_type?: "comment_update";
-                                    is_subcribe?: boolean;
-                                    file_type: "doc" | "docx" | "wiki";
-                                };
+                                subscription_id?: string;
+                                subscription_type?: "comment_update";
+                                is_subcribe?: boolean;
+                                file_type?: "doc" | "docx" | "wiki";
                             };
                         }
                     >({
@@ -2023,12 +2025,10 @@ export default abstract class Client extends docx {
                             code?: number;
                             msg?: string;
                             data?: {
-                                subscription?: {
-                                    subscription_id?: string;
-                                    subscription_type?: "comment_update";
-                                    is_subcribe?: boolean;
-                                    file_type: "doc" | "docx" | "wiki";
-                                };
+                                subscription_id: string;
+                                subscription_type?: "comment_update";
+                                is_subcribe?: boolean;
+                                file_type?: "doc" | "docx" | "wiki";
                             };
                         }
                     >({
@@ -2075,12 +2075,10 @@ export default abstract class Client extends docx {
                             code?: number;
                             msg?: string;
                             data?: {
-                                subscription?: {
-                                    subscription_id?: string;
-                                    subscription_type?: "comment_update";
-                                    is_subcribe?: boolean;
-                                    file_type: "doc" | "docx" | "wiki";
-                                };
+                                subscription_id?: string;
+                                subscription_type?: "comment_update";
+                                is_subcribe?: boolean;
+                                file_type?: "doc" | "docx" | "wiki";
                             };
                         }
                     >({
@@ -2123,8 +2121,8 @@ export default abstract class Client extends docx {
                         create_time?: string;
                         update_time?: string;
                         status?: "0" | "1" | "2";
-                        obj_type?: "docx";
-                        parent_type?: "docx";
+                        obj_type?: "docx" | "sheet";
+                        parent_type?: "docx" | "sheet";
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -2151,8 +2149,8 @@ export default abstract class Client extends docx {
                                 create_time?: string;
                                 update_time?: string;
                                 status?: "0" | "1" | "2";
-                                obj_type?: "docx";
-                                parent_type?: "docx";
+                                obj_type?: "docx" | "sheet";
+                                parent_type?: "docx" | "sheet";
                             };
                         }
                     >({
@@ -2182,7 +2180,7 @@ export default abstract class Client extends docx {
             delete: async (
                 payload?: {
                     params: {
-                        obj_type: "docx";
+                        obj_type: "docx" | "sheet";
                         user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { file_token: string; version_id: string };
@@ -2220,7 +2218,7 @@ export default abstract class Client extends docx {
             get: async (
                 payload?: {
                     params: {
-                        obj_type: "docx";
+                        obj_type: "docx" | "sheet";
                         user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { file_token: string; version_id: string };
@@ -2245,8 +2243,8 @@ export default abstract class Client extends docx {
                                 create_time?: string;
                                 update_time?: string;
                                 status?: "0" | "1" | "2";
-                                obj_type?: "docx";
-                                parent_type?: "docx";
+                                obj_type?: "docx" | "sheet";
+                                parent_type?: "docx" | "sheet";
                             };
                         }
                     >({
@@ -2269,7 +2267,7 @@ export default abstract class Client extends docx {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        obj_type: "docx";
+                        obj_type: "docx" | "sheet";
                         user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { file_token: string };
@@ -2339,8 +2337,10 @@ export default abstract class Client extends docx {
                                                     create_time?: string;
                                                     update_time?: string;
                                                     status?: "0" | "1" | "2";
-                                                    obj_type?: "docx";
-                                                    parent_type?: "docx";
+                                                    obj_type?: "docx" | "sheet";
+                                                    parent_type?:
+                                                        | "docx"
+                                                        | "sheet";
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -2377,7 +2377,7 @@ export default abstract class Client extends docx {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        obj_type: "docx";
+                        obj_type: "docx" | "sheet";
                         user_id_type?: "open_id" | "union_id" | "user_id";
                     };
                     path: { file_token: string };
@@ -2403,8 +2403,8 @@ export default abstract class Client extends docx {
                                     create_time?: string;
                                     update_time?: string;
                                     status?: "0" | "1" | "2";
-                                    obj_type?: "docx";
-                                    parent_type?: "docx";
+                                    obj_type?: "docx" | "sheet";
+                                    parent_type?: "docx" | "sheet";
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -3133,7 +3133,8 @@ export default abstract class Client extends docx {
                             | "comment"
                             | "export"
                             | "copy"
-                            | "print";
+                            | "print"
+                            | "manage_public";
                     };
                     path: { token: string };
                 },
@@ -3390,6 +3391,7 @@ export default abstract class Client extends docx {
                         need_notification?: boolean;
                         remove_old_owner?: boolean;
                         stay_put?: boolean;
+                        old_owner_perm?: string;
                     };
                     path: { token: string };
                 },
@@ -4813,7 +4815,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 事件
+             * 分片上传
              */
             file: {
                 /**
@@ -4837,7 +4839,8 @@ export default abstract class Client extends docx {
                                 | "sheet"
                                 | "bitable"
                                 | "docx"
-                                | "mindnote";
+                                | "mindnote"
+                                | "slides";
                             folder_token: string;
                             extra?: Array<{ key: string; value: string }>;
                         };
@@ -4949,7 +4952,8 @@ export default abstract class Client extends docx {
                                     | "bitable"
                                     | "doc"
                                     | "sheet"
-                                    | "mindnote";
+                                    | "mindnote"
+                                    | "slides";
                             };
                         };
                         params?: {
@@ -5023,7 +5027,8 @@ export default abstract class Client extends docx {
                                 | "doc"
                                 | "sheet"
                                 | "mindnote"
-                                | "shortcut";
+                                | "shortcut"
+                                | "slides";
                         };
                         path?: { file_token?: string };
                     },
@@ -5384,7 +5389,8 @@ export default abstract class Client extends docx {
                                 | "doc"
                                 | "sheet"
                                 | "mindnote"
-                                | "folder";
+                                | "folder"
+                                | "slides";
                             folder_token?: string;
                         };
                         path: { file_token: string };
@@ -5803,12 +5809,10 @@ export default abstract class Client extends docx {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    subscription?: {
-                                        subscription_id?: string;
-                                        subscription_type?: "comment_update";
-                                        is_subcribe?: boolean;
-                                        file_type: "doc" | "docx" | "wiki";
-                                    };
+                                    subscription_id?: string;
+                                    subscription_type?: "comment_update";
+                                    is_subcribe?: boolean;
+                                    file_type?: "doc" | "docx" | "wiki";
                                 };
                             }
                         >({
@@ -5855,12 +5859,10 @@ export default abstract class Client extends docx {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    subscription?: {
-                                        subscription_id?: string;
-                                        subscription_type?: "comment_update";
-                                        is_subcribe?: boolean;
-                                        file_type: "doc" | "docx" | "wiki";
-                                    };
+                                    subscription_id: string;
+                                    subscription_type?: "comment_update";
+                                    is_subcribe?: boolean;
+                                    file_type?: "doc" | "docx" | "wiki";
                                 };
                             }
                         >({
@@ -5910,12 +5912,10 @@ export default abstract class Client extends docx {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    subscription?: {
-                                        subscription_id?: string;
-                                        subscription_type?: "comment_update";
-                                        is_subcribe?: boolean;
-                                        file_type: "doc" | "docx" | "wiki";
-                                    };
+                                    subscription_id?: string;
+                                    subscription_type?: "comment_update";
+                                    is_subcribe?: boolean;
+                                    file_type?: "doc" | "docx" | "wiki";
                                 };
                             }
                         >({
@@ -5958,8 +5958,8 @@ export default abstract class Client extends docx {
                             create_time?: string;
                             update_time?: string;
                             status?: "0" | "1" | "2";
-                            obj_type?: "docx";
-                            parent_type?: "docx";
+                            obj_type?: "docx" | "sheet";
+                            parent_type?: "docx" | "sheet";
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -5986,8 +5986,8 @@ export default abstract class Client extends docx {
                                     create_time?: string;
                                     update_time?: string;
                                     status?: "0" | "1" | "2";
-                                    obj_type?: "docx";
-                                    parent_type?: "docx";
+                                    obj_type?: "docx" | "sheet";
+                                    parent_type?: "docx" | "sheet";
                                 };
                             }
                         >({
@@ -6017,7 +6017,7 @@ export default abstract class Client extends docx {
                 delete: async (
                     payload?: {
                         params: {
-                            obj_type: "docx";
+                            obj_type: "docx" | "sheet";
                             user_id_type?: "open_id" | "union_id" | "user_id";
                         };
                         path: { file_token: string; version_id: string };
@@ -6058,7 +6058,7 @@ export default abstract class Client extends docx {
                 get: async (
                     payload?: {
                         params: {
-                            obj_type: "docx";
+                            obj_type: "docx" | "sheet";
                             user_id_type?: "open_id" | "union_id" | "user_id";
                         };
                         path: { file_token: string; version_id: string };
@@ -6083,8 +6083,8 @@ export default abstract class Client extends docx {
                                     create_time?: string;
                                     update_time?: string;
                                     status?: "0" | "1" | "2";
-                                    obj_type?: "docx";
-                                    parent_type?: "docx";
+                                    obj_type?: "docx" | "sheet";
+                                    parent_type?: "docx" | "sheet";
                                 };
                             }
                         >({
@@ -6107,7 +6107,7 @@ export default abstract class Client extends docx {
                         params: {
                             page_size: number;
                             page_token?: string;
-                            obj_type: "docx";
+                            obj_type: "docx" | "sheet";
                             user_id_type?: "open_id" | "union_id" | "user_id";
                         };
                         path: { file_token: string };
@@ -6180,8 +6180,12 @@ export default abstract class Client extends docx {
                                                             | "0"
                                                             | "1"
                                                             | "2";
-                                                        obj_type?: "docx";
-                                                        parent_type?: "docx";
+                                                        obj_type?:
+                                                            | "docx"
+                                                            | "sheet";
+                                                        parent_type?:
+                                                            | "docx"
+                                                            | "sheet";
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -6218,7 +6222,7 @@ export default abstract class Client extends docx {
                         params: {
                             page_size: number;
                             page_token?: string;
-                            obj_type: "docx";
+                            obj_type: "docx" | "sheet";
                             user_id_type?: "open_id" | "union_id" | "user_id";
                         };
                         path: { file_token: string };
@@ -6244,8 +6248,8 @@ export default abstract class Client extends docx {
                                         create_time?: string;
                                         update_time?: string;
                                         status?: "0" | "1" | "2";
-                                        obj_type?: "docx";
-                                        parent_type?: "docx";
+                                        obj_type?: "docx" | "sheet";
+                                        parent_type?: "docx" | "sheet";
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -6977,7 +6981,8 @@ export default abstract class Client extends docx {
                                 | "comment"
                                 | "export"
                                 | "copy"
-                                | "print";
+                                | "print"
+                                | "manage_public";
                         };
                         path: { token: string };
                     },
@@ -7237,6 +7242,7 @@ export default abstract class Client extends docx {
                             need_notification?: boolean;
                             remove_old_owner?: boolean;
                             stay_put?: boolean;
+                            old_owner_perm?: string;
                         };
                         path: { token: string };
                     },

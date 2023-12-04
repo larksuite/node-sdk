@@ -351,6 +351,9 @@ export default abstract class Client extends approval {
                             org_change_auto_adjust?: boolean;
                             bind_default_dept_ids?: Array<string>;
                             bind_default_user_ids?: Array<string>;
+                            overtime_clock_cfg?: {
+                                allow_punch_approval?: boolean;
+                            };
                         };
                         operator_id?: string;
                     };
@@ -511,6 +514,9 @@ export default abstract class Client extends approval {
                                     org_change_auto_adjust?: boolean;
                                     bind_default_dept_ids?: Array<string>;
                                     bind_default_user_ids?: Array<string>;
+                                    overtime_clock_cfg?: {
+                                        allow_punch_approval?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -730,6 +736,9 @@ export default abstract class Client extends approval {
                                 org_change_auto_adjust?: boolean;
                                 bind_default_dept_ids?: Array<string>;
                                 bind_default_user_ids?: Array<string>;
+                                overtime_clock_cfg?: {
+                                    allow_punch_approval?: boolean;
+                                };
                             };
                         }
                     >({
@@ -1131,7 +1140,6 @@ export default abstract class Client extends approval {
                             on_overtime: string;
                             off_overtime: string;
                         }>;
-                        allow_punch_approval?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -1181,7 +1189,6 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
-                                    allow_punch_approval?: boolean;
                                 };
                             };
                         }
@@ -1293,7 +1300,6 @@ export default abstract class Client extends approval {
                                     on_overtime: string;
                                     off_overtime: string;
                                 }>;
-                                allow_punch_approval?: boolean;
                             };
                         }
                     >({
@@ -1406,7 +1412,6 @@ export default abstract class Client extends approval {
                                                         on_overtime: string;
                                                         off_overtime: string;
                                                     }>;
-                                                    allow_punch_approval?: boolean;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1489,7 +1494,6 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
-                                    allow_punch_approval?: boolean;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1569,7 +1573,6 @@ export default abstract class Client extends approval {
                                     on_overtime: string;
                                     off_overtime: string;
                                 }>;
-                                allow_punch_approval?: boolean;
                             };
                         }
                     >({
@@ -3300,6 +3303,9 @@ export default abstract class Client extends approval {
                                 org_change_auto_adjust?: boolean;
                                 bind_default_dept_ids?: Array<string>;
                                 bind_default_user_ids?: Array<string>;
+                                overtime_clock_cfg?: {
+                                    allow_punch_approval?: boolean;
+                                };
                             };
                             operator_id?: string;
                         };
@@ -3460,6 +3466,9 @@ export default abstract class Client extends approval {
                                         org_change_auto_adjust?: boolean;
                                         bind_default_dept_ids?: Array<string>;
                                         bind_default_user_ids?: Array<string>;
+                                        overtime_clock_cfg?: {
+                                            allow_punch_approval?: boolean;
+                                        };
                                     };
                                 };
                             }
@@ -3682,6 +3691,9 @@ export default abstract class Client extends approval {
                                     org_change_auto_adjust?: boolean;
                                     bind_default_dept_ids?: Array<string>;
                                     bind_default_user_ids?: Array<string>;
+                                    overtime_clock_cfg?: {
+                                        allow_punch_approval?: boolean;
+                                    };
                                 };
                             }
                         >({
@@ -4083,7 +4095,6 @@ export default abstract class Client extends approval {
                                 on_overtime: string;
                                 off_overtime: string;
                             }>;
-                            allow_punch_approval?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -4133,7 +4144,6 @@ export default abstract class Client extends approval {
                                             on_overtime: string;
                                             off_overtime: string;
                                         }>;
-                                        allow_punch_approval?: boolean;
                                     };
                                 };
                             }
@@ -4248,7 +4258,6 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
-                                    allow_punch_approval?: boolean;
                                 };
                             }
                         >({
@@ -4361,7 +4370,6 @@ export default abstract class Client extends approval {
                                                             on_overtime: string;
                                                             off_overtime: string;
                                                         }>;
-                                                        allow_punch_approval?: boolean;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -4444,7 +4452,6 @@ export default abstract class Client extends approval {
                                             on_overtime: string;
                                             off_overtime: string;
                                         }>;
-                                        allow_punch_approval?: boolean;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -4524,7 +4531,6 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
-                                    allow_punch_approval?: boolean;
                                 };
                             }
                         >({

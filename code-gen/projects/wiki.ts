@@ -185,7 +185,8 @@ export default abstract class Client extends vc {
                                         | "mindnote"
                                         | "bitable"
                                         | "file"
-                                        | "docx";
+                                        | "docx"
+                                        | "slides";
                                     parent_node_token?: string;
                                     node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
@@ -515,7 +516,8 @@ export default abstract class Client extends vc {
                                         | "mindnote"
                                         | "bitable"
                                         | "file"
-                                        | "docx";
+                                        | "docx"
+                                        | "slides";
                                     parent_node_token?: string;
                                     node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
@@ -565,7 +567,8 @@ export default abstract class Client extends vc {
                             | "mindnote"
                             | "bitable"
                             | "file"
-                            | "docx";
+                            | "docx"
+                            | "slides";
                         parent_node_token?: string;
                         node_type: "origin" | "shortcut";
                         origin_node_token?: string;
@@ -595,7 +598,8 @@ export default abstract class Client extends vc {
                                         | "mindnote"
                                         | "bitable"
                                         | "file"
-                                        | "docx";
+                                        | "docx"
+                                        | "slides";
                                     parent_node_token?: string;
                                     node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
@@ -700,7 +704,8 @@ export default abstract class Client extends vc {
                                                         | "mindnote"
                                                         | "bitable"
                                                         | "file"
-                                                        | "docx";
+                                                        | "docx"
+                                                        | "slides";
                                                     parent_node_token?: string;
                                                     node_type:
                                                         | "origin"
@@ -778,7 +783,8 @@ export default abstract class Client extends vc {
                                         | "mindnote"
                                         | "bitable"
                                         | "file"
-                                        | "docx";
+                                        | "docx"
+                                        | "slides";
                                     parent_node_token?: string;
                                     node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
@@ -851,7 +857,8 @@ export default abstract class Client extends vc {
                                         | "mindnote"
                                         | "bitable"
                                         | "file"
-                                        | "docx";
+                                        | "docx"
+                                        | "slides";
                                     parent_node_token?: string;
                                     node_type: "origin" | "shortcut";
                                     origin_node_token?: string;
@@ -904,7 +911,8 @@ export default abstract class Client extends vc {
                             | "bitable"
                             | "mindnote"
                             | "docx"
-                            | "file";
+                            | "file"
+                            | "slides";
                         obj_token: string;
                         apply?: boolean;
                     };
@@ -1084,7 +1092,8 @@ export default abstract class Client extends vc {
                                                 | "mindnote"
                                                 | "bitable"
                                                 | "file"
-                                                | "docx";
+                                                | "docx"
+                                                | "slides";
                                             parent_node_token?: string;
                                             node_type: "origin" | "shortcut";
                                             origin_node_token?: string;
@@ -1274,7 +1283,8 @@ export default abstract class Client extends vc {
                                             | "mindnote"
                                             | "bitable"
                                             | "file"
-                                            | "docx";
+                                            | "docx"
+                                            | "slides";
                                         parent_node_token?: string;
                                         node_type: "origin" | "shortcut";
                                         origin_node_token?: string;
@@ -1604,7 +1614,8 @@ export default abstract class Client extends vc {
                                             | "mindnote"
                                             | "bitable"
                                             | "file"
-                                            | "docx";
+                                            | "docx"
+                                            | "slides";
                                         parent_node_token?: string;
                                         node_type: "origin" | "shortcut";
                                         origin_node_token?: string;
@@ -1654,7 +1665,8 @@ export default abstract class Client extends vc {
                                 | "mindnote"
                                 | "bitable"
                                 | "file"
-                                | "docx";
+                                | "docx"
+                                | "slides";
                             parent_node_token?: string;
                             node_type: "origin" | "shortcut";
                             origin_node_token?: string;
@@ -1684,7 +1696,8 @@ export default abstract class Client extends vc {
                                             | "mindnote"
                                             | "bitable"
                                             | "file"
-                                            | "docx";
+                                            | "docx"
+                                            | "slides";
                                         parent_node_token?: string;
                                         node_type: "origin" | "shortcut";
                                         origin_node_token?: string;
@@ -1789,7 +1802,8 @@ export default abstract class Client extends vc {
                                                             | "mindnote"
                                                             | "bitable"
                                                             | "file"
-                                                            | "docx";
+                                                            | "docx"
+                                                            | "slides";
                                                         parent_node_token?: string;
                                                         node_type:
                                                             | "origin"
@@ -1867,7 +1881,8 @@ export default abstract class Client extends vc {
                                             | "mindnote"
                                             | "bitable"
                                             | "file"
-                                            | "docx";
+                                            | "docx"
+                                            | "slides";
                                         parent_node_token?: string;
                                         node_type: "origin" | "shortcut";
                                         origin_node_token?: string;
@@ -1940,7 +1955,8 @@ export default abstract class Client extends vc {
                                             | "mindnote"
                                             | "bitable"
                                             | "file"
-                                            | "docx";
+                                            | "docx"
+                                            | "slides";
                                         parent_node_token?: string;
                                         node_type: "origin" | "shortcut";
                                         origin_node_token?: string;
@@ -1993,7 +2009,8 @@ export default abstract class Client extends vc {
                                 | "bitable"
                                 | "mindnote"
                                 | "docx"
-                                | "file";
+                                | "file"
+                                | "slides";
                             obj_token: string;
                             apply?: boolean;
                         };
@@ -2176,7 +2193,8 @@ export default abstract class Client extends vc {
                                                     | "mindnote"
                                                     | "bitable"
                                                     | "file"
-                                                    | "docx";
+                                                    | "docx"
+                                                    | "slides";
                                                 parent_node_token?: string;
                                                 node_type:
                                                     | "origin"

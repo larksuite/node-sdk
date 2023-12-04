@@ -8,10 +8,10 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
-import docs_tool from "./docs_tool";
+import document_ai from "./document_ai";
 
 // auto gen
-export default abstract class Client extends docs_tool {
+export default abstract class Client extends document_ai {
     declare tokenManager;
 
     declare domain;

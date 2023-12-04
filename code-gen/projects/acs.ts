@@ -163,7 +163,10 @@ export default abstract class Client {
                                                     device_id?: string;
                                                     is_clock_in?: boolean;
                                                     access_time?: string;
-                                                    access_type?: "FA";
+                                                    access_type?:
+                                                        | "FA"
+                                                        | "QRCode"
+                                                        | "Card";
                                                     access_data?: string;
                                                     is_door_open?: boolean;
                                                 }>;
@@ -226,7 +229,7 @@ export default abstract class Client {
                                     device_id?: string;
                                     is_clock_in?: boolean;
                                     access_time?: string;
-                                    access_type?: "FA";
+                                    access_type?: "FA" | "QRCode" | "Card";
                                     access_data?: string;
                                     is_door_open?: boolean;
                                 }>;
@@ -278,6 +281,14 @@ export default abstract class Client {
                                     device_id?: string;
                                     device_name?: string;
                                     device_sn?: string;
+                                    property?: {
+                                        version?: string;
+                                        current_device_face_count?: number;
+                                        max_face_capacity?: number;
+                                        online_status?: number;
+                                        device_name?: string;
+                                        is_clock_in?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -784,7 +795,10 @@ export default abstract class Client {
                                                         device_id?: string;
                                                         is_clock_in?: boolean;
                                                         access_time?: string;
-                                                        access_type?: "FA";
+                                                        access_type?:
+                                                            | "FA"
+                                                            | "QRCode"
+                                                            | "Card";
                                                         access_data?: string;
                                                         is_door_open?: boolean;
                                                     }>;
@@ -847,7 +861,7 @@ export default abstract class Client {
                                         device_id?: string;
                                         is_clock_in?: boolean;
                                         access_time?: string;
-                                        access_type?: "FA";
+                                        access_type?: "FA" | "QRCode" | "Card";
                                         access_data?: string;
                                         is_door_open?: boolean;
                                     }>;
@@ -899,6 +913,14 @@ export default abstract class Client {
                                         device_id?: string;
                                         device_name?: string;
                                         device_sn?: string;
+                                        property?: {
+                                            version?: string;
+                                            current_device_face_count?: number;
+                                            max_face_capacity?: number;
+                                            online_status?: number;
+                                            device_name?: string;
+                                            is_clock_in?: boolean;
+                                        };
                                     }>;
                                 };
                             }

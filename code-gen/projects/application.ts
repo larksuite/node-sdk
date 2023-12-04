@@ -32,6 +32,54 @@ export default abstract class Client extends admin {
      */
     application = {
         /**
+         * 应用红点
+         */
+        appBadge: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_badge/set document }
+             *
+             * 更新应用红点
+             *
+             * 更新应用红点信息，用于工作台场景
+             */
+            set: async (
+                payload?: {
+                    data: {
+                        user_id: string;
+                        version: string;
+                        extra?: string;
+                        pc?: { web_app?: number; gadget?: number };
+                        mobile?: { web_app?: number; gadget?: number };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/app_badge/set`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 我的常用推荐规则
          */
         appRecommendRule: {
@@ -1214,6 +1262,7 @@ export default abstract class Client extends admin {
                                     status?: number;
                                     scene_type?: number;
                                     payment_type?: number;
+                                    create_source?: string;
                                     redirect_urls?: Array<string>;
                                     online_version_id?: string;
                                     unaudit_version_id?: string;
@@ -1370,6 +1419,7 @@ export default abstract class Client extends admin {
                                                     status?: number;
                                                     scene_type?: number;
                                                     payment_type?: number;
+                                                    create_source?: string;
                                                     redirect_urls?: Array<string>;
                                                     online_version_id?: string;
                                                     unaudit_version_id?: string;
@@ -1462,6 +1512,7 @@ export default abstract class Client extends admin {
                                     status?: number;
                                     scene_type?: number;
                                     payment_type?: number;
+                                    create_source?: string;
                                     redirect_urls?: Array<string>;
                                     online_version_id?: string;
                                     unaudit_version_id?: string;
@@ -1759,6 +1810,57 @@ export default abstract class Client extends admin {
             },
         },
         v6: {
+            /**
+             * 应用红点
+             */
+            appBadge: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/app_badge/set document }
+                 *
+                 * 更新应用红点
+                 *
+                 * 更新应用红点信息，用于工作台场景
+                 */
+                set: async (
+                    payload?: {
+                        data: {
+                            user_id: string;
+                            version: string;
+                            extra?: string;
+                            pc?: { web_app?: number; gadget?: number };
+                            mobile?: { web_app?: number; gadget?: number };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/app_badge/set`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * 我的常用推荐规则
              */
@@ -2956,6 +3058,7 @@ export default abstract class Client extends admin {
                                         status?: number;
                                         scene_type?: number;
                                         payment_type?: number;
+                                        create_source?: string;
                                         redirect_urls?: Array<string>;
                                         online_version_id?: string;
                                         unaudit_version_id?: string;
@@ -3118,6 +3221,7 @@ export default abstract class Client extends admin {
                                                         status?: number;
                                                         scene_type?: number;
                                                         payment_type?: number;
+                                                        create_source?: string;
                                                         redirect_urls?: Array<string>;
                                                         online_version_id?: string;
                                                         unaudit_version_id?: string;
@@ -3210,6 +3314,7 @@ export default abstract class Client extends admin {
                                         status?: number;
                                         scene_type?: number;
                                         payment_type?: number;
+                                        create_source?: string;
                                         redirect_urls?: Array<string>;
                                         online_version_id?: string;
                                         unaudit_version_id?: string;

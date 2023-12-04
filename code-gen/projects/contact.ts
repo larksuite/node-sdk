@@ -1478,6 +1478,42 @@ export default abstract class Client extends comment_sdk {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=contact&resource=department&apiName=update_department_id&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_department_id&project=contact&resource=department&version=v3 document }
+             */
+            updateDepartmentId: async (
+                payload?: {
+                    data: { new_department_id: string };
+                    params?: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path?: { department_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/contact/v3/departments/:department_id/update_department_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 人员类型
@@ -4556,7 +4592,11 @@ export default abstract class Client extends comment_sdk {
              */
             batchGetId: async (
                 payload?: {
-                    data?: { emails?: Array<string>; mobiles?: Array<string> };
+                    data?: {
+                        emails?: Array<string>;
+                        mobiles?: Array<string>;
+                        include_resigned?: boolean;
+                    };
                     params?: {
                         user_id_type?: "open_id" | "union_id" | "user_id";
                     };
@@ -7914,6 +7954,45 @@ export default abstract class Client extends comment_sdk {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=contact&resource=department&apiName=update_department_id&version=v3 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_department_id&project=contact&resource=department&version=v3 document }
+                 */
+                updateDepartmentId: async (
+                    payload?: {
+                        data: { new_department_id: string };
+                        params?: {
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path?: { department_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/contact/v3/departments/:department_id/update_department_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * 人员类型
@@ -11060,6 +11139,7 @@ export default abstract class Client extends comment_sdk {
                         data?: {
                             emails?: Array<string>;
                             mobiles?: Array<string>;
+                            include_resigned?: boolean;
                         };
                         params?: {
                             user_id_type?: "open_id" | "union_id" | "user_id";

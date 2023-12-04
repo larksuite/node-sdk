@@ -88,6 +88,7 @@ export default abstract class Client extends helpdesk {
              */
             get: async (
                 payload?: {
+                    params?: { options?: number };
                     path: { application_id: string };
                 },
                 options?: IRequestOptions
@@ -360,6 +361,18 @@ export default abstract class Client extends helpdesk {
                                             object_id?: string;
                                             customize_value?: string;
                                         }>;
+                                        work_location_address_info?: {
+                                            location_info?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            address_info?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                        };
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -812,6 +825,748 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 生态对接账号自定义字段
+         */
+        ecoAccountCustomField: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=batch_delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_delete document }
+             *
+             * 删除帐号自定义字段
+             *
+             * 删除用户在服务商处的身份标示字段（如用户在服务商处的租户 ID）。删除后，不影响已添加帐号对应的自定义字段的值。但在添加新帐号时，将不能再使用此自定义字段。删除不支持撤销，对应的 key 将无法再次复用。
+             */
+            batchDelete: async (
+                payload?: {
+                    data?: {
+                        scope?: number;
+                        custom_field_key_list?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_account_custom_fields/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_update document }
+             *
+             * 更新帐号自定义字段
+             *
+             * 更新用户在服务商处的身份标示字段（如用户在服务商处的租户 ID），此方法只会更新同一 scope 内 key 一致的自定义字段。
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        scope: number;
+                        custom_field_list: Array<{
+                            key: string;
+                            name: { zh_cn?: string; en_us?: string };
+                            is_required: boolean;
+                            description?: { zh_cn?: string; en_us?: string };
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_account_custom_fields/batch_update`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/create document }
+             *
+             * 创建帐号自定义字段
+             *
+             * 定制用户在服务商处的身份标示字段（如用户在服务商处的租户 ID）。用户在飞书招聘后台添加帐号后，系统会推送「帐号绑定」事件给开发者，事件将携带用户填写的自定义字段信息，开发者可根据此信息识别飞书招聘用户在服务商处的身份信息，完成飞书招聘用户和服务商帐号的绑定，并以此来推送对应的套餐或试卷列表等。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        scope: number;
+                        custom_field_list: Array<{
+                            key: string;
+                            name: { zh_cn?: string; en_us?: string };
+                            is_required: boolean;
+                            description?: { zh_cn?: string; en_us?: string };
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_account_custom_fields`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 背调订单
+         */
+        ecoBackgroundCheck: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=cancel&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/cancel document }
+             *
+             * 终止背调订单
+             *
+             * 终止背调订单
+             */
+            cancel: async (
+                payload?: {
+                    data: { background_check_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_checks/cancel`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=update_progress&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_progress document }
+             *
+             * 更新背调进度
+             *
+             * 更新指定背调的进度信息
+             */
+            updateProgress: async (
+                payload?: {
+                    data: {
+                        background_check_id: string;
+                        stage_id: string;
+                        stage_en_name?: string;
+                        stage_name: string;
+                        stage_time: string;
+                        report_file_list?: Array<{
+                            report_name: string;
+                            report_url: string;
+                            report_url_type?: number;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_checks/update_progress`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=update_result&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_result document }
+             *
+             * 回传背调的最终结果
+             *
+             * 回传背调的最终结果
+             */
+            updateResult: async (
+                payload?: {
+                    data: {
+                        background_check_id: string;
+                        result: string;
+                        result_time: string;
+                        report_file_list?: Array<{
+                            report_name: string;
+                            report_url: string;
+                            report_url_type?: number;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_checks/update_result`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 背调自定义字段
+         */
+        ecoBackgroundCheckCustomField: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=batch_delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/batch_delete document }
+             *
+             * 删除背调自定义字段
+             *
+             * 删除用户在发起背调时的自定义字段，删除不影响已创建的背调，删除后对应的自定义字段的 key 不能再复用。
+             */
+            batchDelete: async (
+                payload?: {
+                    data: { account_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/batch_update document }
+             *
+             * 更新背调自定义字段
+             *
+             * 更新用户在发起背调时的自定义字段。更新操作不支持更新自定义字段类型，且将影响已发起的背调表单展示。
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        custom_field_list: Array<{
+                            type:
+                                | "text"
+                                | "textarea"
+                                | "number"
+                                | "boolean"
+                                | "select"
+                                | "multiselect"
+                                | "date"
+                                | "file"
+                                | "resume";
+                            key: string;
+                            name: { zh_cn?: string; en_us?: string };
+                            is_required: boolean;
+                            description?: { zh_cn?: string; en_us?: string };
+                            options?: Array<{
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                            }>;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields/batch_update`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/create document }
+             *
+             * 创建背调自定义字段
+             *
+             * 定制用户在发起背调时的自定义字段
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        custom_field_list: Array<{
+                            type:
+                                | "text"
+                                | "textarea"
+                                | "number"
+                                | "boolean"
+                                | "select"
+                                | "multiselect"
+                                | "date"
+                                | "file"
+                                | "resume";
+                            key: string;
+                            name: { zh_cn?: string; en_us?: string };
+                            is_required: boolean;
+                            description?: { zh_cn?: string; en_us?: string };
+                            options?: Array<{
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                            }>;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 背调套餐和附加调查项
+         */
+        ecoBackgroundCheckPackage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=batch_delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/batch_delete document }
+             *
+             * 删除背调套餐和附加调查项
+             *
+             * 删除指定帐号的指定背调套餐和附加调查项信息，删除不会影响已创建的背调。
+             */
+            batchDelete: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        package_id_list?: Array<string>;
+                        additional_item_id_list?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_packages/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/batch_update document }
+             *
+             * 更新背调套餐和附加调查项
+             *
+             * 更新指定帐号可用的背调套餐和附加调查项信息，更新将影响已发起背调的表单项展示
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        package_list: Array<{
+                            id: string;
+                            name: string;
+                            description?: string;
+                        }>;
+                        additional_item_list?: Array<{
+                            id: string;
+                            name: string;
+                            description?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_packages/batch_update`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/create document }
+             *
+             * 推送背调套餐和附加调查项
+             *
+             * 定制指定帐号可用的背调套餐和附加调查项信息
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        package_list: Array<{
+                            id: string;
+                            name: string;
+                            description?: string;
+                        }>;
+                        additional_item_list?: Array<{
+                            id: string;
+                            name: string;
+                            description?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_background_check_packages`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * eco_exam
+         */
+        ecoExam: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam&apiName=login_info&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=login_info&project=hire&resource=eco_exam&version=v1 document }
+             */
+            loginInfo: async (
+                payload?: {
+                    data: {
+                        result?: number;
+                        msg?: string;
+                        exam_login_info: {
+                            exam_url: string;
+                            username?: string;
+                            password?: string;
+                        };
+                    };
+                    path: { exam_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_exams/:exam_id/login_info`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam&apiName=update_result&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_result&project=hire&resource=eco_exam&version=v1 document }
+             */
+            updateResult: async (
+                payload?: {
+                    data: {
+                        result: string;
+                        result_time?: string;
+                        report_list?: Array<{
+                            name: string;
+                            url: string;
+                            answer_time?: string;
+                        }>;
+                        detail_list?: Array<{
+                            id?: string;
+                            name: string;
+                            result: string;
+                        }>;
+                    };
+                    path: { exam_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_exams/:exam_id/update_result`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * eco_exam_paper
+         */
+        ecoExamPaper: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=batch_delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=hire&resource=eco_exam_paper&version=v1 document }
+             */
+            batchDelete: async (
+                payload?: {
+                    data: { account_id: string; paper_id_list: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_exam_papers/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=hire&resource=eco_exam_paper&version=v1 document }
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        paper_list: Array<{
+                            id: string;
+                            name: string;
+                            duration?: number;
+                            question_count?: number;
+                            start_time?: string;
+                            end_time?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_exam_papers/batch_update`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=eco_exam_paper&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        account_id: string;
+                        paper_list: Array<{
+                            id: string;
+                            name: string;
+                            duration?: number;
+                            question_count?: number;
+                            start_time?: string;
+                            end_time?: string;
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/eco_exam_papers`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1278,6 +2033,7 @@ export default abstract class Client extends helpdesk {
                         termination_reason?: string;
                         delivery_type?: number;
                         modify_time?: number;
+                        create_time?: number;
                         termination_type?: string;
                     };
                 },
@@ -1304,6 +2060,7 @@ export default abstract class Client extends helpdesk {
                                     termination_reason?: string;
                                     delivery_type?: number;
                                     modify_time?: number;
+                                    create_time?: number;
                                     termination_type?: string;
                                 };
                             };
@@ -1358,6 +2115,7 @@ export default abstract class Client extends helpdesk {
                                     termination_reason?: string;
                                     delivery_type?: number;
                                     modify_time?: number;
+                                    create_time?: number;
                                     termination_type?: string;
                                 };
                             };
@@ -1396,6 +2154,7 @@ export default abstract class Client extends helpdesk {
                         termination_reason?: string;
                         delivery_type?: number;
                         modify_time?: number;
+                        create_time?: number;
                         termination_type?: string;
                     };
                     path?: { external_application_id?: string };
@@ -1423,6 +2182,7 @@ export default abstract class Client extends helpdesk {
                                     termination_reason?: string;
                                     delivery_type?: number;
                                     modify_time?: number;
+                                    create_time?: number;
                                     termination_type?: string;
                                 };
                             };
@@ -4488,6 +5248,18 @@ export default abstract class Client extends helpdesk {
                                             object_id?: string;
                                             customize_value?: string;
                                         }>;
+                                        work_location_address_info?: {
+                                            location_info?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            address_info?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                        };
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -5054,6 +5826,211 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * referral_account
+         */
+        referralAccount: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=referral_account&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data?: {
+                        mobile?: { code?: string; number?: string };
+                        email?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                account?: {
+                                    account_id: string;
+                                    assets?: {
+                                        confirmed_bonus?: {
+                                            point_bonus?: number;
+                                        };
+                                        paid_bonus?: { point_bonus?: number };
+                                    };
+                                    status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/referral_account`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=deactivate&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=deactivate&project=hire&resource=referral_account&version=v1 document }
+             */
+            deactivate: async (
+                payload?: {
+                    path?: { referral_account_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                account?: {
+                                    account_id: string;
+                                    assets?: {
+                                        confirmed_bonus?: {
+                                            point_bonus?: number;
+                                        };
+                                        paid_bonus?: { point_bonus?: number };
+                                    };
+                                    status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/referral_account/:referral_account_id/deactivate`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=reconciliation&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reconciliation&project=hire&resource=referral_account&version=v1 document }
+             */
+            reconciliation: async (
+                payload?: {
+                    data?: {
+                        start_trans_time?: string;
+                        end_trans_time?: string;
+                        trade_details?: Array<{
+                            account_id: string;
+                            total_recharge_reward_info?: {
+                                point_bonus?: number;
+                            };
+                        }>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                check_failed_list?: Array<{
+                                    account_id?: string;
+                                    total_withdraw_reward_info?: {
+                                        point_bonus?: number;
+                                    };
+                                    total_recharge_reward_info?: {
+                                        point_bonus?: number;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/referral_account/reconciliation`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=withdraw&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=withdraw&project=hire&resource=referral_account&version=v1 document }
+             */
+            withdraw: async (
+                payload?: {
+                    data?: {
+                        withdraw_bonus_type?: Array<number>;
+                        external_order_id?: string;
+                    };
+                    path?: { referral_account_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_order_id?: string;
+                                trans_time?: string;
+                                withdrawal_details?: { point_bonus?: number };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/referral_account/:referral_account_id/withdraw`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * referral_website.job_post
          */
         referralWebsiteJobPost: {
@@ -5109,6 +6086,20 @@ export default abstract class Client extends helpdesk {
                                         };
                                     };
                                     job_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
                                         id?: string;
                                         name?: {
                                             zh_cn?: string;
@@ -5368,6 +6359,20 @@ export default abstract class Client extends helpdesk {
                                                             en_us?: string;
                                                         };
                                                     };
+                                                    min_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    max_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
                                                     address?: {
                                                         id?: string;
                                                         name?: {
@@ -5457,6 +6462,13 @@ export default abstract class Client extends helpdesk {
                                                             number?: string;
                                                         };
                                                     }>;
+                                                    job_function?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
                                                     address_list?: Array<{
                                                         id?: string;
                                                         name?: {
@@ -5574,6 +6586,20 @@ export default abstract class Client extends helpdesk {
                                             en_us?: string;
                                         };
                                     };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
                                     address?: {
                                         id?: string;
                                         name?: {
@@ -5663,6 +6689,13 @@ export default abstract class Client extends helpdesk {
                                             number?: string;
                                         };
                                     }>;
+                                    job_function?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
                                     address_list?: Array<{
                                         id?: string;
                                         name?: {
@@ -6828,8 +7861,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                                 items?: Array<{
-                                                    name: string;
                                                     folder_id?: string;
+                                                    folder_name: string;
                                                     owner_id?: string;
                                                 }>;
                                             };
@@ -6887,8 +7920,8 @@ export default abstract class Client extends helpdesk {
                                 has_more?: boolean;
                                 page_token?: string;
                                 items?: Array<{
-                                    name: string;
                                     folder_id?: string;
+                                    folder_name: string;
                                     owner_id?: string;
                                 }>;
                             };
@@ -7073,6 +8106,7 @@ export default abstract class Client extends helpdesk {
                  */
                 get: async (
                     payload?: {
+                        params?: { options?: number };
                         path: { application_id: string };
                     },
                     options?: IRequestOptions
@@ -7345,6 +8379,18 @@ export default abstract class Client extends helpdesk {
                                                 object_id?: string;
                                                 customize_value?: string;
                                             }>;
+                                            work_location_address_info?: {
+                                                location_info?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                address_info?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                            };
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -7804,6 +8850,814 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 生态对接账号自定义字段
+             */
+            ecoAccountCustomField: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_delete document }
+                 *
+                 * 删除帐号自定义字段
+                 *
+                 * 删除用户在服务商处的身份标示字段（如用户在服务商处的租户 ID）。删除后，不影响已添加帐号对应的自定义字段的值。但在添加新帐号时，将不能再使用此自定义字段。删除不支持撤销，对应的 key 将无法再次复用。
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data?: {
+                            scope?: number;
+                            custom_field_key_list?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_account_custom_fields/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/batch_update document }
+                 *
+                 * 更新帐号自定义字段
+                 *
+                 * 更新用户在服务商处的身份标示字段（如用户在服务商处的租户 ID），此方法只会更新同一 scope 内 key 一致的自定义字段。
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            scope: number;
+                            custom_field_list: Array<{
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                                is_required: boolean;
+                                description?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                };
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_account_custom_fields/batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_account_custom_field&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_account_custom_field/create document }
+                 *
+                 * 创建帐号自定义字段
+                 *
+                 * 定制用户在服务商处的身份标示字段（如用户在服务商处的租户 ID）。用户在飞书招聘后台添加帐号后，系统会推送「帐号绑定」事件给开发者，事件将携带用户填写的自定义字段信息，开发者可根据此信息识别飞书招聘用户在服务商处的身份信息，完成飞书招聘用户和服务商帐号的绑定，并以此来推送对应的套餐或试卷列表等。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            scope: number;
+                            custom_field_list: Array<{
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                                is_required: boolean;
+                                description?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                };
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_account_custom_fields`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 背调订单
+             */
+            ecoBackgroundCheck: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=cancel&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/cancel document }
+                 *
+                 * 终止背调订单
+                 *
+                 * 终止背调订单
+                 */
+                cancel: async (
+                    payload?: {
+                        data: { background_check_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_checks/cancel`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=update_progress&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_progress document }
+                 *
+                 * 更新背调进度
+                 *
+                 * 更新指定背调的进度信息
+                 */
+                updateProgress: async (
+                    payload?: {
+                        data: {
+                            background_check_id: string;
+                            stage_id: string;
+                            stage_en_name?: string;
+                            stage_name: string;
+                            stage_time: string;
+                            report_file_list?: Array<{
+                                report_name: string;
+                                report_url: string;
+                                report_url_type?: number;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_checks/update_progress`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check&apiName=update_result&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check/update_result document }
+                 *
+                 * 回传背调的最终结果
+                 *
+                 * 回传背调的最终结果
+                 */
+                updateResult: async (
+                    payload?: {
+                        data: {
+                            background_check_id: string;
+                            result: string;
+                            result_time: string;
+                            report_file_list?: Array<{
+                                report_name: string;
+                                report_url: string;
+                                report_url_type?: number;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_checks/update_result`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 背调自定义字段
+             */
+            ecoBackgroundCheckCustomField: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/batch_delete document }
+                 *
+                 * 删除背调自定义字段
+                 *
+                 * 删除用户在发起背调时的自定义字段，删除不影响已创建的背调，删除后对应的自定义字段的 key 不能再复用。
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data: { account_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/batch_update document }
+                 *
+                 * 更新背调自定义字段
+                 *
+                 * 更新用户在发起背调时的自定义字段。更新操作不支持更新自定义字段类型，且将影响已发起的背调表单展示。
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            custom_field_list: Array<{
+                                type:
+                                    | "text"
+                                    | "textarea"
+                                    | "number"
+                                    | "boolean"
+                                    | "select"
+                                    | "multiselect"
+                                    | "date"
+                                    | "file"
+                                    | "resume";
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                                is_required: boolean;
+                                description?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                };
+                                options?: Array<{
+                                    key: string;
+                                    name: { zh_cn?: string; en_us?: string };
+                                }>;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields/batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_custom_field&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_custom_field/create document }
+                 *
+                 * 创建背调自定义字段
+                 *
+                 * 定制用户在发起背调时的自定义字段
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            custom_field_list: Array<{
+                                type:
+                                    | "text"
+                                    | "textarea"
+                                    | "number"
+                                    | "boolean"
+                                    | "select"
+                                    | "multiselect"
+                                    | "date"
+                                    | "file"
+                                    | "resume";
+                                key: string;
+                                name: { zh_cn?: string; en_us?: string };
+                                is_required: boolean;
+                                description?: {
+                                    zh_cn?: string;
+                                    en_us?: string;
+                                };
+                                options?: Array<{
+                                    key: string;
+                                    name: { zh_cn?: string; en_us?: string };
+                                }>;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_custom_fields`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 背调套餐和附加调查项
+             */
+            ecoBackgroundCheckPackage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/batch_delete document }
+                 *
+                 * 删除背调套餐和附加调查项
+                 *
+                 * 删除指定帐号的指定背调套餐和附加调查项信息，删除不会影响已创建的背调。
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            package_id_list?: Array<string>;
+                            additional_item_id_list?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_packages/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/batch_update document }
+                 *
+                 * 更新背调套餐和附加调查项
+                 *
+                 * 更新指定帐号可用的背调套餐和附加调查项信息，更新将影响已发起背调的表单项展示
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            package_list: Array<{
+                                id: string;
+                                name: string;
+                                description?: string;
+                            }>;
+                            additional_item_list?: Array<{
+                                id: string;
+                                name: string;
+                                description?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_packages/batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_background_check_package&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/eco_background_check_package/create document }
+                 *
+                 * 推送背调套餐和附加调查项
+                 *
+                 * 定制指定帐号可用的背调套餐和附加调查项信息
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            package_list: Array<{
+                                id: string;
+                                name: string;
+                                description?: string;
+                            }>;
+                            additional_item_list?: Array<{
+                                id: string;
+                                name: string;
+                                description?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_background_check_packages`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * eco_exam
+             */
+            ecoExam: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam&apiName=login_info&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=login_info&project=hire&resource=eco_exam&version=v1 document }
+                 */
+                loginInfo: async (
+                    payload?: {
+                        data: {
+                            result?: number;
+                            msg?: string;
+                            exam_login_info: {
+                                exam_url: string;
+                                username?: string;
+                                password?: string;
+                            };
+                        };
+                        path: { exam_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_exams/:exam_id/login_info`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam&apiName=update_result&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_result&project=hire&resource=eco_exam&version=v1 document }
+                 */
+                updateResult: async (
+                    payload?: {
+                        data: {
+                            result: string;
+                            result_time?: string;
+                            report_list?: Array<{
+                                name: string;
+                                url: string;
+                                answer_time?: string;
+                            }>;
+                            detail_list?: Array<{
+                                id?: string;
+                                name: string;
+                                result: string;
+                            }>;
+                        };
+                        path: { exam_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_exams/:exam_id/update_result`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * eco_exam_paper
+             */
+            ecoExamPaper: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=hire&resource=eco_exam_paper&version=v1 document }
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            paper_id_list: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_exam_papers/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=hire&resource=eco_exam_paper&version=v1 document }
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            paper_list: Array<{
+                                id: string;
+                                name: string;
+                                duration?: number;
+                                question_count?: number;
+                                start_time?: string;
+                                end_time?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_exam_papers/batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=eco_exam_paper&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=eco_exam_paper&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            account_id: string;
+                            paper_list: Array<{
+                                id: string;
+                                name: string;
+                                duration?: number;
+                                question_count?: number;
+                                start_time?: string;
+                                end_time?: string;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/eco_exam_papers`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -8275,6 +10129,7 @@ export default abstract class Client extends helpdesk {
                             termination_reason?: string;
                             delivery_type?: number;
                             modify_time?: number;
+                            create_time?: number;
                             termination_type?: string;
                         };
                     },
@@ -8301,6 +10156,7 @@ export default abstract class Client extends helpdesk {
                                         termination_reason?: string;
                                         delivery_type?: number;
                                         modify_time?: number;
+                                        create_time?: number;
                                         termination_type?: string;
                                     };
                                 };
@@ -8355,6 +10211,7 @@ export default abstract class Client extends helpdesk {
                                         termination_reason?: string;
                                         delivery_type?: number;
                                         modify_time?: number;
+                                        create_time?: number;
                                         termination_type?: string;
                                     };
                                 };
@@ -8393,6 +10250,7 @@ export default abstract class Client extends helpdesk {
                             termination_reason?: string;
                             delivery_type?: number;
                             modify_time?: number;
+                            create_time?: number;
                             termination_type?: string;
                         };
                         path?: { external_application_id?: string };
@@ -8420,6 +10278,7 @@ export default abstract class Client extends helpdesk {
                                         termination_reason?: string;
                                         delivery_type?: number;
                                         modify_time?: number;
+                                        create_time?: number;
                                         termination_type?: string;
                                     };
                                 };
@@ -11497,6 +13356,18 @@ export default abstract class Client extends helpdesk {
                                                 object_id?: string;
                                                 customize_value?: string;
                                             }>;
+                                            work_location_address_info?: {
+                                                location_info?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                                address_info?: {
+                                                    id?: string;
+                                                    zh_name?: string;
+                                                    en_name?: string;
+                                                };
+                                            };
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -12071,6 +13942,217 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * referral_account
+             */
+            referralAccount: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=referral_account&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            mobile?: { code?: string; number?: string };
+                            email?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    account?: {
+                                        account_id: string;
+                                        assets?: {
+                                            confirmed_bonus?: {
+                                                point_bonus?: number;
+                                            };
+                                            paid_bonus?: {
+                                                point_bonus?: number;
+                                            };
+                                        };
+                                        status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/referral_account`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=deactivate&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=deactivate&project=hire&resource=referral_account&version=v1 document }
+                 */
+                deactivate: async (
+                    payload?: {
+                        path?: { referral_account_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    account?: {
+                                        account_id: string;
+                                        assets?: {
+                                            confirmed_bonus?: {
+                                                point_bonus?: number;
+                                            };
+                                            paid_bonus?: {
+                                                point_bonus?: number;
+                                            };
+                                        };
+                                        status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/referral_account/:referral_account_id/deactivate`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=reconciliation&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reconciliation&project=hire&resource=referral_account&version=v1 document }
+                 */
+                reconciliation: async (
+                    payload?: {
+                        data?: {
+                            start_trans_time?: string;
+                            end_trans_time?: string;
+                            trade_details?: Array<{
+                                account_id: string;
+                                total_recharge_reward_info?: {
+                                    point_bonus?: number;
+                                };
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    check_failed_list?: Array<{
+                                        account_id?: string;
+                                        total_withdraw_reward_info?: {
+                                            point_bonus?: number;
+                                        };
+                                        total_recharge_reward_info?: {
+                                            point_bonus?: number;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/referral_account/reconciliation`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral_account&apiName=withdraw&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=withdraw&project=hire&resource=referral_account&version=v1 document }
+                 */
+                withdraw: async (
+                    payload?: {
+                        data?: {
+                            withdraw_bonus_type?: Array<number>;
+                            external_order_id?: string;
+                        };
+                        path?: { referral_account_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    external_order_id?: string;
+                                    trans_time?: string;
+                                    withdrawal_details?: {
+                                        point_bonus?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/referral_account/:referral_account_id/withdraw`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * referral_website.job_post
              */
             referralWebsiteJobPost: {
@@ -12126,6 +14208,20 @@ export default abstract class Client extends helpdesk {
                                             };
                                         };
                                         job_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
                                             id?: string;
                                             name?: {
                                                 zh_cn?: string;
@@ -12385,6 +14481,20 @@ export default abstract class Client extends helpdesk {
                                                                 en_us?: string;
                                                             };
                                                         };
+                                                        min_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        max_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
                                                         address?: {
                                                             id?: string;
                                                             name?: {
@@ -12474,6 +14584,13 @@ export default abstract class Client extends helpdesk {
                                                                 number?: string;
                                                             };
                                                         }>;
+                                                        job_function?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
                                                         address_list?: Array<{
                                                             id?: string;
                                                             name?: {
@@ -12591,6 +14708,20 @@ export default abstract class Client extends helpdesk {
                                                 en_us?: string;
                                             };
                                         };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
                                         address?: {
                                             id?: string;
                                             name?: {
@@ -12680,6 +14811,13 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                             };
                                         }>;
+                                        job_function?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
                                         address_list?: Array<{
                                             id?: string;
                                             name?: {
@@ -13845,8 +15983,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                     items?: Array<{
-                                                        name: string;
                                                         folder_id?: string;
+                                                        folder_name: string;
                                                         owner_id?: string;
                                                     }>;
                                                 };
@@ -13904,8 +16042,8 @@ export default abstract class Client extends helpdesk {
                                     has_more?: boolean;
                                     page_token?: string;
                                     items?: Array<{
-                                        name: string;
                                         folder_id?: string;
+                                        folder_name: string;
                                         owner_id?: string;
                                     }>;
                                 };

@@ -121,6 +121,7 @@ export default abstract class Client extends search_in_app {
                             callback_user_id_type?: number;
                             callback_endpoint?: string;
                         };
+                        enable_answer?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -163,6 +164,7 @@ export default abstract class Client extends search_in_app {
                                         callback_user_id_type?: number;
                                         callback_endpoint?: string;
                                     };
+                                    enable_answer?: boolean;
                                 };
                             };
                         }
@@ -268,6 +270,7 @@ export default abstract class Client extends search_in_app {
                                         callback_user_id_type?: number;
                                         callback_endpoint?: string;
                                     };
+                                    enable_answer?: boolean;
                                 };
                             };
                         }
@@ -380,6 +383,7 @@ export default abstract class Client extends search_in_app {
                                                         callback_user_id_type?: number;
                                                         callback_endpoint?: string;
                                                     };
+                                                    enable_answer?: boolean;
                                                 }>;
                                             };
                                         },
@@ -459,6 +463,7 @@ export default abstract class Client extends search_in_app {
                                         callback_user_id_type?: number;
                                         callback_endpoint?: string;
                                     };
+                                    enable_answer?: boolean;
                                 }>;
                             };
                         }
@@ -507,6 +512,7 @@ export default abstract class Client extends search_in_app {
                             callback_user_id_type?: number;
                             callback_endpoint?: string;
                         };
+                        enable_answer?: boolean;
                     };
                     path: { data_source_id: string };
                 },
@@ -550,6 +556,7 @@ export default abstract class Client extends search_in_app {
                                         callback_user_id_type?: number;
                                         callback_endpoint?: string;
                                     };
+                                    enable_answer?: boolean;
                                 };
                             };
                         }
@@ -880,6 +887,11 @@ export default abstract class Client extends search_in_app {
                                 enable_client_filter?: boolean;
                                 reference_datasource_id?: string;
                             };
+                            answer_option?: {
+                                is_searchable?: boolean;
+                                is_returnable?: boolean;
+                            };
+                            desc?: string;
                         }>;
                         display: {
                             card_key: "search_common_card";
@@ -971,6 +983,11 @@ export default abstract class Client extends search_in_app {
                                             enable_client_filter?: boolean;
                                             reference_datasource_id?: string;
                                         };
+                                        answer_option?: {
+                                            is_searchable?: boolean;
+                                            is_returnable?: boolean;
+                                        };
+                                        desc?: string;
                                     }>;
                                     display: {
                                         card_key: "search_common_card";
@@ -1124,6 +1141,11 @@ export default abstract class Client extends search_in_app {
                                             enable_client_filter?: boolean;
                                             reference_datasource_id?: string;
                                         };
+                                        answer_option?: {
+                                            is_searchable?: boolean;
+                                            is_returnable?: boolean;
+                                        };
+                                        desc?: string;
                                     }>;
                                     display: {
                                         card_key: "search_common_card";
@@ -1170,6 +1192,14 @@ export default abstract class Client extends search_in_app {
                                 data_field: string;
                             }>;
                         };
+                        properties?: Array<{
+                            name: string;
+                            desc?: string;
+                            answer_option?: {
+                                is_searchable?: boolean;
+                                is_returnable?: boolean;
+                            };
+                        }>;
                     };
                     path: { schema_id: string };
                 },
@@ -1252,6 +1282,11 @@ export default abstract class Client extends search_in_app {
                                             enable_client_filter?: boolean;
                                             reference_datasource_id?: string;
                                         };
+                                        answer_option?: {
+                                            is_searchable?: boolean;
+                                            is_returnable?: boolean;
+                                        };
+                                        desc?: string;
                                     }>;
                                     display: {
                                         card_key: "search_common_card";
@@ -1371,6 +1406,7 @@ export default abstract class Client extends search_in_app {
                                 callback_user_id_type?: number;
                                 callback_endpoint?: string;
                             };
+                            enable_answer?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -1413,6 +1449,7 @@ export default abstract class Client extends search_in_app {
                                             callback_user_id_type?: number;
                                             callback_endpoint?: string;
                                         };
+                                        enable_answer?: boolean;
                                     };
                                 };
                             }
@@ -1521,6 +1558,7 @@ export default abstract class Client extends search_in_app {
                                             callback_user_id_type?: number;
                                             callback_endpoint?: string;
                                         };
+                                        enable_answer?: boolean;
                                     };
                                 };
                             }
@@ -1633,6 +1671,7 @@ export default abstract class Client extends search_in_app {
                                                             callback_user_id_type?: number;
                                                             callback_endpoint?: string;
                                                         };
+                                                        enable_answer?: boolean;
                                                     }>;
                                                 };
                                             },
@@ -1712,6 +1751,7 @@ export default abstract class Client extends search_in_app {
                                             callback_user_id_type?: number;
                                             callback_endpoint?: string;
                                         };
+                                        enable_answer?: boolean;
                                     }>;
                                 };
                             }
@@ -1760,6 +1800,7 @@ export default abstract class Client extends search_in_app {
                                 callback_user_id_type?: number;
                                 callback_endpoint?: string;
                             };
+                            enable_answer?: boolean;
                         };
                         path: { data_source_id: string };
                     },
@@ -1803,6 +1844,7 @@ export default abstract class Client extends search_in_app {
                                             callback_user_id_type?: number;
                                             callback_endpoint?: string;
                                         };
+                                        enable_answer?: boolean;
                                     };
                                 };
                             }
@@ -2142,6 +2184,11 @@ export default abstract class Client extends search_in_app {
                                     enable_client_filter?: boolean;
                                     reference_datasource_id?: string;
                                 };
+                                answer_option?: {
+                                    is_searchable?: boolean;
+                                    is_returnable?: boolean;
+                                };
+                                desc?: string;
                             }>;
                             display: {
                                 card_key: "search_common_card";
@@ -2235,6 +2282,11 @@ export default abstract class Client extends search_in_app {
                                                 enable_client_filter?: boolean;
                                                 reference_datasource_id?: string;
                                             };
+                                            answer_option?: {
+                                                is_searchable?: boolean;
+                                                is_returnable?: boolean;
+                                            };
+                                            desc?: string;
                                         }>;
                                         display: {
                                             card_key: "search_common_card";
@@ -2393,6 +2445,11 @@ export default abstract class Client extends search_in_app {
                                                 enable_client_filter?: boolean;
                                                 reference_datasource_id?: string;
                                             };
+                                            answer_option?: {
+                                                is_searchable?: boolean;
+                                                is_returnable?: boolean;
+                                            };
+                                            desc?: string;
                                         }>;
                                         display: {
                                             card_key: "search_common_card";
@@ -2439,6 +2496,14 @@ export default abstract class Client extends search_in_app {
                                     data_field: string;
                                 }>;
                             };
+                            properties?: Array<{
+                                name: string;
+                                desc?: string;
+                                answer_option?: {
+                                    is_searchable?: boolean;
+                                    is_returnable?: boolean;
+                                };
+                            }>;
                         };
                         path: { schema_id: string };
                     },
@@ -2523,6 +2588,11 @@ export default abstract class Client extends search_in_app {
                                                 enable_client_filter?: boolean;
                                                 reference_datasource_id?: string;
                                             };
+                                            answer_option?: {
+                                                is_searchable?: boolean;
+                                                is_returnable?: boolean;
+                                            };
+                                            desc?: string;
                                         }>;
                                         display: {
                                             card_key: "search_common_card";
