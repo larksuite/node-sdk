@@ -4427,7 +4427,7 @@ export default abstract class Client extends comment_sdk {
             batch: async (
                 payload?: {
                     params: {
-                        user_ids: number;
+                        user_ids: Array<string>;
                         user_id_type?: "open_id" | "union_id" | "user_id";
                         department_id_type?:
                             | "open_department_id"
