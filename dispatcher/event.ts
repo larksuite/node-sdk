@@ -1,3 +1,4 @@
+import get from 'lodash.get';
 import { CEventType, CAppTicket } from '@node-sdk/consts';
 import { Cache, Logger, LoggerLevel } from '@node-sdk/typings';
 import { internalCache } from '@node-sdk/utils';
@@ -80,8 +81,10 @@ export class EventDispatcher {
         return this;
     }
 
-    async invoke(data) {
-        if (!this.requestHandle?.checkIsEventValidated(data)) {
+    async invoke(data, params?: { needCheck?: boolean }) {
+        const needCheck = get(params, 'needCheck', true);
+
+        if (needCheck && !this.requestHandle?.checkIsEventValidated(data)) {
             this.logger.warn('verification failed event');
             return undefined;
         }
@@ -92,8 +95,9 @@ export class EventDispatcher {
             this.logger.debug(`execute ${type} handle`);
             return ret;
         }
-        this.logger.warn(`no ${type} handle`);
 
+        this.logger.warn(`no ${type} handle`);
+        
         return `no ${type} event handle`;
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/node-sdk",
-  "version": "1.23.0",
+  "version": "1.24.0",
   "description": "larksuite open sdk for nodejs",
   "keywords": [
     "feishu",
@@ -22,7 +22,7 @@
   "scripts": {
     "build": "rm -r lib es types & rollup -c",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch --testPathPattern=ws-client/__tests__"
   },
   "author": "mazhe.nerd",
   "license": "MIT",
@@ -34,7 +34,9 @@
     "lodash.identity": "^3.0.0",
     "lodash.merge": "^4.6.2",
     "lodash.pick": "^4.4.0",
-    "lodash.pickby": "^4.6.0"
+    "lodash.pickby": "^4.6.0",
+    "protobufjs": "^7.2.6",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@koa/router": "^12.0.0",
@@ -44,6 +46,7 @@
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.merge": "^4.6.7",
     "@types/lodash.pick": "^4.4.7",
+    "@types/ws": "^8.5.10",
     "@typescript-eslint/parser": "^5.27.1",
     "body-parser": "^1.20.1",
     "eslint": "^8.17.0",
