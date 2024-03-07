@@ -35,6 +35,8 @@ export class WSClient {
 
   private eventDispatcher?: EventDispatcher;
 
+  private pingInterval?: NodeJS.Timeout;
+
   constructor(params: IConstructorParams) {
     const { 
       appId, 
@@ -109,10 +111,10 @@ export class WSClient {
         deviceId: device_id as string,
         serviceId: service_id as string,
 
-        pingInterval: ClientConfig.PingInterval,
+        pingInterval: ClientConfig.PingInterval * 1000,
         reconnectCount: ClientConfig.ReconnectCount,
-        reconnectInterval: ClientConfig.ReconnectInterval,
-        reconnectNonce: ClientConfig.ReconnectNonce
+        reconnectInterval: ClientConfig.ReconnectInterval * 1000,
+        reconnectNonce: ClientConfig.ReconnectNonce * 1000
       });
 
       this.logger.debug('[ws]', `get connect config success, ws url: ${URL}`);
@@ -154,6 +156,10 @@ export class WSClient {
           }
           return Promise.resolve(false);
         })
+    }
+
+    if (this.pingInterval) {
+      clearTimeout(this.pingInterval)
     }
 
     if (isStart) {
@@ -226,7 +232,7 @@ export class WSClient {
       this.logger.trace('[ws]', 'ping success');
     }
 
-    setTimeout(this.pingLoop.bind(this), pingInterval);
+    this.pingInterval = setTimeout(this.pingLoop.bind(this), pingInterval);
   }
 
   private communicate() {
@@ -275,10 +281,10 @@ export class WSClient {
       } = JSON.parse(dataString);
 
       this.wsConfig.updateWs({
-        pingInterval: PingInterval,
+        pingInterval: PingInterval * 1000,
         reconnectCount: ReconnectCount,
-        reconnectInterval: ReconnectInterval,
-        reconnectNonce: ReconnectNonce,
+        reconnectInterval: ReconnectInterval * 1000,
+        reconnectNonce: ReconnectNonce * 1000,
       });
 
       this.logger.trace('[ws]', 'update wsConfig with pong data');

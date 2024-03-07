@@ -30,8 +30,8 @@ export class WSConfig {
 
     pingInterval: 120 * 1000,
     reconnectCount: -1,
-    reconnectInterval: 120,
-    reconnectNonce: 30,
+    reconnectInterval: 120 * 1000,
+    reconnectNonce: 30 * 1000,
   
     deviceId: '',
     serviceId: '',
