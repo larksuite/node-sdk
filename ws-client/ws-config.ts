@@ -28,7 +28,7 @@ export class WSConfig {
   private ws: IWSConfig = {
     connectUrl: '',
 
-    pingInterval: 120,
+    pingInterval: 120 * 1000,
     reconnectCount: -1,
     reconnectInterval: 120,
     reconnectNonce: 30,
