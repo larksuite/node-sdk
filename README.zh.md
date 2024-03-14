@@ -508,6 +508,59 @@ router.post(
 );
 ```
 
+### 使用长链模式处理事件
+官方文档：[文档](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/event-subscription-guide/long-connection-mode#62c8b8c8)
+
+开发者通过集成飞书 SDK 与开放平台建立一条 WebSocket 全双工通道，当有事件回调发生时，开放平台会通过该通道向开发者发送消息。与传统的 Webhook 模式相比，长连接模式大大降低了接入成本，将原先 1 周左右的开发周期降低到 5 分钟。具体优势如下：
+
+* 测试阶段**无需使用内网穿透工具**，通过长连接模式在本地开发环境中即可接收事件回调。
+* 只在建连时进行鉴权，后续事件推送均为明文数据，无需开发者再处理解密和验签逻辑。
+* 只需保证运行环境具备访问公网能力即可，无需提供公网 IP 或域名。
+* 无需部署防火墙和配置白名单。
+
+> 注意事项
+
+1. 与 Webhook 相同， 长连接模式下开发者接收到消息后，需要在 3 秒内处理完成，否则会触发超时重推。
+2. 消息推送为 集群模式，不支持广播，即如果同一应用部署了多个客户端，那么只有其中随机一个客户端会收到消息。
+3. 目前长连接模式仅支持事件订阅，不支持回调订阅。
+
+SDK支持了该功能集成，`1.24.0`及之后的版本可用，示例代码：
+```typescript
+import * as Lark from '@larksuiteoapi/node-sdk';
+
+const baseConfig = {
+  appId: 'xxx',
+  appSecret: 'xxx'
+}
+
+const client = new Lark.Client(baseConfig);
+
+const wsClient = new Lark.WSClient({...baseConfig, loggerLevel: Lark.LoggerLevel.info});
+
+wsClient.start({
+  eventDispatcher: new Lark.EventDispatcher({}).register({
+    'im.message.receive_v1': async (data) => {
+      const {
+        message: { chat_id, content}
+      } = data;
+      await client.im.v1.message.create({
+        params: {
+          receive_id_type: "chat_id"
+        },
+        data: {
+          receive_id: chat_id,
+          content: Lark.messageCard.defaultCard({
+            title: `reply： ${JSON.parse(content).text}`,
+            content: 'hello'
+          }),
+          msg_type: 'interactive'
+        }
+      });
+    }
+  })
+});
+```
+
 ### [消息卡片](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)
 
 对消息卡片的处理亦是对事件处理的一种，两者的不同点仅在于消息卡片的处理器用于响应用户与消息卡片交互所产生的事件，若处理器有返回值（*返回值的数据结构理应为符合[消息卡片结构](https://open.feishu.cn/document/ukTMukTMukTM/uEjNwUjLxYDM14SM2ATN)所定义的结构*），则返回值被用来更新被响应的消息卡片：
