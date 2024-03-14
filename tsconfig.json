@@ -19,6 +19,7 @@
         "baseUrl": ".",
         "emitDeclarationOnly": true,
         "declarationDir": "types",
+        "allowJs": true,
         "paths": {
             "@node-sdk/*": ["*"]
         }

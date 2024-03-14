@@ -16,3 +16,4 @@ export { AESCipher } from './utils/aes-cipher';
 export { default as defaultHttpInstance } from './http';
 export { HttpInstance, HttpRequestOptions } from './typings/http';
 export * as messageCard from './utils/message-card';
+export { WSClient } from './ws-client';
