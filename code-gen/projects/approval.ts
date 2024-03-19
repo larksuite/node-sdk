@@ -32,7 +32,7 @@ export default abstract class Client extends application {
      */
     approval = {
         /**
-         * 原生审批定义
+         * 事件
          */
         approval: {
             /**
@@ -1659,9 +1659,9 @@ export default abstract class Client extends application {
                                                         start_time?: string;
                                                         end_time?: string;
                                                         status?:
-                                                            | "reject"
+                                                            | "rejected"
                                                             | "pending"
-                                                            | "recall"
+                                                            | "canceled"
                                                             | "deleted"
                                                             | "approved";
                                                         title?: string;
@@ -1762,9 +1762,9 @@ export default abstract class Client extends application {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | "reject"
+                                            | "rejected"
                                             | "pending"
-                                            | "recall"
+                                            | "canceled"
                                             | "deleted"
                                             | "approved";
                                         title?: string;
@@ -1857,9 +1857,9 @@ export default abstract class Client extends application {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | "reject"
+                                            | "rejected"
                                             | "pending"
-                                            | "recall"
+                                            | "canceled"
                                             | "deleted"
                                             | "approved";
                                         title?: string;
@@ -2290,7 +2290,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批任务
          */
         task: {
             /**
@@ -2716,9 +2716,9 @@ export default abstract class Client extends application {
                                         start_time?: string;
                                         end_time?: string;
                                         status?:
-                                            | "reject"
+                                            | "rejected"
                                             | "pending"
-                                            | "recall"
+                                            | "canceled"
                                             | "deleted"
                                             | "approved";
                                         title?: string;
@@ -2819,7 +2819,7 @@ export default abstract class Client extends application {
         },
         v4: {
             /**
-             * 原生审批定义
+             * 事件
              */
             approval: {
                 /**
@@ -4467,9 +4467,9 @@ export default abstract class Client extends application {
                                                             start_time?: string;
                                                             end_time?: string;
                                                             status?:
-                                                                | "reject"
+                                                                | "rejected"
                                                                 | "pending"
-                                                                | "recall"
+                                                                | "canceled"
                                                                 | "deleted"
                                                                 | "approved";
                                                             title?: string;
@@ -4572,9 +4572,9 @@ export default abstract class Client extends application {
                                             start_time?: string;
                                             end_time?: string;
                                             status?:
-                                                | "reject"
+                                                | "rejected"
                                                 | "pending"
-                                                | "recall"
+                                                | "canceled"
                                                 | "deleted"
                                                 | "approved";
                                             title?: string;
@@ -4669,9 +4669,9 @@ export default abstract class Client extends application {
                                             start_time?: string;
                                             end_time?: string;
                                             status?:
-                                                | "reject"
+                                                | "rejected"
                                                 | "pending"
-                                                | "recall"
+                                                | "canceled"
                                                 | "deleted"
                                                 | "approved";
                                             title?: string;
@@ -5105,7 +5105,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批任务
              */
             task: {
                 /**
@@ -5545,9 +5545,9 @@ export default abstract class Client extends application {
                                             start_time?: string;
                                             end_time?: string;
                                             status?:
-                                                | "reject"
+                                                | "rejected"
                                                 | "pending"
-                                                | "recall"
+                                                | "canceled"
                                                 | "deleted"
                                                 | "approved";
                                             title?: string;

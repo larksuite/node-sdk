@@ -120,6 +120,9 @@ export default abstract class Client extends unified_kms_log {
                                                     process_time?: string;
                                                     recover_time?: string;
                                                     process_status?: number;
+                                                    alert_rule_id?: string;
+                                                    monitor_target_room_id?: string;
+                                                    monitor_target_room_mac?: string;
                                                 }>;
                                             };
                                         },
@@ -190,6 +193,9 @@ export default abstract class Client extends unified_kms_log {
                                     process_time?: string;
                                     recover_time?: string;
                                     process_status?: number;
+                                    alert_rule_id?: string;
+                                    monitor_target_room_id?: string;
+                                    monitor_target_room_mac?: string;
                                 }>;
                             };
                         }
@@ -1778,7 +1784,11 @@ export default abstract class Client extends unified_kms_log {
              */
             getDaily: async (
                 payload?: {
-                    params: { start_time: string; end_time: string };
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        unit?: number;
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1838,6 +1848,7 @@ export default abstract class Client extends unified_kms_log {
                         end_time: string;
                         limit: number;
                         order_by: number;
+                        unit?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -4500,6 +4511,9 @@ export default abstract class Client extends unified_kms_log {
                                                         process_time?: string;
                                                         recover_time?: string;
                                                         process_status?: number;
+                                                        alert_rule_id?: string;
+                                                        monitor_target_room_id?: string;
+                                                        monitor_target_room_mac?: string;
                                                     }>;
                                                 };
                                             },
@@ -4570,6 +4584,9 @@ export default abstract class Client extends unified_kms_log {
                                         process_time?: string;
                                         recover_time?: string;
                                         process_status?: number;
+                                        alert_rule_id?: string;
+                                        monitor_target_room_id?: string;
+                                        monitor_target_room_mac?: string;
                                     }>;
                                 };
                             }
@@ -6179,7 +6196,11 @@ export default abstract class Client extends unified_kms_log {
                  */
                 getDaily: async (
                     payload?: {
-                        params: { start_time: string; end_time: string };
+                        params: {
+                            start_time: string;
+                            end_time: string;
+                            unit?: number;
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -6239,6 +6260,7 @@ export default abstract class Client extends unified_kms_log {
                             end_time: string;
                             limit: number;
                             order_by: number;
+                            unit?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },

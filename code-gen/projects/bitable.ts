@@ -3775,6 +3775,352 @@ export default abstract class Client extends baike {
                         throw e;
                     });
             },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        view_id?: string;
+                        field_names?: Array<string>;
+                        sort?: Array<{ field_name?: string; desc?: boolean }>;
+                        filter?: {
+                            conjunction?: "and" | "or";
+                            conditions?: Array<{
+                                field_name: string;
+                                operator:
+                                    | "is"
+                                    | "isNot"
+                                    | "contains"
+                                    | "doesNotContain"
+                                    | "isEmpty"
+                                    | "isNotEmpty"
+                                    | "isGreater"
+                                    | "isGreaterEqual"
+                                    | "isLess"
+                                    | "isLessEqual"
+                                    | "like"
+                                    | "in";
+                                value?: Array<string>;
+                            }>;
+                            children?: Array<{
+                                conjunction: "and" | "or";
+                                conditions?: Array<{
+                                    field_name: string;
+                                    operator:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty"
+                                        | "isGreater"
+                                        | "isGreaterEqual"
+                                        | "isLess"
+                                        | "isLessEqual"
+                                        | "like"
+                                        | "in";
+                                    value?: Array<string>;
+                                }>;
+                            }>;
+                        };
+                        automatic_fields?: boolean;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    fields: Record<
+                                                        string,
+                                                        | string
+                                                        | number
+                                                        | number
+                                                        | number
+                                                        | boolean
+                                                        | {
+                                                              text?: string;
+                                                              link?: string;
+                                                          }
+                                                        | {
+                                                              location?: string;
+                                                              pname?: string;
+                                                              cityname?: string;
+                                                              adname?: string;
+                                                              address?: string;
+                                                              name?: string;
+                                                              full_address?: string;
+                                                          }
+                                                        | Array<{
+                                                              id?: string;
+                                                              name?: string;
+                                                              avatar_url?: string;
+                                                          }>
+                                                        | Array<string>
+                                                        | Array<{
+                                                              id?: string;
+                                                              name?: string;
+                                                              en_name?: string;
+                                                              email?: string;
+                                                              avatar_url?: string;
+                                                          }>
+                                                        | Array<{
+                                                              file_token?: string;
+                                                              name?: string;
+                                                              type?: string;
+                                                              size?: number;
+                                                              url?: string;
+                                                              tmp_url?: string;
+                                                          }>
+                                                    >;
+                                                    record_id?: string;
+                                                    created_by?: {
+                                                        id?: string;
+                                                        name?: string;
+                                                        en_name?: string;
+                                                        email?: string;
+                                                        avatar_url?: string;
+                                                    };
+                                                    created_time?: number;
+                                                    last_modified_by?: {
+                                                        id?: string;
+                                                        name?: string;
+                                                        en_name?: string;
+                                                        email?: string;
+                                                        avatar_url?: string;
+                                                    };
+                                                    last_modified_time?: number;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                total?: number;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=bitable&resource=app.table.record&version=v1 document }
+             *
+             * 查找多维表格记录
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        view_id?: string;
+                        field_names?: Array<string>;
+                        sort?: Array<{ field_name?: string; desc?: boolean }>;
+                        filter?: {
+                            conjunction?: "and" | "or";
+                            conditions?: Array<{
+                                field_name: string;
+                                operator:
+                                    | "is"
+                                    | "isNot"
+                                    | "contains"
+                                    | "doesNotContain"
+                                    | "isEmpty"
+                                    | "isNotEmpty"
+                                    | "isGreater"
+                                    | "isGreaterEqual"
+                                    | "isLess"
+                                    | "isLessEqual"
+                                    | "like"
+                                    | "in";
+                                value?: Array<string>;
+                            }>;
+                            children?: Array<{
+                                conjunction: "and" | "or";
+                                conditions?: Array<{
+                                    field_name: string;
+                                    operator:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty"
+                                        | "isGreater"
+                                        | "isGreaterEqual"
+                                        | "isLess"
+                                        | "isLessEqual"
+                                        | "like"
+                                        | "in";
+                                    value?: Array<string>;
+                                }>;
+                            }>;
+                        };
+                        automatic_fields?: boolean;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    fields: Record<
+                                        string,
+                                        | string
+                                        | number
+                                        | number
+                                        | number
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              avatar_url?: string;
+                                          }>
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                              avatar_url?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                        avatar_url?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                        avatar_url?: string;
+                                    };
+                                    last_modified_time?: number;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                                total?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=update&version=v1 click to debug }
              *
@@ -3987,7 +4333,7 @@ export default abstract class Client extends baike {
                                                     | "isLessEqual";
                                                 value?: string;
                                                 condition_id?: string;
-                                                field_type?: string;
+                                                field_type?: number;
                                             }>;
                                             condition_omitted?: boolean;
                                         };
@@ -4110,7 +4456,7 @@ export default abstract class Client extends baike {
                                                     | "isLessEqual";
                                                 value?: string;
                                                 condition_id?: string;
-                                                field_type?: string;
+                                                field_type?: number;
                                             }>;
                                             condition_omitted?: boolean;
                                         };
@@ -4231,7 +4577,7 @@ export default abstract class Client extends baike {
                                                                     | "isLessEqual";
                                                                 value?: string;
                                                                 condition_id?: string;
-                                                                field_type?: string;
+                                                                field_type?: number;
                                                             }>;
                                                             condition_omitted?: boolean;
                                                         };
@@ -4322,7 +4668,7 @@ export default abstract class Client extends baike {
                                                     | "isLessEqual";
                                                 value?: string;
                                                 condition_id?: string;
-                                                field_type?: string;
+                                                field_type?: number;
                                             }>;
                                             condition_omitted?: boolean;
                                         };
@@ -4433,7 +4779,7 @@ export default abstract class Client extends baike {
                                                     | "isLessEqual";
                                                 value?: string;
                                                 condition_id?: string;
-                                                field_type?: string;
+                                                field_type?: number;
                                             }>;
                                             condition_omitted?: boolean;
                                         };
@@ -8245,6 +8591,358 @@ export default abstract class Client extends baike {
                             throw e;
                         });
                 },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            view_id?: string;
+                            field_names?: Array<string>;
+                            sort?: Array<{
+                                field_name?: string;
+                                desc?: boolean;
+                            }>;
+                            filter?: {
+                                conjunction?: "and" | "or";
+                                conditions?: Array<{
+                                    field_name: string;
+                                    operator:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty"
+                                        | "isGreater"
+                                        | "isGreaterEqual"
+                                        | "isLess"
+                                        | "isLessEqual"
+                                        | "like"
+                                        | "in";
+                                    value?: Array<string>;
+                                }>;
+                                children?: Array<{
+                                    conjunction: "and" | "or";
+                                    conditions?: Array<{
+                                        field_name: string;
+                                        operator:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty"
+                                            | "isGreater"
+                                            | "isGreaterEqual"
+                                            | "isLess"
+                                            | "isLessEqual"
+                                            | "like"
+                                            | "in";
+                                        value?: Array<string>;
+                                    }>;
+                                }>;
+                            };
+                            automatic_fields?: boolean;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { app_token: string; table_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        fields: Record<
+                                                            string,
+                                                            | string
+                                                            | number
+                                                            | number
+                                                            | number
+                                                            | boolean
+                                                            | {
+                                                                  text?: string;
+                                                                  link?: string;
+                                                              }
+                                                            | {
+                                                                  location?: string;
+                                                                  pname?: string;
+                                                                  cityname?: string;
+                                                                  adname?: string;
+                                                                  address?: string;
+                                                                  name?: string;
+                                                                  full_address?: string;
+                                                              }
+                                                            | Array<{
+                                                                  id?: string;
+                                                                  name?: string;
+                                                                  avatar_url?: string;
+                                                              }>
+                                                            | Array<string>
+                                                            | Array<{
+                                                                  id?: string;
+                                                                  name?: string;
+                                                                  en_name?: string;
+                                                                  email?: string;
+                                                                  avatar_url?: string;
+                                                              }>
+                                                            | Array<{
+                                                                  file_token?: string;
+                                                                  name?: string;
+                                                                  type?: string;
+                                                                  size?: number;
+                                                                  url?: string;
+                                                                  tmp_url?: string;
+                                                              }>
+                                                        >;
+                                                        record_id?: string;
+                                                        created_by?: {
+                                                            id?: string;
+                                                            name?: string;
+                                                            en_name?: string;
+                                                            email?: string;
+                                                            avatar_url?: string;
+                                                        };
+                                                        created_time?: number;
+                                                        last_modified_by?: {
+                                                            id?: string;
+                                                            name?: string;
+                                                            en_name?: string;
+                                                            email?: string;
+                                                            avatar_url?: string;
+                                                        };
+                                                        last_modified_time?: number;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    total?: number;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=bitable&resource=app.table.record&version=v1 document }
+                 *
+                 * 查找多维表格记录
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            view_id?: string;
+                            field_names?: Array<string>;
+                            sort?: Array<{
+                                field_name?: string;
+                                desc?: boolean;
+                            }>;
+                            filter?: {
+                                conjunction?: "and" | "or";
+                                conditions?: Array<{
+                                    field_name: string;
+                                    operator:
+                                        | "is"
+                                        | "isNot"
+                                        | "contains"
+                                        | "doesNotContain"
+                                        | "isEmpty"
+                                        | "isNotEmpty"
+                                        | "isGreater"
+                                        | "isGreaterEqual"
+                                        | "isLess"
+                                        | "isLessEqual"
+                                        | "like"
+                                        | "in";
+                                    value?: Array<string>;
+                                }>;
+                                children?: Array<{
+                                    conjunction: "and" | "or";
+                                    conditions?: Array<{
+                                        field_name: string;
+                                        operator:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty"
+                                            | "isGreater"
+                                            | "isGreaterEqual"
+                                            | "isLess"
+                                            | "isLessEqual"
+                                            | "like"
+                                            | "in";
+                                        value?: Array<string>;
+                                    }>;
+                                }>;
+                            };
+                            automatic_fields?: boolean;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        path: { app_token: string; table_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        fields: Record<
+                                            string,
+                                            | string
+                                            | number
+                                            | number
+                                            | number
+                                            | boolean
+                                            | { text?: string; link?: string }
+                                            | {
+                                                  location?: string;
+                                                  pname?: string;
+                                                  cityname?: string;
+                                                  adname?: string;
+                                                  address?: string;
+                                                  name?: string;
+                                                  full_address?: string;
+                                              }
+                                            | Array<{
+                                                  id?: string;
+                                                  name?: string;
+                                                  avatar_url?: string;
+                                              }>
+                                            | Array<string>
+                                            | Array<{
+                                                  id?: string;
+                                                  name?: string;
+                                                  en_name?: string;
+                                                  email?: string;
+                                                  avatar_url?: string;
+                                              }>
+                                            | Array<{
+                                                  file_token?: string;
+                                                  name?: string;
+                                                  type?: string;
+                                                  size?: number;
+                                                  url?: string;
+                                                  tmp_url?: string;
+                                              }>
+                                        >;
+                                        record_id?: string;
+                                        created_by?: {
+                                            id?: string;
+                                            name?: string;
+                                            en_name?: string;
+                                            email?: string;
+                                            avatar_url?: string;
+                                        };
+                                        created_time?: number;
+                                        last_modified_by?: {
+                                            id?: string;
+                                            name?: string;
+                                            en_name?: string;
+                                            email?: string;
+                                            avatar_url?: string;
+                                        };
+                                        last_modified_time?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    total?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=update&version=v1 click to debug }
                  *
@@ -8457,7 +9155,7 @@ export default abstract class Client extends baike {
                                                         | "isLessEqual";
                                                     value?: string;
                                                     condition_id?: string;
-                                                    field_type?: string;
+                                                    field_type?: number;
                                                 }>;
                                                 condition_omitted?: boolean;
                                             };
@@ -8583,7 +9281,7 @@ export default abstract class Client extends baike {
                                                         | "isLessEqual";
                                                     value?: string;
                                                     condition_id?: string;
-                                                    field_type?: string;
+                                                    field_type?: number;
                                                 }>;
                                                 condition_omitted?: boolean;
                                             };
@@ -8704,7 +9402,7 @@ export default abstract class Client extends baike {
                                                                         | "isLessEqual";
                                                                     value?: string;
                                                                     condition_id?: string;
-                                                                    field_type?: string;
+                                                                    field_type?: number;
                                                                 }>;
                                                                 condition_omitted?: boolean;
                                                             };
@@ -8795,7 +9493,7 @@ export default abstract class Client extends baike {
                                                         | "isLessEqual";
                                                     value?: string;
                                                     condition_id?: string;
-                                                    field_type?: string;
+                                                    field_type?: number;
                                                 }>;
                                                 condition_omitted?: boolean;
                                             };
@@ -8906,7 +9604,7 @@ export default abstract class Client extends baike {
                                                         | "isLessEqual";
                                                     value?: string;
                                                     condition_id?: string;
-                                                    field_type?: string;
+                                                    field_type?: number;
                                                 }>;
                                                 condition_omitted?: boolean;
                                             };

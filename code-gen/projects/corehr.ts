@@ -155,6 +155,22 @@ export default abstract class Client extends contract {
                             field_name: string;
                             value: string;
                         }>;
+                        currency?: {
+                            currency_name?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            numeric_code?: number;
+                            currency_alpha_3_code?: string;
+                        };
+                        phone?: {
+                            area_code: { enum_name: string };
+                            phone_number: string;
+                        };
+                        fax?: {
+                            area_code: { enum_name: string };
+                            phone_number: string;
+                        };
                     };
                     params?: { client_token?: string };
                 },
@@ -275,6 +291,12 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    registered_office_address_info?: {
+                                        postal_code?: string;
+                                    };
+                                    office_address_info?: {
+                                        postal_code?: string;
+                                    };
                                 };
                             };
                         }
@@ -457,6 +479,12 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    registered_office_address_info?: {
+                                        postal_code?: string;
+                                    };
+                                    office_address_info?: {
+                                        postal_code?: string;
+                                    };
                                 };
                             };
                         }
@@ -605,6 +633,12 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    registered_office_address_info?: {
+                                        postal_code?: string;
+                                    };
+                                    office_address_info?: {
+                                        postal_code?: string;
+                                    };
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -616,6 +650,213 @@ export default abstract class Client extends contract {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=company&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=company&version=v1 document }
+             *
+             * 更新公司数据
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        hiberarchy_common: {
+                            parent_id?: string;
+                            name: Array<{ lang: string; value: string }>;
+                            type?: { enum_name: string };
+                            active: boolean;
+                            effective_time?: string;
+                            expiration_time?: string;
+                            code?: string;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        };
+                        type?: { enum_name: string };
+                        industry_list?: Array<{ enum_name: string }>;
+                        legal_representative?: Array<{
+                            lang: string;
+                            value: string;
+                        }>;
+                        post_code?: string;
+                        tax_payer_id?: string;
+                        confidential?: boolean;
+                        sub_type_list?: Array<{ enum_name: string }>;
+                        branch_company?: boolean;
+                        primary_manager?: Array<{
+                            lang: string;
+                            value: string;
+                        }>;
+                        custom_fields?: Array<{
+                            field_name: string;
+                            value: string;
+                        }>;
+                        currency?: {
+                            currency_name?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            numeric_code?: number;
+                            currency_alpha_3_code?: string;
+                        };
+                        phone?: {
+                            area_code: { enum_name: string };
+                            phone_number: string;
+                        };
+                        fax?: {
+                            area_code: { enum_name: string };
+                            phone_number: string;
+                        };
+                    };
+                    params?: { client_token?: string };
+                    path: { company_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                company?: {
+                                    id?: string;
+                                    hiberarchy_common: {
+                                        parent_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        active: boolean;
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        code?: string;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        tree_order?: string;
+                                        list_order?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    industry_list?: Array<{
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    legal_representative?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    post_code?: string;
+                                    tax_payer_id?: string;
+                                    confidential?: boolean;
+                                    sub_type_list?: Array<{
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    branch_company?: boolean;
+                                    primary_manager?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                    currency?: {
+                                        id?: string;
+                                        country_region_id?: string;
+                                        currency_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        numeric_code?: number;
+                                        currency_alpha_3_code?: string;
+                                    };
+                                    phone?: {
+                                        area_code: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_number: string;
+                                    };
+                                    fax?: {
+                                        area_code: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_number: string;
+                                    };
+                                    registered_office_address?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    office_address?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
+                                    registered_office_address_info?: {
+                                        postal_code?: string;
+                                    };
+                                    office_address_info?: {
+                                        postal_code?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/companies/:company_id`,
+                            path
+                        ),
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -1596,6 +1837,7 @@ export default abstract class Client extends contract {
                             value: string;
                         }>;
                         cost_center_id?: string;
+                        staffing_model?: { enum_name: string };
                     };
                     params?: {
                         client_token?: string;
@@ -1668,6 +1910,13 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     cost_center_id?: string;
+                                    staffing_model?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 };
                             };
                         }
@@ -1802,6 +2051,13 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     cost_center_id?: string;
+                                    staffing_model?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 };
                             };
                         }
@@ -1905,6 +2161,13 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     cost_center_id?: string;
+                                    staffing_model?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -1965,6 +2228,7 @@ export default abstract class Client extends contract {
                             value: string;
                         }>;
                         cost_center_id?: string;
+                        staffing_model?: { enum_name: string };
                     };
                     params?: {
                         client_token?: string;
@@ -2038,6 +2302,13 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     cost_center_id?: string;
+                                    staffing_model?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 };
                             };
                         }
@@ -2671,6 +2942,21 @@ export default abstract class Client extends contract {
                                         }>;
                                     }>;
                                     ats_application_id?: string;
+                                    service_company?: string;
+                                    compensation_type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    work_shift?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 };
                             };
                         }
@@ -3187,6 +3473,10 @@ export default abstract class Client extends contract {
                             };
                             original_job_grade?: string;
                             target_job_grade?: string;
+                            original_compensation_type?: string;
+                            target_compensation_type?: string;
+                            original_service_company?: string;
+                            target_service_company?: string;
                         };
                         transfer_key?: string;
                         initiator_id?: string;
@@ -3307,6 +3597,10 @@ export default abstract class Client extends contract {
                                     };
                                     original_job_grade?: string;
                                     target_job_grade?: string;
+                                    original_compensation_type?: string;
+                                    target_compensation_type?: string;
+                                    original_service_company?: string;
+                                    target_service_company?: string;
                                 };
                             };
                         }
@@ -3369,6 +3663,9 @@ export default abstract class Client extends contract {
                             field_name: string;
                             value: string;
                         }>;
+                        work_shift?: { enum_name: string };
+                        compensation_type?: { enum_name: string };
+                        service_company?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -3432,6 +3729,21 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     weekly_working_hours_v2?: number;
+                                    work_shift?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    compensation_type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    service_company?: string;
                                 };
                             };
                         }
@@ -3557,6 +3869,21 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     weekly_working_hours_v2?: number;
+                                    work_shift?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    compensation_type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    service_company?: string;
                                 };
                             };
                         }
@@ -3662,6 +3989,21 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     weekly_working_hours_v2?: number;
+                                    work_shift?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    compensation_type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    service_company?: string;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -3721,6 +4063,9 @@ export default abstract class Client extends contract {
                             field_name: string;
                             value: string;
                         }>;
+                        work_shift?: { enum_name: string };
+                        compensation_type?: { enum_name: string };
+                        service_company?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -3785,6 +4130,21 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     weekly_working_hours_v2?: number;
+                                    work_shift?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    compensation_type?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    service_company?: string;
                                 };
                             };
                         }
@@ -4570,6 +4930,10 @@ export default abstract class Client extends contract {
                                     estimated_end_date?: string;
                                     time_zone?: string;
                                     data_source?: number;
+                                    leave_process_id?: Array<string>;
+                                    leave_correct_process_id?: Array<string>;
+                                    leave_cancel_process_id?: Array<string>;
+                                    leave_return_process_id?: Array<string>;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -4685,6 +5049,7 @@ export default abstract class Client extends contract {
                         granting_unit: number;
                         effective_date: string;
                         expiration_date?: string;
+                        section_type?: number;
                         reason: Array<{ lang: string; value: string }>;
                         external_id?: string;
                     };
@@ -4725,6 +5090,7 @@ export default abstract class Client extends contract {
                                     created_by: string;
                                     updated_at: string;
                                     updated_by: string;
+                                    section_type?: number;
                                 };
                             };
                         }
@@ -4904,6 +5270,8 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
+                                        city_id_v2?: string;
+                                        district_id_v2?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -5066,6 +5434,8 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
+                                        city_id_v2?: string;
+                                        district_id_v2?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -5194,6 +5564,8 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
+                                        city_id_v2?: string;
+                                        district_id_v2?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -6172,6 +6544,7 @@ export default abstract class Client extends contract {
                                     };
                                     date_of_birth?: string;
                                     nationality_id?: string;
+                                    nationality_id_v2?: string;
                                     race?: {
                                         enum_name: string;
                                         display?: Array<{
@@ -6225,6 +6598,8 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
+                                        city_id_v2?: string;
+                                        district_id_v2?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -6350,6 +6725,8 @@ export default abstract class Client extends contract {
                                         branch_name?: string;
                                         bank_id?: string;
                                         branch_id?: string;
+                                        bank_id_v2?: string;
+                                        branch_id_v2?: string;
                                         custom_fields?: Array<{
                                             field_name: string;
                                             value: string;
@@ -6453,6 +6830,7 @@ export default abstract class Client extends contract {
                                         };
                                         date_of_birth?: string;
                                         nationality_id?: string;
+                                        nationality_id_v2?: string;
                                         national_id_list?: Array<{
                                             national_id_type_id: string;
                                             national_id_number: string;
@@ -6520,6 +6898,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -8168,6 +8548,22 @@ export default abstract class Client extends contract {
                                 field_name: string;
                                 value: string;
                             }>;
+                            currency?: {
+                                currency_name?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                numeric_code?: number;
+                                currency_alpha_3_code?: string;
+                            };
+                            phone?: {
+                                area_code: { enum_name: string };
+                                phone_number: string;
+                            };
+                            fax?: {
+                                area_code: { enum_name: string };
+                                phone_number: string;
+                            };
                         };
                         params?: { client_token?: string };
                     },
@@ -8288,6 +8684,12 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        registered_office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                        office_address_info?: {
+                                            postal_code?: string;
+                                        };
                                     };
                                 };
                             }
@@ -8473,6 +8875,12 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        registered_office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                        office_address_info?: {
+                                            postal_code?: string;
+                                        };
                                     };
                                 };
                             }
@@ -8621,6 +9029,12 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        registered_office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                        office_address_info?: {
+                                            postal_code?: string;
+                                        };
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -8632,6 +9046,213 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=company&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=company&version=v1 document }
+                 *
+                 * 更新公司数据
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            hiberarchy_common: {
+                                parent_id?: string;
+                                name: Array<{ lang: string; value: string }>;
+                                type?: { enum_name: string };
+                                active: boolean;
+                                effective_time?: string;
+                                expiration_time?: string;
+                                code?: string;
+                                description?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            type?: { enum_name: string };
+                            industry_list?: Array<{ enum_name: string }>;
+                            legal_representative?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            post_code?: string;
+                            tax_payer_id?: string;
+                            confidential?: boolean;
+                            sub_type_list?: Array<{ enum_name: string }>;
+                            branch_company?: boolean;
+                            primary_manager?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            currency?: {
+                                currency_name?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                numeric_code?: number;
+                                currency_alpha_3_code?: string;
+                            };
+                            phone?: {
+                                area_code: { enum_name: string };
+                                phone_number: string;
+                            };
+                            fax?: {
+                                area_code: { enum_name: string };
+                                phone_number: string;
+                            };
+                        };
+                        params?: { client_token?: string };
+                        path: { company_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    company?: {
+                                        id?: string;
+                                        hiberarchy_common: {
+                                            parent_id?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            active: boolean;
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            code?: string;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            tree_order?: string;
+                                            list_order?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        industry_list?: Array<{
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        legal_representative?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        post_code?: string;
+                                        tax_payer_id?: string;
+                                        confidential?: boolean;
+                                        sub_type_list?: Array<{
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        branch_company?: boolean;
+                                        primary_manager?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        currency?: {
+                                            id?: string;
+                                            country_region_id?: string;
+                                            currency_name?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            numeric_code?: number;
+                                            currency_alpha_3_code?: string;
+                                        };
+                                        phone?: {
+                                            area_code: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                        };
+                                        fax?: {
+                                            area_code: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                        };
+                                        registered_office_address?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        office_address?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        registered_office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                        office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/companies/:company_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -9626,6 +10247,7 @@ export default abstract class Client extends contract {
                                 value: string;
                             }>;
                             cost_center_id?: string;
+                            staffing_model?: { enum_name: string };
                         };
                         params?: {
                             client_token?: string;
@@ -9698,6 +10320,13 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         cost_center_id?: string;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                 };
                             }
@@ -9835,6 +10464,13 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         cost_center_id?: string;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                 };
                             }
@@ -9938,6 +10574,13 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         cost_center_id?: string;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -9998,6 +10641,7 @@ export default abstract class Client extends contract {
                                 value: string;
                             }>;
                             cost_center_id?: string;
+                            staffing_model?: { enum_name: string };
                         };
                         params?: {
                             client_token?: string;
@@ -10071,6 +10715,13 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         cost_center_id?: string;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                 };
                             }
@@ -10710,6 +11361,21 @@ export default abstract class Client extends contract {
                                             }>;
                                         }>;
                                         ats_application_id?: string;
+                                        service_company?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                 };
                             }
@@ -11235,6 +11901,10 @@ export default abstract class Client extends contract {
                                 };
                                 original_job_grade?: string;
                                 target_job_grade?: string;
+                                original_compensation_type?: string;
+                                target_compensation_type?: string;
+                                original_service_company?: string;
+                                target_service_company?: string;
                             };
                             transfer_key?: string;
                             initiator_id?: string;
@@ -11355,6 +12025,10 @@ export default abstract class Client extends contract {
                                         };
                                         original_job_grade?: string;
                                         target_job_grade?: string;
+                                        original_compensation_type?: string;
+                                        target_compensation_type?: string;
+                                        original_service_company?: string;
+                                        target_service_company?: string;
                                     };
                                 };
                             }
@@ -11417,6 +12091,9 @@ export default abstract class Client extends contract {
                                 field_name: string;
                                 value: string;
                             }>;
+                            work_shift?: { enum_name: string };
+                            compensation_type?: { enum_name: string };
+                            service_company?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -11480,6 +12157,21 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         weekly_working_hours_v2?: number;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        service_company?: string;
                                     };
                                 };
                             }
@@ -11608,6 +12300,21 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         weekly_working_hours_v2?: number;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        service_company?: string;
                                     };
                                 };
                             }
@@ -11713,6 +12420,21 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         weekly_working_hours_v2?: number;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        service_company?: string;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -11772,6 +12494,9 @@ export default abstract class Client extends contract {
                                 field_name: string;
                                 value: string;
                             }>;
+                            work_shift?: { enum_name: string };
+                            compensation_type?: { enum_name: string };
+                            service_company?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -11836,6 +12561,21 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         weekly_working_hours_v2?: number;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        service_company?: string;
                                     };
                                 };
                             }
@@ -12633,6 +13373,10 @@ export default abstract class Client extends contract {
                                         estimated_end_date?: string;
                                         time_zone?: string;
                                         data_source?: number;
+                                        leave_process_id?: Array<string>;
+                                        leave_correct_process_id?: Array<string>;
+                                        leave_cancel_process_id?: Array<string>;
+                                        leave_return_process_id?: Array<string>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -12748,6 +13492,7 @@ export default abstract class Client extends contract {
                             granting_unit: number;
                             effective_date: string;
                             expiration_date?: string;
+                            section_type?: number;
                             reason: Array<{ lang: string; value: string }>;
                             external_id?: string;
                         };
@@ -12788,6 +13533,7 @@ export default abstract class Client extends contract {
                                         created_by: string;
                                         updated_at: string;
                                         updated_by: string;
+                                        section_type?: number;
                                     };
                                 };
                             }
@@ -12972,6 +13718,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -13137,6 +13885,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -13265,6 +14015,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -14249,6 +15001,7 @@ export default abstract class Client extends contract {
                                         };
                                         date_of_birth?: string;
                                         nationality_id?: string;
+                                        nationality_id_v2?: string;
                                         race?: {
                                             enum_name: string;
                                             display?: Array<{
@@ -14302,6 +15055,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -14427,6 +15182,8 @@ export default abstract class Client extends contract {
                                             branch_name?: string;
                                             bank_id?: string;
                                             branch_id?: string;
+                                            bank_id_v2?: string;
+                                            branch_id_v2?: string;
                                             custom_fields?: Array<{
                                                 field_name: string;
                                                 value: string;
@@ -14530,6 +15287,7 @@ export default abstract class Client extends contract {
                                             };
                                             date_of_birth?: string;
                                             nationality_id?: string;
+                                            nationality_id_v2?: string;
                                             national_id_list?: Array<{
                                                 national_id_type_id: string;
                                                 national_id_number: string;
@@ -14597,6 +15355,8 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                city_id_v2?: string;
+                                                district_id_v2?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -16142,6 +16902,1282 @@ export default abstract class Client extends contract {
         },
         v2: {
             /**
+             * basic_info.bank
+             */
+            basicInfoBank: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            bank_id_list?: Array<string>;
+                            bank_name_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/banks/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        bank_id?: string;
+                                                        bank_name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        bank_code?: string;
+                                                        country_region_id?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.bank&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.bank&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            bank_id_list?: Array<string>;
+                            bank_name_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        bank_id?: string;
+                                        bank_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        bank_code?: string;
+                                        country_region_id?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/banks/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.bank_branch
+             */
+            basicInfoBankBranch: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            bank_id_list?: Array<string>;
+                            bank_branch_id_list?: Array<string>;
+                            bank_branch_name_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/bank_branchs/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        bank_branch_id?: string;
+                                                        bank_branch_name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        bank_id?: string;
+                                                        code?: string;
+                                                        swift_code?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.bank_branch&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.bank_branch&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            bank_id_list?: Array<string>;
+                            bank_branch_id_list?: Array<string>;
+                            bank_branch_name_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        bank_branch_id?: string;
+                                        bank_branch_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        bank_id?: string;
+                                        code?: string;
+                                        swift_code?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/bank_branchs/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.city
+             */
+            basicInfoCity: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            country_region_subdivision_id_list?: Array<string>;
+                            city_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/cities/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        city_id?: string;
+                                                        name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        country_region_subdivision_id?: string;
+                                                        code?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.city&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.city&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            country_region_subdivision_id_list?: Array<string>;
+                            city_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        city_id?: string;
+                                        name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        country_region_subdivision_id?: string;
+                                        code?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/cities/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.country_region
+             */
+            basicInfoCountryRegion: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            country_region_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/country_regions/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        country_region_id?: string;
+                                                        name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        full_name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        alpha_2_code?: string;
+                                                        alpha_3_code?: string;
+                                                        global_code?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.country_region&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.country_region&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            country_region_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        country_region_id?: string;
+                                        name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        full_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        alpha_2_code?: string;
+                                        alpha_3_code?: string;
+                                        global_code?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/country_regions/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.country_region_subdivision
+             */
+            basicInfoCountryRegionSubdivision: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            country_region_id_list?: Array<string>;
+                            country_region_subdivision_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/country_region_subdivisions/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        country_region_subdivision_id?: string;
+                                                        name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        country_region_id?: string;
+                                                        subdivision_type?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        iso_code?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.country_region_subdivision&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.country_region_subdivision&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            country_region_id_list?: Array<string>;
+                            country_region_subdivision_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        country_region_subdivision_id?: string;
+                                        name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        country_region_id?: string;
+                                        subdivision_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        iso_code?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/country_region_subdivisions/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.currency
+             */
+            basicInfoCurrency: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            currency_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/currencies/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        currency_id?: string;
+                                                        country_region_id?: string;
+                                                        currency_name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        numeric_code?: number;
+                                                        currency_alpha_3_code?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.currency&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.currency&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            currency_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        currency_id?: string;
+                                        country_region_id?: string;
+                                        currency_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        numeric_code?: number;
+                                        currency_alpha_3_code?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/currencies/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.district
+             */
+            basicInfoDistrict: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            city_id_list?: Array<string>;
+                            district_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/districts/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        district_id?: string;
+                                                        name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        city_id?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.district&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.district&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            city_id_list?: Array<string>;
+                            district_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        district_id?: string;
+                                        name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        city_id?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/districts/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * basic_info.nationality
+             */
+            basicInfoNationality: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            nationality_id_list?: Array<string>;
+                            country_region_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/basic_info/nationalities/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        nationality_id?: string;
+                                                        name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        alpha_2_code?: string;
+                                                        alpha_3_code?: string;
+                                                        numeric_code?: number;
+                                                        country_region_id?: string;
+                                                        status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=basic_info.nationality&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=basic_info.nationality&version=v2 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            nationality_id_list?: Array<string>;
+                            country_region_id_list?: Array<string>;
+                            status_list?: Array<number>;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        nationality_id?: string;
+                                        name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        alpha_2_code?: string;
+                                        alpha_3_code?: string;
+                                        numeric_code?: number;
+                                        country_region_id?: string;
+                                        status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/basic_info/nationalities/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * bp
              */
             bp: {
@@ -16483,6 +18519,12 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        registered_office_address_info?: {
+                                            postal_code?: string;
+                                        };
+                                        office_address_info?: {
+                                            postal_code?: string;
+                                        };
                                         custom_fields?: Array<{
                                             custom_api_name: string;
                                             name?: {
@@ -16726,6 +18768,456 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * cost_center
+             */
+            costCenter: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=cost_center&version=v2 document }
+                 *
+                 * 创建成本中心
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: Array<{ lang: string; value: string }>;
+                            code?: string;
+                            parent_cost_center_id?: string;
+                            managers?: Array<string>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            effective_time: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    cost_center?: {
+                                        cost_center_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_cost_center_id?: string;
+                                        managers?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        active?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=cost_center&version=v2 document }
+                 */
+                delete: async (
+                    payload?: {
+                        data: { operation_reason: string };
+                        path?: { cost_center_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/:cost_center_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=cost_center&version=v2 document }
+                 *
+                 * 创建成本中心版本
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            effective_time: string;
+                            active: boolean;
+                            operation_reason: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                        path?: { cost_center_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    cost_center?: {
+                                        cost_center_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_cost_center_id?: string;
+                                        managers?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        active?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/:cost_center_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=cost_center&version=v2 document }
+                 *
+                 * 查询成本中心信息
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            cost_center_id_list?: Array<string>;
+                            name_list?: Array<string>;
+                            code?: string;
+                            parent_cost_center_id?: string;
+                            get_all_version?: boolean;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        cost_center_id?: string;
+                                        version_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_cost_center_id?: string;
+                                        managers?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        active?: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * cost_center.version
+             */
+            costCenterVersion: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center.version&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=cost_center.version&version=v2 document }
+                 *
+                 * 创建成本中心版本
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: Array<{ lang: string; value: string }>;
+                            parent_cost_center_id?: string;
+                            managers?: Array<string>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            effective_time: string;
+                            operation_reason: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                        path?: { cost_center_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    version?: {
+                                        cost_center_id?: string;
+                                        version_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_cost_center_id?: string;
+                                        managers?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        active?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/:cost_center_id/versions`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center.version&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=cost_center.version&version=v2 document }
+                 *
+                 * 撤销成本中心版本
+                 */
+                delete: async (
+                    payload?: {
+                        data: { operation_reason: string };
+                        path?: { cost_center_id?: string; version_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/:cost_center_id/versions/:version_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center.version&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=cost_center.version&version=v2 document }
+                 *
+                 * 创建成本中心版本
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            name: Array<{ lang: string; value: string }>;
+                            parent_cost_center_id?: string;
+                            managers?: Array<string>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            effective_time: string;
+                            operation_reason: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                        path?: { cost_center_id?: string; version_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    version?: {
+                                        cost_center_id?: string;
+                                        version_id?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_cost_center_id?: string;
+                                        managers?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        active?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/:cost_center_id/versions/:version_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * department
              */
             department: {
@@ -16906,6 +19398,13 @@ export default abstract class Client extends contract {
                                                             type?: number;
                                                             value: string;
                                                         }>;
+                                                        staffing_model?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -17011,6 +19510,13 @@ export default abstract class Client extends contract {
                                             type?: number;
                                             value: string;
                                         }>;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -17084,10 +19590,80 @@ export default abstract class Client extends contract {
                                         employee_type_id?: string;
                                         department_id?: string;
                                         job_level_id?: string;
+                                        job_level?: {
+                                            job_level_id?: string;
+                                            level_order: number;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
                                         job_grade_id?: string;
                                         work_location_id?: string;
                                         job_family_id?: string;
+                                        job_family?: {
+                                            job_family_id?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            parent_id?: string;
+                                            effective_time: string;
+                                            expiration_time?: string;
+                                            code?: string;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
                                         job_id?: string;
+                                        job?: {
+                                            id?: string;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            job_title?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            job_family_id_list?: Array<string>;
+                                            job_level_id_list?: Array<string>;
+                                            working_hours_type_id?: string;
+                                            effective_time: string;
+                                            expiration_time?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
                                         company_id?: string;
                                         working_hours_type_id?: string;
                                         tenure?: string;
@@ -17211,6 +19787,32 @@ export default abstract class Client extends contract {
                                             date_of_birth?: string;
                                             nationality_id?: string;
                                             nationality_id_v2?: string;
+                                            additional_nationalities?: Array<{
+                                                nationality_id?: string;
+                                                name?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                alpha_2_code?: string;
+                                                alpha_3_code?: string;
+                                                numeric_code?: number;
+                                                country_region_id?: string;
+                                                status?: number;
+                                            }>;
+                                            citizenship_status?: Array<{
+                                                id?: string;
+                                                country_region_id?: string;
+                                                active?: boolean;
+                                                name?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                citizenship_status?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                view_order?: string;
+                                            }>;
                                             race?: {
                                                 enum_name: string;
                                                 display?: Array<{
@@ -17260,6 +19862,8 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                city_id_v2?: string;
+                                                district_id_v2?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -17582,6 +20186,8 @@ export default abstract class Client extends contract {
                                                     region_id?: string;
                                                     city_id?: string;
                                                     distinct_id?: string;
+                                                    city_id_v2?: string;
+                                                    district_id_v2?: string;
                                                     local_address_line1?: string;
                                                     local_address_line2?: string;
                                                     local_address_line3?: string;
@@ -17966,6 +20572,21 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                         };
+                                        service_company?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                 };
                             }
@@ -18089,10 +20710,80 @@ export default abstract class Client extends contract {
                                                         employee_type_id?: string;
                                                         department_id?: string;
                                                         job_level_id?: string;
+                                                        job_level?: {
+                                                            job_level_id?: string;
+                                                            level_order: number;
+                                                            code?: string;
+                                                            name: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            description?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            active: boolean;
+                                                            custom_fields?: Array<{
+                                                                custom_api_name: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                type?: number;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                         job_grade_id?: string;
                                                         work_location_id?: string;
                                                         job_family_id?: string;
+                                                        job_family?: {
+                                                            job_family_id?: string;
+                                                            name: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            active: boolean;
+                                                            parent_id?: string;
+                                                            effective_time: string;
+                                                            expiration_time?: string;
+                                                            code?: string;
+                                                            custom_fields?: Array<{
+                                                                custom_api_name: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                type?: number;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                         job_id?: string;
+                                                        job?: {
+                                                            id?: string;
+                                                            code?: string;
+                                                            name: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            description?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            active: boolean;
+                                                            job_title?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            job_family_id_list?: Array<string>;
+                                                            job_level_id_list?: Array<string>;
+                                                            working_hours_type_id?: string;
+                                                            effective_time: string;
+                                                            expiration_time?: string;
+                                                            custom_fields?: Array<{
+                                                                field_name: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                         company_id?: string;
                                                         working_hours_type_id?: string;
                                                         tenure?: string;
@@ -18216,6 +20907,32 @@ export default abstract class Client extends contract {
                                                             date_of_birth?: string;
                                                             nationality_id?: string;
                                                             nationality_id_v2?: string;
+                                                            additional_nationalities?: Array<{
+                                                                nationality_id?: string;
+                                                                name?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                                alpha_2_code?: string;
+                                                                alpha_3_code?: string;
+                                                                numeric_code?: number;
+                                                                country_region_id?: string;
+                                                                status?: number;
+                                                            }>;
+                                                            citizenship_status?: Array<{
+                                                                id?: string;
+                                                                country_region_id?: string;
+                                                                active?: boolean;
+                                                                name?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                                citizenship_status?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                                view_order?: string;
+                                                            }>;
                                                             race?: {
                                                                 enum_name: string;
                                                                 display?: Array<{
@@ -18265,6 +20982,8 @@ export default abstract class Client extends contract {
                                                                 region_id?: string;
                                                                 city_id?: string;
                                                                 distinct_id?: string;
+                                                                city_id_v2?: string;
+                                                                district_id_v2?: string;
                                                                 local_address_line1?: string;
                                                                 local_address_line2?: string;
                                                                 local_address_line3?: string;
@@ -18587,6 +21306,8 @@ export default abstract class Client extends contract {
                                                                     region_id?: string;
                                                                     city_id?: string;
                                                                     distinct_id?: string;
+                                                                    city_id_v2?: string;
+                                                                    district_id_v2?: string;
                                                                     local_address_line1?: string;
                                                                     local_address_line2?: string;
                                                                     local_address_line3?: string;
@@ -18973,6 +21694,21 @@ export default abstract class Client extends contract {
                                                                 }>;
                                                             };
                                                         };
+                                                        service_company?: string;
+                                                        compensation_type?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        work_shift?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -19063,10 +21799,80 @@ export default abstract class Client extends contract {
                                         employee_type_id?: string;
                                         department_id?: string;
                                         job_level_id?: string;
+                                        job_level?: {
+                                            job_level_id?: string;
+                                            level_order: number;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
                                         job_grade_id?: string;
                                         work_location_id?: string;
                                         job_family_id?: string;
+                                        job_family?: {
+                                            job_family_id?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            parent_id?: string;
+                                            effective_time: string;
+                                            expiration_time?: string;
+                                            code?: string;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
                                         job_id?: string;
+                                        job?: {
+                                            id?: string;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            job_title?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            job_family_id_list?: Array<string>;
+                                            job_level_id_list?: Array<string>;
+                                            working_hours_type_id?: string;
+                                            effective_time: string;
+                                            expiration_time?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
                                         company_id?: string;
                                         working_hours_type_id?: string;
                                         tenure?: string;
@@ -19190,6 +21996,32 @@ export default abstract class Client extends contract {
                                             date_of_birth?: string;
                                             nationality_id?: string;
                                             nationality_id_v2?: string;
+                                            additional_nationalities?: Array<{
+                                                nationality_id?: string;
+                                                name?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                alpha_2_code?: string;
+                                                alpha_3_code?: string;
+                                                numeric_code?: number;
+                                                country_region_id?: string;
+                                                status?: number;
+                                            }>;
+                                            citizenship_status?: Array<{
+                                                id?: string;
+                                                country_region_id?: string;
+                                                active?: boolean;
+                                                name?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                citizenship_status?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                                view_order?: string;
+                                            }>;
                                             race?: {
                                                 enum_name: string;
                                                 display?: Array<{
@@ -19239,6 +22071,8 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                city_id_v2?: string;
+                                                district_id_v2?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -19561,6 +22395,8 @@ export default abstract class Client extends contract {
                                                     region_id?: string;
                                                     city_id?: string;
                                                     distinct_id?: string;
+                                                    city_id_v2?: string;
+                                                    district_id_v2?: string;
                                                     local_address_line1?: string;
                                                     local_address_line2?: string;
                                                     local_address_line3?: string;
@@ -19945,6 +22781,21 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                         };
+                                        service_company?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -20121,6 +22972,21 @@ export default abstract class Client extends contract {
                                                 cost_center_id?: string;
                                                 rate?: number;
                                             }>;
+                                            work_shift?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            compensation_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            service_company?: string;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
                                                 name?: {
@@ -20238,6 +23104,21 @@ export default abstract class Client extends contract {
                                                 cost_center_id?: string;
                                                 rate?: number;
                                             }>;
+                                            work_shift?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            compensation_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            service_company?: string;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
                                                 name?: {
@@ -20430,6 +23311,10 @@ export default abstract class Client extends contract {
                                 | "Cancelled"
                                 | "NoNeedApproval"
                             >;
+                            effective_date_start?: string;
+                            effective_date_end?: string;
+                            updated_time_start?: string;
+                            updated_time_end?: string;
                         };
                         params: {
                             page_size: number;
@@ -20600,6 +23485,10 @@ export default abstract class Client extends contract {
                                                             };
                                                             original_job_grade?: string;
                                                             target_job_grade?: string;
+                                                            original_compensation_type?: string;
+                                                            target_compensation_type?: string;
+                                                            original_service_company?: string;
+                                                            target_service_company?: string;
                                                         };
                                                     }>;
                                                     has_more?: boolean;
@@ -20643,6 +23532,10 @@ export default abstract class Client extends contract {
                                 | "Cancelled"
                                 | "NoNeedApproval"
                             >;
+                            effective_date_start?: string;
+                            effective_date_end?: string;
+                            updated_time_start?: string;
+                            updated_time_end?: string;
                         };
                         params: {
                             page_size: number;
@@ -20769,6 +23662,10 @@ export default abstract class Client extends contract {
                                             };
                                             original_job_grade?: string;
                                             target_job_grade?: string;
+                                            original_compensation_type?: string;
+                                            target_compensation_type?: string;
+                                            original_service_company?: string;
+                                            target_service_company?: string;
                                         };
                                     }>;
                                     has_more?: boolean;
@@ -20997,6 +23894,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -21105,6 +24004,7 @@ export default abstract class Client extends contract {
                             gender?: { enum_name: string };
                             date_of_birth?: string;
                             nationality_id?: string;
+                            nationality_id_v2?: string;
                             race?: { enum_name: string };
                             marital_status?: { enum_name: string };
                             phone_list?: Array<{
@@ -21117,6 +24017,8 @@ export default abstract class Client extends contract {
                                 region_id?: string;
                                 city_id?: string;
                                 distinct_id?: string;
+                                city_id_v2?: string;
+                                district_id_v2?: string;
                                 local_address_line1?: string;
                                 local_address_line2?: string;
                                 local_address_line3?: string;
@@ -21190,6 +24092,8 @@ export default abstract class Client extends contract {
                                 branch_name?: string;
                                 bank_id?: string;
                                 branch_id?: string;
+                                bank_id_v2?: string;
+                                branch_id_v2?: string;
                                 country_region_id?: string;
                                 bank_account_usage?: Array<{
                                     enum_name: string;
@@ -21218,6 +24122,7 @@ export default abstract class Client extends contract {
                                 gender?: { enum_name: string };
                                 date_of_birth?: string;
                                 nationality_id?: string;
+                                nationality_id_v2?: string;
                                 national_id_list?: Array<{
                                     national_id_type_id: string;
                                     national_id_number: string;
@@ -21252,6 +24157,8 @@ export default abstract class Client extends contract {
                                     region_id?: string;
                                     city_id?: string;
                                     distinct_id?: string;
+                                    city_id_v2?: string;
+                                    district_id_v2?: string;
                                     local_address_line1?: string;
                                     local_address_line2?: string;
                                     local_address_line3?: string;
@@ -21307,7 +24214,6 @@ export default abstract class Client extends contract {
                             }>;
                             date_entered_workforce?: string;
                             profile_image_id?: string;
-                            age?: number;
                             personal_profile?: Array<{
                                 personal_profile_id?: string;
                                 personal_profile_type?: { enum_name: string };
@@ -21468,6 +24374,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -21789,6 +24697,8 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                city_id_v2?: string;
+                                                district_id_v2?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -22130,6 +25040,7 @@ export default abstract class Client extends contract {
                             gender?: { enum_name: string };
                             date_of_birth?: string;
                             nationality_id?: string;
+                            nationality_id_v2?: string;
                             race?: { enum_name: string };
                             marital_status?: { enum_name: string };
                             phone_list?: Array<{
@@ -22142,6 +25053,8 @@ export default abstract class Client extends contract {
                                 region_id?: string;
                                 city_id?: string;
                                 distinct_id?: string;
+                                city_id_v2?: string;
+                                district_id_v2?: string;
                                 local_address_line1?: string;
                                 local_address_line2?: string;
                                 local_address_line3?: string;
@@ -22215,6 +25128,8 @@ export default abstract class Client extends contract {
                                 branch_name?: string;
                                 bank_id?: string;
                                 branch_id?: string;
+                                bank_id_v2?: string;
+                                branch_id_v2?: string;
                                 country_region_id?: string;
                                 bank_account_usage?: Array<{
                                     enum_name: string;
@@ -22243,6 +25158,7 @@ export default abstract class Client extends contract {
                                 gender?: { enum_name: string };
                                 date_of_birth?: string;
                                 nationality_id?: string;
+                                nationality_id_v2?: string;
                                 national_id_list?: Array<{
                                     national_id_type_id: string;
                                     national_id_number: string;
@@ -22277,6 +25193,8 @@ export default abstract class Client extends contract {
                                     region_id?: string;
                                     city_id?: string;
                                     distinct_id?: string;
+                                    city_id_v2?: string;
+                                    district_id_v2?: string;
                                     local_address_line1?: string;
                                     local_address_line2?: string;
                                     local_address_line3?: string;
@@ -22332,7 +25250,6 @@ export default abstract class Client extends contract {
                             }>;
                             date_entered_workforce?: string;
                             profile_image_id?: string;
-                            age?: number;
                             personal_profile?: Array<{
                                 personal_profile_id?: string;
                                 personal_profile_type?: { enum_name: string };
@@ -22364,7 +25281,10 @@ export default abstract class Client extends contract {
                             first_entry_time?: string;
                             leave_time?: string;
                         };
-                        params?: { client_token?: string };
+                        params?: {
+                            client_token?: string;
+                            no_need_query?: boolean;
+                        };
                         path?: { person_id?: string };
                     },
                     options?: IRequestOptions
@@ -22494,6 +25414,8 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -22815,6 +25737,8 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                city_id_v2?: string;
+                                                district_id_v2?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -23158,6 +26082,8 @@ export default abstract class Client extends contract {
                                 date_entered_workforce?: string;
                                 gender_id?: string;
                                 nationality_id?: string;
+                                additional_nationality_id_list?: Array<string>;
+                                citizenship_status_id_list?: Array<string>;
                                 home_address?: string;
                                 worker_id?: string;
                             };
@@ -23174,6 +26100,8 @@ export default abstract class Client extends contract {
                                 probation_end_date?: string;
                                 contract_start_date?: string;
                                 contract_end_date?: string;
+                                duration_period?: number;
+                                duration_unit?: string;
                                 onboarding_date?: string;
                                 onboarding_location_id?: string;
                                 office_location_id?: string;
@@ -23197,6 +26125,9 @@ export default abstract class Client extends contract {
                                     field_name: string;
                                     value: string;
                                 }>;
+                                service_company?: string;
+                                work_shift?: string;
+                                compensation_type?: string;
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -23780,6 +26711,284 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * process
+             */
+            process: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=process&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=corehr&resource=process&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { process_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    process_id?: string;
+                                    status?: number;
+                                    flow_template_id?: string;
+                                    flow_template_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    flow_definition_id?: string;
+                                    flow_definition_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    initiator_id?: string;
+                                    initiator_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    create_time?: string;
+                                    complete_time?: string;
+                                    start_links?: {
+                                        web_link?: string;
+                                        pc_link?: string;
+                                        mobile_link?: string;
+                                    };
+                                    abstracts?: Array<{
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        value?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    todos?: Array<{
+                                        approver_id?: string;
+                                        type?: number;
+                                        links?: {
+                                            web_link?: string;
+                                            pc_link?: string;
+                                            mobile_link?: string;
+                                        };
+                                        operator_id?: string;
+                                        operator_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        node_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                        node_definition_id?: string;
+                                    }>;
+                                    cc_list?: Array<{
+                                        approver_id?: string;
+                                        links?: {
+                                            web_link?: string;
+                                            pc_link?: string;
+                                            mobile_link?: string;
+                                        };
+                                        operator_id?: string;
+                                        operator_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        node_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                        node_definition_id?: string;
+                                    }>;
+                                    done_list?: Array<{
+                                        approver_id?: string;
+                                        type?: number;
+                                        status?: number;
+                                        links?: {
+                                            web_link?: string;
+                                            pc_link?: string;
+                                            mobile_link?: string;
+                                        };
+                                        operator_id?: string;
+                                        operator_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        node_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                        complete_time?: string;
+                                        node_definition_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/processes/:process_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            modify_time_to: string;
+                            statuses?: number;
+                            page_token?: string;
+                            page_size: number;
+                            modify_time_from: string;
+                            flow_definition_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/processes`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    process_ids?: Array<string>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=process&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=corehr&resource=process&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            modify_time_to: string;
+                            statuses?: number;
+                            page_token?: string;
+                            page_size: number;
+                            modify_time_from: string;
+                            flow_definition_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    process_ids?: Array<string>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/processes`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,

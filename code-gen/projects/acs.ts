@@ -309,6 +309,225 @@ export default abstract class Client {
             },
         },
         /**
+         * rule_external
+         */
+        ruleExternal: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        rule: {
+                            id?: string;
+                            name?: string;
+                            devices?: Array<{ id?: string; name?: string }>;
+                            user_count?: string;
+                            users?: Array<{
+                                user_type: number;
+                                user_id?: string;
+                                user_name?: string;
+                                phone_num?: string;
+                                department_id?: string;
+                            }>;
+                            visitor_count?: string;
+                            visitors?: Array<{
+                                user_type: number;
+                                user_id?: string;
+                                user_name?: string;
+                                phone_num?: string;
+                                department_id?: string;
+                            }>;
+                            remind_face?: boolean;
+                            opening_time?: {
+                                valid_day?: {
+                                    start_day: number;
+                                    end_day: number;
+                                };
+                                weekdays?: Array<number>;
+                                day_times?: Array<{
+                                    start_hhmm: number;
+                                    end_hhmm: number;
+                                }>;
+                            };
+                            is_temp?: boolean;
+                        };
+                    };
+                    params?: {
+                        rule_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { rule_id: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    params: { rule_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
+             */
+            deviceBind: async (
+                payload?: {
+                    data: { device_id: string; rule_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        device_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rules: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    devices?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
+                                    user_count?: string;
+                                    users?: Array<{
+                                        user_type: number;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        phone_num?: string;
+                                        department_id?: string;
+                                    }>;
+                                    visitor_count?: string;
+                                    visitors?: Array<{
+                                        user_type: number;
+                                        user_id?: string;
+                                        user_name?: string;
+                                        phone_num?: string;
+                                        department_id?: string;
+                                    }>;
+                                    remind_face?: boolean;
+                                    opening_time?: {
+                                        valid_day?: {
+                                            start_day: number;
+                                            end_day: number;
+                                        };
+                                        weekdays?: Array<number>;
+                                        day_times?: Array<{
+                                            start_hhmm: number;
+                                            end_hhmm: number;
+                                        }>;
+                                    };
+                                    is_temp?: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/rule_external`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user.face
          */
         userFace: {
@@ -661,6 +880,92 @@ export default abstract class Client {
                     });
             },
         },
+        /**
+         * visitor
+         */
+        visitor: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=visitor&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        user: {
+                            user_type: number;
+                            user_id?: string;
+                            user_name?: string;
+                            phone_num?: string;
+                            department_id?: string;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { visitor_id: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/visitors`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { visitor_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
              * access_record.access_photo
@@ -927,6 +1232,231 @@ export default abstract class Client {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/acs/v1/devices`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * rule_external
+             */
+            ruleExternal: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=rule_external&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            rule: {
+                                id?: string;
+                                name?: string;
+                                devices?: Array<{ id?: string; name?: string }>;
+                                user_count?: string;
+                                users?: Array<{
+                                    user_type: number;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    phone_num?: string;
+                                    department_id?: string;
+                                }>;
+                                visitor_count?: string;
+                                visitors?: Array<{
+                                    user_type: number;
+                                    user_id?: string;
+                                    user_name?: string;
+                                    phone_num?: string;
+                                    department_id?: string;
+                                }>;
+                                remind_face?: boolean;
+                                opening_time?: {
+                                    valid_day?: {
+                                        start_day: number;
+                                        end_day: number;
+                                    };
+                                    weekdays?: Array<number>;
+                                    day_times?: Array<{
+                                        start_hhmm: number;
+                                        end_hhmm: number;
+                                    }>;
+                                };
+                                is_temp?: boolean;
+                            };
+                        };
+                        params?: {
+                            rule_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { rule_id: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=rule_external&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        params: { rule_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=device_bind&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=device_bind&project=acs&resource=rule_external&version=v1 document }
+                 */
+                deviceBind: async (
+                    payload?: {
+                        data: { device_id: string; rule_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external/device_bind`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=rule_external&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=acs&resource=rule_external&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            device_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rules: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        devices?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
+                                        user_count?: string;
+                                        users?: Array<{
+                                            user_type: number;
+                                            user_id?: string;
+                                            user_name?: string;
+                                            phone_num?: string;
+                                            department_id?: string;
+                                        }>;
+                                        visitor_count?: string;
+                                        visitors?: Array<{
+                                            user_type: number;
+                                            user_id?: string;
+                                            user_name?: string;
+                                            phone_num?: string;
+                                            department_id?: string;
+                                        }>;
+                                        remind_face?: boolean;
+                                        opening_time?: {
+                                            valid_day?: {
+                                                start_day: number;
+                                                end_day: number;
+                                            };
+                                            weekdays?: Array<number>;
+                                            day_times?: Array<{
+                                                start_hhmm: number;
+                                                end_hhmm: number;
+                                            }>;
+                                        };
+                                        is_temp?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/rule_external`,
                                 path
                             ),
                             method: "GET",
@@ -1289,6 +1819,95 @@ export default abstract class Client {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * visitor
+             */
+            visitor: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=acs&resource=visitor&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            user: {
+                                user_type: number;
+                                user_id?: string;
+                                user_name?: string;
+                                phone_num?: string;
+                                department_id?: string;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { visitor_id: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/visitors`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=acs&resource=visitor&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=acs&resource=visitor&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { visitor_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/acs/v1/visitors/:visitor_id`,
+                                path
+                            ),
+                            method: "DELETE",
                             data,
                             params,
                             headers,

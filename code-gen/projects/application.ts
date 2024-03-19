@@ -577,7 +577,23 @@ export default abstract class Client extends admin {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
@@ -676,6 +692,11 @@ export default abstract class Client extends admin {
                                             };
                                         };
                                     };
+                                    event_infos?: Array<{
+                                        event_type?: string;
+                                        event_name?: string;
+                                        event_description?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -778,7 +799,20 @@ export default abstract class Client extends admin {
                                                         i18n_key:
                                                             | "zh_cn"
                                                             | "en_us"
-                                                            | "ja_jp";
+                                                            | "ja_jp"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "id_id"
+                                                            | "ms_my"
+                                                            | "de_de"
+                                                            | "es_es"
+                                                            | "fr_fr"
+                                                            | "it_it"
+                                                            | "pt_br"
+                                                            | "vi_vn"
+                                                            | "ru_ru"
+                                                            | "th_th"
+                                                            | "ko_kr";
                                                         name?: string;
                                                         description?: string;
                                                         help_use?: string;
@@ -879,6 +913,11 @@ export default abstract class Client extends admin {
                                                             };
                                                         };
                                                     };
+                                                    event_infos?: Array<{
+                                                        event_type?: string;
+                                                        event_name?: string;
+                                                        event_description?: string;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -947,7 +986,23 @@ export default abstract class Client extends admin {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
@@ -1046,6 +1101,11 @@ export default abstract class Client extends admin {
                                             };
                                         };
                                     };
+                                    event_infos?: Array<{
+                                        event_type?: string;
+                                        event_name?: string;
+                                        event_description?: string;
+                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1262,7 +1322,13 @@ export default abstract class Client extends admin {
                                     status?: number;
                                     scene_type?: number;
                                     payment_type?: number;
-                                    create_source?: string;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
                                     redirect_urls?: Array<string>;
                                     online_version_id?: string;
                                     unaudit_version_id?: string;
@@ -1276,7 +1342,23 @@ export default abstract class Client extends admin {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
@@ -1293,7 +1375,16 @@ export default abstract class Client extends admin {
                                         help_desk?: string;
                                         email?: string;
                                         phone?: string;
+                                        customer_service_account?: string;
                                     };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
                                 };
                             };
                         }
@@ -1419,7 +1510,13 @@ export default abstract class Client extends admin {
                                                     status?: number;
                                                     scene_type?: number;
                                                     payment_type?: number;
-                                                    create_source?: string;
+                                                    create_source?:
+                                                        | "developer_console"
+                                                        | "base"
+                                                        | "app_engine"
+                                                        | "bot_builder"
+                                                        | "aily"
+                                                        | "unknown";
                                                     redirect_urls?: Array<string>;
                                                     online_version_id?: string;
                                                     unaudit_version_id?: string;
@@ -1436,7 +1533,20 @@ export default abstract class Client extends admin {
                                                         i18n_key:
                                                             | "zh_cn"
                                                             | "en_us"
-                                                            | "ja_jp";
+                                                            | "ja_jp"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "id_id"
+                                                            | "ms_my"
+                                                            | "de_de"
+                                                            | "es_es"
+                                                            | "fr_fr"
+                                                            | "it_it"
+                                                            | "pt_br"
+                                                            | "vi_vn"
+                                                            | "ru_ru"
+                                                            | "th_th"
+                                                            | "ko_kr";
                                                         name?: string;
                                                         description?: string;
                                                         help_use?: string;
@@ -1453,7 +1563,16 @@ export default abstract class Client extends admin {
                                                         help_desk?: string;
                                                         email?: string;
                                                         phone?: string;
+                                                        customer_service_account?: string;
                                                     };
+                                                    mobile_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    pc_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
                                                 }>;
                                                 has_more: boolean;
                                                 page_token?: string;
@@ -1512,7 +1631,13 @@ export default abstract class Client extends admin {
                                     status?: number;
                                     scene_type?: number;
                                     payment_type?: number;
-                                    create_source?: string;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
                                     redirect_urls?: Array<string>;
                                     online_version_id?: string;
                                     unaudit_version_id?: string;
@@ -1526,7 +1651,23 @@ export default abstract class Client extends admin {
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
-                                        i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
                                         name?: string;
                                         description?: string;
                                         help_use?: string;
@@ -1543,7 +1684,16 @@ export default abstract class Client extends admin {
                                         help_desk?: string;
                                         email?: string;
                                         phone?: string;
+                                        customer_service_account?: string;
                                     };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
                                 }>;
                                 has_more: boolean;
                                 page_token?: string;
@@ -1670,6 +1820,42 @@ export default abstract class Client extends admin {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * application.management
+         */
+        applicationManagement: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
+             */
+            update: async (
+                payload?: {
+                    data?: { enable?: boolean };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -2364,7 +2550,20 @@ export default abstract class Client extends admin {
                                             i18n_key:
                                                 | "zh_cn"
                                                 | "en_us"
-                                                | "ja_jp";
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
                                             name?: string;
                                             description?: string;
                                             help_use?: string;
@@ -2463,6 +2662,11 @@ export default abstract class Client extends admin {
                                                 };
                                             };
                                         };
+                                        event_infos?: Array<{
+                                            event_type?: string;
+                                            event_name?: string;
+                                            event_description?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -2565,7 +2769,20 @@ export default abstract class Client extends admin {
                                                             i18n_key:
                                                                 | "zh_cn"
                                                                 | "en_us"
-                                                                | "ja_jp";
+                                                                | "ja_jp"
+                                                                | "zh_hk"
+                                                                | "zh_tw"
+                                                                | "id_id"
+                                                                | "ms_my"
+                                                                | "de_de"
+                                                                | "es_es"
+                                                                | "fr_fr"
+                                                                | "it_it"
+                                                                | "pt_br"
+                                                                | "vi_vn"
+                                                                | "ru_ru"
+                                                                | "th_th"
+                                                                | "ko_kr";
                                                             name?: string;
                                                             description?: string;
                                                             help_use?: string;
@@ -2666,6 +2883,11 @@ export default abstract class Client extends admin {
                                                                 };
                                                             };
                                                         };
+                                                        event_infos?: Array<{
+                                                            event_type?: string;
+                                                            event_name?: string;
+                                                            event_description?: string;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -2737,7 +2959,20 @@ export default abstract class Client extends admin {
                                             i18n_key:
                                                 | "zh_cn"
                                                 | "en_us"
-                                                | "ja_jp";
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
                                             name?: string;
                                             description?: string;
                                             help_use?: string;
@@ -2836,6 +3071,11 @@ export default abstract class Client extends admin {
                                                 };
                                             };
                                         };
+                                        event_infos?: Array<{
+                                            event_type?: string;
+                                            event_name?: string;
+                                            event_description?: string;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -3058,7 +3298,13 @@ export default abstract class Client extends admin {
                                         status?: number;
                                         scene_type?: number;
                                         payment_type?: number;
-                                        create_source?: string;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
                                         redirect_urls?: Array<string>;
                                         online_version_id?: string;
                                         unaudit_version_id?: string;
@@ -3075,7 +3321,20 @@ export default abstract class Client extends admin {
                                             i18n_key:
                                                 | "zh_cn"
                                                 | "en_us"
-                                                | "ja_jp";
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
                                             name?: string;
                                             description?: string;
                                             help_use?: string;
@@ -3092,7 +3351,16 @@ export default abstract class Client extends admin {
                                             help_desk?: string;
                                             email?: string;
                                             phone?: string;
+                                            customer_service_account?: string;
                                         };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
                                     };
                                 };
                             }
@@ -3221,7 +3489,13 @@ export default abstract class Client extends admin {
                                                         status?: number;
                                                         scene_type?: number;
                                                         payment_type?: number;
-                                                        create_source?: string;
+                                                        create_source?:
+                                                            | "developer_console"
+                                                            | "base"
+                                                            | "app_engine"
+                                                            | "bot_builder"
+                                                            | "aily"
+                                                            | "unknown";
                                                         redirect_urls?: Array<string>;
                                                         online_version_id?: string;
                                                         unaudit_version_id?: string;
@@ -3238,7 +3512,20 @@ export default abstract class Client extends admin {
                                                             i18n_key:
                                                                 | "zh_cn"
                                                                 | "en_us"
-                                                                | "ja_jp";
+                                                                | "ja_jp"
+                                                                | "zh_hk"
+                                                                | "zh_tw"
+                                                                | "id_id"
+                                                                | "ms_my"
+                                                                | "de_de"
+                                                                | "es_es"
+                                                                | "fr_fr"
+                                                                | "it_it"
+                                                                | "pt_br"
+                                                                | "vi_vn"
+                                                                | "ru_ru"
+                                                                | "th_th"
+                                                                | "ko_kr";
                                                             name?: string;
                                                             description?: string;
                                                             help_use?: string;
@@ -3255,7 +3542,16 @@ export default abstract class Client extends admin {
                                                             help_desk?: string;
                                                             email?: string;
                                                             phone?: string;
+                                                            customer_service_account?: string;
                                                         };
+                                                        mobile_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        pc_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
                                                     }>;
                                                     has_more: boolean;
                                                     page_token?: string;
@@ -3314,7 +3610,13 @@ export default abstract class Client extends admin {
                                         status?: number;
                                         scene_type?: number;
                                         payment_type?: number;
-                                        create_source?: string;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
                                         redirect_urls?: Array<string>;
                                         online_version_id?: string;
                                         unaudit_version_id?: string;
@@ -3331,7 +3633,20 @@ export default abstract class Client extends admin {
                                             i18n_key:
                                                 | "zh_cn"
                                                 | "en_us"
-                                                | "ja_jp";
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
                                             name?: string;
                                             description?: string;
                                             help_use?: string;
@@ -3348,7 +3663,16 @@ export default abstract class Client extends admin {
                                             help_desk?: string;
                                             email?: string;
                                             phone?: string;
+                                            customer_service_account?: string;
                                         };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
                                     }>;
                                     has_more: boolean;
                                     page_token?: string;
@@ -3478,6 +3802,45 @@ export default abstract class Client extends admin {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.management
+             */
+            applicationManagement: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.management&version=v6 document }
+                 */
+                update: async (
+                    payload?: {
+                        data?: { enable?: boolean };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,

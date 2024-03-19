@@ -220,6 +220,51 @@ export default abstract class Client extends moments {
          */
         period: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/create document }
+             *
+             * 创建 OKR 周期
+             *
+             * 根据周期规则创建一个 OKR 周期
+             */
+            create: async (
+                payload?: {
+                    data: { period_rule_id: string; start_month: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                period_id?: string;
+                                start_month?: string;
+                                end_month?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/periods`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/list document }
@@ -261,6 +306,96 @@ export default abstract class Client extends moments {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/okr/v1/periods`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/patch document }
+             *
+             * 修改 OKR 周期状态
+             *
+             * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
+             */
+            patch: async (
+                payload?: {
+                    data: { status: number };
+                    path: { period_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { period_id?: string; status?: number };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/periods/:period_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 周期规则
+         */
+        periodRule: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period_rule&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period_rule/list document }
+             *
+             * 获取 OKR 周期规则
+             *
+             * 获取租户的周期规则列表
+             */
+            list: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                period_rules?: Array<{
+                                    period_rule_id?: string;
+                                    type?: string;
+                                    length?: number;
+                                    first_month?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/period_rules`,
                             path
                         ),
                         method: "GET",
@@ -1076,6 +1211,51 @@ export default abstract class Client extends moments {
              */
             period: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/create document }
+                 *
+                 * 创建 OKR 周期
+                 *
+                 * 根据周期规则创建一个 OKR 周期
+                 */
+                create: async (
+                    payload?: {
+                        data: { period_rule_id: string; start_month: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    period_id?: string;
+                                    start_month?: string;
+                                    end_month?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/periods`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/list document }
@@ -1117,6 +1297,96 @@ export default abstract class Client extends moments {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/okr/v1/periods`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period/patch document }
+                 *
+                 * 修改 OKR 周期状态
+                 *
+                 * 修改某个 OKR 周期的状态为「正常」、「失效」或「隐藏」，对租户所有人生效，请谨慎操作
+                 */
+                patch: async (
+                    payload?: {
+                        data: { status: number };
+                        path: { period_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { period_id?: string; status?: number };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/periods/:period_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 周期规则
+             */
+            periodRule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=period_rule&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/period_rule/list document }
+                 *
+                 * 获取 OKR 周期规则
+                 *
+                 * 获取租户的周期规则列表
+                 */
+                list: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    period_rules?: Array<{
+                                        period_rule_id?: string;
+                                        type?: string;
+                                        length?: number;
+                                        first_month?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/period_rules`,
                                 path
                             ),
                             method: "GET",

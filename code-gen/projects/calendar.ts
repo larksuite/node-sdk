@@ -8,10 +8,10 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
-import block from "./block";
+import board from "./board";
 
 // auto gen
-export default abstract class Client extends block {
+export default abstract class Client extends board {
     declare tokenManager;
 
     declare domain;
@@ -1875,6 +1875,11 @@ export default abstract class Client extends block {
                                             | "unknown";
                                         app_link?: string;
                                     }>;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    app_link?: string;
                                 };
                             };
                         }
@@ -1945,6 +1950,8 @@ export default abstract class Client extends block {
                 payload?: {
                     params?: {
                         need_meeting_settings?: boolean;
+                        need_attendee?: boolean;
+                        max_attendee_num?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { calendar_id: string; event_id: string };
@@ -2038,12 +2045,281 @@ export default abstract class Client extends block {
                                             | "unknown";
                                         app_link?: string;
                                     }>;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    app_link?: string;
+                                    attendees?: Array<{
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "resource"
+                                            | "third_party";
+                                        attendee_id?: string;
+                                        rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
+                                        is_optional?: boolean;
+                                        is_organizer?: boolean;
+                                        is_external?: boolean;
+                                        display_name?: string;
+                                        chat_members?: Array<{
+                                            rsvp_status?:
+                                                | "needs_action"
+                                                | "accept"
+                                                | "tentative"
+                                                | "decline"
+                                                | "removed";
+                                            is_optional?: boolean;
+                                            display_name?: string;
+                                            is_organizer?: boolean;
+                                            is_external?: boolean;
+                                        }>;
+                                        user_id?: string;
+                                        chat_id?: string;
+                                        room_id?: string;
+                                        third_party_email?: string;
+                                        operate_id?: string;
+                                        resource_customization?: Array<{
+                                            index_key: string;
+                                            input_content?: string;
+                                            options?: Array<{
+                                                option_key?: string;
+                                                others_content?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    has_more_attendee?: boolean;
                                 };
                             };
                         }
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=instance_view&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=instance_view&project=calendar&resource=calendar.event&version=v4 document }
+             */
+            instanceView: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { calendar_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    event_id: string;
+                                    summary?: string;
+                                    description?: string;
+                                    start_time?: {
+                                        date?: string;
+                                        timestamp?: string;
+                                        timezone?: string;
+                                    };
+                                    end_time?: {
+                                        date?: string;
+                                        timestamp?: string;
+                                        timezone?: string;
+                                    };
+                                    status?:
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
+                                    is_exception?: boolean;
+                                    app_link?: string;
+                                    organizer_calendar_id?: string;
+                                    vchat?: {
+                                        vc_type?:
+                                            | "vc"
+                                            | "third_party"
+                                            | "no_meeting"
+                                            | "lark_live"
+                                            | "unknown";
+                                        icon_type?: "vc" | "live" | "default";
+                                        description?: string;
+                                        meeting_url?: string;
+                                        live_link?: string;
+                                        vc_info?: {
+                                            unique_id: string;
+                                            meeting_no: string;
+                                        };
+                                    };
+                                    visibility?:
+                                        | "default"
+                                        | "public"
+                                        | "private";
+                                    attendee_ability?:
+                                        | "none"
+                                        | "can_see_others"
+                                        | "can_invite_others"
+                                        | "can_modify_event";
+                                    free_busy_status?: "busy" | "free";
+                                    location?: {
+                                        name?: string;
+                                        address?: string;
+                                        latitude?: number;
+                                        longitude?: number;
+                                    };
+                                    color?: number;
+                                    recurring_event_id?: string;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    attendees?: Array<{
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "resource"
+                                            | "third_party";
+                                        attendee_id?: string;
+                                        rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
+                                        is_optional?: boolean;
+                                        is_organizer?: boolean;
+                                        is_external?: boolean;
+                                        display_name?: string;
+                                        chat_members?: Array<{
+                                            rsvp_status?:
+                                                | "needs_action"
+                                                | "accept"
+                                                | "tentative"
+                                                | "decline"
+                                                | "removed";
+                                            is_optional?: boolean;
+                                            display_name?: string;
+                                            is_organizer?: boolean;
+                                            is_external?: boolean;
+                                        }>;
+                                        user_id?: string;
+                                        chat_id?: string;
+                                        room_id?: string;
+                                        third_party_email?: string;
+                                        operate_id?: string;
+                                        resource_customization?: Array<{
+                                            index_key: string;
+                                            input_content?: string;
+                                            options?: Array<{
+                                                option_key?: string;
+                                                others_content?: string;
+                                            }>;
+                                        }>;
+                                        approval_reason?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/instance_view`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=instances&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=instances&project=calendar&resource=calendar.event&version=v4 document }
+             */
+            instances: async (
+                payload?: {
+                    params: {
+                        start_time: string;
+                        end_time: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                    path: { calendar_id: string; event_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    event_id: string;
+                                    summary?: string;
+                                    description?: string;
+                                    start_time?: {
+                                        date?: string;
+                                        timestamp?: string;
+                                        timezone?: string;
+                                    };
+                                    end_time?: {
+                                        date?: string;
+                                        timestamp?: string;
+                                        timezone?: string;
+                                    };
+                                    status?:
+                                        | "tentative"
+                                        | "confirmed"
+                                        | "cancelled";
+                                    is_exception?: boolean;
+                                    app_link?: string;
+                                    location?: {
+                                        name?: string;
+                                        address?: string;
+                                        latitude?: number;
+                                        longitude?: number;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/instances`,
                             path
                         ),
                         method: "GET",
@@ -2076,6 +2352,7 @@ export default abstract class Client extends block {
                         sync_token?: string;
                         start_time?: string;
                         end_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { calendar_id: string };
                 },
@@ -2160,6 +2437,11 @@ export default abstract class Client extends block {
                                             | "unknown";
                                         app_link?: string;
                                     }>;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    app_link?: string;
                                 }>;
                             };
                         }
@@ -2350,6 +2632,11 @@ export default abstract class Client extends block {
                                             | "unknown";
                                         app_link?: string;
                                     }>;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    app_link?: string;
                                 };
                             };
                         }
@@ -2359,6 +2646,37 @@ export default abstract class Client extends block {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=reply&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=calendar&resource=calendar.event&version=v4 document }
+             */
+            reply: async (
+                payload?: {
+                    data: { rsvp_status: "accept" | "decline" | "tentative" };
+                    path: { calendar_id: string; event_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/reply`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -2495,6 +2813,11 @@ export default abstract class Client extends block {
                                                         | "cancelled";
                                                     is_exception?: boolean;
                                                     recurring_event_id?: string;
+                                                    event_organizer?: {
+                                                        user_id?: string;
+                                                        display_name?: string;
+                                                    };
+                                                    app_link?: string;
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -2606,6 +2929,11 @@ export default abstract class Client extends block {
                                         | "cancelled";
                                     is_exception?: boolean;
                                     recurring_event_id?: string;
+                                    event_organizer?: {
+                                        user_id?: string;
+                                        display_name?: string;
+                                    };
+                                    app_link?: string;
                                 }>;
                                 page_token?: string;
                             };
@@ -5035,6 +5363,11 @@ export default abstract class Client extends block {
                                                 | "unknown";
                                             app_link?: string;
                                         }>;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        app_link?: string;
                                     };
                                 };
                             }
@@ -5108,6 +5441,8 @@ export default abstract class Client extends block {
                     payload?: {
                         params?: {
                             need_meeting_settings?: boolean;
+                            need_attendee?: boolean;
+                            max_attendee_num?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { calendar_id: string; event_id: string };
@@ -5204,12 +5539,284 @@ export default abstract class Client extends block {
                                                 | "unknown";
                                             app_link?: string;
                                         }>;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        app_link?: string;
+                                        attendees?: Array<{
+                                            type?:
+                                                | "user"
+                                                | "chat"
+                                                | "resource"
+                                                | "third_party";
+                                            attendee_id?: string;
+                                            rsvp_status?:
+                                                | "needs_action"
+                                                | "accept"
+                                                | "tentative"
+                                                | "decline"
+                                                | "removed";
+                                            is_optional?: boolean;
+                                            is_organizer?: boolean;
+                                            is_external?: boolean;
+                                            display_name?: string;
+                                            chat_members?: Array<{
+                                                rsvp_status?:
+                                                    | "needs_action"
+                                                    | "accept"
+                                                    | "tentative"
+                                                    | "decline"
+                                                    | "removed";
+                                                is_optional?: boolean;
+                                                display_name?: string;
+                                                is_organizer?: boolean;
+                                                is_external?: boolean;
+                                            }>;
+                                            user_id?: string;
+                                            chat_id?: string;
+                                            room_id?: string;
+                                            third_party_email?: string;
+                                            operate_id?: string;
+                                            resource_customization?: Array<{
+                                                index_key: string;
+                                                input_content?: string;
+                                                options?: Array<{
+                                                    option_key?: string;
+                                                    others_content?: string;
+                                                }>;
+                                            }>;
+                                        }>;
+                                        has_more_attendee?: boolean;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=instance_view&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=instance_view&project=calendar&resource=calendar.event&version=v4 document }
+                 */
+                instanceView: async (
+                    payload?: {
+                        params: {
+                            start_time: string;
+                            end_time: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { calendar_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        event_id: string;
+                                        summary?: string;
+                                        description?: string;
+                                        start_time?: {
+                                            date?: string;
+                                            timestamp?: string;
+                                            timezone?: string;
+                                        };
+                                        end_time?: {
+                                            date?: string;
+                                            timestamp?: string;
+                                            timezone?: string;
+                                        };
+                                        status?:
+                                            | "tentative"
+                                            | "confirmed"
+                                            | "cancelled";
+                                        is_exception?: boolean;
+                                        app_link?: string;
+                                        organizer_calendar_id?: string;
+                                        vchat?: {
+                                            vc_type?:
+                                                | "vc"
+                                                | "third_party"
+                                                | "no_meeting"
+                                                | "lark_live"
+                                                | "unknown";
+                                            icon_type?:
+                                                | "vc"
+                                                | "live"
+                                                | "default";
+                                            description?: string;
+                                            meeting_url?: string;
+                                            live_link?: string;
+                                            vc_info?: {
+                                                unique_id: string;
+                                                meeting_no: string;
+                                            };
+                                        };
+                                        visibility?:
+                                            | "default"
+                                            | "public"
+                                            | "private";
+                                        attendee_ability?:
+                                            | "none"
+                                            | "can_see_others"
+                                            | "can_invite_others"
+                                            | "can_modify_event";
+                                        free_busy_status?: "busy" | "free";
+                                        location?: {
+                                            name?: string;
+                                            address?: string;
+                                            latitude?: number;
+                                            longitude?: number;
+                                        };
+                                        color?: number;
+                                        recurring_event_id?: string;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        attendees?: Array<{
+                                            type?:
+                                                | "user"
+                                                | "chat"
+                                                | "resource"
+                                                | "third_party";
+                                            attendee_id?: string;
+                                            rsvp_status?:
+                                                | "needs_action"
+                                                | "accept"
+                                                | "tentative"
+                                                | "decline"
+                                                | "removed";
+                                            is_optional?: boolean;
+                                            is_organizer?: boolean;
+                                            is_external?: boolean;
+                                            display_name?: string;
+                                            chat_members?: Array<{
+                                                rsvp_status?:
+                                                    | "needs_action"
+                                                    | "accept"
+                                                    | "tentative"
+                                                    | "decline"
+                                                    | "removed";
+                                                is_optional?: boolean;
+                                                display_name?: string;
+                                                is_organizer?: boolean;
+                                                is_external?: boolean;
+                                            }>;
+                                            user_id?: string;
+                                            chat_id?: string;
+                                            room_id?: string;
+                                            third_party_email?: string;
+                                            operate_id?: string;
+                                            resource_customization?: Array<{
+                                                index_key: string;
+                                                input_content?: string;
+                                                options?: Array<{
+                                                    option_key?: string;
+                                                    others_content?: string;
+                                                }>;
+                                            }>;
+                                            approval_reason?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/instance_view`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=instances&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=instances&project=calendar&resource=calendar.event&version=v4 document }
+                 */
+                instances: async (
+                    payload?: {
+                        params: {
+                            start_time: string;
+                            end_time: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                        path: { calendar_id: string; event_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        event_id: string;
+                                        summary?: string;
+                                        description?: string;
+                                        start_time?: {
+                                            date?: string;
+                                            timestamp?: string;
+                                            timezone?: string;
+                                        };
+                                        end_time?: {
+                                            date?: string;
+                                            timestamp?: string;
+                                            timezone?: string;
+                                        };
+                                        status?:
+                                            | "tentative"
+                                            | "confirmed"
+                                            | "cancelled";
+                                        is_exception?: boolean;
+                                        app_link?: string;
+                                        location?: {
+                                            name?: string;
+                                            address?: string;
+                                            latitude?: number;
+                                            longitude?: number;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/instances`,
                                 path
                             ),
                             method: "GET",
@@ -5242,6 +5849,7 @@ export default abstract class Client extends block {
                             sync_token?: string;
                             start_time?: string;
                             end_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { calendar_id: string };
                     },
@@ -5329,6 +5937,11 @@ export default abstract class Client extends block {
                                                 | "unknown";
                                             app_link?: string;
                                         }>;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        app_link?: string;
                                     }>;
                                 };
                             }
@@ -5525,6 +6138,11 @@ export default abstract class Client extends block {
                                                 | "unknown";
                                             app_link?: string;
                                         }>;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        app_link?: string;
                                     };
                                 };
                             }
@@ -5534,6 +6152,42 @@ export default abstract class Client extends block {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event&apiName=reply&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reply&project=calendar&resource=calendar.event&version=v4 document }
+                 */
+                reply: async (
+                    payload?: {
+                        data: {
+                            rsvp_status: "accept" | "decline" | "tentative";
+                        };
+                        path: { calendar_id: string; event_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/reply`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -5670,6 +6324,11 @@ export default abstract class Client extends block {
                                                             | "cancelled";
                                                         is_exception?: boolean;
                                                         recurring_event_id?: string;
+                                                        event_organizer?: {
+                                                            user_id?: string;
+                                                            display_name?: string;
+                                                        };
+                                                        app_link?: string;
                                                     }>;
                                                     page_token?: string;
                                                 };
@@ -5781,6 +6440,11 @@ export default abstract class Client extends block {
                                             | "cancelled";
                                         is_exception?: boolean;
                                         recurring_event_id?: string;
+                                        event_organizer?: {
+                                            user_id?: string;
+                                            display_name?: string;
+                                        };
+                                        app_link?: string;
                                     }>;
                                     page_token?: string;
                                 };

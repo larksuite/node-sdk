@@ -88,7 +88,10 @@ export default abstract class Client extends helpdesk {
              */
             get: async (
                 payload?: {
-                    params?: { options?: number };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        options?: number;
+                    };
                     path: { application_id: string };
                 },
                 options?: IRequestOptions
@@ -156,6 +159,7 @@ export default abstract class Client extends helpdesk {
                                             en_us?: string;
                                         };
                                     }>;
+                                    creator_id?: string;
                                 };
                             };
                         }
@@ -245,6 +249,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path: { application_id: string };
                 },
@@ -487,6 +500,15 @@ export default abstract class Client extends helpdesk {
                             | "open_department_id"
                             | "department_id"
                             | "people_admin_department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path: { application_id: string };
                 },
@@ -556,6 +578,9 @@ export default abstract class Client extends helpdesk {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
                     };
                     path: { application_id: string };
                 },
@@ -1016,6 +1041,7 @@ export default abstract class Client extends helpdesk {
                         stage_en_name?: string;
                         stage_name: string;
                         stage_time: string;
+                        result?: string;
                         report_file_list?: Array<{
                             report_name: string;
                             report_url: string;
@@ -1642,6 +1668,15 @@ export default abstract class Client extends helpdesk {
                             | "open_department_id"
                             | "department_id"
                             | "people_admin_department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path: { employee_id: string };
                 },
@@ -1709,6 +1744,15 @@ export default abstract class Client extends helpdesk {
                             | "open_department_id"
                             | "department_id"
                             | "people_admin_department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -1782,6 +1826,15 @@ export default abstract class Client extends helpdesk {
                             | "open_department_id"
                             | "department_id"
                             | "people_admin_department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path: { employee_id: string };
                 },
@@ -2433,6 +2486,9 @@ export default abstract class Client extends helpdesk {
                         interview_id?: string;
                         start_time?: string;
                         end_time?: string;
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -2770,6 +2826,12 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
                     };
                 },
                 options?: IRequestOptions
@@ -3000,6 +3062,12 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
                     };
                     path: { job_id: string };
                 },
@@ -3344,6 +3412,12 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
                     };
                     path: { job_id: string };
                 },
@@ -3490,6 +3564,207 @@ export default abstract class Client extends helpdesk {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/jobs/:job_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/list document }
+             *
+             * 获取职位列表
+             *
+             * 根据更新时间获取职位列表，仅支持获取默认字段信息，获取详细信息可调用[获取职位详细](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get)接口
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    title?: string;
+                                    description?: string;
+                                    code?: string;
+                                    requirement?: string;
+                                    recruitment_type?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    department?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    city?: {
+                                        city_code?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    highlight_list?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    }>;
+                                    job_category?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                        active_status?: number;
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    };
+                                    active_status?: number;
+                                    create_user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    process_type?: number;
+                                    process_id?: string;
+                                    process_name?: string;
+                                    process_en_name?: string;
+                                    job_function?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    subject?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    head_count?: number;
+                                    experience?: number;
+                                    expiry_time?: number;
+                                    min_salary?: number;
+                                    max_salary?: number;
+                                    required_degree?: number;
+                                    city_list?: Array<{
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    job_attribute?: number;
+                                    create_timestamp?: string;
+                                    update_timestamp?: string;
+                                    expiry_timestamp?: string;
+                                    target_major_list?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=recruiter&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recruiter&project=hire&resource=job&version=v1 document }
+             */
+            recruiter: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                info?: {
+                                    id?: string;
+                                    recruiter_id?: string;
+                                    hiring_manager_id_list?: Array<string>;
+                                    assistant_id_list?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/recruiter`,
                             path
                         ),
                         method: "GET",
@@ -3852,6 +4127,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4066,6 +4350,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4240,6 +4533,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -4442,6 +4744,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path: { job_requirement_id: string };
                 },
@@ -5040,6 +5351,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -5132,6 +5452,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path?: { offer_id?: string };
                 },
@@ -5392,6 +5721,9 @@ export default abstract class Client extends helpdesk {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                 },
                 options?: IRequestOptions
@@ -5537,6 +5869,15 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                        employee_type_id_type?:
+                            | "people_admin_employee_type_id"
+                            | "employee_type_enum_id";
                     };
                     path?: { offer_id?: string };
                 },
@@ -5857,9 +6198,21 @@ export default abstract class Client extends helpdesk {
                                     account_id: string;
                                     assets?: {
                                         confirmed_bonus?: {
+                                            bonus_type?: number;
                                             point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
                                         };
-                                        paid_bonus?: { point_bonus?: number };
+                                        paid_bonus?: {
+                                            bonus_type?: number;
+                                            point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
+                                        };
                                     };
                                     status?: number;
                                 };
@@ -5905,9 +6258,21 @@ export default abstract class Client extends helpdesk {
                                     account_id: string;
                                     assets?: {
                                         confirmed_bonus?: {
+                                            bonus_type?: number;
                                             point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
                                         };
-                                        paid_bonus?: { point_bonus?: number };
+                                        paid_bonus?: {
+                                            bonus_type?: number;
+                                            point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
+                                        };
                                     };
                                     status?: number;
                                 };
@@ -5941,7 +6306,12 @@ export default abstract class Client extends helpdesk {
                         trade_details?: Array<{
                             account_id: string;
                             total_recharge_reward_info?: {
+                                bonus_type?: number;
                                 point_bonus?: number;
+                                cash?: {
+                                    currency_type: string;
+                                    amount: number;
+                                };
                             };
                         }>;
                     };
@@ -5961,10 +6331,20 @@ export default abstract class Client extends helpdesk {
                                 check_failed_list?: Array<{
                                     account_id?: string;
                                     total_withdraw_reward_info?: {
+                                        bonus_type?: number;
                                         point_bonus?: number;
+                                        cash?: {
+                                            currency_type: string;
+                                            amount: number;
+                                        };
                                     };
                                     total_recharge_reward_info?: {
+                                        bonus_type?: number;
                                         point_bonus?: number;
+                                        cash?: {
+                                            currency_type: string;
+                                            amount: number;
+                                        };
                                     };
                                 }>;
                             };
@@ -6011,7 +6391,14 @@ export default abstract class Client extends helpdesk {
                             data?: {
                                 external_order_id?: string;
                                 trans_time?: string;
-                                withdrawal_details?: { point_bonus?: number };
+                                withdrawal_details?: {
+                                    bonus_type?: number;
+                                    point_bonus?: number;
+                                    cash?: {
+                                        currency_type: string;
+                                        amount: number;
+                                    };
+                                };
                             };
                         }
                     >({
@@ -6048,6 +6435,9 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
                     };
                     path: { job_post_id: string };
                 },
@@ -6272,6 +6662,9 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
                     };
                 },
                 options?: IRequestOptions
@@ -6543,6 +6936,9 @@ export default abstract class Client extends helpdesk {
                         department_id_type?:
                             | "open_department_id"
                             | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
                     };
                 },
                 options?: IRequestOptions
@@ -7383,7 +7779,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7399,6 +7795,7 @@ export default abstract class Client extends helpdesk {
                                         field_of_study?: string;
                                         start_time?: string;
                                         end_time?: string;
+                                        end_time_v2?: string;
                                         education_type?: number;
                                         academic_ranking?: number;
                                         tag_list?: Array<number>;
@@ -7433,7 +7830,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7480,7 +7877,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7526,7 +7923,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7569,7 +7966,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7612,7 +8009,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7654,7 +8051,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7696,7 +8093,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7758,7 +8155,7 @@ export default abstract class Client extends helpdesk {
                                                 number?: string;
                                                 customized_attachment?: Array<{
                                                     file_id?: string;
-                                                    file_name?: string;
+                                                    name?: string;
                                                     content_type?: string;
                                                     file_size?: number;
                                                 }>;
@@ -7773,6 +8170,172 @@ export default abstract class Client extends helpdesk {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/talents/:talent_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/list document }
+             *
+             * 获取人才列表
+             *
+             * 根据更新时间获取人才列表，仅支持获取默认字段信息，获取详细信息可调用「获取人才详细」接口
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                        query_option?: "ignore_empty_error";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    is_in_agency_period?: boolean;
+                                    is_onboarded?: boolean;
+                                    basic_info?: {
+                                        name: string;
+                                        mobile?: string;
+                                        mobile_code?: string;
+                                        mobile_country_code?: string;
+                                        email?: string;
+                                        experience_years?: number;
+                                        age?: number;
+                                        nationality?: {
+                                            nationality_code?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        gender?: number;
+                                        current_city?: {
+                                            city_code?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        hometown_city?: {
+                                            city_code?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        preferred_city_list?: Array<{
+                                            city_code?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        }>;
+                                        identification_type?: number;
+                                        identification_number?: string;
+                                        identification?: {
+                                            identification_type?: number;
+                                            identification_number?: string;
+                                        };
+                                        birthday?: number;
+                                        creator_id?: string;
+                                        marital_status?: number;
+                                        current_home_address?: string;
+                                        modify_time?: string;
+                                    };
+                                    education_list?: Array<{
+                                        id?: string;
+                                        degree?: number;
+                                        school?: string;
+                                        field_of_study?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                        end_time_v2?: string;
+                                        education_type?: number;
+                                        academic_ranking?: number;
+                                        tag_list?: Array<number>;
+                                    }>;
+                                    career_list?: Array<{
+                                        id?: string;
+                                        company?: string;
+                                        title?: string;
+                                        desc?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                        career_type?: number;
+                                        tag_list?: Array<number>;
+                                    }>;
+                                    project_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        role?: string;
+                                        link?: string;
+                                        desc?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                    }>;
+                                    works_list?: Array<{
+                                        id?: string;
+                                        link?: string;
+                                        desc?: string;
+                                        name?: string;
+                                    }>;
+                                    award_list?: Array<{
+                                        id?: string;
+                                        title?: string;
+                                        award_time?: string;
+                                        desc?: string;
+                                    }>;
+                                    language_list?: Array<{
+                                        id?: string;
+                                        language?: number;
+                                        proficiency?: number;
+                                    }>;
+                                    sns_list?: Array<{
+                                        id?: string;
+                                        sns_type?: number;
+                                        link?: string;
+                                    }>;
+                                    resume_source_list?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    }>;
+                                    interview_registration_list?: Array<{
+                                        id?: string;
+                                        registration_time?: number;
+                                    }>;
+                                    resume_attachment_id_list?: Array<string>;
+                                    top_degree?: number;
+                                    first_degree?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents`,
                             path
                         ),
                         method: "GET",
@@ -8106,7 +8669,10 @@ export default abstract class Client extends helpdesk {
                  */
                 get: async (
                     payload?: {
-                        params?: { options?: number };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            options?: number;
+                        };
                         path: { application_id: string };
                     },
                     options?: IRequestOptions
@@ -8174,6 +8740,7 @@ export default abstract class Client extends helpdesk {
                                                 en_us?: string;
                                             };
                                         }>;
+                                        creator_id?: string;
                                     };
                                 };
                             }
@@ -8263,6 +8830,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path: { application_id: string };
                     },
@@ -8508,6 +9084,15 @@ export default abstract class Client extends helpdesk {
                                 | "open_department_id"
                                 | "department_id"
                                 | "people_admin_department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path: { application_id: string };
                     },
@@ -8577,6 +9162,9 @@ export default abstract class Client extends helpdesk {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
                         };
                         path: { application_id: string };
                     },
@@ -9059,6 +9647,7 @@ export default abstract class Client extends helpdesk {
                             stage_en_name?: string;
                             stage_name: string;
                             stage_time: string;
+                            result?: string;
                             report_file_list?: Array<{
                                 report_name: string;
                                 report_url: string;
@@ -9736,6 +10325,15 @@ export default abstract class Client extends helpdesk {
                                 | "open_department_id"
                                 | "department_id"
                                 | "people_admin_department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path: { employee_id: string };
                     },
@@ -9803,6 +10401,15 @@ export default abstract class Client extends helpdesk {
                                 | "open_department_id"
                                 | "department_id"
                                 | "people_admin_department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -9878,6 +10485,15 @@ export default abstract class Client extends helpdesk {
                                 | "open_department_id"
                                 | "department_id"
                                 | "people_admin_department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path: { employee_id: string };
                     },
@@ -10529,6 +11145,9 @@ export default abstract class Client extends helpdesk {
                             interview_id?: string;
                             start_time?: string;
                             end_time?: string;
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
@@ -10866,6 +11485,12 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
                         };
                     },
                     options?: IRequestOptions
@@ -11096,6 +11721,12 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
                         };
                         path: { job_id: string };
                     },
@@ -11440,6 +12071,12 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
                         };
                         path: { job_id: string };
                     },
@@ -11586,6 +12223,207 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/jobs/:job_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/list document }
+                 *
+                 * 获取职位列表
+                 *
+                 * 根据更新时间获取职位列表，仅支持获取默认字段信息，获取详细信息可调用[获取职位详细](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/get)接口
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        title?: string;
+                                        description?: string;
+                                        code?: string;
+                                        requirement?: string;
+                                        recruitment_type?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            active_status?: number;
+                                        };
+                                        department?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        city?: {
+                                            city_code?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            active_status?: number;
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            active_status?: number;
+                                        };
+                                        highlight_list?: Array<{
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        }>;
+                                        job_category?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            active_status?: number;
+                                        };
+                                        job_type?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        };
+                                        active_status?: number;
+                                        create_user_id?: string;
+                                        create_time?: number;
+                                        update_time?: number;
+                                        process_type?: number;
+                                        process_id?: string;
+                                        process_name?: string;
+                                        process_en_name?: string;
+                                        job_function?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        subject?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        head_count?: number;
+                                        experience?: number;
+                                        expiry_time?: number;
+                                        min_salary?: number;
+                                        max_salary?: number;
+                                        required_degree?: number;
+                                        city_list?: Array<{
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        job_attribute?: number;
+                                        create_timestamp?: string;
+                                        update_timestamp?: string;
+                                        expiry_timestamp?: string;
+                                        target_major_list?: Array<{
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/jobs`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=recruiter&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recruiter&project=hire&resource=job&version=v1 document }
+                 */
+                recruiter: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { job_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    info?: {
+                                        id?: string;
+                                        recruiter_id?: string;
+                                        hiring_manager_id_list?: Array<string>;
+                                        assistant_id_list?: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/jobs/:job_id/recruiter`,
                                 path
                             ),
                             method: "GET",
@@ -11948,6 +12786,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -12165,6 +13012,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -12339,6 +13195,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -12541,6 +13406,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path: { job_requirement_id: string };
                     },
@@ -13148,6 +14022,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -13240,6 +14123,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path?: { offer_id?: string };
                     },
@@ -13502,6 +14394,9 @@ export default abstract class Client extends helpdesk {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                     },
                     options?: IRequestOptions
@@ -13650,6 +14545,15 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                            employee_type_id_type?:
+                                | "people_admin_employee_type_id"
+                                | "employee_type_enum_id";
                         };
                         path?: { offer_id?: string };
                     },
@@ -13973,10 +14877,20 @@ export default abstract class Client extends helpdesk {
                                         account_id: string;
                                         assets?: {
                                             confirmed_bonus?: {
+                                                bonus_type?: number;
                                                 point_bonus?: number;
+                                                cash?: {
+                                                    currency_type: string;
+                                                    amount: number;
+                                                };
                                             };
                                             paid_bonus?: {
+                                                bonus_type?: number;
                                                 point_bonus?: number;
+                                                cash?: {
+                                                    currency_type: string;
+                                                    amount: number;
+                                                };
                                             };
                                         };
                                         status?: number;
@@ -14023,10 +14937,20 @@ export default abstract class Client extends helpdesk {
                                         account_id: string;
                                         assets?: {
                                             confirmed_bonus?: {
+                                                bonus_type?: number;
                                                 point_bonus?: number;
+                                                cash?: {
+                                                    currency_type: string;
+                                                    amount: number;
+                                                };
                                             };
                                             paid_bonus?: {
+                                                bonus_type?: number;
                                                 point_bonus?: number;
+                                                cash?: {
+                                                    currency_type: string;
+                                                    amount: number;
+                                                };
                                             };
                                         };
                                         status?: number;
@@ -14061,7 +14985,12 @@ export default abstract class Client extends helpdesk {
                             trade_details?: Array<{
                                 account_id: string;
                                 total_recharge_reward_info?: {
+                                    bonus_type?: number;
                                     point_bonus?: number;
+                                    cash?: {
+                                        currency_type: string;
+                                        amount: number;
+                                    };
                                 };
                             }>;
                         };
@@ -14081,10 +15010,20 @@ export default abstract class Client extends helpdesk {
                                     check_failed_list?: Array<{
                                         account_id?: string;
                                         total_withdraw_reward_info?: {
+                                            bonus_type?: number;
                                             point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
                                         };
                                         total_recharge_reward_info?: {
+                                            bonus_type?: number;
                                             point_bonus?: number;
+                                            cash?: {
+                                                currency_type: string;
+                                                amount: number;
+                                            };
                                         };
                                     }>;
                                 };
@@ -14132,7 +15071,12 @@ export default abstract class Client extends helpdesk {
                                     external_order_id?: string;
                                     trans_time?: string;
                                     withdrawal_details?: {
+                                        bonus_type?: number;
                                         point_bonus?: number;
+                                        cash?: {
+                                            currency_type: string;
+                                            amount: number;
+                                        };
                                     };
                                 };
                             }
@@ -14170,6 +15114,9 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
                         };
                         path: { job_post_id: string };
                     },
@@ -14394,6 +15341,9 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
                         };
                     },
                     options?: IRequestOptions
@@ -14665,6 +15615,9 @@ export default abstract class Client extends helpdesk {
                             department_id_type?:
                                 | "open_department_id"
                                 | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
                         };
                     },
                     options?: IRequestOptions
@@ -15505,7 +16458,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15521,6 +16474,7 @@ export default abstract class Client extends helpdesk {
                                             field_of_study?: string;
                                             start_time?: string;
                                             end_time?: string;
+                                            end_time_v2?: string;
                                             education_type?: number;
                                             academic_ranking?: number;
                                             tag_list?: Array<number>;
@@ -15555,7 +16509,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15602,7 +16556,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15648,7 +16602,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15691,7 +16645,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15734,7 +16688,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15776,7 +16730,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15818,7 +16772,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15880,7 +16834,7 @@ export default abstract class Client extends helpdesk {
                                                     number?: string;
                                                     customized_attachment?: Array<{
                                                         file_id?: string;
-                                                        file_name?: string;
+                                                        name?: string;
                                                         content_type?: string;
                                                         file_size?: number;
                                                     }>;
@@ -15895,6 +16849,172 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/talents/:talent_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/list document }
+                 *
+                 * 获取人才列表
+                 *
+                 * 根据更新时间获取人才列表，仅支持获取默认字段信息，获取详细信息可调用「获取人才详细」接口
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                            query_option?: "ignore_empty_error";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        is_in_agency_period?: boolean;
+                                        is_onboarded?: boolean;
+                                        basic_info?: {
+                                            name: string;
+                                            mobile?: string;
+                                            mobile_code?: string;
+                                            mobile_country_code?: string;
+                                            email?: string;
+                                            experience_years?: number;
+                                            age?: number;
+                                            nationality?: {
+                                                nationality_code?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            gender?: number;
+                                            current_city?: {
+                                                city_code?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            hometown_city?: {
+                                                city_code?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            };
+                                            preferred_city_list?: Array<{
+                                                city_code?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                            }>;
+                                            identification_type?: number;
+                                            identification_number?: string;
+                                            identification?: {
+                                                identification_type?: number;
+                                                identification_number?: string;
+                                            };
+                                            birthday?: number;
+                                            creator_id?: string;
+                                            marital_status?: number;
+                                            current_home_address?: string;
+                                            modify_time?: string;
+                                        };
+                                        education_list?: Array<{
+                                            id?: string;
+                                            degree?: number;
+                                            school?: string;
+                                            field_of_study?: string;
+                                            start_time?: string;
+                                            end_time?: string;
+                                            end_time_v2?: string;
+                                            education_type?: number;
+                                            academic_ranking?: number;
+                                            tag_list?: Array<number>;
+                                        }>;
+                                        career_list?: Array<{
+                                            id?: string;
+                                            company?: string;
+                                            title?: string;
+                                            desc?: string;
+                                            start_time?: string;
+                                            end_time?: string;
+                                            career_type?: number;
+                                            tag_list?: Array<number>;
+                                        }>;
+                                        project_list?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                            role?: string;
+                                            link?: string;
+                                            desc?: string;
+                                            start_time?: string;
+                                            end_time?: string;
+                                        }>;
+                                        works_list?: Array<{
+                                            id?: string;
+                                            link?: string;
+                                            desc?: string;
+                                            name?: string;
+                                        }>;
+                                        award_list?: Array<{
+                                            id?: string;
+                                            title?: string;
+                                            award_time?: string;
+                                            desc?: string;
+                                        }>;
+                                        language_list?: Array<{
+                                            id?: string;
+                                            language?: number;
+                                            proficiency?: number;
+                                        }>;
+                                        sns_list?: Array<{
+                                            id?: string;
+                                            sns_type?: number;
+                                            link?: string;
+                                        }>;
+                                        resume_source_list?: Array<{
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                        }>;
+                                        interview_registration_list?: Array<{
+                                            id?: string;
+                                            registration_time?: number;
+                                        }>;
+                                        resume_attachment_id_list?: Array<string>;
+                                        top_degree?: number;
+                                        first_degree?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents`,
                                 path
                             ),
                             method: "GET",

@@ -307,6 +307,7 @@ export default abstract class Client extends human_authentication {
                         owner_id?: string;
                         user_id_list?: Array<string>;
                         bot_id_list?: Array<string>;
+                        group_message_type?: "chat" | "thread";
                         chat_mode?: string;
                         chat_type?: string;
                         external?: boolean;
@@ -369,6 +370,7 @@ export default abstract class Client extends human_authentication {
                                 share_card_permission?: string;
                                 at_all_permission?: string;
                                 edit_permission?: string;
+                                group_message_type?: string;
                                 chat_mode?: string;
                                 chat_type?: string;
                                 chat_tag?: string;
@@ -491,6 +493,7 @@ export default abstract class Client extends human_authentication {
                                 owner_id?: string;
                                 user_manager_id_list?: Array<string>;
                                 bot_manager_id_list?: Array<string>;
+                                group_message_type?: string;
                                 chat_mode?: string;
                                 chat_type?: string;
                                 chat_tag?: string;
@@ -950,6 +953,7 @@ export default abstract class Client extends human_authentication {
                                 | "not_anyone";
                         };
                         chat_type?: string;
+                        group_message_type?: "chat" | "thread";
                         urgent_setting?: "only_owner" | "all_members";
                         video_conference_setting?: "only_owner" | "all_members";
                     };
@@ -2825,7 +2829,7 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * 消息
+         * 消息 - 消息卡片
          */
         message: {
             /**
@@ -2871,6 +2875,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -2961,7 +2966,8 @@ export default abstract class Client extends human_authentication {
                             | "user_id"
                             | "union_id"
                             | "email"
-                            | "chat_id";
+                            | "chat_id"
+                            | "thread_id";
                         uuid?: string;
                     };
                     path: { message_id: string };
@@ -2981,6 +2987,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -3053,6 +3060,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -3166,6 +3174,7 @@ export default abstract class Client extends human_authentication {
                                                     message_id?: string;
                                                     root_id?: string;
                                                     parent_id?: string;
+                                                    thread_id?: string;
                                                     msg_type?: string;
                                                     create_time?: string;
                                                     update_time?: string;
@@ -3250,6 +3259,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -3308,7 +3318,8 @@ export default abstract class Client extends human_authentication {
                             | "user_id"
                             | "union_id"
                             | "email"
-                            | "chat_id";
+                            | "chat_id"
+                            | "thread_id";
                         uuid?: string;
                     };
                 },
@@ -3328,6 +3339,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -3475,7 +3487,12 @@ export default abstract class Client extends human_authentication {
              */
             reply: async (
                 payload?: {
-                    data: { content: string; msg_type: string; uuid?: string };
+                    data: {
+                        content: string;
+                        msg_type: string;
+                        reply_in_thread?: boolean;
+                        uuid?: string;
+                    };
                     path: { message_id: string };
                 },
                 options?: IRequestOptions
@@ -3493,6 +3510,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -3558,6 +3576,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -3797,6 +3816,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -3847,6 +3867,7 @@ export default abstract class Client extends human_authentication {
             replyByCard: async (
                 payload?: {
                     data: {
+                        reply_in_thread?: boolean;
                         uuid?: string;
                         template_id: string;
                         template_variable?: Record<string, any>;
@@ -3881,6 +3902,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -3962,6 +3984,7 @@ export default abstract class Client extends human_authentication {
                                 message_id?: string;
                                 root_id?: string;
                                 parent_id?: string;
+                                thread_id?: string;
                                 msg_type?: string;
                                 create_time?: string;
                                 update_time?: string;
@@ -4574,6 +4597,87 @@ export default abstract class Client extends human_authentication {
                     });
             },
         },
+        /**
+         * thread
+         */
+        thread: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=thread&apiName=forward&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=thread&version=v1 document }
+             *
+             * 转发
+             */
+            forward: async (
+                payload?: {
+                    data: { receive_id: string };
+                    params: {
+                        receive_id_type:
+                            | "open_id"
+                            | "user_id"
+                            | "union_id"
+                            | "email"
+                            | "chat_id"
+                            | "thread_id";
+                        uuid?: string;
+                    };
+                    path: { thread_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                root_id?: string;
+                                parent_id?: string;
+                                thread_id?: string;
+                                msg_type?: string;
+                                create_time?: string;
+                                update_time?: string;
+                                deleted?: boolean;
+                                updated?: boolean;
+                                chat_id?: string;
+                                sender?: {
+                                    id: string;
+                                    id_type: string;
+                                    sender_type: string;
+                                    tenant_key?: string;
+                                };
+                                body?: { content: string };
+                                mentions?: Array<{
+                                    key: string;
+                                    id: string;
+                                    id_type: string;
+                                    name: string;
+                                    tenant_key?: string;
+                                }>;
+                                upper_message_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/threads/:thread_id/forward`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
              * 消息 - 批量消息
@@ -4857,6 +4961,7 @@ export default abstract class Client extends human_authentication {
                             owner_id?: string;
                             user_id_list?: Array<string>;
                             bot_id_list?: Array<string>;
+                            group_message_type?: "chat" | "thread";
                             chat_mode?: string;
                             chat_type?: string;
                             external?: boolean;
@@ -4923,6 +5028,7 @@ export default abstract class Client extends human_authentication {
                                     share_card_permission?: string;
                                     at_all_permission?: string;
                                     edit_permission?: string;
+                                    group_message_type?: string;
                                     chat_mode?: string;
                                     chat_type?: string;
                                     chat_tag?: string;
@@ -5048,6 +5154,7 @@ export default abstract class Client extends human_authentication {
                                     owner_id?: string;
                                     user_manager_id_list?: Array<string>;
                                     bot_manager_id_list?: Array<string>;
+                                    group_message_type?: string;
                                     chat_mode?: string;
                                     chat_type?: string;
                                     chat_tag?: string;
@@ -5509,6 +5616,7 @@ export default abstract class Client extends human_authentication {
                                     | "not_anyone";
                             };
                             chat_type?: string;
+                            group_message_type?: "chat" | "thread";
                             urgent_setting?: "only_owner" | "all_members";
                             video_conference_setting?:
                                 | "only_owner"
@@ -7403,7 +7511,7 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * 消息
+             * 消息 - 消息卡片
              */
             message: {
                 /**
@@ -7449,6 +7557,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -7542,7 +7651,8 @@ export default abstract class Client extends human_authentication {
                                 | "user_id"
                                 | "union_id"
                                 | "email"
-                                | "chat_id";
+                                | "chat_id"
+                                | "thread_id";
                             uuid?: string;
                         };
                         path: { message_id: string };
@@ -7562,6 +7672,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -7634,6 +7745,7 @@ export default abstract class Client extends human_authentication {
                                         message_id?: string;
                                         root_id?: string;
                                         parent_id?: string;
+                                        thread_id?: string;
                                         msg_type?: string;
                                         create_time?: string;
                                         update_time?: string;
@@ -7747,6 +7859,7 @@ export default abstract class Client extends human_authentication {
                                                         message_id?: string;
                                                         root_id?: string;
                                                         parent_id?: string;
+                                                        thread_id?: string;
                                                         msg_type?: string;
                                                         create_time?: string;
                                                         update_time?: string;
@@ -7833,6 +7946,7 @@ export default abstract class Client extends human_authentication {
                                         message_id?: string;
                                         root_id?: string;
                                         parent_id?: string;
+                                        thread_id?: string;
                                         msg_type?: string;
                                         create_time?: string;
                                         update_time?: string;
@@ -7891,7 +8005,8 @@ export default abstract class Client extends human_authentication {
                                 | "user_id"
                                 | "union_id"
                                 | "email"
-                                | "chat_id";
+                                | "chat_id"
+                                | "thread_id";
                             uuid?: string;
                         };
                     },
@@ -7911,6 +8026,7 @@ export default abstract class Client extends human_authentication {
                                         message_id?: string;
                                         root_id?: string;
                                         parent_id?: string;
+                                        thread_id?: string;
                                         msg_type?: string;
                                         create_time?: string;
                                         update_time?: string;
@@ -8064,6 +8180,7 @@ export default abstract class Client extends human_authentication {
                         data: {
                             content: string;
                             msg_type: string;
+                            reply_in_thread?: boolean;
                             uuid?: string;
                         };
                         path: { message_id: string };
@@ -8083,6 +8200,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -8148,6 +8266,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -8387,6 +8506,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -8437,6 +8557,7 @@ export default abstract class Client extends human_authentication {
                 replyByCard: async (
                     payload?: {
                         data: {
+                            reply_in_thread?: boolean;
                             uuid?: string;
                             template_id: string;
                             template_variable?: Record<string, any>;
@@ -8471,6 +8592,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -8552,6 +8674,7 @@ export default abstract class Client extends human_authentication {
                                     message_id?: string;
                                     root_id?: string;
                                     parent_id?: string;
+                                    thread_id?: string;
                                     msg_type?: string;
                                     create_time?: string;
                                     update_time?: string;
@@ -9157,6 +9280,87 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * thread
+             */
+            thread: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=thread&apiName=forward&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=im&resource=thread&version=v1 document }
+                 *
+                 * 转发
+                 */
+                forward: async (
+                    payload?: {
+                        data: { receive_id: string };
+                        params: {
+                            receive_id_type:
+                                | "open_id"
+                                | "user_id"
+                                | "union_id"
+                                | "email"
+                                | "chat_id"
+                                | "thread_id";
+                            uuid?: string;
+                        };
+                        path: { thread_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    root_id?: string;
+                                    parent_id?: string;
+                                    thread_id?: string;
+                                    msg_type?: string;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    deleted?: boolean;
+                                    updated?: boolean;
+                                    chat_id?: string;
+                                    sender?: {
+                                        id: string;
+                                        id_type: string;
+                                        sender_type: string;
+                                        tenant_key?: string;
+                                    };
+                                    body?: { content: string };
+                                    mentions?: Array<{
+                                        key: string;
+                                        id: string;
+                                        id_type: string;
+                                        name: string;
+                                        tenant_key?: string;
+                                    }>;
+                                    upper_message_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/threads/:thread_id/forward`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

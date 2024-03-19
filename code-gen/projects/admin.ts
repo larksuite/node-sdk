@@ -226,6 +226,400 @@ export default abstract class Client extends acs {
             },
         },
         /**
+         * 行为审计日志（灰度租户可见）
+         */
+        auditInfo: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        latest?: number;
+                        oldest?: number;
+                        event_name?: string;
+                        operator_type?: "user" | "bot";
+                        operator_value?: string;
+                        event_module?: number;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/audit_infos`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    event_id?: string;
+                                                    unique_id?: string;
+                                                    event_name: string;
+                                                    department_ids?: Array<string>;
+                                                    event_module: number;
+                                                    operator_type?: number;
+                                                    operator_value?: string;
+                                                    objects?: Array<{
+                                                        object_type?: string;
+                                                        object_value?: string;
+                                                        object_name?: string;
+                                                        object_owner?: string;
+                                                        object_detail?: {
+                                                            clone_source?: string;
+                                                            text_detail?: string;
+                                                            file_name?: string;
+                                                            third_party_appID?: string;
+                                                            contain_file_num?: number;
+                                                            permission_setting_type?: string;
+                                                            permission_external_access_Type?: boolean;
+                                                            permission_share_type?: string;
+                                                            file_service_source?: string;
+                                                            okr_download_content?: string;
+                                                            container_type?: string;
+                                                            container_id?: string;
+                                                            current_page?: string;
+                                                        };
+                                                    }>;
+                                                    recipients?: Array<{
+                                                        recipient_type?: string;
+                                                        recipient_value?: string;
+                                                        recipient_detail?: {
+                                                            permission_action_type?: string;
+                                                        };
+                                                    }>;
+                                                    event_time?: number;
+                                                    ip?: string;
+                                                    operator_app?: string;
+                                                    audit_context?: {
+                                                        terminal_type?: number;
+                                                        ios_context?: {
+                                                            udid?: string;
+                                                            did?: string;
+                                                            app_ver?: string;
+                                                            ver?: string;
+                                                            os?: string;
+                                                            STZone?: string;
+                                                            ML?: string;
+                                                            sjd?: string;
+                                                            proxyip?: string;
+                                                            wifip?: string;
+                                                            location?: string;
+                                                            active_ip?: string;
+                                                            active_ip_detail?: string;
+                                                            cell_base_station?: string;
+                                                            IP?: string;
+                                                        };
+                                                        pc_context?: {
+                                                            udid?: string;
+                                                            did?: string;
+                                                            app_ver?: string;
+                                                            ver?: string;
+                                                            os?: string;
+                                                            wifip?: string;
+                                                            region?: string;
+                                                            IP?: string;
+                                                        };
+                                                        web_context?: {
+                                                            user_agent?: string;
+                                                            IP?: string;
+                                                        };
+                                                        android_context?: {
+                                                            udid?: string;
+                                                            did?: string;
+                                                            app_ver?: string;
+                                                            ver?: string;
+                                                            region?: string;
+                                                            id_i?: string;
+                                                            id_r?: string;
+                                                            hw_brand?: string;
+                                                            hw_manuf?: string;
+                                                            wifip?: string;
+                                                            route_iip?: string;
+                                                            route_gip?: string;
+                                                            env_su?: string;
+                                                            env_tz?: string;
+                                                            env_ml?: string;
+                                                            location?: string;
+                                                            active_ip?: string;
+                                                            active_ip_detail?: string;
+                                                            cell_base_station?: string;
+                                                            IP?: string;
+                                                        };
+                                                    };
+                                                    extend?: {
+                                                        comment_type?: string;
+                                                        app_detail?: string;
+                                                        two_step_validation?: boolean;
+                                                        login_method?: string;
+                                                        new_people_num_in_video?: number;
+                                                        external_people_num_in_video?: number;
+                                                        external_people_num_in_chat?: number;
+                                                        join_group?: number;
+                                                        quit_group?: number;
+                                                        external_people_num_in_doc_share?: number;
+                                                    };
+                                                    operator_app_name?: string;
+                                                    common_drawers?: {
+                                                        common_draw_info_list?: Array<{
+                                                            info_key?: string;
+                                                            info_val?: string;
+                                                            key_i18n_key?: string;
+                                                            val_type?: string;
+                                                            val_i18n_key?: string;
+                                                        }>;
+                                                    };
+                                                    audit_detail?: {
+                                                        mc?: string;
+                                                        device_model?: string;
+                                                        os?: string;
+                                                        city?: string;
+                                                    };
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        latest?: number;
+                        oldest?: number;
+                        event_name?: string;
+                        operator_type?: "user" | "bot";
+                        operator_value?: string;
+                        event_module?: number;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    event_id?: string;
+                                    unique_id?: string;
+                                    event_name: string;
+                                    department_ids?: Array<string>;
+                                    event_module: number;
+                                    operator_type?: number;
+                                    operator_value?: string;
+                                    objects?: Array<{
+                                        object_type?: string;
+                                        object_value?: string;
+                                        object_name?: string;
+                                        object_owner?: string;
+                                        object_detail?: {
+                                            clone_source?: string;
+                                            text_detail?: string;
+                                            file_name?: string;
+                                            third_party_appID?: string;
+                                            contain_file_num?: number;
+                                            permission_setting_type?: string;
+                                            permission_external_access_Type?: boolean;
+                                            permission_share_type?: string;
+                                            file_service_source?: string;
+                                            okr_download_content?: string;
+                                            container_type?: string;
+                                            container_id?: string;
+                                            current_page?: string;
+                                        };
+                                    }>;
+                                    recipients?: Array<{
+                                        recipient_type?: string;
+                                        recipient_value?: string;
+                                        recipient_detail?: {
+                                            permission_action_type?: string;
+                                        };
+                                    }>;
+                                    event_time?: number;
+                                    ip?: string;
+                                    operator_app?: string;
+                                    audit_context?: {
+                                        terminal_type?: number;
+                                        ios_context?: {
+                                            udid?: string;
+                                            did?: string;
+                                            app_ver?: string;
+                                            ver?: string;
+                                            os?: string;
+                                            STZone?: string;
+                                            ML?: string;
+                                            sjd?: string;
+                                            proxyip?: string;
+                                            wifip?: string;
+                                            location?: string;
+                                            active_ip?: string;
+                                            active_ip_detail?: string;
+                                            cell_base_station?: string;
+                                            IP?: string;
+                                        };
+                                        pc_context?: {
+                                            udid?: string;
+                                            did?: string;
+                                            app_ver?: string;
+                                            ver?: string;
+                                            os?: string;
+                                            wifip?: string;
+                                            region?: string;
+                                            IP?: string;
+                                        };
+                                        web_context?: {
+                                            user_agent?: string;
+                                            IP?: string;
+                                        };
+                                        android_context?: {
+                                            udid?: string;
+                                            did?: string;
+                                            app_ver?: string;
+                                            ver?: string;
+                                            region?: string;
+                                            id_i?: string;
+                                            id_r?: string;
+                                            hw_brand?: string;
+                                            hw_manuf?: string;
+                                            wifip?: string;
+                                            route_iip?: string;
+                                            route_gip?: string;
+                                            env_su?: string;
+                                            env_tz?: string;
+                                            env_ml?: string;
+                                            location?: string;
+                                            active_ip?: string;
+                                            active_ip_detail?: string;
+                                            cell_base_station?: string;
+                                            IP?: string;
+                                        };
+                                    };
+                                    extend?: {
+                                        comment_type?: string;
+                                        app_detail?: string;
+                                        two_step_validation?: boolean;
+                                        login_method?: string;
+                                        new_people_num_in_video?: number;
+                                        external_people_num_in_video?: number;
+                                        external_people_num_in_chat?: number;
+                                        join_group?: number;
+                                        quit_group?: number;
+                                        external_people_num_in_doc_share?: number;
+                                    };
+                                    operator_app_name?: string;
+                                    common_drawers?: {
+                                        common_draw_info_list?: Array<{
+                                            info_key?: string;
+                                            info_val?: string;
+                                            key_i18n_key?: string;
+                                            val_type?: string;
+                                            val_i18n_key?: string;
+                                        }>;
+                                    };
+                                    audit_detail?: {
+                                        mc?: string;
+                                        device_model?: string;
+                                        os?: string;
+                                        city?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/admin/v1/audit_infos`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 勋章
          */
         badge: {
@@ -1327,6 +1721,400 @@ export default abstract class Client extends acs {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/admin/v1/admin_user_stats`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 行为审计日志（灰度租户可见）
+             */
+            auditInfo: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            latest?: number;
+                            oldest?: number;
+                            event_name?: string;
+                            operator_type?: "user" | "bot";
+                            operator_value?: string;
+                            event_module?: number;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/admin/v1/audit_infos`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        event_id?: string;
+                                                        unique_id?: string;
+                                                        event_name: string;
+                                                        department_ids?: Array<string>;
+                                                        event_module: number;
+                                                        operator_type?: number;
+                                                        operator_value?: string;
+                                                        objects?: Array<{
+                                                            object_type?: string;
+                                                            object_value?: string;
+                                                            object_name?: string;
+                                                            object_owner?: string;
+                                                            object_detail?: {
+                                                                clone_source?: string;
+                                                                text_detail?: string;
+                                                                file_name?: string;
+                                                                third_party_appID?: string;
+                                                                contain_file_num?: number;
+                                                                permission_setting_type?: string;
+                                                                permission_external_access_Type?: boolean;
+                                                                permission_share_type?: string;
+                                                                file_service_source?: string;
+                                                                okr_download_content?: string;
+                                                                container_type?: string;
+                                                                container_id?: string;
+                                                                current_page?: string;
+                                                            };
+                                                        }>;
+                                                        recipients?: Array<{
+                                                            recipient_type?: string;
+                                                            recipient_value?: string;
+                                                            recipient_detail?: {
+                                                                permission_action_type?: string;
+                                                            };
+                                                        }>;
+                                                        event_time?: number;
+                                                        ip?: string;
+                                                        operator_app?: string;
+                                                        audit_context?: {
+                                                            terminal_type?: number;
+                                                            ios_context?: {
+                                                                udid?: string;
+                                                                did?: string;
+                                                                app_ver?: string;
+                                                                ver?: string;
+                                                                os?: string;
+                                                                STZone?: string;
+                                                                ML?: string;
+                                                                sjd?: string;
+                                                                proxyip?: string;
+                                                                wifip?: string;
+                                                                location?: string;
+                                                                active_ip?: string;
+                                                                active_ip_detail?: string;
+                                                                cell_base_station?: string;
+                                                                IP?: string;
+                                                            };
+                                                            pc_context?: {
+                                                                udid?: string;
+                                                                did?: string;
+                                                                app_ver?: string;
+                                                                ver?: string;
+                                                                os?: string;
+                                                                wifip?: string;
+                                                                region?: string;
+                                                                IP?: string;
+                                                            };
+                                                            web_context?: {
+                                                                user_agent?: string;
+                                                                IP?: string;
+                                                            };
+                                                            android_context?: {
+                                                                udid?: string;
+                                                                did?: string;
+                                                                app_ver?: string;
+                                                                ver?: string;
+                                                                region?: string;
+                                                                id_i?: string;
+                                                                id_r?: string;
+                                                                hw_brand?: string;
+                                                                hw_manuf?: string;
+                                                                wifip?: string;
+                                                                route_iip?: string;
+                                                                route_gip?: string;
+                                                                env_su?: string;
+                                                                env_tz?: string;
+                                                                env_ml?: string;
+                                                                location?: string;
+                                                                active_ip?: string;
+                                                                active_ip_detail?: string;
+                                                                cell_base_station?: string;
+                                                                IP?: string;
+                                                            };
+                                                        };
+                                                        extend?: {
+                                                            comment_type?: string;
+                                                            app_detail?: string;
+                                                            two_step_validation?: boolean;
+                                                            login_method?: string;
+                                                            new_people_num_in_video?: number;
+                                                            external_people_num_in_video?: number;
+                                                            external_people_num_in_chat?: number;
+                                                            join_group?: number;
+                                                            quit_group?: number;
+                                                            external_people_num_in_doc_share?: number;
+                                                        };
+                                                        operator_app_name?: string;
+                                                        common_drawers?: {
+                                                            common_draw_info_list?: Array<{
+                                                                info_key?: string;
+                                                                info_val?: string;
+                                                                key_i18n_key?: string;
+                                                                val_type?: string;
+                                                                val_i18n_key?: string;
+                                                            }>;
+                                                        };
+                                                        audit_detail?: {
+                                                            mc?: string;
+                                                            device_model?: string;
+                                                            os?: string;
+                                                            city?: string;
+                                                        };
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            latest?: number;
+                            oldest?: number;
+                            event_name?: string;
+                            operator_type?: "user" | "bot";
+                            operator_value?: string;
+                            event_module?: number;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        event_id?: string;
+                                        unique_id?: string;
+                                        event_name: string;
+                                        department_ids?: Array<string>;
+                                        event_module: number;
+                                        operator_type?: number;
+                                        operator_value?: string;
+                                        objects?: Array<{
+                                            object_type?: string;
+                                            object_value?: string;
+                                            object_name?: string;
+                                            object_owner?: string;
+                                            object_detail?: {
+                                                clone_source?: string;
+                                                text_detail?: string;
+                                                file_name?: string;
+                                                third_party_appID?: string;
+                                                contain_file_num?: number;
+                                                permission_setting_type?: string;
+                                                permission_external_access_Type?: boolean;
+                                                permission_share_type?: string;
+                                                file_service_source?: string;
+                                                okr_download_content?: string;
+                                                container_type?: string;
+                                                container_id?: string;
+                                                current_page?: string;
+                                            };
+                                        }>;
+                                        recipients?: Array<{
+                                            recipient_type?: string;
+                                            recipient_value?: string;
+                                            recipient_detail?: {
+                                                permission_action_type?: string;
+                                            };
+                                        }>;
+                                        event_time?: number;
+                                        ip?: string;
+                                        operator_app?: string;
+                                        audit_context?: {
+                                            terminal_type?: number;
+                                            ios_context?: {
+                                                udid?: string;
+                                                did?: string;
+                                                app_ver?: string;
+                                                ver?: string;
+                                                os?: string;
+                                                STZone?: string;
+                                                ML?: string;
+                                                sjd?: string;
+                                                proxyip?: string;
+                                                wifip?: string;
+                                                location?: string;
+                                                active_ip?: string;
+                                                active_ip_detail?: string;
+                                                cell_base_station?: string;
+                                                IP?: string;
+                                            };
+                                            pc_context?: {
+                                                udid?: string;
+                                                did?: string;
+                                                app_ver?: string;
+                                                ver?: string;
+                                                os?: string;
+                                                wifip?: string;
+                                                region?: string;
+                                                IP?: string;
+                                            };
+                                            web_context?: {
+                                                user_agent?: string;
+                                                IP?: string;
+                                            };
+                                            android_context?: {
+                                                udid?: string;
+                                                did?: string;
+                                                app_ver?: string;
+                                                ver?: string;
+                                                region?: string;
+                                                id_i?: string;
+                                                id_r?: string;
+                                                hw_brand?: string;
+                                                hw_manuf?: string;
+                                                wifip?: string;
+                                                route_iip?: string;
+                                                route_gip?: string;
+                                                env_su?: string;
+                                                env_tz?: string;
+                                                env_ml?: string;
+                                                location?: string;
+                                                active_ip?: string;
+                                                active_ip_detail?: string;
+                                                cell_base_station?: string;
+                                                IP?: string;
+                                            };
+                                        };
+                                        extend?: {
+                                            comment_type?: string;
+                                            app_detail?: string;
+                                            two_step_validation?: boolean;
+                                            login_method?: string;
+                                            new_people_num_in_video?: number;
+                                            external_people_num_in_video?: number;
+                                            external_people_num_in_chat?: number;
+                                            join_group?: number;
+                                            quit_group?: number;
+                                            external_people_num_in_doc_share?: number;
+                                        };
+                                        operator_app_name?: string;
+                                        common_drawers?: {
+                                            common_draw_info_list?: Array<{
+                                                info_key?: string;
+                                                info_val?: string;
+                                                key_i18n_key?: string;
+                                                val_type?: string;
+                                                val_i18n_key?: string;
+                                            }>;
+                                        };
+                                        audit_detail?: {
+                                            mc?: string;
+                                            device_model?: string;
+                                            os?: string;
+                                            city?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/admin/v1/audit_infos`,
                                 path
                             ),
                             method: "GET",

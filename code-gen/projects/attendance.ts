@@ -227,9 +227,12 @@ export default abstract class Client extends approval {
                             sub_group_leader_ids?: Array<string>;
                             allow_out_punch?: boolean;
                             out_punch_need_approval?: boolean;
+                            out_punch_need_post_approval?: boolean;
                             out_punch_need_remark?: boolean;
                             out_punch_need_photo?: boolean;
                             out_punch_allowed_hide_addr?: boolean;
+                            out_punch_allowed_adjust_addr?: boolean;
+                            adjust_range?: number;
                             allow_pc_punch?: boolean;
                             allow_remedy?: boolean;
                             remedy_limit?: boolean;
@@ -353,7 +356,10 @@ export default abstract class Client extends approval {
                             bind_default_user_ids?: Array<string>;
                             overtime_clock_cfg?: {
                                 allow_punch_approval?: boolean;
+                                need_clock_over_time_start_and_end?: boolean;
                             };
+                            new_calendar_id?: string;
+                            allow_apply_punch?: boolean;
                         };
                         operator_id?: string;
                     };
@@ -386,9 +392,12 @@ export default abstract class Client extends approval {
                                     sub_group_leader_ids?: Array<string>;
                                     allow_out_punch?: boolean;
                                     out_punch_need_approval?: boolean;
+                                    out_punch_need_post_approval?: boolean;
                                     out_punch_need_remark?: boolean;
                                     out_punch_need_photo?: boolean;
                                     out_punch_allowed_hide_addr?: boolean;
+                                    out_punch_allowed_adjust_addr?: boolean;
+                                    adjust_range?: number;
                                     allow_pc_punch?: boolean;
                                     allow_remedy?: boolean;
                                     remedy_limit?: boolean;
@@ -516,7 +525,10 @@ export default abstract class Client extends approval {
                                     bind_default_user_ids?: Array<string>;
                                     overtime_clock_cfg?: {
                                         allow_punch_approval?: boolean;
+                                        need_clock_over_time_start_and_end?: boolean;
                                     };
+                                    new_calendar_id?: string;
+                                    allow_apply_punch?: boolean;
                                 };
                             };
                         }
@@ -609,9 +621,12 @@ export default abstract class Client extends approval {
                                 sub_group_leader_ids?: Array<string>;
                                 allow_out_punch?: boolean;
                                 out_punch_need_approval?: boolean;
+                                out_punch_need_post_approval?: boolean;
                                 out_punch_need_remark?: boolean;
                                 out_punch_need_photo?: boolean;
                                 out_punch_allowed_hide_addr?: boolean;
+                                out_punch_allowed_adjust_addr?: boolean;
+                                adjust_range?: number;
                                 allow_pc_punch?: boolean;
                                 allow_remedy?: boolean;
                                 remedy_limit?: boolean;
@@ -738,7 +753,10 @@ export default abstract class Client extends approval {
                                 bind_default_user_ids?: Array<string>;
                                 overtime_clock_cfg?: {
                                     allow_punch_approval?: boolean;
+                                    need_clock_over_time_start_and_end?: boolean;
                                 };
+                                new_calendar_id?: string;
+                                allow_apply_punch?: boolean;
                             };
                         }
                     >({
@@ -957,6 +975,7 @@ export default abstract class Client extends approval {
                         time_offset?: number;
                         expiration_date?: string;
                         quantity?: string;
+                        section_type?: number;
                     };
                     params?: {
                         user_id_type?:
@@ -996,6 +1015,7 @@ export default abstract class Client extends approval {
                                     created_by: string;
                                     updated_at: string;
                                     updated_by: string;
+                                    section_type?: number;
                                 };
                             };
                         }
@@ -1070,6 +1090,7 @@ export default abstract class Client extends approval {
                                     is_update_by_external: boolean;
                                     accrual_source: number;
                                     leave_sub_type_id: string;
+                                    section_type?: number;
                                 }>;
                             };
                         }
@@ -1140,6 +1161,11 @@ export default abstract class Client extends approval {
                             on_overtime: string;
                             off_overtime: string;
                         }>;
+                        day_type?: number;
+                        overtime_rest_time_rule?: Array<{
+                            rest_begin_time: string;
+                            rest_end_time: string;
+                        }>;
                     };
                 },
                 options?: IRequestOptions
@@ -1188,6 +1214,11 @@ export default abstract class Client extends approval {
                                     overtime_rule?: Array<{
                                         on_overtime: string;
                                         off_overtime: string;
+                                    }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
                                     }>;
                                 };
                             };
@@ -1299,6 +1330,11 @@ export default abstract class Client extends approval {
                                 overtime_rule?: Array<{
                                     on_overtime: string;
                                     off_overtime: string;
+                                }>;
+                                day_type?: number;
+                                overtime_rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
                                 }>;
                             };
                         }
@@ -1412,6 +1448,11 @@ export default abstract class Client extends approval {
                                                         on_overtime: string;
                                                         off_overtime: string;
                                                     }>;
+                                                    day_type?: number;
+                                                    overtime_rest_time_rule?: Array<{
+                                                        rest_begin_time: string;
+                                                        rest_end_time: string;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1494,6 +1535,11 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1573,6 +1619,11 @@ export default abstract class Client extends approval {
                                     on_overtime: string;
                                     off_overtime: string;
                                 }>;
+                                day_type?: number;
+                                overtime_rest_time_rule?: Array<{
+                                    rest_begin_time: string;
+                                    rest_end_time: string;
+                                }>;
                             };
                         }
                     >({
@@ -1647,6 +1698,7 @@ export default abstract class Client extends approval {
                                 type: number;
                                 start_time: string;
                                 end_time: string;
+                                reason?: string;
                             }>;
                             trips?: Array<{
                                 start_time: string;
@@ -1717,6 +1769,7 @@ export default abstract class Client extends approval {
                                         type: number;
                                         start_time: string;
                                         end_time: string;
+                                        reason?: string;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -1829,6 +1882,7 @@ export default abstract class Client extends approval {
                                         type: number;
                                         start_time: string;
                                         end_time: string;
+                                        reason?: string;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -2021,6 +2075,7 @@ export default abstract class Client extends approval {
                                 | "Invalid"
                                 | "None"
                                 | "Todo";
+                            external_id?: string;
                         }>;
                     };
                     params: { employee_type: "employee_id" | "employee_no" };
@@ -2064,6 +2119,7 @@ export default abstract class Client extends approval {
                                         | "Invalid"
                                         | "None"
                                         | "Todo";
+                                    external_id?: string;
                                 }>;
                             };
                         }
@@ -2139,6 +2195,7 @@ export default abstract class Client extends approval {
                                     | "Invalid"
                                     | "None"
                                     | "Todo";
+                                external_id?: string;
                             };
                         }
                     >({
@@ -2218,6 +2275,7 @@ export default abstract class Client extends approval {
                                         | "Invalid"
                                         | "None"
                                         | "Todo";
+                                    external_id?: string;
                                 }>;
                             };
                         }
@@ -2703,6 +2761,7 @@ export default abstract class Client extends approval {
                                                 | "Invalid"
                                                 | "None"
                                                 | "Todo";
+                                            external_id?: string;
                                         };
                                         check_out_record_id: string;
                                         check_out_record?: {
@@ -2732,6 +2791,7 @@ export default abstract class Client extends approval {
                                                 | "Invalid"
                                                 | "None"
                                                 | "Todo";
+                                            external_id?: string;
                                         };
                                         check_in_result:
                                             | "NoNeedCheck"
@@ -3179,9 +3239,12 @@ export default abstract class Client extends approval {
                                 sub_group_leader_ids?: Array<string>;
                                 allow_out_punch?: boolean;
                                 out_punch_need_approval?: boolean;
+                                out_punch_need_post_approval?: boolean;
                                 out_punch_need_remark?: boolean;
                                 out_punch_need_photo?: boolean;
                                 out_punch_allowed_hide_addr?: boolean;
+                                out_punch_allowed_adjust_addr?: boolean;
+                                adjust_range?: number;
                                 allow_pc_punch?: boolean;
                                 allow_remedy?: boolean;
                                 remedy_limit?: boolean;
@@ -3305,7 +3368,10 @@ export default abstract class Client extends approval {
                                 bind_default_user_ids?: Array<string>;
                                 overtime_clock_cfg?: {
                                     allow_punch_approval?: boolean;
+                                    need_clock_over_time_start_and_end?: boolean;
                                 };
+                                new_calendar_id?: string;
+                                allow_apply_punch?: boolean;
                             };
                             operator_id?: string;
                         };
@@ -3338,9 +3404,12 @@ export default abstract class Client extends approval {
                                         sub_group_leader_ids?: Array<string>;
                                         allow_out_punch?: boolean;
                                         out_punch_need_approval?: boolean;
+                                        out_punch_need_post_approval?: boolean;
                                         out_punch_need_remark?: boolean;
                                         out_punch_need_photo?: boolean;
                                         out_punch_allowed_hide_addr?: boolean;
+                                        out_punch_allowed_adjust_addr?: boolean;
+                                        adjust_range?: number;
                                         allow_pc_punch?: boolean;
                                         allow_remedy?: boolean;
                                         remedy_limit?: boolean;
@@ -3468,7 +3537,10 @@ export default abstract class Client extends approval {
                                         bind_default_user_ids?: Array<string>;
                                         overtime_clock_cfg?: {
                                             allow_punch_approval?: boolean;
+                                            need_clock_over_time_start_and_end?: boolean;
                                         };
+                                        new_calendar_id?: string;
+                                        allow_apply_punch?: boolean;
                                     };
                                 };
                             }
@@ -3564,9 +3636,12 @@ export default abstract class Client extends approval {
                                     sub_group_leader_ids?: Array<string>;
                                     allow_out_punch?: boolean;
                                     out_punch_need_approval?: boolean;
+                                    out_punch_need_post_approval?: boolean;
                                     out_punch_need_remark?: boolean;
                                     out_punch_need_photo?: boolean;
                                     out_punch_allowed_hide_addr?: boolean;
+                                    out_punch_allowed_adjust_addr?: boolean;
+                                    adjust_range?: number;
                                     allow_pc_punch?: boolean;
                                     allow_remedy?: boolean;
                                     remedy_limit?: boolean;
@@ -3693,7 +3768,10 @@ export default abstract class Client extends approval {
                                     bind_default_user_ids?: Array<string>;
                                     overtime_clock_cfg?: {
                                         allow_punch_approval?: boolean;
+                                        need_clock_over_time_start_and_end?: boolean;
                                     };
+                                    new_calendar_id?: string;
+                                    allow_apply_punch?: boolean;
                                 };
                             }
                         >({
@@ -3912,6 +3990,7 @@ export default abstract class Client extends approval {
                             time_offset?: number;
                             expiration_date?: string;
                             quantity?: string;
+                            section_type?: number;
                         };
                         params?: {
                             user_id_type?:
@@ -3951,6 +4030,7 @@ export default abstract class Client extends approval {
                                         created_by: string;
                                         updated_at: string;
                                         updated_by: string;
+                                        section_type?: number;
                                     };
                                 };
                             }
@@ -4025,6 +4105,7 @@ export default abstract class Client extends approval {
                                         is_update_by_external: boolean;
                                         accrual_source: number;
                                         leave_sub_type_id: string;
+                                        section_type?: number;
                                     }>;
                                 };
                             }
@@ -4095,6 +4176,11 @@ export default abstract class Client extends approval {
                                 on_overtime: string;
                                 off_overtime: string;
                             }>;
+                            day_type?: number;
+                            overtime_rest_time_rule?: Array<{
+                                rest_begin_time: string;
+                                rest_end_time: string;
+                            }>;
                         };
                     },
                     options?: IRequestOptions
@@ -4143,6 +4229,11 @@ export default abstract class Client extends approval {
                                         overtime_rule?: Array<{
                                             on_overtime: string;
                                             off_overtime: string;
+                                        }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
                                         }>;
                                     };
                                 };
@@ -4258,6 +4349,11 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
                                 };
                             }
                         >({
@@ -4370,6 +4466,11 @@ export default abstract class Client extends approval {
                                                             on_overtime: string;
                                                             off_overtime: string;
                                                         }>;
+                                                        day_type?: number;
+                                                        overtime_rest_time_rule?: Array<{
+                                                            rest_begin_time: string;
+                                                            rest_end_time: string;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -4452,6 +4553,11 @@ export default abstract class Client extends approval {
                                             on_overtime: string;
                                             off_overtime: string;
                                         }>;
+                                        day_type?: number;
+                                        overtime_rest_time_rule?: Array<{
+                                            rest_begin_time: string;
+                                            rest_end_time: string;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -4531,6 +4637,11 @@ export default abstract class Client extends approval {
                                         on_overtime: string;
                                         off_overtime: string;
                                     }>;
+                                    day_type?: number;
+                                    overtime_rest_time_rule?: Array<{
+                                        rest_begin_time: string;
+                                        rest_end_time: string;
+                                    }>;
                                 };
                             }
                         >({
@@ -4605,6 +4716,7 @@ export default abstract class Client extends approval {
                                     type: number;
                                     start_time: string;
                                     end_time: string;
+                                    reason?: string;
                                 }>;
                                 trips?: Array<{
                                     start_time: string;
@@ -4677,6 +4789,7 @@ export default abstract class Client extends approval {
                                             type: number;
                                             start_time: string;
                                             end_time: string;
+                                            reason?: string;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -4791,6 +4904,7 @@ export default abstract class Client extends approval {
                                             type: number;
                                             start_time: string;
                                             end_time: string;
+                                            reason?: string;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -4987,6 +5101,7 @@ export default abstract class Client extends approval {
                                     | "Invalid"
                                     | "None"
                                     | "Todo";
+                                external_id?: string;
                             }>;
                         };
                         params: {
@@ -5032,6 +5147,7 @@ export default abstract class Client extends approval {
                                             | "Invalid"
                                             | "None"
                                             | "Todo";
+                                        external_id?: string;
                                     }>;
                                 };
                             }
@@ -5107,6 +5223,7 @@ export default abstract class Client extends approval {
                                         | "Invalid"
                                         | "None"
                                         | "Todo";
+                                    external_id?: string;
                                 };
                             }
                         >({
@@ -5186,6 +5303,7 @@ export default abstract class Client extends approval {
                                             | "Invalid"
                                             | "None"
                                             | "Todo";
+                                        external_id?: string;
                                     }>;
                                 };
                             }
@@ -5683,6 +5801,7 @@ export default abstract class Client extends approval {
                                                     | "Invalid"
                                                     | "None"
                                                     | "Todo";
+                                                external_id?: string;
                                             };
                                             check_out_record_id: string;
                                             check_out_record?: {
@@ -5712,6 +5831,7 @@ export default abstract class Client extends approval {
                                                     | "Invalid"
                                                     | "None"
                                                     | "Todo";
+                                                external_id?: string;
                                             };
                                             check_in_result:
                                                 | "NoNeedCheck"

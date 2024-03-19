@@ -170,6 +170,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 fields: Array<number>;
                             };
@@ -328,8 +347,31 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 fields: Array<number>;
+                            };
+                            update_task?: {
+                                task_id?: string;
+                                folded?: boolean;
                             };
                         }>;
                     };
@@ -364,6 +406,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -482,6 +543,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -600,6 +680,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -718,6 +817,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -836,6 +954,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -954,6 +1091,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1072,6 +1228,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1190,6 +1365,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1308,6 +1502,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1426,6 +1639,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1544,6 +1776,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1662,6 +1913,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1780,6 +2050,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1898,6 +2187,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2016,6 +2324,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2134,6 +2461,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2252,6 +2598,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2431,7 +2796,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         objectives?: Array<{
@@ -2479,6 +2847,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -2618,6 +3005,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -2734,6 +3140,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -2799,6 +3326,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2917,6 +3463,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3035,6 +3600,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3153,6 +3737,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3271,6 +3874,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3389,6 +4011,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3507,6 +4148,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3625,6 +4285,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3743,6 +4422,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3861,6 +4559,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3979,6 +4696,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4097,6 +4833,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4215,6 +4970,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4333,6 +5107,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4451,6 +5244,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4569,6 +5381,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4687,6 +5518,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4859,7 +5709,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
@@ -4903,6 +5756,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -5042,6 +5914,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -5158,6 +6049,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 };
                             };
                         }
@@ -5254,6 +6266,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -5386,6 +6417,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -5518,6 +6568,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -5650,6 +6719,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -5782,6 +6870,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -5914,6 +7021,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6046,6 +7172,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6178,6 +7323,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6310,6 +7474,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6442,6 +7625,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6574,6 +7776,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6706,6 +7927,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6838,6 +8078,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6970,6 +8229,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7102,6 +8380,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7234,6 +8531,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7366,6 +8682,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7564,7 +8899,10 @@ export default abstract class Client extends document_ai {
                                                     };
                                                     undefined?: {};
                                                     quote_container?: {};
-                                                    task?: { task_id: string };
+                                                    task?: {
+                                                        task_id?: string;
+                                                        folded?: boolean;
+                                                    };
                                                     okr?: {
                                                         okr_id?: string;
                                                         period_display_status?:
@@ -7612,6 +8950,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -7769,6 +9126,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -7904,6 +9280,141 @@ export default abstract class Client extends document_ai {
                                                     wiki_catalog?: {
                                                         wiki_token?: string;
                                                     };
+                                                    board?: {
+                                                        token?: string;
+                                                        align?: number;
+                                                        width?: number;
+                                                        height?: number;
+                                                    };
+                                                    agenda?: {};
+                                                    agenda_item?: {};
+                                                    agenda_item_title?: {
+                                                        elements: Array<{
+                                                            text_run?: {
+                                                                content: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            mention_user?: {
+                                                                user_id: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            mention_doc?: {
+                                                                token: string;
+                                                                obj_type: number;
+                                                                url: string;
+                                                                title?: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            reminder?: {
+                                                                create_user_id: string;
+                                                                is_notify?: boolean;
+                                                                is_whole_day?: boolean;
+                                                                expire_time: string;
+                                                                notify_time: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            file?: {
+                                                                file_token?: string;
+                                                                source_block_id?: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            undefined?: {};
+                                                            inline_block?: {
+                                                                block_id: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            equation?: {
+                                                                content: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        align?: number;
+                                                    };
+                                                    agenda_item_content?: {};
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -7973,6 +9484,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8091,6 +9621,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8209,6 +9758,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8327,6 +9895,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8445,6 +10032,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8563,6 +10169,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8681,6 +10306,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8799,6 +10443,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -8917,6 +10580,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9035,6 +10717,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9153,6 +10854,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9271,6 +10991,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9389,6 +11128,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9507,6 +11265,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9625,6 +11402,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9743,6 +11539,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9861,6 +11676,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10033,7 +11867,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
@@ -10077,6 +11914,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -10216,6 +12072,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -10332,6 +12207,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -10483,6 +12479,25 @@ export default abstract class Client extends document_ai {
                                 folded?: boolean;
                                 language?: number;
                                 wrap?: boolean;
+                                background_color?:
+                                    | "LightGrayBackground"
+                                    | "LightRedBackground"
+                                    | "LightOrangeBackground"
+                                    | "LightYellowBackground"
+                                    | "LightGreenBackground"
+                                    | "LightBlueBackground"
+                                    | "LightPurpleBackground"
+                                    | "PaleGrayBackground"
+                                    | "DarkGrayBackground"
+                                    | "DarkRedBackground"
+                                    | "DarkOrangeBackground"
+                                    | "DarkYellowBackground"
+                                    | "DarkGreenBackground"
+                                    | "DarkBlueBackground"
+                                    | "DarkPurpleBackground";
+                                indentation_level?:
+                                    | "NoIndent"
+                                    | "OneLevelIndent";
                             };
                             fields: Array<number>;
                         };
@@ -10637,9 +12652,29 @@ export default abstract class Client extends document_ai {
                                 folded?: boolean;
                                 language?: number;
                                 wrap?: boolean;
+                                background_color?:
+                                    | "LightGrayBackground"
+                                    | "LightRedBackground"
+                                    | "LightOrangeBackground"
+                                    | "LightYellowBackground"
+                                    | "LightGreenBackground"
+                                    | "LightBlueBackground"
+                                    | "LightPurpleBackground"
+                                    | "PaleGrayBackground"
+                                    | "DarkGrayBackground"
+                                    | "DarkRedBackground"
+                                    | "DarkOrangeBackground"
+                                    | "DarkYellowBackground"
+                                    | "DarkGreenBackground"
+                                    | "DarkBlueBackground"
+                                    | "DarkPurpleBackground";
+                                indentation_level?:
+                                    | "NoIndent"
+                                    | "OneLevelIndent";
                             };
                             fields: Array<number>;
                         };
+                        update_task?: { task_id?: string; folded?: boolean };
                     };
                     params?: {
                         document_revision_id?: number;
@@ -10672,6 +12707,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10790,6 +12844,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10908,6 +12981,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11026,6 +13118,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11144,6 +13255,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11262,6 +13392,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11380,6 +13529,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11498,6 +13666,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11616,6 +13803,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11734,6 +13940,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11852,6 +14077,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11970,6 +14214,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12088,6 +14351,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12206,6 +14488,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12324,6 +14625,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12442,6 +14762,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12560,6 +14899,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12739,7 +15097,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         objectives?: Array<{
@@ -12787,6 +15148,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -12926,6 +15306,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -13042,6 +15441,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 };
                                 document_revision_id?: number;
                                 client_token: string;
@@ -13145,6 +15665,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13260,6 +15799,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13375,6 +15933,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13490,6 +16067,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13605,6 +16201,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13720,6 +16335,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13835,6 +16469,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -13950,6 +16603,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14065,6 +16737,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14180,6 +16871,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14295,6 +17005,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14410,6 +17139,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14525,6 +17273,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14640,6 +17407,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14755,6 +17541,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -14870,6 +17675,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 elements: Array<{
                                     text_run?: {
@@ -15016,6 +17840,7 @@ export default abstract class Client extends document_ai {
                                 };
                             };
                             quote_container?: {};
+                            task?: { folded?: boolean };
                             okr?: {
                                 okr_id?: string;
                                 objectives?: Array<{
@@ -15025,6 +17850,11 @@ export default abstract class Client extends document_ai {
                             };
                             comment_ids?: Array<string>;
                             wiki_catalog?: { wiki_token?: string };
+                            board?: {
+                                align?: number;
+                                width?: number;
+                                height?: number;
+                            };
                         }>;
                         index?: number;
                     };
@@ -15059,6 +17889,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15177,6 +18026,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15295,6 +18163,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15413,6 +18300,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15531,6 +18437,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15649,6 +18574,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15767,6 +18711,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15885,6 +18848,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16003,6 +18985,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16121,6 +19122,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16239,6 +19259,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16357,6 +19396,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16475,6 +19533,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16593,6 +19670,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16711,6 +19807,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16829,6 +19944,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -16947,6 +20081,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -17126,7 +20279,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         objectives?: Array<{
@@ -17174,6 +20330,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -17313,6 +20488,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -17429,6 +20623,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -17527,6 +20842,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -17659,6 +20993,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -17791,6 +21144,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -17923,6 +21295,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18055,6 +21446,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18187,6 +21597,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18319,6 +21748,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18451,6 +21899,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18583,6 +22050,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18715,6 +22201,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18847,6 +22352,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -18979,6 +22503,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19111,6 +22654,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19243,6 +22805,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19375,6 +22956,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19507,6 +23107,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19639,6 +23258,25 @@ export default abstract class Client extends document_ai {
                                                             folded?: boolean;
                                                             language?: number;
                                                             wrap?: boolean;
+                                                            background_color?:
+                                                                | "LightGrayBackground"
+                                                                | "LightRedBackground"
+                                                                | "LightOrangeBackground"
+                                                                | "LightYellowBackground"
+                                                                | "LightGreenBackground"
+                                                                | "LightBlueBackground"
+                                                                | "LightPurpleBackground"
+                                                                | "PaleGrayBackground"
+                                                                | "DarkGrayBackground"
+                                                                | "DarkRedBackground"
+                                                                | "DarkOrangeBackground"
+                                                                | "DarkYellowBackground"
+                                                                | "DarkGreenBackground"
+                                                                | "DarkBlueBackground"
+                                                                | "DarkPurpleBackground";
+                                                            indentation_level?:
+                                                                | "NoIndent"
+                                                                | "OneLevelIndent";
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -19837,7 +23475,10 @@ export default abstract class Client extends document_ai {
                                                     };
                                                     undefined?: {};
                                                     quote_container?: {};
-                                                    task?: { task_id: string };
+                                                    task?: {
+                                                        task_id?: string;
+                                                        folded?: boolean;
+                                                    };
                                                     okr?: {
                                                         okr_id?: string;
                                                         period_display_status?:
@@ -19885,6 +23526,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -20042,6 +23702,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -20177,6 +23856,141 @@ export default abstract class Client extends document_ai {
                                                     wiki_catalog?: {
                                                         wiki_token?: string;
                                                     };
+                                                    board?: {
+                                                        token?: string;
+                                                        align?: number;
+                                                        width?: number;
+                                                        height?: number;
+                                                    };
+                                                    agenda?: {};
+                                                    agenda_item?: {};
+                                                    agenda_item_title?: {
+                                                        elements: Array<{
+                                                            text_run?: {
+                                                                content: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            mention_user?: {
+                                                                user_id: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            mention_doc?: {
+                                                                token: string;
+                                                                obj_type: number;
+                                                                url: string;
+                                                                title?: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            reminder?: {
+                                                                create_user_id: string;
+                                                                is_notify?: boolean;
+                                                                is_whole_day?: boolean;
+                                                                expire_time: string;
+                                                                notify_time: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            file?: {
+                                                                file_token?: string;
+                                                                source_block_id?: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            undefined?: {};
+                                                            inline_block?: {
+                                                                block_id: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                            equation?: {
+                                                                content: string;
+                                                                text_element_style?: {
+                                                                    bold?: boolean;
+                                                                    italic?: boolean;
+                                                                    strikethrough?: boolean;
+                                                                    underline?: boolean;
+                                                                    inline_code?: boolean;
+                                                                    background_color?: number;
+                                                                    text_color?: number;
+                                                                    link?: {
+                                                                        url: string;
+                                                                    };
+                                                                    comment_ids?: Array<string>;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        align?: number;
+                                                    };
+                                                    agenda_item_content?: {};
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -20246,6 +24060,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20364,6 +24197,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20482,6 +24334,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20600,6 +24471,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20718,6 +24608,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20836,6 +24745,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20954,6 +24882,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21072,6 +25019,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21190,6 +25156,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21308,6 +25293,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21426,6 +25430,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21544,6 +25567,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21662,6 +25704,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21780,6 +25841,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -21898,6 +25978,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -22016,6 +26115,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -22134,6 +26252,25 @@ export default abstract class Client extends document_ai {
                                             folded?: boolean;
                                             language?: number;
                                             wrap?: boolean;
+                                            background_color?:
+                                                | "LightGrayBackground"
+                                                | "LightRedBackground"
+                                                | "LightOrangeBackground"
+                                                | "LightYellowBackground"
+                                                | "LightGreenBackground"
+                                                | "LightBlueBackground"
+                                                | "LightPurpleBackground"
+                                                | "PaleGrayBackground"
+                                                | "DarkGrayBackground"
+                                                | "DarkRedBackground"
+                                                | "DarkOrangeBackground"
+                                                | "DarkYellowBackground"
+                                                | "DarkGreenBackground"
+                                                | "DarkBlueBackground"
+                                                | "DarkPurpleBackground";
+                                            indentation_level?:
+                                                | "NoIndent"
+                                                | "OneLevelIndent";
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -22306,7 +26443,10 @@ export default abstract class Client extends document_ai {
                                     view?: { view_type?: number };
                                     undefined?: {};
                                     quote_container?: {};
-                                    task?: { task_id: string };
+                                    task?: {
+                                        task_id?: string;
+                                        folded?: boolean;
+                                    };
                                     okr?: {
                                         okr_id?: string;
                                         period_display_status?:
@@ -22350,6 +26490,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -22489,6 +26648,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -22605,6 +26783,127 @@ export default abstract class Client extends document_ai {
                                     comment_ids?: Array<string>;
                                     jira_issue?: { id?: string; key?: string };
                                     wiki_catalog?: { wiki_token?: string };
+                                    board?: {
+                                        token?: string;
+                                        align?: number;
+                                        width?: number;
+                                        height?: number;
+                                    };
+                                    agenda?: {};
+                                    agenda_item?: {};
+                                    agenda_item_title?: {
+                                        elements: Array<{
+                                            text_run?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_user?: {
+                                                user_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            mention_doc?: {
+                                                token: string;
+                                                obj_type: number;
+                                                url: string;
+                                                title?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            reminder?: {
+                                                create_user_id: string;
+                                                is_notify?: boolean;
+                                                is_whole_day?: boolean;
+                                                expire_time: string;
+                                                notify_time: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            file?: {
+                                                file_token?: string;
+                                                source_block_id?: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            undefined?: {};
+                                            inline_block?: {
+                                                block_id: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                            equation?: {
+                                                content: string;
+                                                text_element_style?: {
+                                                    bold?: boolean;
+                                                    italic?: boolean;
+                                                    strikethrough?: boolean;
+                                                    underline?: boolean;
+                                                    inline_code?: boolean;
+                                                    background_color?: number;
+                                                    text_color?: number;
+                                                    link?: { url: string };
+                                                    comment_ids?: Array<string>;
+                                                };
+                                            };
+                                        }>;
+                                        align?: number;
+                                    };
+                                    agenda_item_content?: {};
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -22663,6 +26962,15 @@ export default abstract class Client extends document_ai {
                                     document_id?: string;
                                     revision_id?: number;
                                     title?: string;
+                                    display_setting?: {
+                                        show_authors?: boolean;
+                                        show_create_time?: boolean;
+                                        show_pv?: boolean;
+                                        show_uv?: boolean;
+                                        show_like_count?: boolean;
+                                        show_comment_count?: boolean;
+                                        show_related_matters?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -22714,6 +27022,15 @@ export default abstract class Client extends document_ai {
                                     document_id?: string;
                                     revision_id?: number;
                                     title?: string;
+                                    display_setting?: {
+                                        show_authors?: boolean;
+                                        show_create_time?: boolean;
+                                        show_pv?: boolean;
+                                        show_uv?: boolean;
+                                        show_like_count?: boolean;
+                                        show_comment_count?: boolean;
+                                        show_related_matters?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -22919,6 +27236,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     fields: Array<number>;
                                 };
@@ -23077,8 +27413,31 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     fields: Array<number>;
+                                };
+                                update_task?: {
+                                    task_id?: string;
+                                    folded?: boolean;
                                 };
                             }>;
                         };
@@ -23113,6 +27472,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23231,6 +27609,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23349,6 +27746,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23467,6 +27883,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23585,6 +28020,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23703,6 +28157,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23821,6 +28294,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -23939,6 +28431,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24057,6 +28568,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24175,6 +28705,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24293,6 +28842,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24411,6 +28979,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24529,6 +29116,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24647,6 +29253,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24765,6 +29390,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -24883,6 +29527,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -25001,6 +29664,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -25180,7 +29862,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             objectives?: Array<{
@@ -25230,6 +29915,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -25385,6 +30089,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -25518,6 +30241,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     }>;
                                     document_revision_id?: number;
                                     client_token: string;
@@ -25583,6 +30427,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -25701,6 +30564,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -25819,6 +30701,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -25937,6 +30838,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26055,6 +30975,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26173,6 +31112,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26291,6 +31249,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26409,6 +31386,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26527,6 +31523,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26645,6 +31660,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26763,6 +31797,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26881,6 +31934,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26999,6 +32071,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27117,6 +32208,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27235,6 +32345,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27353,6 +32482,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27471,6 +32619,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27643,7 +32810,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             period_display_status?:
@@ -27689,6 +32859,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -27844,6 +33033,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -27977,6 +33185,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     };
                                 };
                             }
@@ -28073,6 +33402,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28205,6 +33553,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28337,6 +33704,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28469,6 +33855,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28601,6 +34006,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28733,6 +34157,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28865,6 +34308,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -28997,6 +34459,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29129,6 +34610,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29261,6 +34761,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29393,6 +34912,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29525,6 +35063,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29657,6 +35214,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29789,6 +35365,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -29921,6 +35516,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -30053,6 +35667,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -30185,6 +35818,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -30386,7 +36038,8 @@ export default abstract class Client extends document_ai {
                                                         undefined?: {};
                                                         quote_container?: {};
                                                         task?: {
-                                                            task_id: string;
+                                                            task_id?: string;
+                                                            folded?: boolean;
                                                         };
                                                         okr?: {
                                                             okr_id?: string;
@@ -30435,6 +36088,25 @@ export default abstract class Client extends document_ai {
                                                                     folded?: boolean;
                                                                     language?: number;
                                                                     wrap?: boolean;
+                                                                    background_color?:
+                                                                        | "LightGrayBackground"
+                                                                        | "LightRedBackground"
+                                                                        | "LightOrangeBackground"
+                                                                        | "LightYellowBackground"
+                                                                        | "LightGreenBackground"
+                                                                        | "LightBlueBackground"
+                                                                        | "LightPurpleBackground"
+                                                                        | "PaleGrayBackground"
+                                                                        | "DarkGrayBackground"
+                                                                        | "DarkRedBackground"
+                                                                        | "DarkOrangeBackground"
+                                                                        | "DarkYellowBackground"
+                                                                        | "DarkGreenBackground"
+                                                                        | "DarkBlueBackground"
+                                                                        | "DarkPurpleBackground";
+                                                                    indentation_level?:
+                                                                        | "NoIndent"
+                                                                        | "OneLevelIndent";
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -30592,6 +36264,25 @@ export default abstract class Client extends document_ai {
                                                                     folded?: boolean;
                                                                     language?: number;
                                                                     wrap?: boolean;
+                                                                    background_color?:
+                                                                        | "LightGrayBackground"
+                                                                        | "LightRedBackground"
+                                                                        | "LightOrangeBackground"
+                                                                        | "LightYellowBackground"
+                                                                        | "LightGreenBackground"
+                                                                        | "LightBlueBackground"
+                                                                        | "LightPurpleBackground"
+                                                                        | "PaleGrayBackground"
+                                                                        | "DarkGrayBackground"
+                                                                        | "DarkRedBackground"
+                                                                        | "DarkOrangeBackground"
+                                                                        | "DarkYellowBackground"
+                                                                        | "DarkGreenBackground"
+                                                                        | "DarkBlueBackground"
+                                                                        | "DarkPurpleBackground";
+                                                                    indentation_level?:
+                                                                        | "NoIndent"
+                                                                        | "OneLevelIndent";
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -30727,6 +36418,141 @@ export default abstract class Client extends document_ai {
                                                         wiki_catalog?: {
                                                             wiki_token?: string;
                                                         };
+                                                        board?: {
+                                                            token?: string;
+                                                            align?: number;
+                                                            width?: number;
+                                                            height?: number;
+                                                        };
+                                                        agenda?: {};
+                                                        agenda_item?: {};
+                                                        agenda_item_title?: {
+                                                            elements: Array<{
+                                                                text_run?: {
+                                                                    content: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                mention_user?: {
+                                                                    user_id: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                mention_doc?: {
+                                                                    token: string;
+                                                                    obj_type: number;
+                                                                    url: string;
+                                                                    title?: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                reminder?: {
+                                                                    create_user_id: string;
+                                                                    is_notify?: boolean;
+                                                                    is_whole_day?: boolean;
+                                                                    expire_time: string;
+                                                                    notify_time: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                file?: {
+                                                                    file_token?: string;
+                                                                    source_block_id?: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                undefined?: {};
+                                                                inline_block?: {
+                                                                    block_id: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                equation?: {
+                                                                    content: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                            }>;
+                                                            align?: number;
+                                                        };
+                                                        agenda_item_content?: {};
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -30796,6 +36622,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -30914,6 +36759,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31032,6 +36896,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31150,6 +37033,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31268,6 +37170,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31386,6 +37307,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31504,6 +37444,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31622,6 +37581,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31740,6 +37718,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31858,6 +37855,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31976,6 +37992,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32094,6 +38129,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32212,6 +38266,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32330,6 +38403,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32448,6 +38540,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32566,6 +38677,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32684,6 +38814,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32856,7 +39005,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             period_display_status?:
@@ -32902,6 +39054,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -33057,6 +39228,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -33190,6 +39380,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -33341,6 +39652,25 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 fields: Array<number>;
                             };
@@ -33495,8 +39825,31 @@ export default abstract class Client extends document_ai {
                                     folded?: boolean;
                                     language?: number;
                                     wrap?: boolean;
+                                    background_color?:
+                                        | "LightGrayBackground"
+                                        | "LightRedBackground"
+                                        | "LightOrangeBackground"
+                                        | "LightYellowBackground"
+                                        | "LightGreenBackground"
+                                        | "LightBlueBackground"
+                                        | "LightPurpleBackground"
+                                        | "PaleGrayBackground"
+                                        | "DarkGrayBackground"
+                                        | "DarkRedBackground"
+                                        | "DarkOrangeBackground"
+                                        | "DarkYellowBackground"
+                                        | "DarkGreenBackground"
+                                        | "DarkBlueBackground"
+                                        | "DarkPurpleBackground";
+                                    indentation_level?:
+                                        | "NoIndent"
+                                        | "OneLevelIndent";
                                 };
                                 fields: Array<number>;
+                            };
+                            update_task?: {
+                                task_id?: string;
+                                folded?: boolean;
                             };
                         };
                         params?: {
@@ -33530,6 +39883,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -33648,6 +40020,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -33766,6 +40157,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -33884,6 +40294,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34002,6 +40431,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34120,6 +40568,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34238,6 +40705,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34356,6 +40842,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34474,6 +40979,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34592,6 +41116,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34710,6 +41253,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34828,6 +41390,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -34946,6 +41527,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -35064,6 +41664,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -35182,6 +41801,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -35300,6 +41938,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -35418,6 +42075,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -35597,7 +42273,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             objectives?: Array<{
@@ -35647,6 +42326,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -35802,6 +42500,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -35935,6 +42652,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     };
                                     document_revision_id?: number;
                                     client_token: string;
@@ -36038,6 +42876,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36153,6 +43010,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36268,6 +43144,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36383,6 +43278,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36498,6 +43412,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36613,6 +43546,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36728,6 +43680,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36843,6 +43814,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -36958,6 +43948,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37073,6 +44082,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37188,6 +44216,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37303,6 +44350,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37418,6 +44484,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37533,6 +44618,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37648,6 +44752,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37763,6 +44886,25 @@ export default abstract class Client extends document_ai {
                                         folded?: boolean;
                                         language?: number;
                                         wrap?: boolean;
+                                        background_color?:
+                                            | "LightGrayBackground"
+                                            | "LightRedBackground"
+                                            | "LightOrangeBackground"
+                                            | "LightYellowBackground"
+                                            | "LightGreenBackground"
+                                            | "LightBlueBackground"
+                                            | "LightPurpleBackground"
+                                            | "PaleGrayBackground"
+                                            | "DarkGrayBackground"
+                                            | "DarkRedBackground"
+                                            | "DarkOrangeBackground"
+                                            | "DarkYellowBackground"
+                                            | "DarkGreenBackground"
+                                            | "DarkBlueBackground"
+                                            | "DarkPurpleBackground";
+                                        indentation_level?:
+                                            | "NoIndent"
+                                            | "OneLevelIndent";
                                     };
                                     elements: Array<{
                                         text_run?: {
@@ -37912,6 +45054,7 @@ export default abstract class Client extends document_ai {
                                     };
                                 };
                                 quote_container?: {};
+                                task?: { folded?: boolean };
                                 okr?: {
                                     okr_id?: string;
                                     objectives?: Array<{
@@ -37921,6 +45064,11 @@ export default abstract class Client extends document_ai {
                                 };
                                 comment_ids?: Array<string>;
                                 wiki_catalog?: { wiki_token?: string };
+                                board?: {
+                                    align?: number;
+                                    width?: number;
+                                    height?: number;
+                                };
                             }>;
                             index?: number;
                         };
@@ -37955,6 +45103,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38073,6 +45240,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38191,6 +45377,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38309,6 +45514,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38427,6 +45651,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38545,6 +45788,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38663,6 +45925,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38781,6 +46062,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38899,6 +46199,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39017,6 +46336,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39135,6 +46473,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39253,6 +46610,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39371,6 +46747,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39489,6 +46884,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39607,6 +47021,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39725,6 +47158,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39843,6 +47295,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40022,7 +47493,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             objectives?: Array<{
@@ -40072,6 +47546,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -40227,6 +47720,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -40360,6 +47872,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     }>;
                                     document_revision_id?: number;
                                     client_token: string;
@@ -40458,6 +48091,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -40590,6 +48242,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -40722,6 +48393,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -40854,6 +48544,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -40986,6 +48695,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41118,6 +48846,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41250,6 +48997,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41382,6 +49148,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41514,6 +49299,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41646,6 +49450,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41778,6 +49601,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -41910,6 +49752,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42042,6 +49903,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42174,6 +50054,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42306,6 +50205,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42438,6 +50356,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42570,6 +50507,25 @@ export default abstract class Client extends document_ai {
                                                                 folded?: boolean;
                                                                 language?: number;
                                                                 wrap?: boolean;
+                                                                background_color?:
+                                                                    | "LightGrayBackground"
+                                                                    | "LightRedBackground"
+                                                                    | "LightOrangeBackground"
+                                                                    | "LightYellowBackground"
+                                                                    | "LightGreenBackground"
+                                                                    | "LightBlueBackground"
+                                                                    | "LightPurpleBackground"
+                                                                    | "PaleGrayBackground"
+                                                                    | "DarkGrayBackground"
+                                                                    | "DarkRedBackground"
+                                                                    | "DarkOrangeBackground"
+                                                                    | "DarkYellowBackground"
+                                                                    | "DarkGreenBackground"
+                                                                    | "DarkBlueBackground"
+                                                                    | "DarkPurpleBackground";
+                                                                indentation_level?:
+                                                                    | "NoIndent"
+                                                                    | "OneLevelIndent";
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -42771,7 +50727,8 @@ export default abstract class Client extends document_ai {
                                                         undefined?: {};
                                                         quote_container?: {};
                                                         task?: {
-                                                            task_id: string;
+                                                            task_id?: string;
+                                                            folded?: boolean;
                                                         };
                                                         okr?: {
                                                             okr_id?: string;
@@ -42820,6 +50777,25 @@ export default abstract class Client extends document_ai {
                                                                     folded?: boolean;
                                                                     language?: number;
                                                                     wrap?: boolean;
+                                                                    background_color?:
+                                                                        | "LightGrayBackground"
+                                                                        | "LightRedBackground"
+                                                                        | "LightOrangeBackground"
+                                                                        | "LightYellowBackground"
+                                                                        | "LightGreenBackground"
+                                                                        | "LightBlueBackground"
+                                                                        | "LightPurpleBackground"
+                                                                        | "PaleGrayBackground"
+                                                                        | "DarkGrayBackground"
+                                                                        | "DarkRedBackground"
+                                                                        | "DarkOrangeBackground"
+                                                                        | "DarkYellowBackground"
+                                                                        | "DarkGreenBackground"
+                                                                        | "DarkBlueBackground"
+                                                                        | "DarkPurpleBackground";
+                                                                    indentation_level?:
+                                                                        | "NoIndent"
+                                                                        | "OneLevelIndent";
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -42977,6 +50953,25 @@ export default abstract class Client extends document_ai {
                                                                     folded?: boolean;
                                                                     language?: number;
                                                                     wrap?: boolean;
+                                                                    background_color?:
+                                                                        | "LightGrayBackground"
+                                                                        | "LightRedBackground"
+                                                                        | "LightOrangeBackground"
+                                                                        | "LightYellowBackground"
+                                                                        | "LightGreenBackground"
+                                                                        | "LightBlueBackground"
+                                                                        | "LightPurpleBackground"
+                                                                        | "PaleGrayBackground"
+                                                                        | "DarkGrayBackground"
+                                                                        | "DarkRedBackground"
+                                                                        | "DarkOrangeBackground"
+                                                                        | "DarkYellowBackground"
+                                                                        | "DarkGreenBackground"
+                                                                        | "DarkBlueBackground"
+                                                                        | "DarkPurpleBackground";
+                                                                    indentation_level?:
+                                                                        | "NoIndent"
+                                                                        | "OneLevelIndent";
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -43112,6 +51107,141 @@ export default abstract class Client extends document_ai {
                                                         wiki_catalog?: {
                                                             wiki_token?: string;
                                                         };
+                                                        board?: {
+                                                            token?: string;
+                                                            align?: number;
+                                                            width?: number;
+                                                            height?: number;
+                                                        };
+                                                        agenda?: {};
+                                                        agenda_item?: {};
+                                                        agenda_item_title?: {
+                                                            elements: Array<{
+                                                                text_run?: {
+                                                                    content: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                mention_user?: {
+                                                                    user_id: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                mention_doc?: {
+                                                                    token: string;
+                                                                    obj_type: number;
+                                                                    url: string;
+                                                                    title?: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                reminder?: {
+                                                                    create_user_id: string;
+                                                                    is_notify?: boolean;
+                                                                    is_whole_day?: boolean;
+                                                                    expire_time: string;
+                                                                    notify_time: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                file?: {
+                                                                    file_token?: string;
+                                                                    source_block_id?: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                undefined?: {};
+                                                                inline_block?: {
+                                                                    block_id: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                                equation?: {
+                                                                    content: string;
+                                                                    text_element_style?: {
+                                                                        bold?: boolean;
+                                                                        italic?: boolean;
+                                                                        strikethrough?: boolean;
+                                                                        underline?: boolean;
+                                                                        inline_code?: boolean;
+                                                                        background_color?: number;
+                                                                        text_color?: number;
+                                                                        link?: {
+                                                                            url: string;
+                                                                        };
+                                                                        comment_ids?: Array<string>;
+                                                                    };
+                                                                };
+                                                            }>;
+                                                            align?: number;
+                                                        };
+                                                        agenda_item_content?: {};
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -43181,6 +51311,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43299,6 +51448,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43417,6 +51585,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43535,6 +51722,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43653,6 +51859,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43771,6 +51996,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -43889,6 +52133,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44007,6 +52270,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44125,6 +52407,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44243,6 +52544,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44361,6 +52681,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44479,6 +52818,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44597,6 +52955,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44715,6 +53092,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44833,6 +53229,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -44951,6 +53366,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45069,6 +53503,25 @@ export default abstract class Client extends document_ai {
                                                 folded?: boolean;
                                                 language?: number;
                                                 wrap?: boolean;
+                                                background_color?:
+                                                    | "LightGrayBackground"
+                                                    | "LightRedBackground"
+                                                    | "LightOrangeBackground"
+                                                    | "LightYellowBackground"
+                                                    | "LightGreenBackground"
+                                                    | "LightBlueBackground"
+                                                    | "LightPurpleBackground"
+                                                    | "PaleGrayBackground"
+                                                    | "DarkGrayBackground"
+                                                    | "DarkRedBackground"
+                                                    | "DarkOrangeBackground"
+                                                    | "DarkYellowBackground"
+                                                    | "DarkGreenBackground"
+                                                    | "DarkBlueBackground"
+                                                    | "DarkPurpleBackground";
+                                                indentation_level?:
+                                                    | "NoIndent"
+                                                    | "OneLevelIndent";
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45241,7 +53694,10 @@ export default abstract class Client extends document_ai {
                                         view?: { view_type?: number };
                                         undefined?: {};
                                         quote_container?: {};
-                                        task?: { task_id: string };
+                                        task?: {
+                                            task_id?: string;
+                                            folded?: boolean;
+                                        };
                                         okr?: {
                                             okr_id?: string;
                                             period_display_status?:
@@ -45287,6 +53743,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -45442,6 +53917,25 @@ export default abstract class Client extends document_ai {
                                                     folded?: boolean;
                                                     language?: number;
                                                     wrap?: boolean;
+                                                    background_color?:
+                                                        | "LightGrayBackground"
+                                                        | "LightRedBackground"
+                                                        | "LightOrangeBackground"
+                                                        | "LightYellowBackground"
+                                                        | "LightGreenBackground"
+                                                        | "LightBlueBackground"
+                                                        | "LightPurpleBackground"
+                                                        | "PaleGrayBackground"
+                                                        | "DarkGrayBackground"
+                                                        | "DarkRedBackground"
+                                                        | "DarkOrangeBackground"
+                                                        | "DarkYellowBackground"
+                                                        | "DarkGreenBackground"
+                                                        | "DarkBlueBackground"
+                                                        | "DarkPurpleBackground";
+                                                    indentation_level?:
+                                                        | "NoIndent"
+                                                        | "OneLevelIndent";
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -45575,6 +54069,127 @@ export default abstract class Client extends document_ai {
                                             key?: string;
                                         };
                                         wiki_catalog?: { wiki_token?: string };
+                                        board?: {
+                                            token?: string;
+                                            align?: number;
+                                            width?: number;
+                                            height?: number;
+                                        };
+                                        agenda?: {};
+                                        agenda_item?: {};
+                                        agenda_item_title?: {
+                                            elements: Array<{
+                                                text_run?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_user?: {
+                                                    user_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                mention_doc?: {
+                                                    token: string;
+                                                    obj_type: number;
+                                                    url: string;
+                                                    title?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                reminder?: {
+                                                    create_user_id: string;
+                                                    is_notify?: boolean;
+                                                    is_whole_day?: boolean;
+                                                    expire_time: string;
+                                                    notify_time: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                file?: {
+                                                    file_token?: string;
+                                                    source_block_id?: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                undefined?: {};
+                                                inline_block?: {
+                                                    block_id: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                                equation?: {
+                                                    content: string;
+                                                    text_element_style?: {
+                                                        bold?: boolean;
+                                                        italic?: boolean;
+                                                        strikethrough?: boolean;
+                                                        underline?: boolean;
+                                                        inline_code?: boolean;
+                                                        background_color?: number;
+                                                        text_color?: number;
+                                                        link?: { url: string };
+                                                        comment_ids?: Array<string>;
+                                                    };
+                                                };
+                                            }>;
+                                            align?: number;
+                                        };
+                                        agenda_item_content?: {};
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -45633,6 +54248,15 @@ export default abstract class Client extends document_ai {
                                         document_id?: string;
                                         revision_id?: number;
                                         title?: string;
+                                        display_setting?: {
+                                            show_authors?: boolean;
+                                            show_create_time?: boolean;
+                                            show_pv?: boolean;
+                                            show_uv?: boolean;
+                                            show_like_count?: boolean;
+                                            show_comment_count?: boolean;
+                                            show_related_matters?: boolean;
+                                        };
                                     };
                                 };
                             }
@@ -45684,6 +54308,15 @@ export default abstract class Client extends document_ai {
                                         document_id?: string;
                                         revision_id?: number;
                                         title?: string;
+                                        display_setting?: {
+                                            show_authors?: boolean;
+                                            show_create_time?: boolean;
+                                            show_pv?: boolean;
+                                            show_uv?: boolean;
+                                            show_like_count?: boolean;
+                                            show_comment_count?: boolean;
+                                            show_related_matters?: boolean;
+                                        };
                                     };
                                 };
                             }

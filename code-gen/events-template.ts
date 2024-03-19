@@ -104,7 +104,23 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             back_home_url?: string;
             i18n?: Array<{
-                i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                i18n_key:
+                    | "zh_cn"
+                    | "en_us"
+                    | "ja_jp"
+                    | "zh_hk"
+                    | "zh_tw"
+                    | "id_id"
+                    | "ms_my"
+                    | "de_de"
+                    | "es_es"
+                    | "fr_fr"
+                    | "it_it"
+                    | "pt_br"
+                    | "vi_vn"
+                    | "ru_ru"
+                    | "th_th"
+                    | "ko_kr";
                 name?: string;
                 description?: string;
                 help_use?: string;
@@ -207,7 +223,23 @@ export interface IHandles extends IOtherEventHandles {
             }>;
             back_home_url?: string;
             i18n?: Array<{
-                i18n_key: "zh_cn" | "en_us" | "ja_jp";
+                i18n_key:
+                    | "zh_cn"
+                    | "en_us"
+                    | "ja_jp"
+                    | "zh_hk"
+                    | "zh_tw"
+                    | "id_id"
+                    | "ms_my"
+                    | "de_de"
+                    | "es_es"
+                    | "fr_fr"
+                    | "it_it"
+                    | "pt_br"
+                    | "vi_vn"
+                    | "ru_ru"
+                    | "th_th"
+                    | "ko_kr";
                 name?: string;
                 description?: string;
                 help_use?: string;
@@ -342,6 +374,13 @@ export interface IHandles extends IOtherEventHandles {
         avatar?: string;
         app_scene_type?: number;
         primary_language?: string;
+        create_source?:
+            | "developer_console"
+            | "base"
+            | "app_engine"
+            | "bot_builder"
+            | "aily"
+            | "unknown";
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-feedback/events/created document }
@@ -1711,6 +1750,51 @@ export interface IHandles extends IOtherEventHandles {
         field_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "corehr.job.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_id?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_change/events/updated document }
      *
      * 异动状态变更事件
@@ -1926,6 +2010,80 @@ export interface IHandles extends IOtherEventHandles {
             | "converted"
             | "offboarded";
         actual_probation_end_date?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.process.approver.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        process_id?: string;
+        approver_id?: string;
+        status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.process.cc.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        approver_id?: string;
+        status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.process.node.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        flow_definition_id?: string;
+        node_definition_id?: string;
+        process_id?: string;
+        process_node_id?: string;
+        node_type?: number;
+        node_status?: number;
+        biz_type?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.process.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
@@ -2376,6 +2534,25 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/events/deleted document }
+     *
+     * 删除投递
+     *
+     * 删除投递
+     */
+    "hire.application.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        application_ids?: Array<string>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/event/application-stage-changed document }
      */
     "hire.application.stage_changed_v1"?: (data: {
@@ -2586,8 +2763,16 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         account_id?: string;
         assets?: {
-            confirmed_bonus?: { point_bonus?: number };
-            paid_bonus?: { point_bonus?: number };
+            confirmed_bonus?: {
+                bonus_type?: number;
+                point_bonus?: number;
+                cash?: { currency_type: string; amount: number };
+            };
+            paid_bonus?: {
+                bonus_type?: number;
+                point_bonus?: number;
+                cash?: { currency_type: string; amount: number };
+            };
         };
         modify_time?: string;
     }) => Promise<any> | any;
@@ -2812,6 +2997,7 @@ export interface IHandles extends IOtherEventHandles {
                 download_has_permission_setting?: "all_members" | "not_anyone";
                 message_has_permission_setting?: "all_members" | "not_anyone";
             };
+            group_message_type?: string;
         };
         before_change?: {
             avatar?: string;
@@ -2840,6 +3026,7 @@ export interface IHandles extends IOtherEventHandles {
                 download_has_permission_setting?: "all_members" | "not_anyone";
                 message_has_permission_setting?: "all_members" | "not_anyone";
             };
+            group_message_type?: string;
         };
         moderator_list?: {
             added_member_list?: Array<{
@@ -3001,6 +3188,7 @@ export interface IHandles extends IOtherEventHandles {
             create_time: string;
             update_time?: string;
             chat_id: string;
+            thread_id?: string;
             chat_type: string;
             message_type: string;
             content: string;

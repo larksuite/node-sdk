@@ -8,10 +8,10 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
-import vc from "./vc";
+import verification from "./verification";
 
 // auto gen
-export default abstract class Client extends vc {
+export default abstract class Client extends verification {
     declare tokenManager;
 
     declare domain;
@@ -99,6 +99,25 @@ export default abstract class Client extends vc {
              */
             get: async (
                 payload?: {
+                    params?: {
+                        lang?:
+                            | "zh"
+                            | "id"
+                            | "de"
+                            | "en"
+                            | "es"
+                            | "fr"
+                            | "it"
+                            | "pt"
+                            | "vi"
+                            | "ru"
+                            | "hi"
+                            | "th"
+                            | "ko"
+                            | "ja"
+                            | "zh-HK"
+                            | "zh-TW";
+                    };
                     path?: { space_id?: string };
                 },
                 options?: IRequestOptions
@@ -218,7 +237,27 @@ export default abstract class Client extends vc {
             },
             listWithIterator: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        lang?:
+                            | "zh"
+                            | "id"
+                            | "de"
+                            | "en"
+                            | "es"
+                            | "fr"
+                            | "it"
+                            | "pt"
+                            | "vi"
+                            | "ru"
+                            | "hi"
+                            | "th"
+                            | "ko"
+                            | "ja"
+                            | "zh-HK"
+                            | "zh-TW";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -321,7 +360,27 @@ export default abstract class Client extends vc {
              */
             list: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        lang?:
+                            | "zh"
+                            | "id"
+                            | "de"
+                            | "en"
+                            | "es"
+                            | "fr"
+                            | "it"
+                            | "pt"
+                            | "vi"
+                            | "ru"
+                            | "hi"
+                            | "th"
+                            | "ko"
+                            | "ja"
+                            | "zh-HK"
+                            | "zh-TW";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -1197,6 +1256,25 @@ export default abstract class Client extends vc {
                  */
                 get: async (
                     payload?: {
+                        params?: {
+                            lang?:
+                                | "zh"
+                                | "id"
+                                | "de"
+                                | "en"
+                                | "es"
+                                | "fr"
+                                | "it"
+                                | "pt"
+                                | "vi"
+                                | "ru"
+                                | "hi"
+                                | "th"
+                                | "ko"
+                                | "ja"
+                                | "zh-HK"
+                                | "zh-TW";
+                        };
                         path?: { space_id?: string };
                     },
                     options?: IRequestOptions
@@ -1316,7 +1394,27 @@ export default abstract class Client extends vc {
                 },
                 listWithIterator: async (
                     payload?: {
-                        params?: { page_size?: number; page_token?: string };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            lang?:
+                                | "zh"
+                                | "id"
+                                | "de"
+                                | "en"
+                                | "es"
+                                | "fr"
+                                | "it"
+                                | "pt"
+                                | "vi"
+                                | "ru"
+                                | "hi"
+                                | "th"
+                                | "ko"
+                                | "ja"
+                                | "zh-HK"
+                                | "zh-TW";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1419,7 +1517,27 @@ export default abstract class Client extends vc {
                  */
                 list: async (
                     payload?: {
-                        params?: { page_size?: number; page_token?: string };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            lang?:
+                                | "zh"
+                                | "id"
+                                | "de"
+                                | "en"
+                                | "es"
+                                | "fr"
+                                | "it"
+                                | "pt"
+                                | "vi"
+                                | "ru"
+                                | "hi"
+                                | "th"
+                                | "ko"
+                                | "ja"
+                                | "zh-HK"
+                                | "zh-TW";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {

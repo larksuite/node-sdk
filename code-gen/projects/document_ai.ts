@@ -595,6 +595,67 @@ export default abstract class Client extends docs_tool {
                 },
             },
             /**
+             * health_certificate
+             */
+            healthCertificate: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=health_certificate&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=health_certificate&version=v1 document }
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    health_certificate?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "name"
+                                                | "issued_by"
+                                                | "date_of_handling"
+                                                | "date_of_issue"
+                                                | "date_of_medical_examination"
+                                                | "valid_date"
+                                                | "other_date";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/health_certificate/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return get(res, "data", null);
+                },
+            },
+            /**
              * hkm_mainland_travel_permit
              */
             hkmMainlandTravelPermit: {
@@ -700,6 +761,121 @@ export default abstract class Client extends docs_tool {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/document_ai/v1/id_card/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return get(res, "data", null);
+                },
+            },
+            /**
+             * resume
+             */
+            resume: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=resume&apiName=parse&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=parse&project=document_ai&resource=resume&version=v1 document }
+                 */
+                parse: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    resumes?: Array<{
+                                        file_md5?: string;
+                                        content?: string;
+                                        new_content?: string;
+                                        name?: string;
+                                        email?: string;
+                                        mobile?: string;
+                                        mobile_is_virtual?: boolean;
+                                        country_code?: string;
+                                        educations?: Array<{
+                                            school?: string;
+                                            start_date?: string;
+                                            start_time?: string;
+                                            end_date?: string;
+                                            end_time?: string;
+                                            major?: string;
+                                            degree?: string;
+                                            qualification?: number;
+                                        }>;
+                                        careers?: Array<{
+                                            company?: string;
+                                            start_date?: string;
+                                            start_time?: string;
+                                            end_date?: string;
+                                            end_time?: string;
+                                            title?: string;
+                                            type?: number;
+                                            type_str?: string;
+                                            job_description?: string;
+                                        }>;
+                                        projects?: Array<{
+                                            name?: string;
+                                            title?: string;
+                                            start_date?: string;
+                                            start_time?: string;
+                                            end_date?: string;
+                                            end_time?: string;
+                                            description?: string;
+                                        }>;
+                                        work_year?: number;
+                                        date_of_birth?: string;
+                                        gender?: number;
+                                        willing_positions?: Array<string>;
+                                        current_location?: string;
+                                        willing_locations?: Array<string>;
+                                        home_location?: string;
+                                        languages?: Array<{
+                                            level?: number;
+                                            description?: string;
+                                        }>;
+                                        awards?: Array<{
+                                            award?: string;
+                                            date?: string;
+                                            description?: string;
+                                        }>;
+                                        certificates?: Array<{
+                                            name?: string;
+                                            desc?: string;
+                                        }>;
+                                        competitions?: Array<{
+                                            name?: string;
+                                            desc?: string;
+                                        }>;
+                                        self_evaluation?: string;
+                                        urls?: Array<string>;
+                                        social_links?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/resume/parse`,
                                 path
                             ),
                             method: "POST",
@@ -953,6 +1129,81 @@ export default abstract class Client extends docs_tool {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/document_ai/v1/vat_invoice/recognize`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return get(res, "data", null);
+                },
+            },
+            /**
+             * vehicle_invoice
+             */
+            vehicleInvoice: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=document_ai&resource=vehicle_invoice&apiName=recognize&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recognize&project=document_ai&resource=vehicle_invoice&version=v1 document }
+                 */
+                recognize: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    vehicle_invoice?: {
+                                        entities?: Array<{
+                                            type?:
+                                                | "invoice_code"
+                                                | "invoice_num"
+                                                | "date"
+                                                | "print_code"
+                                                | "print_num"
+                                                | "machine_num"
+                                                | "buyer_name"
+                                                | "buyer_id"
+                                                | "vehicle_type"
+                                                | "product_model"
+                                                | "certificate_num"
+                                                | "engine_num"
+                                                | "vin"
+                                                | "total_price"
+                                                | "total_price_little"
+                                                | "saler_name"
+                                                | "saler_id"
+                                                | "saler_addr"
+                                                | "tax_rate"
+                                                | "tax"
+                                                | "price";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/document_ai/v1/vehicle_invoice/recognize`,
                                 path
                             ),
                             method: "POST",

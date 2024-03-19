@@ -237,10 +237,6 @@ export default abstract class Client extends docx {
                                     quote?: string;
                                     reply_list?: {
                                         replies: Array<{
-                                            reply_id?: string;
-                                            user_id?: string;
-                                            create_time?: number;
-                                            update_time?: number;
                                             content: {
                                                 elements: Array<{
                                                     type:
@@ -254,6 +250,10 @@ export default abstract class Client extends docx {
                                                     };
                                                 }>;
                                             };
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
@@ -289,23 +289,8 @@ export default abstract class Client extends docx {
             create: async (
                 payload?: {
                     data?: {
-                        comment_id?: string;
-                        user_id?: string;
-                        create_time?: number;
-                        update_time?: number;
-                        is_solved?: boolean;
-                        solved_time?: number;
-                        solver_user_id?: string;
-                        has_more?: boolean;
-                        page_token?: string;
-                        is_whole?: boolean;
-                        quote?: string;
                         reply_list?: {
                             replies: Array<{
-                                reply_id?: string;
-                                user_id?: string;
-                                create_time?: number;
-                                update_time?: number;
                                 content: {
                                     elements: Array<{
                                         type:
@@ -317,7 +302,6 @@ export default abstract class Client extends docx {
                                         person?: { user_id: string };
                                     }>;
                                 };
-                                extra?: { image_list?: Array<string> };
                             }>;
                         };
                     };
@@ -352,10 +336,6 @@ export default abstract class Client extends docx {
                                 quote?: string;
                                 reply_list?: {
                                     replies: Array<{
-                                        reply_id?: string;
-                                        user_id?: string;
-                                        create_time?: number;
-                                        update_time?: number;
                                         content: {
                                             elements: Array<{
                                                 type:
@@ -367,6 +347,10 @@ export default abstract class Client extends docx {
                                                 person?: { user_id: string };
                                             }>;
                                         };
+                                        reply_id?: string;
+                                        user_id?: string;
+                                        create_time?: number;
+                                        update_time?: number;
                                         extra?: { image_list?: Array<string> };
                                     }>;
                                 };
@@ -429,10 +413,6 @@ export default abstract class Client extends docx {
                                 quote?: string;
                                 reply_list?: {
                                     replies: Array<{
-                                        reply_id?: string;
-                                        user_id?: string;
-                                        create_time?: number;
-                                        update_time?: number;
                                         content: {
                                             elements: Array<{
                                                 type:
@@ -444,6 +424,10 @@ export default abstract class Client extends docx {
                                                 person?: { user_id: string };
                                             }>;
                                         };
+                                        reply_id?: string;
+                                        user_id?: string;
+                                        create_time?: number;
+                                        update_time?: number;
                                         extra?: { image_list?: Array<string> };
                                     }>;
                                 };
@@ -548,10 +532,6 @@ export default abstract class Client extends docx {
                                                     quote?: string;
                                                     reply_list?: {
                                                         replies: Array<{
-                                                            reply_id?: string;
-                                                            user_id?: string;
-                                                            create_time?: number;
-                                                            update_time?: number;
                                                             content: {
                                                                 elements: Array<{
                                                                     type:
@@ -569,6 +549,10 @@ export default abstract class Client extends docx {
                                                                     };
                                                                 }>;
                                                             };
+                                                            reply_id?: string;
+                                                            user_id?: string;
+                                                            create_time?: number;
+                                                            update_time?: number;
                                                             extra?: {
                                                                 image_list?: Array<string>;
                                                             };
@@ -643,10 +627,6 @@ export default abstract class Client extends docx {
                                     quote?: string;
                                     reply_list?: {
                                         replies: Array<{
-                                            reply_id?: string;
-                                            user_id?: string;
-                                            create_time?: number;
-                                            update_time?: number;
                                             content: {
                                                 elements: Array<{
                                                     type:
@@ -660,6 +640,10 @@ export default abstract class Client extends docx {
                                                     };
                                                 }>;
                                             };
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
@@ -830,10 +814,6 @@ export default abstract class Client extends docx {
                                             msg?: string;
                                             data?: {
                                                 items?: Array<{
-                                                    reply_id?: string;
-                                                    user_id?: string;
-                                                    create_time?: number;
-                                                    update_time?: number;
                                                     content: {
                                                         elements: Array<{
                                                             type:
@@ -851,6 +831,10 @@ export default abstract class Client extends docx {
                                                             };
                                                         }>;
                                                     };
+                                                    reply_id?: string;
+                                                    user_id?: string;
+                                                    create_time?: number;
+                                                    update_time?: number;
                                                     extra?: {
                                                         image_list?: Array<string>;
                                                     };
@@ -908,10 +892,6 @@ export default abstract class Client extends docx {
                             msg?: string;
                             data?: {
                                 items?: Array<{
-                                    reply_id?: string;
-                                    user_id?: string;
-                                    create_time?: number;
-                                    update_time?: number;
                                     content: {
                                         elements: Array<{
                                             type:
@@ -923,6 +903,10 @@ export default abstract class Client extends docx {
                                             person?: { user_id: string };
                                         }>;
                                     };
+                                    reply_id?: string;
+                                    user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
                                     extra?: { image_list?: Array<string> };
                                 }>;
                                 page_token?: string;
@@ -998,7 +982,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 分片上传
+         * 事件
          */
         file: {
             /**
@@ -1260,7 +1244,9 @@ export default abstract class Client extends docx {
                             | "docx"
                             | "sheet"
                             | "bitable"
-                            | "file";
+                            | "file"
+                            | "folder";
+                        event_type?: string;
                     };
                     path: { file_token: string };
                 },
@@ -1355,7 +1341,9 @@ export default abstract class Client extends docx {
                             | "docx"
                             | "sheet"
                             | "bitable"
-                            | "file";
+                            | "file"
+                            | "folder";
+                        event_type?: string;
                     };
                     path: { file_token: string };
                 },
@@ -1365,7 +1353,14 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { is_subseribe?: boolean };
+                        }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/get_subscribe`,
                             path
@@ -1611,7 +1606,15 @@ export default abstract class Client extends docx {
              */
             subscribe: async (
                 payload?: {
-                    params: { file_type: "doc" | "docx" | "sheet" | "bitable" };
+                    params: {
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "bitable"
+                            | "folder";
+                        event_type?: string;
+                    };
                     path: { file_token: string };
                 },
                 options?: IRequestOptions
@@ -1924,6 +1927,9 @@ export default abstract class Client extends docx {
                                     pv?: number;
                                     like_count?: number;
                                     timestamp?: number;
+                                    uv_today?: number;
+                                    pv_today?: number;
+                                    like_count_today?: number;
                                 };
                             };
                         }
@@ -3051,7 +3057,8 @@ export default abstract class Client extends docx {
                                 | "file"
                                 | "wiki"
                                 | "docx"
-                                | "folder";
+                                | "folder"
+                                | "synced_block";
                         }>;
                         with_url?: boolean;
                     };
@@ -4025,10 +4032,6 @@ export default abstract class Client extends docx {
                                         quote?: string;
                                         reply_list?: {
                                             replies: Array<{
-                                                reply_id?: string;
-                                                user_id?: string;
-                                                create_time?: number;
-                                                update_time?: number;
                                                 content: {
                                                     elements: Array<{
                                                         type:
@@ -4046,6 +4049,10 @@ export default abstract class Client extends docx {
                                                         };
                                                     }>;
                                                 };
+                                                reply_id?: string;
+                                                user_id?: string;
+                                                create_time?: number;
+                                                update_time?: number;
                                                 extra?: {
                                                     image_list?: Array<string>;
                                                 };
@@ -4081,23 +4088,8 @@ export default abstract class Client extends docx {
                 create: async (
                     payload?: {
                         data?: {
-                            comment_id?: string;
-                            user_id?: string;
-                            create_time?: number;
-                            update_time?: number;
-                            is_solved?: boolean;
-                            solved_time?: number;
-                            solver_user_id?: string;
-                            has_more?: boolean;
-                            page_token?: string;
-                            is_whole?: boolean;
-                            quote?: string;
                             reply_list?: {
                                 replies: Array<{
-                                    reply_id?: string;
-                                    user_id?: string;
-                                    create_time?: number;
-                                    update_time?: number;
                                     content: {
                                         elements: Array<{
                                             type:
@@ -4109,7 +4101,6 @@ export default abstract class Client extends docx {
                                             person?: { user_id: string };
                                         }>;
                                     };
-                                    extra?: { image_list?: Array<string> };
                                 }>;
                             };
                         };
@@ -4144,10 +4135,6 @@ export default abstract class Client extends docx {
                                     quote?: string;
                                     reply_list?: {
                                         replies: Array<{
-                                            reply_id?: string;
-                                            user_id?: string;
-                                            create_time?: number;
-                                            update_time?: number;
                                             content: {
                                                 elements: Array<{
                                                     type:
@@ -4161,6 +4148,10 @@ export default abstract class Client extends docx {
                                                     };
                                                 }>;
                                             };
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
@@ -4225,10 +4216,6 @@ export default abstract class Client extends docx {
                                     quote?: string;
                                     reply_list?: {
                                         replies: Array<{
-                                            reply_id?: string;
-                                            user_id?: string;
-                                            create_time?: number;
-                                            update_time?: number;
                                             content: {
                                                 elements: Array<{
                                                     type:
@@ -4242,6 +4229,10 @@ export default abstract class Client extends docx {
                                                     };
                                                 }>;
                                             };
+                                            reply_id?: string;
+                                            user_id?: string;
+                                            create_time?: number;
+                                            update_time?: number;
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
@@ -4348,10 +4339,6 @@ export default abstract class Client extends docx {
                                                         quote?: string;
                                                         reply_list?: {
                                                             replies: Array<{
-                                                                reply_id?: string;
-                                                                user_id?: string;
-                                                                create_time?: number;
-                                                                update_time?: number;
                                                                 content: {
                                                                     elements: Array<{
                                                                         type:
@@ -4369,6 +4356,10 @@ export default abstract class Client extends docx {
                                                                         };
                                                                     }>;
                                                                 };
+                                                                reply_id?: string;
+                                                                user_id?: string;
+                                                                create_time?: number;
+                                                                update_time?: number;
                                                                 extra?: {
                                                                     image_list?: Array<string>;
                                                                 };
@@ -4443,10 +4434,6 @@ export default abstract class Client extends docx {
                                         quote?: string;
                                         reply_list?: {
                                             replies: Array<{
-                                                reply_id?: string;
-                                                user_id?: string;
-                                                create_time?: number;
-                                                update_time?: number;
                                                 content: {
                                                     elements: Array<{
                                                         type:
@@ -4464,6 +4451,10 @@ export default abstract class Client extends docx {
                                                         };
                                                     }>;
                                                 };
+                                                reply_id?: string;
+                                                user_id?: string;
+                                                create_time?: number;
+                                                update_time?: number;
                                                 extra?: {
                                                     image_list?: Array<string>;
                                                 };
@@ -4644,10 +4635,6 @@ export default abstract class Client extends docx {
                                                 msg?: string;
                                                 data?: {
                                                     items?: Array<{
-                                                        reply_id?: string;
-                                                        user_id?: string;
-                                                        create_time?: number;
-                                                        update_time?: number;
                                                         content: {
                                                             elements: Array<{
                                                                 type:
@@ -4665,6 +4652,10 @@ export default abstract class Client extends docx {
                                                                 };
                                                             }>;
                                                         };
+                                                        reply_id?: string;
+                                                        user_id?: string;
+                                                        create_time?: number;
+                                                        update_time?: number;
                                                         extra?: {
                                                             image_list?: Array<string>;
                                                         };
@@ -4722,10 +4713,6 @@ export default abstract class Client extends docx {
                                 msg?: string;
                                 data?: {
                                     items?: Array<{
-                                        reply_id?: string;
-                                        user_id?: string;
-                                        create_time?: number;
-                                        update_time?: number;
                                         content: {
                                             elements: Array<{
                                                 type:
@@ -4737,6 +4724,10 @@ export default abstract class Client extends docx {
                                                 person?: { user_id: string };
                                             }>;
                                         };
+                                        reply_id?: string;
+                                        user_id?: string;
+                                        create_time?: number;
+                                        update_time?: number;
                                         extra?: { image_list?: Array<string> };
                                     }>;
                                     page_token?: string;
@@ -4815,7 +4806,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 分片上传
+             * 事件
              */
             file: {
                 /**
@@ -5077,7 +5068,9 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "bitable"
-                                | "file";
+                                | "file"
+                                | "folder";
+                            event_type?: string;
                         };
                         path: { file_token: string };
                     },
@@ -5175,7 +5168,9 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "bitable"
-                                | "file";
+                                | "file"
+                                | "folder";
+                            event_type?: string;
                         };
                         path: { file_token: string };
                     },
@@ -5187,7 +5182,11 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { is_subseribe?: boolean };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/get_subscribe`,
@@ -5435,7 +5434,13 @@ export default abstract class Client extends docx {
                 subscribe: async (
                     payload?: {
                         params: {
-                            file_type: "doc" | "docx" | "sheet" | "bitable";
+                            file_type:
+                                | "doc"
+                                | "docx"
+                                | "sheet"
+                                | "bitable"
+                                | "folder";
+                            event_type?: string;
                         };
                         path: { file_token: string };
                     },
@@ -5755,6 +5760,9 @@ export default abstract class Client extends docx {
                                         pv?: number;
                                         like_count?: number;
                                         timestamp?: number;
+                                        uv_today?: number;
+                                        pv_today?: number;
+                                        like_count_today?: number;
                                     };
                                 };
                             }
@@ -6899,7 +6907,8 @@ export default abstract class Client extends docx {
                                     | "file"
                                     | "wiki"
                                     | "docx"
-                                    | "folder";
+                                    | "folder"
+                                    | "synced_block";
                             }>;
                             with_url?: boolean;
                         };
@@ -7663,6 +7672,205 @@ export default abstract class Client extends docx {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+        v2: {
+            /**
+             * permission.public
+             */
+            permissionPublic: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=drive&resource=permission.public&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "wiki"
+                                | "bitable"
+                                | "docx"
+                                | "mindnote"
+                                | "minutes"
+                                | "slides";
+                        };
+                        path: { token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    permission_public?: {
+                                        external_access_entity?:
+                                            | "open"
+                                            | "closed"
+                                            | "allow_share_partner_tenant";
+                                        security_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        comment_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit";
+                                        share_entity?: "anyone" | "same_tenant";
+                                        manage_collaborator_entity?:
+                                            | "collaborator_can_view"
+                                            | "collaborator_can_edit"
+                                            | "collaborator_full_access";
+                                        link_share_entity?:
+                                            | "tenant_readable"
+                                            | "tenant_editable"
+                                            | "partner_tenant_readable"
+                                            | "partner_tenant_editable"
+                                            | "anyone_readable"
+                                            | "anyone_editable"
+                                            | "closed";
+                                        copy_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        lock_switch?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v2/permissions/:token/public`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.public&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=drive&resource=permission.public&version=v2 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            external_access_entity?:
+                                | "open"
+                                | "closed"
+                                | "allow_share_partner_tenant";
+                            security_entity?:
+                                | "anyone_can_view"
+                                | "anyone_can_edit"
+                                | "only_full_access";
+                            comment_entity?:
+                                | "anyone_can_view"
+                                | "anyone_can_edit";
+                            share_entity?: "anyone" | "same_tenant";
+                            manage_collaborator_entity?:
+                                | "collaborator_can_view"
+                                | "collaborator_can_edit"
+                                | "collaborator_full_access";
+                            link_share_entity?:
+                                | "tenant_readable"
+                                | "tenant_editable"
+                                | "partner_tenant_readable"
+                                | "partner_tenant_editable"
+                                | "anyone_readable"
+                                | "anyone_editable"
+                                | "closed";
+                            copy_entity?:
+                                | "anyone_can_view"
+                                | "anyone_can_edit"
+                                | "only_full_access";
+                        };
+                        params: {
+                            type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "wiki"
+                                | "bitable"
+                                | "docx"
+                                | "mindnote"
+                                | "minutes"
+                                | "slides";
+                        };
+                        path: { token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    permission_public?: {
+                                        external_access_entity?:
+                                            | "open"
+                                            | "closed"
+                                            | "allow_share_partner_tenant";
+                                        security_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        comment_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit";
+                                        share_entity?: "anyone" | "same_tenant";
+                                        manage_collaborator_entity?:
+                                            | "collaborator_can_view"
+                                            | "collaborator_can_edit"
+                                            | "collaborator_full_access";
+                                        link_share_entity?:
+                                            | "tenant_readable"
+                                            | "tenant_editable"
+                                            | "partner_tenant_readable"
+                                            | "partner_tenant_editable"
+                                            | "anyone_readable"
+                                            | "anyone_editable"
+                                            | "closed";
+                                        copy_entity?:
+                                            | "anyone_can_view"
+                                            | "anyone_can_edit"
+                                            | "only_full_access";
+                                        lock_switch?: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v2/permissions/:token/public`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,

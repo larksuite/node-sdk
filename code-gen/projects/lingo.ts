@@ -691,6 +691,40 @@ export default abstract class Client extends im {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=lingo&resource=entity&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        params?: { provider?: string; outer_id?: string };
+                        path: { entity_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/lingo/v1/entities/:entity_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=lingo&resource=entity&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=lingo&resource=entity&version=v1 document }

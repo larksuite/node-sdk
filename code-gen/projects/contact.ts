@@ -4617,6 +4617,13 @@ export default abstract class Client extends comment_sdk {
                                     user_id?: string;
                                     mobile?: string;
                                     email?: string;
+                                    status?: {
+                                        is_frozen?: boolean;
+                                        is_resigned?: boolean;
+                                        is_activated?: boolean;
+                                        is_exited?: boolean;
+                                        is_unjoin?: boolean;
+                                    };
                                 }>;
                             };
                         }
@@ -11161,6 +11168,13 @@ export default abstract class Client extends comment_sdk {
                                         user_id?: string;
                                         mobile?: string;
                                         email?: string;
+                                        status?: {
+                                            is_frozen?: boolean;
+                                            is_resigned?: boolean;
+                                            is_activated?: boolean;
+                                            is_exited?: boolean;
+                                            is_unjoin?: boolean;
+                                        };
                                     }>;
                                 };
                             }

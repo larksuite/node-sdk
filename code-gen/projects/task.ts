@@ -3635,6 +3635,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         is_cover?: boolean;
                                         uploaded_at?: string;
@@ -3736,6 +3737,7 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         is_cover?: boolean;
                                                         uploaded_at?: string;
@@ -3802,6 +3804,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         is_cover?: boolean;
                                         uploaded_at?: string;
@@ -3867,6 +3870,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         is_cover?: boolean;
                                         uploaded_at?: string;
@@ -3932,6 +3936,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         reply_to_comment_id?: string;
                                         created_at?: string;
@@ -4018,6 +4023,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         reply_to_comment_id?: string;
                                         created_at?: string;
@@ -4116,6 +4122,7 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         reply_to_comment_id?: string;
                                                         created_at?: string;
@@ -4179,6 +4186,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         reply_to_comment_id?: string;
                                         created_at?: string;
@@ -4238,6 +4246,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         reply_to_comment_id?: string;
                                         created_at?: string;
@@ -4405,6 +4414,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         created_at?: string;
                                         updated_at?: string;
@@ -4491,6 +4501,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         created_at?: string;
                                         updated_at?: string;
@@ -4625,6 +4636,7 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         created_at?: string;
                                                         updated_at?: string;
@@ -4718,6 +4730,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         created_at?: string;
                                         updated_at?: string;
@@ -4841,6 +4854,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         created_at?: string;
                                         updated_at?: string;
@@ -5052,6 +5066,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         tasklist?: {
                                             guid?: string;
@@ -5141,6 +5156,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         tasklist?: {
                                             guid?: string;
@@ -5348,6 +5364,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         tasklist?: {
                                             guid?: string;
@@ -5457,6 +5474,7 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         }>;
                                                         subtask_count?: number;
                                                     }>;
@@ -5526,6 +5544,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         subtask_count?: number;
                                     }>;
@@ -5613,6 +5632,7 @@ export default abstract class Client extends sup_project {
                                 id: string;
                                 type?: string;
                                 role: string;
+                                name?: string;
                             }>;
                             client_token?: string;
                         };
@@ -5647,11 +5667,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -5667,6 +5689,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -5773,6 +5796,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -5782,6 +5806,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -5842,11 +5870,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -5862,6 +5892,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -5968,6 +5999,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -5977,6 +6009,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -6035,11 +6071,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -6055,6 +6093,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -6161,6 +6200,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -6170,6 +6210,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -6223,6 +6267,7 @@ export default abstract class Client extends sup_project {
                                 id: string;
                                 type?: string;
                                 role: string;
+                                name?: string;
                             }>;
                             repeat_rule?: string;
                             custom_complete?: {
@@ -6296,6 +6341,7 @@ export default abstract class Client extends sup_project {
                                 member_value?: Array<{
                                     id?: string;
                                     type?: string;
+                                    name?: string;
                                 }>;
                                 datetime_value?: string;
                                 single_select_value?: string;
@@ -6334,11 +6380,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -6354,6 +6402,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -6460,6 +6509,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -6469,6 +6519,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -6559,11 +6613,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -6579,6 +6635,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -6685,6 +6742,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -6694,6 +6752,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -6795,11 +6857,13 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         members?: Array<{
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         }>;
                                                         completed_at?: string;
                                                         attachments?: Array<{
@@ -6815,6 +6879,7 @@ export default abstract class Client extends sup_project {
                                                                 id?: string;
                                                                 type?: string;
                                                                 role?: string;
+                                                                name?: string;
                                                             };
                                                             is_cover?: boolean;
                                                             uploaded_at?: string;
@@ -6921,6 +6986,7 @@ export default abstract class Client extends sup_project {
                                                                 id?: string;
                                                                 type?: string;
                                                                 role?: string;
+                                                                name?: string;
                                                             }>;
                                                             single_select_value?: string;
                                                             multi_select_value?: Array<string>;
@@ -6932,6 +6998,10 @@ export default abstract class Client extends sup_project {
                                                                 | "prev"
                                                                 | "next";
                                                             task_guid: string;
+                                                        }>;
+                                                        assignee_related?: Array<{
+                                                            id?: string;
+                                                            completed_at?: string;
                                                         }>;
                                                     }>;
                                                     page_token?: string;
@@ -6998,11 +7068,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -7018,6 +7090,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -7124,6 +7197,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -7133,6 +7207,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -7237,6 +7315,7 @@ export default abstract class Client extends sup_project {
                                     member_value?: Array<{
                                         id?: string;
                                         type?: string;
+                                        name?: string;
                                     }>;
                                     datetime_value?: string;
                                     single_select_value?: string;
@@ -7277,11 +7356,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -7297,6 +7378,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -7403,6 +7485,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -7412,6 +7495,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -7486,6 +7573,7 @@ export default abstract class Client extends sup_project {
                                 id: string;
                                 type?: string;
                                 role: string;
+                                name?: string;
                             }>;
                         };
                         params?: { user_id_type?: string };
@@ -7519,11 +7607,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -7539,6 +7629,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -7645,6 +7736,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -7654,6 +7746,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -7712,11 +7808,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -7732,6 +7830,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -7838,6 +7937,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -7847,6 +7947,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -7905,11 +8009,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -7925,6 +8031,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -8031,6 +8138,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -8040,6 +8148,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -8140,6 +8252,7 @@ export default abstract class Client extends sup_project {
                                 id: string;
                                 type?: string;
                                 role: string;
+                                name?: string;
                             }>;
                             repeat_rule?: string;
                             custom_complete?: {
@@ -8214,6 +8327,7 @@ export default abstract class Client extends sup_project {
                                     id?: string;
                                     type?: string;
                                     role?: string;
+                                    name?: string;
                                 }>;
                                 datetime_value?: string;
                                 single_select_value?: string;
@@ -8253,11 +8367,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -8273,6 +8389,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -8379,6 +8496,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -8388,6 +8506,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     };
                                 };
@@ -8488,11 +8610,13 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         members?: Array<{
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         }>;
                                                         completed_at?: string;
                                                         attachments?: Array<{
@@ -8508,6 +8632,7 @@ export default abstract class Client extends sup_project {
                                                                 id?: string;
                                                                 type?: string;
                                                                 role?: string;
+                                                                name?: string;
                                                             };
                                                             is_cover?: boolean;
                                                             uploaded_at?: string;
@@ -8614,6 +8739,7 @@ export default abstract class Client extends sup_project {
                                                                 id?: string;
                                                                 type?: string;
                                                                 role?: string;
+                                                                name?: string;
                                                             }>;
                                                             single_select_value?: string;
                                                             multi_select_value?: Array<string>;
@@ -8625,6 +8751,10 @@ export default abstract class Client extends sup_project {
                                                                 | "prev"
                                                                 | "next";
                                                             task_guid: string;
+                                                        }>;
+                                                        assignee_related?: Array<{
+                                                            id?: string;
+                                                            completed_at?: string;
                                                         }>;
                                                     }>;
                                                     page_token?: string;
@@ -8690,11 +8820,13 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         completed_at?: string;
                                         attachments?: Array<{
@@ -8710,6 +8842,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             };
                                             is_cover?: boolean;
                                             uploaded_at?: string;
@@ -8816,6 +8949,7 @@ export default abstract class Client extends sup_project {
                                                 id?: string;
                                                 type?: string;
                                                 role?: string;
+                                                name?: string;
                                             }>;
                                             single_select_value?: string;
                                             multi_select_value?: Array<string>;
@@ -8825,6 +8959,10 @@ export default abstract class Client extends sup_project {
                                         dependencies?: Array<{
                                             type: "prev" | "next";
                                             task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -8860,7 +8998,11 @@ export default abstract class Client extends sup_project {
                     payload?: {
                         data: {
                             name: string;
-                            subscribers: Array<{ id?: string; type?: string }>;
+                            subscribers: Array<{
+                                id?: string;
+                                type?: string;
+                                name?: string;
+                            }>;
                             include_keys: Array<number>;
                             disabled?: boolean;
                         };
@@ -8888,6 +9030,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         include_keys?: Array<number>;
                                         disabled?: boolean;
@@ -8979,6 +9122,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         include_keys?: Array<number>;
                                         disabled?: boolean;
@@ -9032,6 +9176,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         include_keys?: Array<number>;
                                         disabled?: boolean;
@@ -9066,6 +9211,7 @@ export default abstract class Client extends sup_project {
                                 subscribers?: Array<{
                                     id?: string;
                                     type?: string;
+                                    name?: string;
                                 }>;
                                 include_keys?: Array<number>;
                                 disabled?: boolean;
@@ -9104,6 +9250,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         include_keys?: Array<number>;
                                         disabled?: boolean;
@@ -9142,6 +9289,7 @@ export default abstract class Client extends sup_project {
                                 id?: string;
                                 type?: string;
                                 role?: string;
+                                name?: string;
                             }>;
                         };
                         params?: { user_id_type?: string };
@@ -9166,16 +9314,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9211,6 +9362,7 @@ export default abstract class Client extends sup_project {
                                 id?: string;
                                 type?: string;
                                 role?: string;
+                                name?: string;
                             }>;
                         };
                         params?: { user_id_type?: string };
@@ -9234,16 +9386,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9328,16 +9483,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9431,16 +9589,19 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         owner?: {
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         };
                                                         members?: Array<{
                                                             id?: string;
                                                             type?: string;
                                                             role?: string;
+                                                            name?: string;
                                                         }>;
                                                         url?: string;
                                                         created_at?: string;
@@ -9499,16 +9660,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9547,6 +9711,7 @@ export default abstract class Client extends sup_project {
                                     id?: string;
                                     type?: string;
                                     role?: string;
+                                    name?: string;
                                 };
                             };
                             update_fields: Array<string>;
@@ -9574,16 +9739,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9618,6 +9786,7 @@ export default abstract class Client extends sup_project {
                                 id?: string;
                                 type?: string;
                                 role?: string;
+                                name?: string;
                             }>;
                         };
                         params?: { user_id_type?: string };
@@ -9642,16 +9811,19 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         owner?: {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         };
                                         members?: Array<{
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         url?: string;
                                         created_at?: string;
@@ -9719,6 +9891,7 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             type?: string;
                                             role?: string;
+                                            name?: string;
                                         }>;
                                         subtask_count?: number;
                                     }>;
