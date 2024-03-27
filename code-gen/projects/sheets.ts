@@ -875,7 +875,7 @@ export default abstract class Client extends security_and_compliance {
             },
         },
         /**
-         * 单元格
+         * 工作表
          */
         spreadsheetSheet: {
             /**
@@ -2319,7 +2319,7 @@ export default abstract class Client extends security_and_compliance {
                 },
             },
             /**
-             * 单元格
+             * 工作表
              */
             spreadsheetSheet: {
                 /**

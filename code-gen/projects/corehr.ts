@@ -19222,6 +19222,104 @@ export default abstract class Client extends contract {
              */
             department: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=batch_get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=department&version=v2 document }
+                 */
+                batchGet: async (
+                    payload?: {
+                        data?: {
+                            department_id_list?: Array<string>;
+                            fields?: Array<string>;
+                            department_name_list?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        version_id?: string;
+                                        department_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        sub_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        parent_department_id?: string;
+                                        manager?: string;
+                                        tree_order?: string;
+                                        list_order?: string;
+                                        code?: string;
+                                        is_root: boolean;
+                                        is_confidential: boolean;
+                                        effective_date: string;
+                                        expiration_date?: string;
+                                        active: boolean;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            custom_api_name: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            value: string;
+                                        }>;
+                                        staffing_model?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/departments/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=parents&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=parents&project=corehr&resource=department&version=v2 document }
@@ -20443,6 +20541,13 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             hukou_location?: string;
+                                            political_affiliations?: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
                                             talent_id?: string;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
@@ -21565,6 +21670,13 @@ export default abstract class Client extends contract {
                                                                 }>;
                                                             };
                                                             hukou_location?: string;
+                                                            political_affiliations?: Array<{
+                                                                enum_name: string;
+                                                                display?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                            }>;
                                                             talent_id?: string;
                                                             custom_fields?: Array<{
                                                                 custom_api_name: string;
@@ -22652,6 +22764,13 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             hukou_location?: string;
+                                            political_affiliations?: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
                                             talent_id?: string;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
@@ -26086,6 +26205,7 @@ export default abstract class Client extends contract {
                                 citizenship_status_id_list?: Array<string>;
                                 home_address?: string;
                                 worker_id?: string;
+                                user_geo?: string;
                             };
                             offer_info: {
                                 offer_id?: string;

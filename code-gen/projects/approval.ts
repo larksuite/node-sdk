@@ -32,7 +32,7 @@ export default abstract class Client extends application {
      */
     approval = {
         /**
-         * 事件
+         * 原生审批定义
          */
         approval: {
             /**
@@ -111,6 +111,10 @@ export default abstract class Client extends application {
                             revert_option?: number;
                             reject_option?: number;
                             quick_approval_option?: number;
+                            overtime_disable?: boolean;
+                            overtime_notice_time?: number;
+                            overtime_close_time?: number;
+                            overtime_recover_time?: number;
                         };
                         config?: {
                             can_update_viewer: boolean;
@@ -1183,6 +1187,10 @@ export default abstract class Client extends application {
                         }>;
                         title?: string;
                         title_display_method?: number;
+                        node_auto_approval_list?: Array<{
+                            node_id_type?: "CUSTOM" | "NON_CUSTOM";
+                            node_id?: string;
+                        }>;
                     };
                 },
                 options?: IRequestOptions
@@ -2819,7 +2827,7 @@ export default abstract class Client extends application {
         },
         v4: {
             /**
-             * 事件
+             * 原生审批定义
              */
             approval: {
                 /**
@@ -2898,6 +2906,10 @@ export default abstract class Client extends application {
                                 revert_option?: number;
                                 reject_option?: number;
                                 quick_approval_option?: number;
+                                overtime_disable?: boolean;
+                                overtime_notice_time?: number;
+                                overtime_close_time?: number;
+                                overtime_recover_time?: number;
                             };
                             config?: {
                                 can_update_viewer: boolean;
@@ -3991,6 +4003,10 @@ export default abstract class Client extends application {
                             }>;
                             title?: string;
                             title_display_method?: number;
+                            node_auto_approval_list?: Array<{
+                                node_id_type?: "CUSTOM" | "NON_CUSTOM";
+                                node_id?: string;
+                            }>;
                         };
                     },
                     options?: IRequestOptions

@@ -166,7 +166,8 @@ export default abstract class Client {
                                                     access_type?:
                                                         | "FA"
                                                         | "QRCode"
-                                                        | "Card";
+                                                        | "Card"
+                                                        | "Fp";
                                                     access_data?: string;
                                                     is_door_open?: boolean;
                                                 }>;
@@ -229,7 +230,11 @@ export default abstract class Client {
                                     device_id?: string;
                                     is_clock_in?: boolean;
                                     access_time?: string;
-                                    access_type?: "FA" | "QRCode" | "Card";
+                                    access_type?:
+                                        | "FA"
+                                        | "QRCode"
+                                        | "Card"
+                                        | "Fp";
                                     access_data?: string;
                                     is_door_open?: boolean;
                                 }>;
@@ -1103,7 +1108,8 @@ export default abstract class Client {
                                                         access_type?:
                                                             | "FA"
                                                             | "QRCode"
-                                                            | "Card";
+                                                            | "Card"
+                                                            | "Fp";
                                                         access_data?: string;
                                                         is_door_open?: boolean;
                                                     }>;
@@ -1166,7 +1172,11 @@ export default abstract class Client {
                                         device_id?: string;
                                         is_clock_in?: boolean;
                                         access_time?: string;
-                                        access_type?: "FA" | "QRCode" | "Card";
+                                        access_type?:
+                                            | "FA"
+                                            | "QRCode"
+                                            | "Card"
+                                            | "Fp";
                                         access_data?: string;
                                         is_door_open?: boolean;
                                     }>;

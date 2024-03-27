@@ -49,8 +49,12 @@ export default abstract class Client extends helpdesk {
                     data: {
                         talent_id: string;
                         job_id: string;
+                        user_id?: string;
                         resume_source_id?: string;
                         application_preferred_city_code_list?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
                 options?: IRequestOptions
@@ -8626,8 +8630,12 @@ export default abstract class Client extends helpdesk {
                         data: {
                             talent_id: string;
                             job_id: string;
+                            user_id?: string;
                             resume_source_id?: string;
                             application_preferred_city_code_list?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
                     options?: IRequestOptions

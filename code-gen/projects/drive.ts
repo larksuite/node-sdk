@@ -28,7 +28,7 @@ export default abstract class Client extends docx {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 云文档-文件管理
+     * 云文档-文档
      */
     drive = {
         /**
@@ -982,7 +982,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 事件
+         * 分片上传
          */
         file: {
             /**
@@ -2118,18 +2118,7 @@ export default abstract class Client extends docx {
              */
             create: async (
                 payload?: {
-                    data?: {
-                        name?: string;
-                        version?: string;
-                        parent_token?: string;
-                        owner_id?: string;
-                        creator_id?: string;
-                        create_time?: string;
-                        update_time?: string;
-                        status?: "0" | "1" | "2";
-                        obj_type?: "docx" | "sheet";
-                        parent_type?: "docx" | "sheet";
-                    };
+                    data?: { name?: string; obj_type?: "docx" | "sheet" };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
@@ -2700,7 +2689,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -3188,11 +3177,22 @@ export default abstract class Client extends docx {
                         member_type:
                             | "email"
                             | "openid"
+                            | "unionid"
                             | "openchat"
                             | "opendepartmentid"
-                            | "userid";
+                            | "userid"
+                            | "groupid"
+                            | "wikispaceid";
                         member_id: string;
                         perm: "view" | "edit" | "full_access";
+                        type?:
+                            | "user"
+                            | "chat"
+                            | "department"
+                            | "group"
+                            | "wiki_space_member"
+                            | "wiki_space_viewer"
+                            | "wiki_space_editor";
                     };
                     params: {
                         type:
@@ -3226,11 +3226,22 @@ export default abstract class Client extends docx {
                                     member_type:
                                         | "email"
                                         | "openid"
+                                        | "unionid"
                                         | "openchat"
                                         | "opendepartmentid"
-                                        | "userid";
+                                        | "userid"
+                                        | "groupid"
+                                        | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
+                                    type?:
+                                        | "user"
+                                        | "chat"
+                                        | "department"
+                                        | "group"
+                                        | "wiki_space_member"
+                                        | "wiki_space_viewer"
+                                        | "wiki_space_editor";
                                 };
                             };
                         }
@@ -3260,6 +3271,16 @@ export default abstract class Client extends docx {
              */
             delete: async (
                 payload?: {
+                    data?: {
+                        type?:
+                            | "user"
+                            | "chat"
+                            | "department"
+                            | "group"
+                            | "wiki_space_member"
+                            | "wiki_space_viewer"
+                            | "wiki_space_editor";
+                    };
                     params: {
                         type:
                             | "doc"
@@ -3277,7 +3298,10 @@ export default abstract class Client extends docx {
                             | "openid"
                             | "openchat"
                             | "opendepartmentid"
-                            | "userid";
+                            | "userid"
+                            | "unionid"
+                            | "groupid"
+                            | "wikispaceid";
                     };
                     path: { token: string; member_id: string };
                 },
@@ -3346,12 +3370,22 @@ export default abstract class Client extends docx {
                                     member_type:
                                         | "email"
                                         | "openid"
+                                        | "unionid"
                                         | "openchat"
                                         | "opendepartmentid"
-                                        | "userid";
+                                        | "userid"
+                                        | "groupid"
+                                        | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
-                                    type?: "user" | "chat" | "department";
+                                    type?:
+                                        | "user"
+                                        | "chat"
+                                        | "department"
+                                        | "group"
+                                        | "wiki_space_member"
+                                        | "wiki_space_viewer"
+                                        | "wiki_space_editor";
                                     name?: string;
                                     avatar?: string;
                                     external_label?: boolean;
@@ -3440,10 +3474,21 @@ export default abstract class Client extends docx {
                         member_type:
                             | "email"
                             | "openid"
+                            | "unionid"
                             | "openchat"
                             | "opendepartmentid"
-                            | "userid";
+                            | "userid"
+                            | "groupid"
+                            | "wikispaceid";
                         perm: "view" | "edit" | "full_access";
+                        type?:
+                            | "user"
+                            | "chat"
+                            | "department"
+                            | "group"
+                            | "wiki_space_member"
+                            | "wiki_space_viewer"
+                            | "wiki_space_editor";
                     };
                     params: {
                         need_notification?: boolean;
@@ -3476,11 +3521,22 @@ export default abstract class Client extends docx {
                                     member_type:
                                         | "email"
                                         | "openid"
+                                        | "unionid"
                                         | "openchat"
                                         | "opendepartmentid"
-                                        | "userid";
+                                        | "userid"
+                                        | "groupid"
+                                        | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
+                                    type?:
+                                        | "user"
+                                        | "chat"
+                                        | "department"
+                                        | "group"
+                                        | "wiki_space_member"
+                                        | "wiki_space_viewer"
+                                        | "wiki_space_editor";
                                 };
                             };
                         }
@@ -4806,7 +4862,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 事件
+             * 分片上传
              */
             file: {
                 /**
@@ -5957,18 +6013,7 @@ export default abstract class Client extends docx {
                  */
                 create: async (
                     payload?: {
-                        data?: {
-                            name?: string;
-                            version?: string;
-                            parent_token?: string;
-                            owner_id?: string;
-                            creator_id?: string;
-                            create_time?: string;
-                            update_time?: string;
-                            status?: "0" | "1" | "2";
-                            obj_type?: "docx" | "sheet";
-                            parent_type?: "docx" | "sheet";
-                        };
+                        data?: { name?: string; obj_type?: "docx" | "sheet" };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
@@ -6547,7 +6592,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 素材
+             * 分片上传
              */
             media: {
                 /**
@@ -7038,11 +7083,22 @@ export default abstract class Client extends docx {
                             member_type:
                                 | "email"
                                 | "openid"
+                                | "unionid"
                                 | "openchat"
                                 | "opendepartmentid"
-                                | "userid";
+                                | "userid"
+                                | "groupid"
+                                | "wikispaceid";
                             member_id: string;
                             perm: "view" | "edit" | "full_access";
+                            type?:
+                                | "user"
+                                | "chat"
+                                | "department"
+                                | "group"
+                                | "wiki_space_member"
+                                | "wiki_space_viewer"
+                                | "wiki_space_editor";
                         };
                         params: {
                             type:
@@ -7076,11 +7132,22 @@ export default abstract class Client extends docx {
                                         member_type:
                                             | "email"
                                             | "openid"
+                                            | "unionid"
                                             | "openchat"
                                             | "opendepartmentid"
-                                            | "userid";
+                                            | "userid"
+                                            | "groupid"
+                                            | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "department"
+                                            | "group"
+                                            | "wiki_space_member"
+                                            | "wiki_space_viewer"
+                                            | "wiki_space_editor";
                                     };
                                 };
                             }
@@ -7110,6 +7177,16 @@ export default abstract class Client extends docx {
                  */
                 delete: async (
                     payload?: {
+                        data?: {
+                            type?:
+                                | "user"
+                                | "chat"
+                                | "department"
+                                | "group"
+                                | "wiki_space_member"
+                                | "wiki_space_viewer"
+                                | "wiki_space_editor";
+                        };
                         params: {
                             type:
                                 | "doc"
@@ -7127,7 +7204,10 @@ export default abstract class Client extends docx {
                                 | "openid"
                                 | "openchat"
                                 | "opendepartmentid"
-                                | "userid";
+                                | "userid"
+                                | "unionid"
+                                | "groupid"
+                                | "wikispaceid";
                         };
                         path: { token: string; member_id: string };
                     },
@@ -7199,12 +7279,22 @@ export default abstract class Client extends docx {
                                         member_type:
                                             | "email"
                                             | "openid"
+                                            | "unionid"
                                             | "openchat"
                                             | "opendepartmentid"
-                                            | "userid";
+                                            | "userid"
+                                            | "groupid"
+                                            | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
-                                        type?: "user" | "chat" | "department";
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "department"
+                                            | "group"
+                                            | "wiki_space_member"
+                                            | "wiki_space_viewer"
+                                            | "wiki_space_editor";
                                         name?: string;
                                         avatar?: string;
                                         external_label?: boolean;
@@ -7296,10 +7386,21 @@ export default abstract class Client extends docx {
                             member_type:
                                 | "email"
                                 | "openid"
+                                | "unionid"
                                 | "openchat"
                                 | "opendepartmentid"
-                                | "userid";
+                                | "userid"
+                                | "groupid"
+                                | "wikispaceid";
                             perm: "view" | "edit" | "full_access";
+                            type?:
+                                | "user"
+                                | "chat"
+                                | "department"
+                                | "group"
+                                | "wiki_space_member"
+                                | "wiki_space_viewer"
+                                | "wiki_space_editor";
                         };
                         params: {
                             need_notification?: boolean;
@@ -7332,11 +7433,22 @@ export default abstract class Client extends docx {
                                         member_type:
                                             | "email"
                                             | "openid"
+                                            | "unionid"
                                             | "openchat"
                                             | "opendepartmentid"
-                                            | "userid";
+                                            | "userid"
+                                            | "groupid"
+                                            | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "department"
+                                            | "group"
+                                            | "wiki_space_member"
+                                            | "wiki_space_viewer"
+                                            | "wiki_space_editor";
                                     };
                                 };
                             }
