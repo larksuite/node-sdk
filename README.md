@@ -433,13 +433,13 @@ const eventDispatcher = new lark.EventDispatcher({
     },
 });
 
-server.use(nodeSdk.adaptKoa('/webhook/event', eventDispatcher));
+server.use(lark.adaptKoa('/webhook/event', eventDispatcher));
 server.listen(3000);
 ````
 #### Combined with koa-router
 When using Koa to write services, in most cases, koa-router is used to process routing, so the SDK also provides adaptations for this situation:
 ```typescript
-import * as nodeSdk from '@larksuiteoapi/node-sdk';
+import * as lark from '@larksuiteoapi/node-sdk';
 import Koa from 'koa';
 import Router from '@koa/router';
 import koaBody from 'koa-body';
