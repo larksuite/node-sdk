@@ -66,6 +66,14 @@ export default class RequestHandle {
     }
 
     checkIsCardEventValidated(data: any): boolean {
+        /**
+         * 1. new message card encrypt ('encrypt' in data)
+         * 2. new message card but not encrypt ('schema' in data)
+         */
+        if ('encrypt' in data || 'schema' in data) {
+            return this.checkIsEventValidated(data);
+        }
+
         const {
             'x-lark-request-timestamp': timestamp,
             'x-lark-request-nonce': nonce,
