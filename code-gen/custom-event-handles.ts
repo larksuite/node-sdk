@@ -25,7 +25,7 @@ interface FeishuUser {
   user_id: string
 }
 export interface ICustomEventHandles {
-    'drive.file.bitable_record_changed_v1': (data: {
+    'drive.file.bitable_record_changed_v1'?: (data: {
         event_id?: string;
         token?: string;
         create_time?: string;
