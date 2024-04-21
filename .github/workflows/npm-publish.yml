@@ -35,7 +35,12 @@ jobs:
 
             //Manipulate data
             data.name = '@whyun/feishu-node-sdk';
-            data.version = '${{ github.event.release.tag_name }}';
+            var version = '${{ github.event.release.tag_name }}';
+            if (version.startsWith('v')) {
+              data.version = version.substring(1);
+            } else {
+              data.version = version;
+            }
             //Output data
             console.log(JSON.stringify(data));
             EOF
