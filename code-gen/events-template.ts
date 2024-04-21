@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
+import { ICustomEventHandles } from "./custom-event-handles";
 import { IOtherEventHandles } from "./other-event-handles";
 
 // auto gen
-export interface IHandles extends IOtherEventHandles {
+export interface IHandles extends IOtherEventHandles, ICustomEventHandles {
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/acs-v1/access_record/events/created document }
      *
