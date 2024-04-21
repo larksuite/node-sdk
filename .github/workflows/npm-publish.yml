@@ -29,21 +29,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: |
           yarn install && yarn build 
-          node > ../package.json <<EOF
-            //Read data
-            var data = require('../package.json');
-
-            //Manipulate data
-            data.name = '@whyun/feishu-node-sdk';
-            var version = '${{ github.event.release.tag_name }}';
-            if (version.startsWith('v')) {
-              data.version = version.substring(1);
-            } else {
-              data.version = version;
-            }
-            //Output data
-            console.log(JSON.stringify(data));
-            EOF
+          node .github/workflows/pkg.js
+        env: 
+          PGK_VERSION: ${{ github.event.release.tag_name }}
 
       - run: npm publish --access=public
         env:
