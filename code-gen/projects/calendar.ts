@@ -1747,6 +1747,7 @@ export default abstract class Client extends board {
                                     | "anyone_can_join"
                                     | "only_organization_employees"
                                     | "only_event_attendees";
+                                password?: string;
                                 assign_hosts?: Array<string>;
                                 auto_record?: boolean;
                                 open_lobby?: boolean;
@@ -1834,6 +1835,7 @@ export default abstract class Client extends board {
                                                 | "anyone_can_join"
                                                 | "only_organization_employees"
                                                 | "only_event_attendees";
+                                            password?: string;
                                             assign_hosts?: Array<string>;
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
@@ -2004,6 +2006,7 @@ export default abstract class Client extends board {
                                                 | "anyone_can_join"
                                                 | "only_organization_employees"
                                                 | "only_event_attendees";
+                                            password?: string;
                                             assign_hosts?: Array<string>;
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
@@ -2505,6 +2508,7 @@ export default abstract class Client extends board {
                                     | "anyone_can_join"
                                     | "only_organization_employees"
                                     | "only_event_attendees";
+                                password?: string;
                                 assign_hosts?: Array<string>;
                                 auto_record?: boolean;
                                 open_lobby?: boolean;
@@ -2591,6 +2595,7 @@ export default abstract class Client extends board {
                                                 | "anyone_can_join"
                                                 | "only_organization_employees"
                                                 | "only_event_attendees";
+                                            password?: string;
                                             assign_hosts?: Array<string>;
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
@@ -5232,6 +5237,7 @@ export default abstract class Client extends board {
                                         | "anyone_can_join"
                                         | "only_organization_employees"
                                         | "only_event_attendees";
+                                    password?: string;
                                     assign_hosts?: Array<string>;
                                     auto_record?: boolean;
                                     open_lobby?: boolean;
@@ -5322,6 +5328,7 @@ export default abstract class Client extends board {
                                                     | "anyone_can_join"
                                                     | "only_organization_employees"
                                                     | "only_event_attendees";
+                                                password?: string;
                                                 assign_hosts?: Array<string>;
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;
@@ -5498,6 +5505,7 @@ export default abstract class Client extends board {
                                                     | "anyone_can_join"
                                                     | "only_organization_employees"
                                                     | "only_event_attendees";
+                                                password?: string;
                                                 assign_hosts?: Array<string>;
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;
@@ -6008,6 +6016,7 @@ export default abstract class Client extends board {
                                         | "anyone_can_join"
                                         | "only_organization_employees"
                                         | "only_event_attendees";
+                                    password?: string;
                                     assign_hosts?: Array<string>;
                                     auto_record?: boolean;
                                     open_lobby?: boolean;
@@ -6097,6 +6106,7 @@ export default abstract class Client extends board {
                                                     | "anyone_can_join"
                                                     | "only_organization_employees"
                                                     | "only_event_attendees";
+                                                password?: string;
                                                 assign_hosts?: Array<string>;
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;

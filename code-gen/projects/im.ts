@@ -332,6 +332,10 @@ export default abstract class Client extends human_authentication {
                         video_conference_setting?: "only_owner" | "all_members";
                         edit_permission?: "only_owner" | "all_members";
                         chat_tags?: Array<string>;
+                        pin_manage_setting?: "only_owner" | "all_members";
+                        hide_member_count_setting?:
+                            | "all_members"
+                            | "only_owner";
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -366,6 +370,9 @@ export default abstract class Client extends human_authentication {
                                 video_conference_setting?:
                                     | "only_owner"
                                     | "all_members";
+                                pin_manage_setting?:
+                                    | "only_owner"
+                                    | "all_members";
                                 add_member_permission?: string;
                                 share_card_permission?: string;
                                 at_all_permission?: string;
@@ -394,6 +401,9 @@ export default abstract class Client extends human_authentication {
                                         | "all_members"
                                         | "not_anyone";
                                 };
+                                hide_member_count_setting?:
+                                    | "all_members"
+                                    | "only_owner";
                             };
                         }
                     >({
@@ -523,6 +533,16 @@ export default abstract class Client extends human_authentication {
                                 video_conference_setting?:
                                     | "only_owner"
                                     | "all_members";
+                                pin_manage_setting?:
+                                    | "only_owner"
+                                    | "all_members";
+                                hide_member_count_setting?:
+                                    | "all_members"
+                                    | "only_owner";
+                                chat_status?:
+                                    | "normal"
+                                    | "dissolved"
+                                    | "dissolved_save";
                             };
                         }
                     >({
@@ -665,6 +685,10 @@ export default abstract class Client extends human_authentication {
                                                     external?: boolean;
                                                     tenant_key?: string;
                                                     labels?: Array<string>;
+                                                    chat_status?:
+                                                        | "normal"
+                                                        | "dissolved"
+                                                        | "dissolved_save";
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -729,6 +753,10 @@ export default abstract class Client extends human_authentication {
                                     external?: boolean;
                                     tenant_key?: string;
                                     labels?: Array<string>;
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -824,6 +852,10 @@ export default abstract class Client extends human_authentication {
                                                     external?: boolean;
                                                     tenant_key?: string;
                                                     labels?: Array<string>;
+                                                    chat_status?:
+                                                        | "normal"
+                                                        | "dissolved"
+                                                        | "dissolved_save";
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -888,6 +920,10 @@ export default abstract class Client extends human_authentication {
                                     external?: boolean;
                                     tenant_key?: string;
                                     labels?: Array<string>;
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -956,6 +992,10 @@ export default abstract class Client extends human_authentication {
                         group_message_type?: "chat" | "thread";
                         urgent_setting?: "only_owner" | "all_members";
                         video_conference_setting?: "only_owner" | "all_members";
+                        pin_manage_setting?: "only_owner" | "all_members";
+                        hide_member_count_setting?:
+                            | "all_members"
+                            | "only_owner";
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -2829,7 +2869,7 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * 消息加急
+         * 消息 - 消息卡片
          */
         message: {
             /**
@@ -4988,6 +5028,10 @@ export default abstract class Client extends human_authentication {
                                 | "all_members";
                             edit_permission?: "only_owner" | "all_members";
                             chat_tags?: Array<string>;
+                            pin_manage_setting?: "only_owner" | "all_members";
+                            hide_member_count_setting?:
+                                | "all_members"
+                                | "only_owner";
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -5024,6 +5068,9 @@ export default abstract class Client extends human_authentication {
                                     video_conference_setting?:
                                         | "only_owner"
                                         | "all_members";
+                                    pin_manage_setting?:
+                                        | "only_owner"
+                                        | "all_members";
                                     add_member_permission?: string;
                                     share_card_permission?: string;
                                     at_all_permission?: string;
@@ -5052,6 +5099,9 @@ export default abstract class Client extends human_authentication {
                                             | "all_members"
                                             | "not_anyone";
                                     };
+                                    hide_member_count_setting?:
+                                        | "all_members"
+                                        | "only_owner";
                                 };
                             }
                         >({
@@ -5186,6 +5236,16 @@ export default abstract class Client extends human_authentication {
                                     video_conference_setting?:
                                         | "only_owner"
                                         | "all_members";
+                                    pin_manage_setting?:
+                                        | "only_owner"
+                                        | "all_members";
+                                    hide_member_count_setting?:
+                                        | "all_members"
+                                        | "only_owner";
+                                    chat_status?:
+                                        | "normal"
+                                        | "dissolved"
+                                        | "dissolved_save";
                                 };
                             }
                         >({
@@ -5328,6 +5388,10 @@ export default abstract class Client extends human_authentication {
                                                         external?: boolean;
                                                         tenant_key?: string;
                                                         labels?: Array<string>;
+                                                        chat_status?:
+                                                            | "normal"
+                                                            | "dissolved"
+                                                            | "dissolved_save";
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5392,6 +5456,10 @@ export default abstract class Client extends human_authentication {
                                         external?: boolean;
                                         tenant_key?: string;
                                         labels?: Array<string>;
+                                        chat_status?:
+                                            | "normal"
+                                            | "dissolved"
+                                            | "dissolved_save";
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5487,6 +5555,10 @@ export default abstract class Client extends human_authentication {
                                                         external?: boolean;
                                                         tenant_key?: string;
                                                         labels?: Array<string>;
+                                                        chat_status?:
+                                                            | "normal"
+                                                            | "dissolved"
+                                                            | "dissolved_save";
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5551,6 +5623,10 @@ export default abstract class Client extends human_authentication {
                                         external?: boolean;
                                         tenant_key?: string;
                                         labels?: Array<string>;
+                                        chat_status?:
+                                            | "normal"
+                                            | "dissolved"
+                                            | "dissolved_save";
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5621,6 +5697,10 @@ export default abstract class Client extends human_authentication {
                             video_conference_setting?:
                                 | "only_owner"
                                 | "all_members";
+                            pin_manage_setting?: "only_owner" | "all_members";
+                            hide_member_count_setting?:
+                                | "all_members"
+                                | "only_owner";
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -7511,7 +7591,7 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * 消息加急
+             * 消息 - 消息卡片
              */
             message: {
                 /**
@@ -9358,6 +9438,681 @@ export default abstract class Client extends human_authentication {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/threads/:thread_id/forward`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+        v2: {
+            /**
+             * app_feed_card.batch
+             */
+            appFeedCardBatch: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card.batch&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=im&resource=app_feed_card.batch&version=v2 document }
+                 */
+                delete: async (
+                    payload?: {
+                        data?: {
+                            feed_cards?: Array<{
+                                biz_id: string;
+                                user_id: string;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_cards?: Array<{
+                                        biz_id: string;
+                                        user_id: string;
+                                        reason?: "0" | "1" | "2" | "3" | "4";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/app_feed_card/batch`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card.batch&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=app_feed_card.batch&version=v2 document }
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            feed_cards?: Array<{
+                                app_feed_card: {
+                                    biz_id?: string;
+                                    title?: string;
+                                    avatar_key?: string;
+                                    preview?: string;
+                                    status_label?: {
+                                        text: string;
+                                        type:
+                                            | "primary"
+                                            | "secondary"
+                                            | "success"
+                                            | "danger";
+                                    };
+                                    buttons?: {
+                                        buttons: Array<{
+                                            multi_url?: {
+                                                url?: string;
+                                                android_url?: string;
+                                                ios_url?: string;
+                                                pc_url?: string;
+                                            };
+                                            action_type: "url_page" | "webhook";
+                                            text: { text: string };
+                                            button_type?:
+                                                | "default"
+                                                | "primary"
+                                                | "success";
+                                            action_map?: Record<string, string>;
+                                        }>;
+                                    };
+                                    link?: { link?: string };
+                                    time_sensitive?: boolean;
+                                    notify?: {
+                                        close_notify?: boolean;
+                                        custom_sound_text?: string;
+                                        with_custom_sound?: boolean;
+                                    };
+                                };
+                                user_id: string;
+                                update_fields: Array<
+                                    | "1"
+                                    | "2"
+                                    | "3"
+                                    | "10"
+                                    | "11"
+                                    | "12"
+                                    | "13"
+                                    | "101"
+                                    | "102"
+                                    | "103"
+                                >;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_cards?: Array<{
+                                        biz_id: string;
+                                        user_id: string;
+                                        reason?: "0" | "1" | "2" | "3" | "4";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/app_feed_card/batch`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * app_feed_card
+             */
+            appFeedCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=app_feed_card&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=app_feed_card&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data?: {
+                            app_feed_card?: {
+                                biz_id?: string;
+                                title?: string;
+                                avatar_key?: string;
+                                preview?: string;
+                                status_label?: {
+                                    text: string;
+                                    type:
+                                        | "primary"
+                                        | "secondary"
+                                        | "success"
+                                        | "danger";
+                                };
+                                buttons?: {
+                                    buttons: Array<{
+                                        multi_url?: {
+                                            url?: string;
+                                            android_url?: string;
+                                            ios_url?: string;
+                                            pc_url?: string;
+                                        };
+                                        action_type: "url_page" | "webhook";
+                                        text: { text: string };
+                                        button_type?:
+                                            | "default"
+                                            | "primary"
+                                            | "success";
+                                        action_map?: Record<string, string>;
+                                    }>;
+                                };
+                                link?: { link?: string };
+                                time_sensitive?: boolean;
+                                notify?: {
+                                    close_notify?: boolean;
+                                    custom_sound_text?: string;
+                                    with_custom_sound?: boolean;
+                                };
+                            };
+                            user_ids?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_cards?: Array<{
+                                        biz_id: string;
+                                        user_id: string;
+                                        reason?: "0" | "1" | "2" | "3" | "4";
+                                    }>;
+                                    biz_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/app_feed_card`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * biz_entity_tag_relation
+             */
+            bizEntityTagRelation: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            tag_ids?: Array<string>;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tag_info_with_bind_versions?: Array<{
+                                        tag_info?: {
+                                            id?: string;
+                                            tag_type?: string;
+                                            name?: string;
+                                            i18n_names?: Array<{
+                                                locale: string;
+                                                name?: string;
+                                            }>;
+                                            create_time?: string;
+                                            update_time?: string;
+                                        };
+                                        bind_version?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=biz_entity_tag_relation&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=biz_entity_tag_relation&version=v2 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            tag_biz_type: "chat";
+                            biz_entity_id: string;
+                            tag_ids?: Array<string>;
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/biz_entity_tag_relation`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat_button
+             */
+            chatButton: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat_button&apiName=update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=chat_button&version=v2 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            user_ids?: Array<string>;
+                            chat_id: string;
+                            buttons?: {
+                                buttons: Array<{
+                                    multi_url?: {
+                                        url?: string;
+                                        android_url?: string;
+                                        ios_url?: string;
+                                        pc_url?: string;
+                                    };
+                                    action_type: "url_page" | "webhook";
+                                    text: { text: string };
+                                    button_type?:
+                                        | "default"
+                                        | "primary"
+                                        | "success";
+                                    action_map?: Record<string, string>;
+                                }>;
+                            };
+                            bot_id?: string;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chat_button`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * feed_card
+             */
+            feedCard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=feed_card&version=v2 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            time_sensitive: boolean;
+                            user_ids: Array<string>;
+                        };
+                        params: {
+                            user_id_type: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { feed_card_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_cards/:feed_card_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tag
+             */
+            tag: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=tag&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            create_tag: {
+                                tag_type: "tenant";
+                                name: string;
+                                i18n_names?: Array<{
+                                    locale: string;
+                                    name?: string;
+                                }>;
+                            };
+                            bot_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    id?: string;
+                                    create_tag_fail_reason?: {
+                                        duplicate_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/tags`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=tag&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=tag&version=v2 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            patch_tag?: {
+                                id?: string;
+                                name?: string;
+                                i18n_names?: Array<{
+                                    locale: string;
+                                    name?: string;
+                                }>;
+                            };
+                            bot_id?: string;
+                        };
+                        path: { tag_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tag_info?: {
+                                        id?: string;
+                                        tag_type?: string;
+                                        name?: string;
+                                        i18n_names?: Array<{
+                                            locale: string;
+                                            name?: string;
+                                        }>;
+                                        create_time?: string;
+                                        update_time?: string;
+                                    };
+                                    patch_tag_fail_reason?: {
+                                        duplicate_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/tags/:tag_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * url_preview
+             */
+            urlPreview: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=url_preview&apiName=batch_update&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=im&resource=url_preview&version=v2 document }
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            preview_tokens: Array<string>;
+                            open_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/url_previews/batch_update`,
                                 path
                             ),
                             method: "POST",

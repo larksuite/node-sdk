@@ -617,6 +617,15 @@ export interface IHandles extends IOtherEventHandles {
             open_id?: string;
         }>;
         calendar_event_id?: string;
+        change_type?: string;
+        rsvp_infos?: Array<{
+            from_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            rsvp_status?: string;
+        }>;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr_event/events/updated document }
@@ -1820,6 +1829,7 @@ export interface IHandles extends IOtherEventHandles {
         job_change_id?: string;
         transfer_mode?: number;
         transfer_type_unique_identifier?: string;
+        transfer_reason_unique_identifier?: string;
         process_id?: string;
         effective_date?: string;
         status?: number;
@@ -3371,6 +3381,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_type?: number;
             };
             calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3409,6 +3432,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_type?: number;
             };
             calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3450,6 +3486,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3491,6 +3540,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3539,6 +3601,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_type?: number;
             };
             calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3581,6 +3656,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_type?: number;
             };
             calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3622,6 +3710,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3656,6 +3757,19 @@ export interface IHandles extends IOtherEventHandles {
             owner?: {
                 id?: { union_id?: string; user_id?: string; open_id?: string };
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         url?: string;
         duration?: string;
@@ -3694,6 +3808,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3735,6 +3862,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };
@@ -3776,6 +3916,19 @@ export interface IHandles extends IOtherEventHandles {
                 user_role?: number;
                 user_type?: number;
             };
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
         };
         operator?: {
             id?: { union_id?: string; user_id?: string; open_id?: string };

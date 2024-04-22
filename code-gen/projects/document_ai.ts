@@ -755,6 +755,7 @@ export default abstract class Client extends docs_tool {
                                         }>;
                                         side?: number;
                                         conners?: Array<number>;
+                                        face_conners?: Array<number>;
                                     };
                                 };
                             }

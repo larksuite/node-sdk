@@ -889,6 +889,78 @@ export default abstract class Client extends moments {
             },
         },
         /**
+         * 复盘（灰度租户可见）
+         */
+        review: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/review/query document }
+             *
+             * 查询复盘信息
+             *
+             * 根据周期和用户查询复盘信息。
+             */
+            query: async (
+                payload?: {
+                    params: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                        user_ids: number;
+                        period_ids: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                review_list?: Array<{
+                                    user_id?: {
+                                        open_id?: string;
+                                        user_id?: string;
+                                    };
+                                    review_period_list?: Array<{
+                                        period_id?: string;
+                                        cycle_review_list?: Array<{
+                                            url?: string;
+                                            create_time?: string;
+                                        }>;
+                                        progress_report_list?: Array<{
+                                            url?: string;
+                                            create_time?: string;
+                                        }>;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/okr/v1/reviews/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 用户OKR
          */
         userOkr: {
@@ -1884,6 +1956,78 @@ export default abstract class Client extends moments {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 复盘（灰度租户可见）
+             */
+            review: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=okr&resource=review&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/okr-v1/review/query document }
+                 *
+                 * 查询复盘信息
+                 *
+                 * 根据周期和用户查询复盘信息。
+                 */
+                query: async (
+                    payload?: {
+                        params: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                            user_ids: number;
+                            period_ids: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    review_list?: Array<{
+                                        user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        review_period_list?: Array<{
+                                            period_id?: string;
+                                            cycle_review_list?: Array<{
+                                                url?: string;
+                                                create_time?: string;
+                                            }>;
+                                            progress_report_list?: Array<{
+                                                url?: string;
+                                                create_time?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/okr/v1/reviews/query`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,

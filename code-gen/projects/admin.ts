@@ -28,7 +28,7 @@ export default abstract class Client extends acs {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 管理后台-企业勋章
+     * 管理后台-行为审计
      */
     admin = {
         /**
@@ -58,6 +58,7 @@ export default abstract class Client extends acs {
                         contains_child_dept: boolean;
                         page_size?: number;
                         page_token?: string;
+                        target_geo?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -160,6 +161,7 @@ export default abstract class Client extends acs {
                         user_id?: string;
                         page_size?: number;
                         page_token?: string;
+                        target_geo?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -241,6 +243,7 @@ export default abstract class Client extends acs {
                         event_module?: number;
                         page_token?: string;
                         page_size?: number;
+                        user_type?: number;
                     };
                 },
                 options?: IRequestOptions
@@ -424,6 +427,7 @@ export default abstract class Client extends acs {
                                                         os?: string;
                                                         city?: string;
                                                     };
+                                                    operator_tenant?: string;
                                                 }>;
                                             };
                                         },
@@ -461,6 +465,7 @@ export default abstract class Client extends acs {
                         event_module?: number;
                         page_token?: string;
                         page_size?: number;
+                        user_type?: number;
                     };
                 },
                 options?: IRequestOptions
@@ -600,6 +605,7 @@ export default abstract class Client extends acs {
                                         os?: string;
                                         city?: string;
                                     };
+                                    operator_tenant?: string;
                                 }>;
                             };
                         }
@@ -1567,6 +1573,7 @@ export default abstract class Client extends acs {
                             contains_child_dept: boolean;
                             page_size?: number;
                             page_token?: string;
+                            target_geo?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -1669,6 +1676,7 @@ export default abstract class Client extends acs {
                             user_id?: string;
                             page_size?: number;
                             page_token?: string;
+                            target_geo?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -1750,6 +1758,7 @@ export default abstract class Client extends acs {
                             event_module?: number;
                             page_token?: string;
                             page_size?: number;
+                            user_type?: number;
                         };
                     },
                     options?: IRequestOptions
@@ -1933,6 +1942,7 @@ export default abstract class Client extends acs {
                                                             os?: string;
                                                             city?: string;
                                                         };
+                                                        operator_tenant?: string;
                                                     }>;
                                                 };
                                             },
@@ -1970,6 +1980,7 @@ export default abstract class Client extends acs {
                             event_module?: number;
                             page_token?: string;
                             page_size?: number;
+                            user_type?: number;
                         };
                     },
                     options?: IRequestOptions
@@ -2109,6 +2120,7 @@ export default abstract class Client extends acs {
                                             os?: string;
                                             city?: string;
                                         };
+                                        operator_tenant?: string;
                                     }>;
                                 };
                             }
