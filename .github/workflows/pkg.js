@@ -1,5 +1,5 @@
 var data = require('../../package.json');
-var fs = requrie('fs');
+var fs = require('fs');
 var path = require('path');
 //Manipulate data
 data.name = '@whyun/feishu-node-sdk';
