@@ -855,6 +855,7 @@ export default abstract class Client extends application {
                             method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
+                            data,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1391,6 +1392,7 @@ export default abstract class Client extends application {
                             method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
+                            data,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1607,6 +1609,7 @@ export default abstract class Client extends application {
                             method: "POST",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
+                            data,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2088,6 +2091,7 @@ export default abstract class Client extends application {
                             method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
+                            data,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2374,6 +2378,7 @@ export default abstract class Client extends application {
                             method: "GET",
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
+                            data,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -3662,6 +3667,7 @@ export default abstract class Client extends application {
                                 method: "GET",
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
+                                data,
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4207,6 +4213,7 @@ export default abstract class Client extends application {
                                 method: "GET",
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
+                                data,
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4423,6 +4430,7 @@ export default abstract class Client extends application {
                                 method: "POST",
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
+                                data,
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4911,6 +4919,7 @@ export default abstract class Client extends application {
                                 method: "GET",
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
+                                data,
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5200,6 +5209,7 @@ export default abstract class Client extends application {
                                 method: "GET",
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
+                                data,
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
