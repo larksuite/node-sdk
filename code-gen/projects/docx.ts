@@ -3261,6 +3261,10 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url: string;
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -6170,6 +6174,9 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 };
                             };
                         }
@@ -9416,6 +9423,11 @@ export default abstract class Client extends document_ai {
                                                         align?: number;
                                                     };
                                                     agenda_item_content?: {};
+                                                    link_preview?: {
+                                                        url_type:
+                                                            | "MessageLink"
+                                                            | "Undefined";
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -12329,6 +12341,9 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -15563,6 +15578,10 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url: string;
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 };
                                 document_revision_id?: number;
                                 client_token: string;
@@ -17855,6 +17874,10 @@ export default abstract class Client extends document_ai {
                                 align?: number;
                                 width?: number;
                                 height?: number;
+                            };
+                            link_preview?: {
+                                url: string;
+                                url_type: "MessageLink" | "Undefined";
                             };
                         }>;
                         index?: number;
@@ -20745,6 +20768,10 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url: string;
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 }>;
                                 document_revision_id?: number;
                                 client_token: string;
@@ -23993,6 +24020,11 @@ export default abstract class Client extends document_ai {
                                                         align?: number;
                                                     };
                                                     agenda_item_content?: {};
+                                                    link_preview?: {
+                                                        url_type:
+                                                            | "MessageLink"
+                                                            | "Undefined";
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -26906,6 +26938,9 @@ export default abstract class Client extends document_ai {
                                         align?: number;
                                     };
                                     agenda_item_content?: {};
+                                    link_preview?: {
+                                        url_type: "MessageLink" | "Undefined";
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -26973,6 +27008,11 @@ export default abstract class Client extends document_ai {
                                         show_comment_count?: boolean;
                                         show_related_matters?: boolean;
                                     };
+                                    cover?: {
+                                        token: string;
+                                        offset_ratio_x?: number;
+                                        offset_ratio_y?: number;
+                                    };
                                 };
                             };
                         }
@@ -27032,6 +27072,11 @@ export default abstract class Client extends document_ai {
                                         show_like_count?: boolean;
                                         show_comment_count?: boolean;
                                         show_related_matters?: boolean;
+                                    };
+                                    cover?: {
+                                        token: string;
+                                        offset_ratio_x?: number;
+                                        offset_ratio_y?: number;
                                     };
                                 };
                             };
@@ -30364,6 +30409,12 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url: string;
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     }>;
                                     document_revision_id?: number;
                                     client_token: string;
@@ -33308,6 +33359,11 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     };
                                 };
                             }
@@ -36556,6 +36612,11 @@ export default abstract class Client extends document_ai {
                                                             align?: number;
                                                         };
                                                         agenda_item_content?: {};
+                                                        link_preview?: {
+                                                            url_type:
+                                                                | "MessageLink"
+                                                                | "Undefined";
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -39504,6 +39565,11 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -42776,6 +42842,12 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url: string;
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     };
                                     document_revision_id?: number;
                                     client_token: string;
@@ -45071,6 +45143,10 @@ export default abstract class Client extends document_ai {
                                     align?: number;
                                     width?: number;
                                     height?: number;
+                                };
+                                link_preview?: {
+                                    url: string;
+                                    url_type: "MessageLink" | "Undefined";
                                 };
                             }>;
                             index?: number;
@@ -47996,6 +48072,12 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url: string;
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     }>;
                                     document_revision_id?: number;
                                     client_token: string;
@@ -51246,6 +51328,11 @@ export default abstract class Client extends document_ai {
                                                             align?: number;
                                                         };
                                                         agenda_item_content?: {};
+                                                        link_preview?: {
+                                                            url_type:
+                                                                | "MessageLink"
+                                                                | "Undefined";
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -54194,6 +54281,11 @@ export default abstract class Client extends document_ai {
                                             align?: number;
                                         };
                                         agenda_item_content?: {};
+                                        link_preview?: {
+                                            url_type:
+                                                | "MessageLink"
+                                                | "Undefined";
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -54261,6 +54353,11 @@ export default abstract class Client extends document_ai {
                                             show_comment_count?: boolean;
                                             show_related_matters?: boolean;
                                         };
+                                        cover?: {
+                                            token: string;
+                                            offset_ratio_x?: number;
+                                            offset_ratio_y?: number;
+                                        };
                                     };
                                 };
                             }
@@ -54320,6 +54417,11 @@ export default abstract class Client extends document_ai {
                                             show_like_count?: boolean;
                                             show_comment_count?: boolean;
                                             show_related_matters?: boolean;
+                                        };
+                                        cover?: {
+                                            token: string;
+                                            offset_ratio_x?: number;
+                                            offset_ratio_y?: number;
                                         };
                                     };
                                 };

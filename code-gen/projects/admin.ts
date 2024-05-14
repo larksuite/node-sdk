@@ -28,7 +28,7 @@ export default abstract class Client extends acs {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 管理后台-行为审计
+     * 管理后台-企业勋章
      */
     admin = {
         /**
@@ -244,6 +244,8 @@ export default abstract class Client extends acs {
                         page_token?: string;
                         page_size?: number;
                         user_type?: number;
+                        object_type?: number;
+                        object_value?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -453,6 +455,8 @@ export default abstract class Client extends acs {
              * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+             *
+             * 用户行为日志搜索
              */
             list: async (
                 payload?: {
@@ -467,6 +471,8 @@ export default abstract class Client extends acs {
                         page_token?: string;
                         page_size?: number;
                         user_type?: number;
+                        object_type?: number;
+                        object_value?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -1762,6 +1768,8 @@ export default abstract class Client extends acs {
                             page_token?: string;
                             page_size?: number;
                             user_type?: number;
+                            object_type?: number;
+                            object_value?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -1971,6 +1979,8 @@ export default abstract class Client extends acs {
                  * {@link https://open.feishu.cn/api-explorer?project=admin&resource=audit_info&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/ukTMukTMukTM/uQjM5YjL0ITO24CNykjN/audit_log/audit_data_get document }
+                 *
+                 * 用户行为日志搜索
                  */
                 list: async (
                     payload?: {
@@ -1985,6 +1995,8 @@ export default abstract class Client extends acs {
                             page_token?: string;
                             page_size?: number;
                             user_type?: number;
+                            object_type?: number;
+                            object_value?: string;
                         };
                     },
                     options?: IRequestOptions

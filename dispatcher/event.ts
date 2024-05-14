@@ -68,7 +68,7 @@ export class EventDispatcher {
         });
     }
 
-    register(handles: IHandles) {
+    register<T={}>(handles: IHandles & T) {
         Object.keys(handles).forEach((key) => {
             if (this.handles.has(key) && key !== CAppTicketHandle) {
                 this.logger.error(`this ${key} handle is registered`);

@@ -1783,6 +1783,7 @@ export default abstract class Client extends board {
                                 | "unknown";
                             app_link?: string;
                         }>;
+                        attachments?: Array<{ file_token?: string }>;
                     };
                     params?: {
                         idempotency_key?: string;
@@ -1886,6 +1887,12 @@ export default abstract class Client extends board {
                                         display_name?: string;
                                     };
                                     app_link?: string;
+                                    attachments?: Array<{
+                                        file_token?: string;
+                                        file_size?: string;
+                                        is_deleted?: boolean;
+                                        name?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2101,6 +2108,11 @@ export default abstract class Client extends board {
                                         }>;
                                     }>;
                                     has_more_attendee?: boolean;
+                                    attachments?: Array<{
+                                        file_token?: string;
+                                        file_size?: string;
+                                        name?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2449,6 +2461,11 @@ export default abstract class Client extends board {
                                         display_name?: string;
                                     };
                                     app_link?: string;
+                                    attachments?: Array<{
+                                        file_token?: string;
+                                        file_size?: string;
+                                        name?: string;
+                                    }>;
                                 }>;
                             };
                         }
@@ -2543,6 +2560,10 @@ export default abstract class Client extends board {
                                 | "editable"
                                 | "unknown";
                             app_link?: string;
+                        }>;
+                        attachments?: Array<{
+                            file_token?: string;
+                            is_deleted?: boolean;
                         }>;
                     };
                     params?: {
@@ -2646,6 +2667,12 @@ export default abstract class Client extends board {
                                         display_name?: string;
                                     };
                                     app_link?: string;
+                                    attachments?: Array<{
+                                        file_token?: string;
+                                        file_size?: string;
+                                        is_deleted?: boolean;
+                                        name?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2828,6 +2855,12 @@ export default abstract class Client extends board {
                                                         display_name?: string;
                                                     };
                                                     app_link?: string;
+                                                    attachments?: Array<{
+                                                        file_token?: string;
+                                                        file_size?: string;
+                                                        is_deleted?: boolean;
+                                                        name?: string;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -2944,6 +2977,12 @@ export default abstract class Client extends board {
                                         display_name?: string;
                                     };
                                     app_link?: string;
+                                    attachments?: Array<{
+                                        file_token?: string;
+                                        file_size?: string;
+                                        is_deleted?: boolean;
+                                        name?: string;
+                                    }>;
                                 }>;
                                 page_token?: string;
                             };
@@ -5278,6 +5317,7 @@ export default abstract class Client extends board {
                                     | "unknown";
                                 app_link?: string;
                             }>;
+                            attachments?: Array<{ file_token?: string }>;
                         };
                         params?: {
                             idempotency_key?: string;
@@ -5384,6 +5424,12 @@ export default abstract class Client extends board {
                                             display_name?: string;
                                         };
                                         app_link?: string;
+                                        attachments?: Array<{
+                                            file_token?: string;
+                                            file_size?: string;
+                                            is_deleted?: boolean;
+                                            name?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -5605,6 +5651,11 @@ export default abstract class Client extends board {
                                             }>;
                                         }>;
                                         has_more_attendee?: boolean;
+                                        attachments?: Array<{
+                                            file_token?: string;
+                                            file_size?: string;
+                                            name?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -5959,6 +6010,11 @@ export default abstract class Client extends board {
                                             display_name?: string;
                                         };
                                         app_link?: string;
+                                        attachments?: Array<{
+                                            file_token?: string;
+                                            file_size?: string;
+                                            name?: string;
+                                        }>;
                                     }>;
                                 };
                             }
@@ -6056,6 +6112,10 @@ export default abstract class Client extends board {
                                     | "editable"
                                     | "unknown";
                                 app_link?: string;
+                            }>;
+                            attachments?: Array<{
+                                file_token?: string;
+                                is_deleted?: boolean;
                             }>;
                         };
                         params?: {
@@ -6162,6 +6222,12 @@ export default abstract class Client extends board {
                                             display_name?: string;
                                         };
                                         app_link?: string;
+                                        attachments?: Array<{
+                                            file_token?: string;
+                                            file_size?: string;
+                                            is_deleted?: boolean;
+                                            name?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -6349,6 +6415,12 @@ export default abstract class Client extends board {
                                                             display_name?: string;
                                                         };
                                                         app_link?: string;
+                                                        attachments?: Array<{
+                                                            file_token?: string;
+                                                            file_size?: string;
+                                                            is_deleted?: boolean;
+                                                            name?: string;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                 };
@@ -6465,6 +6537,12 @@ export default abstract class Client extends board {
                                             display_name?: string;
                                         };
                                         app_link?: string;
+                                        attachments?: Array<{
+                                            file_token?: string;
+                                            file_size?: string;
+                                            is_deleted?: boolean;
+                                            name?: string;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                 };

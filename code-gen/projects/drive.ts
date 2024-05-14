@@ -984,7 +984,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 文件
+         * 上传
          */
         file: {
             /**
@@ -2986,9 +2986,10 @@ export default abstract class Client extends docx {
                             | "bitable_image"
                             | "bitable_file"
                             | "moments"
-                            | "ccm_import_open";
-                        parent_node: string;
+                            | "ccm_import_open"
+                            | "calendar";
                         size: number;
+                        parent_node?: string;
                         extra?: string;
                     };
                 },
@@ -4869,7 +4870,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 文件
+             * 上传
              */
             file: {
                 /**
@@ -6897,9 +6898,10 @@ export default abstract class Client extends docx {
                                 | "bitable_image"
                                 | "bitable_file"
                                 | "moments"
-                                | "ccm_import_open";
-                            parent_node: string;
+                                | "ccm_import_open"
+                                | "calendar";
                             size: number;
+                            parent_node?: string;
                             extra?: string;
                         };
                     },

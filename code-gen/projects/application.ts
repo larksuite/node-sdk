@@ -8,10 +8,10 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
-import admin from "./admin";
+import aily from "./aily";
 
 // auto gen
-export default abstract class Client extends admin {
+export default abstract class Client extends aily {
     declare tokenManager;
 
     declare domain;

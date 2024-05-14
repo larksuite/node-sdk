@@ -104,6 +104,69 @@ export default abstract class Client extends contract {
             },
         },
         /**
+         * common_data.id
+         */
+        commonDataId: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=common_data.id&apiName=convert&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=convert&project=corehr&resource=common_data.id&version=v1 document }
+             */
+            convert: async (
+                payload?: {
+                    data: { ids: Array<string> };
+                    params: {
+                        id_transform_type: number;
+                        id_type:
+                            | "user_id"
+                            | "department_id"
+                            | "job_level_id"
+                            | "job_family_id"
+                            | "employee_type_id";
+                        feishu_user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id";
+                        feishu_department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    target_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/common_data/id/convert`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 公司
          */
         company: {
@@ -170,6 +233,56 @@ export default abstract class Client extends contract {
                         fax?: {
                             area_code: { enum_name: string };
                             phone_number: string;
+                        };
+                        registered_office_address_info?: {
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                        };
+                        office_address_info?: {
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
                         };
                     };
                     params?: { client_token?: string };
@@ -292,9 +405,53 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     registered_office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                     office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                 };
@@ -480,9 +637,53 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     registered_office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                     office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                 };
@@ -634,9 +835,53 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     registered_office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                     office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                 }>;
@@ -720,6 +965,56 @@ export default abstract class Client extends contract {
                         fax?: {
                             area_code: { enum_name: string };
                             phone_number: string;
+                        };
+                        registered_office_address_info?: {
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                        };
+                        office_address_info?: {
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
                         };
                     };
                     params?: { client_token?: string };
@@ -843,9 +1138,53 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     registered_office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                     office_address_info?: {
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
                                         postal_code?: string;
                                     };
                                 };
@@ -2204,11 +2543,11 @@ export default abstract class Client extends contract {
                         sub_type?: { enum_name: string };
                         manager?: string;
                         is_confidential?: boolean;
-                        hiberarchy_common: {
+                        hiberarchy_common?: {
                             parent_id?: string;
-                            name: Array<{ lang: string; value: string }>;
+                            name?: Array<{ lang: string; value: string }>;
                             type?: { enum_name: string };
-                            active: boolean;
+                            active?: boolean;
                             effective_time?: string;
                             expiration_time?: string;
                             code?: string;
@@ -4880,6 +5219,11 @@ export default abstract class Client extends contract {
                         leave_term_type?: number;
                         time_zone?: string;
                         data_source?: number;
+                        db_update_time_min?: string;
+                        db_update_time_max?: string;
+                        wd_need_amount_zero_records?: boolean;
+                        wd_need_denied_and_canceled_record?: boolean;
+                        wd_paid_type?: number;
                     };
                 },
                 options?: IRequestOptions
@@ -4934,6 +5278,7 @@ export default abstract class Client extends contract {
                                     leave_correct_process_id?: Array<string>;
                                     leave_cancel_process_id?: Array<string>;
                                     leave_return_process_id?: Array<string>;
+                                    wd_paid_type?: number;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -5182,6 +5527,15 @@ export default abstract class Client extends contract {
                             region_id?: string;
                             city_id?: string;
                             distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
                             local_address_line1?: string;
                             local_address_line2?: string;
                             local_address_line3?: string;
@@ -5272,6 +5626,15 @@ export default abstract class Client extends contract {
                                         distinct_id?: string;
                                         city_id_v2?: string;
                                         district_id_v2?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -5436,6 +5799,15 @@ export default abstract class Client extends contract {
                                         distinct_id?: string;
                                         city_id_v2?: string;
                                         district_id_v2?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -5566,6 +5938,15 @@ export default abstract class Client extends contract {
                                         distinct_id?: string;
                                         city_id_v2?: string;
                                         district_id_v2?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -6601,6 +6982,15 @@ export default abstract class Client extends contract {
                                         distinct_id?: string;
                                         city_id_v2?: string;
                                         district_id_v2?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
                                         local_address_line1?: string;
                                         local_address_line2?: string;
                                         local_address_line3?: string;
@@ -6901,6 +7291,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -8523,6 +8922,69 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * common_data.id
+             */
+            commonDataId: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=common_data.id&apiName=convert&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=convert&project=corehr&resource=common_data.id&version=v1 document }
+                 */
+                convert: async (
+                    payload?: {
+                        data: { ids: Array<string> };
+                        params: {
+                            id_transform_type: number;
+                            id_type:
+                                | "user_id"
+                                | "department_id"
+                                | "job_level_id"
+                                | "job_family_id"
+                                | "employee_type_id";
+                            feishu_user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id";
+                            feishu_department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        target_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/common_data/id/convert`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 公司
              */
             company: {
@@ -8589,6 +9051,56 @@ export default abstract class Client extends contract {
                             fax?: {
                                 area_code: { enum_name: string };
                                 phone_number: string;
+                            };
+                            registered_office_address_info?: {
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                            };
+                            office_address_info?: {
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
                             };
                         };
                         params?: { client_token?: string };
@@ -8711,9 +9223,53 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         registered_office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                         office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                     };
@@ -8902,9 +9458,53 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         registered_office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                         office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                     };
@@ -9056,9 +9656,53 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         registered_office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                         office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                     }>;
@@ -9142,6 +9786,56 @@ export default abstract class Client extends contract {
                             fax?: {
                                 area_code: { enum_name: string };
                                 phone_number: string;
+                            };
+                            registered_office_address_info?: {
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                            };
+                            office_address_info?: {
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
                             };
                         };
                         params?: { client_token?: string };
@@ -9265,9 +9959,53 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         registered_office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                         office_address_info?: {
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
                                         };
                                     };
@@ -10643,11 +11381,11 @@ export default abstract class Client extends contract {
                             sub_type?: { enum_name: string };
                             manager?: string;
                             is_confidential?: boolean;
-                            hiberarchy_common: {
+                            hiberarchy_common?: {
                                 parent_id?: string;
-                                name: Array<{ lang: string; value: string }>;
+                                name?: Array<{ lang: string; value: string }>;
                                 type?: { enum_name: string };
-                                active: boolean;
+                                active?: boolean;
                                 effective_time?: string;
                                 expiration_time?: string;
                                 code?: string;
@@ -13349,6 +14087,11 @@ export default abstract class Client extends contract {
                             leave_term_type?: number;
                             time_zone?: string;
                             data_source?: number;
+                            db_update_time_min?: string;
+                            db_update_time_max?: string;
+                            wd_need_amount_zero_records?: boolean;
+                            wd_need_denied_and_canceled_record?: boolean;
+                            wd_paid_type?: number;
                         };
                     },
                     options?: IRequestOptions
@@ -13403,6 +14146,7 @@ export default abstract class Client extends contract {
                                         leave_correct_process_id?: Array<string>;
                                         leave_cancel_process_id?: Array<string>;
                                         leave_return_process_id?: Array<string>;
+                                        wd_paid_type?: number;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -13654,6 +14398,15 @@ export default abstract class Client extends contract {
                                 region_id?: string;
                                 city_id?: string;
                                 distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
                                 local_address_line1?: string;
                                 local_address_line2?: string;
                                 local_address_line3?: string;
@@ -13746,6 +14499,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -13913,6 +14675,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -14043,6 +14814,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -15084,6 +15864,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -15384,6 +16173,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -18603,10 +19401,100 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         registered_office_address_info?: {
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            address_id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
+                                            address_type_list: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            is_primary: boolean;
+                                            is_public: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
                                         };
                                         office_address_info?: {
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            address_id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            city_id_v2?: string;
+                                            district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
                                             postal_code?: string;
+                                            address_type_list: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            is_primary: boolean;
+                                            is_public: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
                                         };
                                         custom_fields?: Array<{
                                             custom_api_name: string;
@@ -19460,6 +20348,77 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=query_timeline&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_timeline&project=corehr&resource=department&version=v2 document }
+                 *
+                 * 查询任意日期部门信息
+                 */
+                queryTimeline: async (
+                    payload?: {
+                        data: {
+                            department_ids: Array<string>;
+                            effective_date: string;
+                            fields?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        parent_department_id?: string;
+                                        manager?: string;
+                                        code?: string;
+                                        effective_date?: string;
+                                        active?: boolean;
+                                        descriptions?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/departments/query_timeline`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 searchWithIterator: async (
                     payload?: {
                         data?: {
@@ -20047,6 +21006,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -20371,6 +21339,15 @@ export default abstract class Client extends contract {
                                                     distinct_id?: string;
                                                     city_id_v2?: string;
                                                     district_id_v2?: string;
+                                                    address_line1?: string;
+                                                    address_line2?: string;
+                                                    address_line3?: string;
+                                                    address_line4?: string;
+                                                    address_line5?: string;
+                                                    address_line6?: string;
+                                                    address_line7?: string;
+                                                    address_line8?: string;
+                                                    address_line9?: string;
                                                     local_address_line1?: string;
                                                     local_address_line2?: string;
                                                     local_address_line3?: string;
@@ -21179,6 +22156,15 @@ export default abstract class Client extends contract {
                                                                 distinct_id?: string;
                                                                 city_id_v2?: string;
                                                                 district_id_v2?: string;
+                                                                address_line1?: string;
+                                                                address_line2?: string;
+                                                                address_line3?: string;
+                                                                address_line4?: string;
+                                                                address_line5?: string;
+                                                                address_line6?: string;
+                                                                address_line7?: string;
+                                                                address_line8?: string;
+                                                                address_line9?: string;
                                                                 local_address_line1?: string;
                                                                 local_address_line2?: string;
                                                                 local_address_line3?: string;
@@ -21503,6 +22489,15 @@ export default abstract class Client extends contract {
                                                                     distinct_id?: string;
                                                                     city_id_v2?: string;
                                                                     district_id_v2?: string;
+                                                                    address_line1?: string;
+                                                                    address_line2?: string;
+                                                                    address_line3?: string;
+                                                                    address_line4?: string;
+                                                                    address_line5?: string;
+                                                                    address_line6?: string;
+                                                                    address_line7?: string;
+                                                                    address_line8?: string;
+                                                                    address_line9?: string;
                                                                     local_address_line1?: string;
                                                                     local_address_line2?: string;
                                                                     local_address_line3?: string;
@@ -22277,6 +23272,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -22601,6 +23605,15 @@ export default abstract class Client extends contract {
                                                     distinct_id?: string;
                                                     city_id_v2?: string;
                                                     district_id_v2?: string;
+                                                    address_line1?: string;
+                                                    address_line2?: string;
+                                                    address_line3?: string;
+                                                    address_line4?: string;
+                                                    address_line5?: string;
+                                                    address_line6?: string;
+                                                    address_line7?: string;
+                                                    address_line8?: string;
+                                                    address_line9?: string;
                                                     local_address_line1?: string;
                                                     local_address_line2?: string;
                                                     local_address_line3?: string;
@@ -24130,6 +25143,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -24253,6 +25275,15 @@ export default abstract class Client extends contract {
                                 distinct_id?: string;
                                 city_id_v2?: string;
                                 district_id_v2?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
                                 local_address_line1?: string;
                                 local_address_line2?: string;
                                 local_address_line3?: string;
@@ -24393,6 +25424,15 @@ export default abstract class Client extends contract {
                                     distinct_id?: string;
                                     city_id_v2?: string;
                                     district_id_v2?: string;
+                                    address_line1?: string;
+                                    address_line2?: string;
+                                    address_line3?: string;
+                                    address_line4?: string;
+                                    address_line5?: string;
+                                    address_line6?: string;
+                                    address_line7?: string;
+                                    address_line8?: string;
+                                    address_line9?: string;
                                     local_address_line1?: string;
                                     local_address_line2?: string;
                                     local_address_line3?: string;
@@ -24456,6 +25496,9 @@ export default abstract class Client extends contract {
                             native_region?: string;
                             hukou_type?: { enum_name: string };
                             hukou_location?: string;
+                            political_affiliations?: Array<{
+                                enum_name: string;
+                            }>;
                             talent_id?: string;
                             custom_fields?: Array<{
                                 custom_api_name: string;
@@ -24610,6 +25653,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -24933,6 +25985,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -25293,6 +26354,15 @@ export default abstract class Client extends contract {
                                 distinct_id?: string;
                                 city_id_v2?: string;
                                 district_id_v2?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
                                 local_address_line1?: string;
                                 local_address_line2?: string;
                                 local_address_line3?: string;
@@ -25433,6 +26503,15 @@ export default abstract class Client extends contract {
                                     distinct_id?: string;
                                     city_id_v2?: string;
                                     district_id_v2?: string;
+                                    address_line1?: string;
+                                    address_line2?: string;
+                                    address_line3?: string;
+                                    address_line4?: string;
+                                    address_line5?: string;
+                                    address_line6?: string;
+                                    address_line7?: string;
+                                    address_line8?: string;
+                                    address_line9?: string;
                                     local_address_line1?: string;
                                     local_address_line2?: string;
                                     local_address_line3?: string;
@@ -25496,6 +26575,9 @@ export default abstract class Client extends contract {
                             native_region?: string;
                             hukou_type?: { enum_name: string };
                             hukou_location?: string;
+                            political_affiliations?: Array<{
+                                enum_name: string;
+                            }>;
                             talent_id?: string;
                             custom_fields?: Array<{
                                 custom_api_name: string;
@@ -25654,6 +26736,15 @@ export default abstract class Client extends contract {
                                             distinct_id?: string;
                                             city_id_v2?: string;
                                             district_id_v2?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
                                             local_address_line1?: string;
                                             local_address_line2?: string;
                                             local_address_line3?: string;
@@ -25977,6 +27068,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -26436,6 +27536,137 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pre_hire&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=pre_hire&version=v2 document }
+                 *
+                 * 删除待入职
+                 */
+                delete: async (
+                    payload?: {
+                        path: { pre_hire_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pre_hires/:pre_hire_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pre_hire&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=pre_hire&version=v2 document }
+                 *
+                 * 更新待入职
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            basic_info_update?: {
+                                names?: Array<{
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    country_region: string;
+                                    name_type: string;
+                                }>;
+                                phones?: Array<{
+                                    international_area_code: string;
+                                    phone_number: string;
+                                    device_type: string;
+                                    phone_usage: string;
+                                    is_primary: boolean;
+                                    is_public: boolean;
+                                }>;
+                                emails?: Array<{
+                                    email: string;
+                                    is_primary: boolean;
+                                    is_public: boolean;
+                                    email_usage: string;
+                                }>;
+                            };
+                            offer_info_update?: {
+                                onboarding_date?: string;
+                                ats_application_id?: string;
+                                onboarding_location_id?: string;
+                                onboarding_address_id?: string;
+                                office_location_id?: string;
+                                office_address_id?: string;
+                                employment_type?: string;
+                                onboarding_method?: string;
+                                work_emails?: Array<{
+                                    email: string;
+                                    is_primary: boolean;
+                                    is_public: boolean;
+                                    email_usage: string;
+                                }>;
+                                cost_center_rates?: Array<{
+                                    cost_center_id?: string;
+                                    rate?: number;
+                                }>;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            standard_update_fields?: Array<string>;
+                            custom_update_fields?: Array<string>;
+                        };
+                        path: { pre_hire_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { pre_hire_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pre_hires/:pre_hire_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 searchWithIterator: async (
                     payload?: {
                         data?: {
@@ -26672,6 +27903,15 @@ export default abstract class Client extends contract {
                                                                 region_id?: string;
                                                                 city_id?: string;
                                                                 distinct_id?: string;
+                                                                address_line1?: string;
+                                                                address_line2?: string;
+                                                                address_line3?: string;
+                                                                address_line4?: string;
+                                                                address_line5?: string;
+                                                                address_line6?: string;
+                                                                address_line7?: string;
+                                                                address_line8?: string;
+                                                                address_line9?: string;
                                                                 local_address_line1?: string;
                                                                 local_address_line2?: string;
                                                                 local_address_line3?: string;
@@ -26990,6 +28230,15 @@ export default abstract class Client extends contract {
                                                                     region_id?: string;
                                                                     city_id?: string;
                                                                     distinct_id?: string;
+                                                                    address_line1?: string;
+                                                                    address_line2?: string;
+                                                                    address_line3?: string;
+                                                                    address_line4?: string;
+                                                                    address_line5?: string;
+                                                                    address_line6?: string;
+                                                                    address_line7?: string;
+                                                                    address_line8?: string;
+                                                                    address_line9?: string;
                                                                     local_address_line1?: string;
                                                                     local_address_line2?: string;
                                                                     local_address_line3?: string;
@@ -27297,6 +28546,13 @@ export default abstract class Client extends contract {
                                                                     }>;
                                                                 };
                                                                 hukou_location?: string;
+                                                                political_affiliations?: Array<{
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                }>;
                                                             }>;
                                                             religion?: {
                                                                 enum_name: string;
@@ -27353,6 +28609,15 @@ export default abstract class Client extends contract {
                                                                 distinct_id?: string;
                                                                 city_id_v2?: string;
                                                                 district_id_v2?: string;
+                                                                address_line1?: string;
+                                                                address_line2?: string;
+                                                                address_line3?: string;
+                                                                address_line4?: string;
+                                                                address_line5?: string;
+                                                                address_line6?: string;
+                                                                address_line7?: string;
+                                                                address_line8?: string;
+                                                                address_line9?: string;
                                                                 local_address_line1?: string;
                                                                 local_address_line2?: string;
                                                                 local_address_line3?: string;
@@ -27437,6 +28702,15 @@ export default abstract class Client extends contract {
                                                                 distinct_id?: string;
                                                                 city_id_v2?: string;
                                                                 district_id_v2?: string;
+                                                                address_line1?: string;
+                                                                address_line2?: string;
+                                                                address_line3?: string;
+                                                                address_line4?: string;
+                                                                address_line5?: string;
+                                                                address_line6?: string;
+                                                                address_line7?: string;
+                                                                address_line8?: string;
+                                                                address_line9?: string;
                                                                 local_address_line1?: string;
                                                                 local_address_line2?: string;
                                                                 local_address_line3?: string;
@@ -27705,6 +28979,15 @@ export default abstract class Client extends contract {
                                                 region_id?: string;
                                                 city_id?: string;
                                                 distinct_id?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -28023,6 +29306,15 @@ export default abstract class Client extends contract {
                                                     region_id?: string;
                                                     city_id?: string;
                                                     distinct_id?: string;
+                                                    address_line1?: string;
+                                                    address_line2?: string;
+                                                    address_line3?: string;
+                                                    address_line4?: string;
+                                                    address_line5?: string;
+                                                    address_line6?: string;
+                                                    address_line7?: string;
+                                                    address_line8?: string;
+                                                    address_line9?: string;
                                                     local_address_line1?: string;
                                                     local_address_line2?: string;
                                                     local_address_line3?: string;
@@ -28330,6 +29622,13 @@ export default abstract class Client extends contract {
                                                     }>;
                                                 };
                                                 hukou_location?: string;
+                                                political_affiliations?: Array<{
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                }>;
                                             }>;
                                             religion?: {
                                                 enum_name: string;
@@ -28386,6 +29685,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -28470,6 +29778,15 @@ export default abstract class Client extends contract {
                                                 distinct_id?: string;
                                                 city_id_v2?: string;
                                                 district_id_v2?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
                                                 local_address_line1?: string;
                                                 local_address_line2?: string;
                                                 local_address_line3?: string;
@@ -29087,6 +30404,118 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * process.form_variable_data
+             */
+            processFormVariableData: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=process.form_variable_data&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=corehr&resource=process.form_variable_data&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                        path: { process_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    field_variable_values?: Array<{
+                                        variable_api_name?: string;
+                                        variable_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        variable_value?: {
+                                            text_value?: string;
+                                            bool_value?: boolean;
+                                            number_value?: string;
+                                            enum_value?: string;
+                                            date_value?: string;
+                                            date_time_value?: string;
+                                            i18n_value?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_value?: {
+                                                wk_id?: string;
+                                                wk_api_name?: string;
+                                            };
+                                            user_value?: string;
+                                            department_value?: string;
+                                            record_value?: {
+                                                variable_api_name?: string;
+                                                variable_value?: string;
+                                            };
+                                            employment_value?: string;
+                                            list_values?: Array<string>;
+                                        };
+                                        sub_values?: Array<{
+                                            key?: string;
+                                            value?: {
+                                                text_value?: string;
+                                                bool_value?: boolean;
+                                                number_value?: string;
+                                                enum_value?: string;
+                                                date_value?: string;
+                                                date_time_value?: string;
+                                                i18n_value?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                object_value?: {
+                                                    wk_id?: string;
+                                                    wk_api_name?: string;
+                                                };
+                                                user_value?: string;
+                                                department_value?: string;
+                                                record_value?: {
+                                                    variable_api_name?: string;
+                                                    variable_value?: string;
+                                                };
+                                                employment_value?: string;
+                                                list_values?: Array<string>;
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/processes/:process_id/form_variable_data`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * process
              */
             process: {
@@ -29098,7 +30527,11 @@ export default abstract class Client extends contract {
                 get: async (
                     payload?: {
                         params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
                         };
                         path: { process_id: string };
                     },
