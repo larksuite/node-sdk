@@ -984,7 +984,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 上传
+         * 异步任务状态
          */
         file: {
             /**
@@ -4870,7 +4870,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 上传
+             * 异步任务状态
              */
             file: {
                 /**

@@ -1800,6 +1800,7 @@ export default abstract class Client extends baike {
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
                             | "Text"
+                            | "Email"
                             | "Barcode"
                             | "Number"
                             | "Progress"
@@ -1891,6 +1892,7 @@ export default abstract class Client extends baike {
                                     field_id?: string;
                                     ui_type?:
                                         | "Text"
+                                        | "Email"
                                         | "Barcode"
                                         | "Number"
                                         | "Progress"
@@ -2328,6 +2330,7 @@ export default abstract class Client extends baike {
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
                             | "Text"
+                            | "Email"
                             | "Barcode"
                             | "Number"
                             | "Progress"
@@ -2422,6 +2425,7 @@ export default abstract class Client extends baike {
                                     field_id?: string;
                                     ui_type?:
                                         | "Text"
+                                        | "Email"
                                         | "Barcode"
                                         | "Number"
                                         | "Progress"
@@ -6619,6 +6623,7 @@ export default abstract class Client extends baike {
                             };
                             ui_type?:
                                 | "Text"
+                                | "Email"
                                 | "Barcode"
                                 | "Number"
                                 | "Progress"
@@ -6710,6 +6715,7 @@ export default abstract class Client extends baike {
                                         field_id?: string;
                                         ui_type?:
                                             | "Text"
+                                            | "Email"
                                             | "Barcode"
                                             | "Number"
                                             | "Progress"
@@ -7150,6 +7156,7 @@ export default abstract class Client extends baike {
                             };
                             ui_type?:
                                 | "Text"
+                                | "Email"
                                 | "Barcode"
                                 | "Number"
                                 | "Progress"
@@ -7244,6 +7251,7 @@ export default abstract class Client extends baike {
                                         field_id?: string;
                                         ui_type?:
                                             | "Text"
+                                            | "Email"
                                             | "Barcode"
                                             | "Number"
                                             | "Progress"

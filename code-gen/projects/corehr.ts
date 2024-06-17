@@ -104,6 +104,234 @@ export default abstract class Client extends contract {
             },
         },
         /**
+         * authorization
+         */
+        authorization: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=authorization&apiName=get_by_param&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_by_param&project=corehr&resource=authorization&version=v1 document }
+             *
+             * 根据ID查询单个用户授权
+             */
+            getByParam: async (
+                payload?: {
+                    params: {
+                        employment_id: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_corehr_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                role_authorization?: {
+                                    employment_id: string;
+                                    permission_detail_list: Array<{
+                                        role?: {
+                                            id: string;
+                                            code: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            org_truncation?: Array<{
+                                                org_key?: string;
+                                                type?: number;
+                                                depth?: number;
+                                            }>;
+                                        };
+                                        assigned_organization_list?: Array<
+                                            Array<{
+                                                org_key: string;
+                                                org_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                org_id_list: Array<string>;
+                                            }>
+                                        >;
+                                        grantor_rule_list?: Array<{
+                                            rule_dimension?: {
+                                                entity_key?: string;
+                                                entity_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            rule_type?: number;
+                                            expression?: {
+                                                conditions?: Array<{
+                                                    left?: {
+                                                        type?: number;
+                                                        value?: string;
+                                                        lookup_value?: string;
+                                                        lookup_type?: string;
+                                                    };
+                                                    right?: {
+                                                        type?: number;
+                                                        value?: string;
+                                                        lookup_value?: string;
+                                                        lookup_type?: string;
+                                                    };
+                                                    operator?: number;
+                                                    right_value_type?: number;
+                                                }>;
+                                                expression?: string;
+                                            };
+                                        }>;
+                                        update_time?: string;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/authorizations/get_by_param`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=authorization&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=corehr&resource=authorization&version=v1 document }
+             *
+             * 批量查询用户授权
+             */
+            query: async (
+                payload?: {
+                    params?: {
+                        employment_id_list?: number;
+                        role_id_list?: number;
+                        page_token?: string;
+                        page_size?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_corehr_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    employment_id: string;
+                                    permission_detail_list: Array<{
+                                        role?: {
+                                            id: string;
+                                            code: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            org_truncation?: Array<{
+                                                org_key?: string;
+                                                type?: number;
+                                                depth?: number;
+                                            }>;
+                                        };
+                                        assigned_organization_list?: Array<
+                                            Array<{
+                                                org_key: string;
+                                                org_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                org_id_list: Array<string>;
+                                            }>
+                                        >;
+                                        grantor_rule_list?: Array<{
+                                            rule_dimension?: {
+                                                entity_key?: string;
+                                                entity_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            rule_type?: number;
+                                            expression?: {
+                                                conditions?: Array<{
+                                                    left?: {
+                                                        type?: number;
+                                                        value?: string;
+                                                        lookup_value?: string;
+                                                        lookup_type?: string;
+                                                    };
+                                                    right?: {
+                                                        type?: number;
+                                                        value?: string;
+                                                        lookup_value?: string;
+                                                        lookup_type?: string;
+                                                    };
+                                                    operator?: number;
+                                                    right_value_type?: number;
+                                                }>;
+                                                expression?: string;
+                                            };
+                                        }>;
+                                        update_time?: string;
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/authorizations/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * common_data.id
          */
         commonDataId: {
@@ -913,13 +1141,13 @@ export default abstract class Client extends contract {
              */
             patch: async (
                 payload?: {
-                    data: {
-                        hiberarchy_common: {
+                    data?: {
+                        hiberarchy_common?: {
                             parent_id?: string;
-                            name: Array<{ lang: string; value: string }>;
+                            name?: Array<{ lang: string; value: string }>;
                             type?: { enum_name: string };
-                            active: boolean;
-                            effective_time?: string;
+                            active?: boolean;
+                            effective_time: string;
                             expiration_time?: string;
                             code?: string;
                             description?: Array<{
@@ -2113,6 +2341,50 @@ export default abstract class Client extends contract {
                                     is_unique: boolean;
                                     object_api_name: string;
                                     type: number;
+                                    common_schema_config?: {
+                                        text_field_setting?: {
+                                            is_multilingual?: boolean;
+                                            is_multiline?: boolean;
+                                            max_length: number;
+                                            is_url_type?: boolean;
+                                        };
+                                        number_field_setting?: {
+                                            number_field_type?: number;
+                                            decimal_places?: number;
+                                            round_type?: number;
+                                            decimal_total_places?: number;
+                                        };
+                                        enum_field_setting?: {
+                                            enum_field_option_list?: Array<{
+                                                api_name?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                is_open?: boolean;
+                                            }>;
+                                            is_multiple?: boolean;
+                                        };
+                                        lookup_field_setting?: {
+                                            lookup_obj_api_name?: string;
+                                            is_multiple?: boolean;
+                                        };
+                                        date_time_field_setting?: {
+                                            date_time_type?: number;
+                                        };
+                                        attachment_field_setting?: {
+                                            is_multiple?: boolean;
+                                            file_type?: number;
+                                        };
+                                        image_field_setting?: {
+                                            image_type?: number;
+                                            display_style?: number;
+                                        };
+                                    };
                                     create_time?: string;
                                     update_time?: string;
                                 }>;
@@ -4033,6 +4305,7 @@ export default abstract class Client extends contract {
                             data?: {
                                 job_data?: {
                                     id?: string;
+                                    version_id?: string;
                                     job_level_id?: string;
                                     job_grade_id?: string;
                                     employee_type_id: string;
@@ -4173,6 +4446,7 @@ export default abstract class Client extends contract {
                             data?: {
                                 job_data?: {
                                     id?: string;
+                                    version_id?: string;
                                     job_level_id?: string;
                                     job_grade_id?: string;
                                     employee_type_id: string;
@@ -4375,6 +4649,7 @@ export default abstract class Client extends contract {
             patch: async (
                 payload?: {
                     data?: {
+                        version_id?: string;
                         job_level_id?: string;
                         job_grade_id?: string;
                         employee_type_id?: string;
@@ -4434,6 +4709,7 @@ export default abstract class Client extends contract {
                             data?: {
                                 job_data?: {
                                     id?: string;
+                                    version_id?: string;
                                     job_level_id?: string;
                                     job_grade_id?: string;
                                     employee_type_id: string;
@@ -6802,6 +7078,953 @@ export default abstract class Client extends contract {
          */
         person: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/create document }
+             *
+             * 创建个人信息
+             *
+             * 创建人员的个人信息
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name_list: Array<{
+                            local_primary?: string;
+                            local_first_name?: string;
+                            country_region_id: string;
+                            name_type: { enum_name: string };
+                            local_first_name_2?: string;
+                            local_primary_2?: string;
+                            additional_name_type?: { enum_name: string };
+                            first_name?: string;
+                            full_name?: string;
+                            hereditary?: string;
+                            custom_name?: string;
+                            custom_local_name?: string;
+                            middle_name?: string;
+                            name_primary?: string;
+                            secondary?: string;
+                            social?: { enum_name: string };
+                            tertiary?: string;
+                            title?: { enum_name: string };
+                            local_middle_name?: string;
+                            local_secondary?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        gender?: { enum_name: string };
+                        date_of_birth?: string;
+                        nationality_id?: string;
+                        race?: { enum_name: string };
+                        marital_status?: { enum_name: string };
+                        phone_list?: Array<{
+                            international_area_code?: { enum_name: string };
+                            phone_number: string;
+                            device_type?: { enum_name: string };
+                            phone_usage?: { enum_name: string };
+                            is_primary?: boolean;
+                            is_public?: boolean;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        address_list?: Array<{
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        email_list?: Array<{
+                            email: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        work_experience_list?: Array<{
+                            company_organization?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            department?: Array<{ lang: string; value: string }>;
+                            job?: Array<{ lang: string; value: string }>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            start_date?: string;
+                            end_date?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        education_list?: Array<{
+                            school: Array<{ lang: string; value: string }>;
+                            level_of_education?: { enum_name: string };
+                            start_date?: string;
+                            end_date?: string;
+                            field_of_study?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            degree?: { enum_name: string };
+                            school_name?: { enum_name: string };
+                            field_of_study_name?: { enum_name: string };
+                            country_region_id?: string;
+                            expected_end_date?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        bank_account_list?: Array<{
+                            bank_name?: string;
+                            bank_account_number: string;
+                            account_holder: string;
+                            bank?: { enum_name: string };
+                            bank_identification_code?: string;
+                            branch_name?: string;
+                            bank_id?: string;
+                            branch_id?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            country_region_id?: string;
+                            bank_account_usage?: Array<{ enum_name: string }>;
+                            bank_account_type?: { enum_name: string };
+                            currency_id?: string;
+                        }>;
+                        national_id_list?: Array<{
+                            national_id_type_id: string;
+                            national_id_number: string;
+                            issue_date?: string;
+                            expiration_date?: string;
+                            country_region_id: string;
+                            issued_by?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        dependent_list?: Array<{
+                            name?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            relationship: { enum_name: string };
+                            gender?: { enum_name: string };
+                            date_of_birth?: string;
+                            nationality_id?: string;
+                            national_id_list?: Array<{
+                                national_id_type_id: string;
+                                national_id_number: string;
+                                issue_date?: string;
+                                expiration_date?: string;
+                                country_region_id: string;
+                                issued_by?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            spouses_working_status?: { enum_name: string };
+                            is_this_person_covered_by_health_insurance?: boolean;
+                            is_this_person_allowed_for_tax_deduction?: boolean;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            dependent_name?: string;
+                            employer?: string;
+                            job?: string;
+                            phone?: {
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            address?: {
+                                id?: string;
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            birth_certificate_of_child?: Array<{ id?: string }>;
+                        }>;
+                        emergency_contact_list?: Array<{
+                            name?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            relationship?: { enum_name: string };
+                            phone_ist?: Array<{
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            legal_name?: string;
+                        }>;
+                        date_entered_workforce?: string;
+                        profile_image_id?: string;
+                        custom_fields?: Array<{
+                            field_name: string;
+                            value: string;
+                        }>;
+                        resident_tax_id_list?: Array<string>;
+                        age?: number;
+                        personal_profile?: Array<{
+                            personal_profile_type?: { enum_name: string };
+                            files?: Array<{ id?: string }>;
+                        }>;
+                    };
+                    params?: { client_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                person?: {
+                                    phone_number?: string;
+                                    legal_name?: string;
+                                    preferred_name?: string;
+                                    id?: string;
+                                    name_list: Array<{
+                                        local_primary?: string;
+                                        local_first_name?: string;
+                                        country_region_id: string;
+                                        name_type: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        local_first_name_2?: string;
+                                        local_primary_2?: string;
+                                        additional_name_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        first_name?: string;
+                                        full_name?: string;
+                                        hereditary?: string;
+                                        middle_name?: string;
+                                        name_primary?: string;
+                                        secondary?: string;
+                                        social?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        tertiary?: string;
+                                        title?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        local_middle_name?: string;
+                                        local_secondary?: string;
+                                        display_name_local_and_western_script?: string;
+                                        display_name_local_script?: string;
+                                        display_name_western_script?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    gender?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    date_of_birth?: string;
+                                    nationality_id?: string;
+                                    race?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    marital_status?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    phone_list?: Array<{
+                                        international_area_code?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_number: string;
+                                        formatted_phone_number?: string;
+                                        device_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_usage?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        is_primary?: boolean;
+                                        is_public?: boolean;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    address_list?: Array<{
+                                        full_address_local_script?: string;
+                                        full_address_western_script?: string;
+                                        id?: string;
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
+                                        postal_code?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    email_list?: Array<{
+                                        email: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    work_experience_list?: Array<{
+                                        company_organization?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        department?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        job?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        start_date?: string;
+                                        end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    education_list?: Array<{
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    bank_account_list?: Array<{
+                                        bank_name?: string;
+                                        bank_account_number: string;
+                                        account_holder: string;
+                                        bank?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        bank_identification_code?: string;
+                                        branch_name?: string;
+                                        bank_id?: string;
+                                        branch_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        country_region_id?: string;
+                                        bank_account_usage?: Array<{
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        bank_account_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        currency_id?: string;
+                                    }>;
+                                    national_id_list?: Array<{
+                                        national_id_type_id: string;
+                                        national_id_number: string;
+                                        issue_date?: string;
+                                        expiration_date?: string;
+                                        country_region_id: string;
+                                        issued_by?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    dependent_list?: Array<{
+                                        name?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        relationship: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        gender?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        date_of_birth?: string;
+                                        nationality_id?: string;
+                                        national_id_list?: Array<{
+                                            national_id_type_id: string;
+                                            national_id_number: string;
+                                            issue_date?: string;
+                                            expiration_date?: string;
+                                            country_region_id: string;
+                                            issued_by?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        spouses_working_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        is_this_person_covered_by_health_insurance?: boolean;
+                                        is_this_person_allowed_for_tax_deduction?: boolean;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        dependent_name?: string;
+                                        employer?: string;
+                                        job?: string;
+                                        phone?: {
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            formatted_phone_number?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        address?: {
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
+                                            postal_code?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        birth_certificate_of_child?: Array<{
+                                            id?: string;
+                                        }>;
+                                    }>;
+                                    emergency_contact_list?: Array<{
+                                        name?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        relationship?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_ist?: Array<{
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        legal_name?: string;
+                                    }>;
+                                    date_entered_workforce?: string;
+                                    profile_image_id?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                    email_address?: string;
+                                    resident_tax_id_list?: Array<string>;
+                                    age?: number;
+                                    highest_level_of_education?: {
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    highest_degree_of_education?: {
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    personal_profile?: Array<{
+                                        personal_profile_id?: string;
+                                        personal_profile_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        files?: Array<{ id?: string }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/persons`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/delete document }
@@ -7547,6 +8770,955 @@ export default abstract class Client extends contract {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/patch document }
+             *
+             * 更新个人信息
+             *
+             * 更新个人信息
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        name_list?: Array<{
+                            local_primary?: string;
+                            local_first_name?: string;
+                            country_region_id: string;
+                            name_type: { enum_name: string };
+                            local_first_name_2?: string;
+                            local_primary_2?: string;
+                            additional_name_type?: { enum_name: string };
+                            first_name?: string;
+                            full_name?: string;
+                            hereditary?: string;
+                            custom_name?: string;
+                            custom_local_name?: string;
+                            middle_name?: string;
+                            name_primary?: string;
+                            secondary?: string;
+                            social?: { enum_name: string };
+                            tertiary?: string;
+                            title?: { enum_name: string };
+                            local_middle_name?: string;
+                            local_secondary?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        gender?: { enum_name: string };
+                        date_of_birth?: string;
+                        nationality_id?: string;
+                        race?: { enum_name: string };
+                        marital_status?: { enum_name: string };
+                        phone_list?: Array<{
+                            international_area_code?: { enum_name: string };
+                            phone_number: string;
+                            device_type?: { enum_name: string };
+                            phone_usage?: { enum_name: string };
+                            is_primary?: boolean;
+                            is_public?: boolean;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        address_list?: Array<{
+                            country_region_id: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            address_line1?: string;
+                            address_line2?: string;
+                            address_line3?: string;
+                            address_line4?: string;
+                            address_line5?: string;
+                            address_line6?: string;
+                            address_line7?: string;
+                            address_line8?: string;
+                            address_line9?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        email_list?: Array<{
+                            email: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        work_experience_list?: Array<{
+                            company_organization?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            department?: Array<{ lang: string; value: string }>;
+                            job?: Array<{ lang: string; value: string }>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            start_date?: string;
+                            end_date?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        education_list?: Array<{
+                            school: Array<{ lang: string; value: string }>;
+                            level_of_education?: { enum_name: string };
+                            start_date?: string;
+                            end_date?: string;
+                            field_of_study?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            degree?: { enum_name: string };
+                            school_name?: { enum_name: string };
+                            field_of_study_name?: { enum_name: string };
+                            country_region_id?: string;
+                            expected_end_date?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        bank_account_list?: Array<{
+                            bank_name?: string;
+                            bank_account_number: string;
+                            account_holder: string;
+                            bank?: { enum_name: string };
+                            bank_identification_code?: string;
+                            branch_name?: string;
+                            bank_id?: string;
+                            branch_id?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            country_region_id?: string;
+                            bank_account_usage?: Array<{ enum_name: string }>;
+                            bank_account_type?: { enum_name: string };
+                            currency_id?: string;
+                        }>;
+                        national_id_list?: Array<{
+                            national_id_type_id: string;
+                            national_id_number: string;
+                            issue_date?: string;
+                            expiration_date?: string;
+                            country_region_id: string;
+                            issued_by?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                        }>;
+                        dependent_list?: Array<{
+                            name?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            relationship: { enum_name: string };
+                            gender?: { enum_name: string };
+                            date_of_birth?: string;
+                            nationality_id?: string;
+                            national_id_list?: Array<{
+                                national_id_type_id: string;
+                                national_id_number: string;
+                                issue_date?: string;
+                                expiration_date?: string;
+                                country_region_id: string;
+                                issued_by?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            spouses_working_status?: { enum_name: string };
+                            is_this_person_covered_by_health_insurance?: boolean;
+                            is_this_person_allowed_for_tax_deduction?: boolean;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            dependent_name?: string;
+                            employer?: string;
+                            job?: string;
+                            phone?: {
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            address?: {
+                                id?: string;
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            birth_certificate_of_child?: Array<{ id?: string }>;
+                        }>;
+                        emergency_contact_list?: Array<{
+                            name?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            };
+                            relationship?: { enum_name: string };
+                            phone_ist?: Array<{
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            legal_name?: string;
+                        }>;
+                        date_entered_workforce?: string;
+                        profile_image_id?: string;
+                        custom_fields?: Array<{
+                            field_name: string;
+                            value: string;
+                        }>;
+                        resident_tax_id_list?: Array<string>;
+                        age?: number;
+                        personal_profile?: Array<{
+                            personal_profile_type?: { enum_name: string };
+                            files?: Array<{ id?: string }>;
+                        }>;
+                    };
+                    params?: { client_token?: string };
+                    path: { person_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                person?: {
+                                    phone_number?: string;
+                                    legal_name?: string;
+                                    preferred_name?: string;
+                                    id?: string;
+                                    name_list: Array<{
+                                        local_primary?: string;
+                                        local_first_name?: string;
+                                        country_region_id: string;
+                                        name_type: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        local_first_name_2?: string;
+                                        local_primary_2?: string;
+                                        additional_name_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        first_name?: string;
+                                        full_name?: string;
+                                        hereditary?: string;
+                                        middle_name?: string;
+                                        name_primary?: string;
+                                        secondary?: string;
+                                        social?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        tertiary?: string;
+                                        title?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        local_middle_name?: string;
+                                        local_secondary?: string;
+                                        display_name_local_and_western_script?: string;
+                                        display_name_local_script?: string;
+                                        display_name_western_script?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    gender?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    date_of_birth?: string;
+                                    nationality_id?: string;
+                                    race?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    marital_status?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    phone_list?: Array<{
+                                        international_area_code?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_number: string;
+                                        formatted_phone_number?: string;
+                                        device_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_usage?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        is_primary?: boolean;
+                                        is_public?: boolean;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    address_list?: Array<{
+                                        full_address_local_script?: string;
+                                        full_address_western_script?: string;
+                                        id?: string;
+                                        country_region_id: string;
+                                        region_id?: string;
+                                        city_id?: string;
+                                        distinct_id?: string;
+                                        address_line1?: string;
+                                        address_line2?: string;
+                                        address_line3?: string;
+                                        address_line4?: string;
+                                        address_line5?: string;
+                                        address_line6?: string;
+                                        address_line7?: string;
+                                        address_line8?: string;
+                                        address_line9?: string;
+                                        local_address_line1?: string;
+                                        local_address_line2?: string;
+                                        local_address_line3?: string;
+                                        local_address_line4?: string;
+                                        local_address_line5?: string;
+                                        local_address_line6?: string;
+                                        local_address_line7?: string;
+                                        local_address_line8?: string;
+                                        local_address_line9?: string;
+                                        postal_code?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    email_list?: Array<{
+                                        email: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    work_experience_list?: Array<{
+                                        company_organization?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        department?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        job?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        start_date?: string;
+                                        end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    education_list?: Array<{
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    bank_account_list?: Array<{
+                                        bank_name?: string;
+                                        bank_account_number: string;
+                                        account_holder: string;
+                                        bank?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        bank_identification_code?: string;
+                                        branch_name?: string;
+                                        bank_id?: string;
+                                        branch_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        country_region_id?: string;
+                                        bank_account_usage?: Array<{
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        bank_account_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        currency_id?: string;
+                                    }>;
+                                    national_id_list?: Array<{
+                                        national_id_type_id: string;
+                                        national_id_number: string;
+                                        issue_date?: string;
+                                        expiration_date?: string;
+                                        country_region_id: string;
+                                        issued_by?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    dependent_list?: Array<{
+                                        name?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        relationship: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        gender?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        date_of_birth?: string;
+                                        nationality_id?: string;
+                                        national_id_list?: Array<{
+                                            national_id_type_id: string;
+                                            national_id_number: string;
+                                            issue_date?: string;
+                                            expiration_date?: string;
+                                            country_region_id: string;
+                                            issued_by?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        spouses_working_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        is_this_person_covered_by_health_insurance?: boolean;
+                                        is_this_person_allowed_for_tax_deduction?: boolean;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        dependent_name?: string;
+                                        employer?: string;
+                                        job?: string;
+                                        phone?: {
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            formatted_phone_number?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        address?: {
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
+                                            postal_code?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        birth_certificate_of_child?: Array<{
+                                            id?: string;
+                                        }>;
+                                    }>;
+                                    emergency_contact_list?: Array<{
+                                        name?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        relationship?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_ist?: Array<{
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            formatted_phone_number?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        legal_name?: string;
+                                    }>;
+                                    date_entered_workforce?: string;
+                                    profile_image_id?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                    email_address?: string;
+                                    resident_tax_id_list?: Array<string>;
+                                    age?: number;
+                                    highest_level_of_education?: {
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    highest_degree_of_education?: {
+                                        school: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        level_of_education?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        start_date?: string;
+                                        end_date?: string;
+                                        field_of_study?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        degree?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        school_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        field_of_study_name?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        country_region_id?: string;
+                                        expected_end_date?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                    };
+                                    personal_profile?: Array<{
+                                        personal_profile_id?: string;
+                                        personal_profile_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        files?: Array<{ id?: string }>;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/corehr/v1/persons/:person_id`,
+                            path
+                        ),
+                        method: "PATCH",
                         data,
                         params,
                         headers,
@@ -8922,6 +11094,234 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * authorization
+             */
+            authorization: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=authorization&apiName=get_by_param&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_by_param&project=corehr&resource=authorization&version=v1 document }
+                 *
+                 * 根据ID查询单个用户授权
+                 */
+                getByParam: async (
+                    payload?: {
+                        params: {
+                            employment_id: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    role_authorization?: {
+                                        employment_id: string;
+                                        permission_detail_list: Array<{
+                                            role?: {
+                                                id: string;
+                                                code: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                org_truncation?: Array<{
+                                                    org_key?: string;
+                                                    type?: number;
+                                                    depth?: number;
+                                                }>;
+                                            };
+                                            assigned_organization_list?: Array<
+                                                Array<{
+                                                    org_key: string;
+                                                    org_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    org_id_list: Array<string>;
+                                                }>
+                                            >;
+                                            grantor_rule_list?: Array<{
+                                                rule_dimension?: {
+                                                    entity_key?: string;
+                                                    entity_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                rule_type?: number;
+                                                expression?: {
+                                                    conditions?: Array<{
+                                                        left?: {
+                                                            type?: number;
+                                                            value?: string;
+                                                            lookup_value?: string;
+                                                            lookup_type?: string;
+                                                        };
+                                                        right?: {
+                                                            type?: number;
+                                                            value?: string;
+                                                            lookup_value?: string;
+                                                            lookup_type?: string;
+                                                        };
+                                                        operator?: number;
+                                                        right_value_type?: number;
+                                                    }>;
+                                                    expression?: string;
+                                                };
+                                            }>;
+                                            update_time?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/authorizations/get_by_param`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=authorization&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=corehr&resource=authorization&version=v1 document }
+                 *
+                 * 批量查询用户授权
+                 */
+                query: async (
+                    payload?: {
+                        params?: {
+                            employment_id_list?: number;
+                            role_id_list?: number;
+                            page_token?: string;
+                            page_size?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        employment_id: string;
+                                        permission_detail_list: Array<{
+                                            role?: {
+                                                id: string;
+                                                code: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                org_truncation?: Array<{
+                                                    org_key?: string;
+                                                    type?: number;
+                                                    depth?: number;
+                                                }>;
+                                            };
+                                            assigned_organization_list?: Array<
+                                                Array<{
+                                                    org_key: string;
+                                                    org_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    org_id_list: Array<string>;
+                                                }>
+                                            >;
+                                            grantor_rule_list?: Array<{
+                                                rule_dimension?: {
+                                                    entity_key?: string;
+                                                    entity_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                rule_type?: number;
+                                                expression?: {
+                                                    conditions?: Array<{
+                                                        left?: {
+                                                            type?: number;
+                                                            value?: string;
+                                                            lookup_value?: string;
+                                                            lookup_type?: string;
+                                                        };
+                                                        right?: {
+                                                            type?: number;
+                                                            value?: string;
+                                                            lookup_value?: string;
+                                                            lookup_type?: string;
+                                                        };
+                                                        operator?: number;
+                                                        right_value_type?: number;
+                                                    }>;
+                                                    expression?: string;
+                                                };
+                                            }>;
+                                            update_time?: string;
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/authorizations/query`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * common_data.id
              */
             commonDataId: {
@@ -9734,13 +12134,13 @@ export default abstract class Client extends contract {
                  */
                 patch: async (
                     payload?: {
-                        data: {
-                            hiberarchy_common: {
+                        data?: {
+                            hiberarchy_common?: {
                                 parent_id?: string;
-                                name: Array<{ lang: string; value: string }>;
+                                name?: Array<{ lang: string; value: string }>;
                                 type?: { enum_name: string };
-                                active: boolean;
-                                effective_time?: string;
+                                active?: boolean;
+                                effective_time: string;
                                 expiration_time?: string;
                                 code?: string;
                                 description?: Array<{
@@ -10948,6 +13348,50 @@ export default abstract class Client extends contract {
                                         is_unique: boolean;
                                         object_api_name: string;
                                         type: number;
+                                        common_schema_config?: {
+                                            text_field_setting?: {
+                                                is_multilingual?: boolean;
+                                                is_multiline?: boolean;
+                                                max_length: number;
+                                                is_url_type?: boolean;
+                                            };
+                                            number_field_setting?: {
+                                                number_field_type?: number;
+                                                decimal_places?: number;
+                                                round_type?: number;
+                                                decimal_total_places?: number;
+                                            };
+                                            enum_field_setting?: {
+                                                enum_field_option_list?: Array<{
+                                                    api_name?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    is_open?: boolean;
+                                                }>;
+                                                is_multiple?: boolean;
+                                            };
+                                            lookup_field_setting?: {
+                                                lookup_obj_api_name?: string;
+                                                is_multiple?: boolean;
+                                            };
+                                            date_time_field_setting?: {
+                                                date_time_type?: number;
+                                            };
+                                            attachment_field_setting?: {
+                                                is_multiple?: boolean;
+                                                file_type?: number;
+                                            };
+                                            image_field_setting?: {
+                                                image_type?: number;
+                                                display_style?: number;
+                                            };
+                                        };
                                         create_time?: string;
                                         update_time?: string;
                                     }>;
@@ -12886,6 +15330,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     job_data?: {
                                         id?: string;
+                                        version_id?: string;
                                         job_level_id?: string;
                                         job_grade_id?: string;
                                         employee_type_id: string;
@@ -13029,6 +15474,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     job_data?: {
                                         id?: string;
+                                        version_id?: string;
                                         job_level_id?: string;
                                         job_grade_id?: string;
                                         employee_type_id: string;
@@ -13231,6 +15677,7 @@ export default abstract class Client extends contract {
                 patch: async (
                     payload?: {
                         data?: {
+                            version_id?: string;
                             job_level_id?: string;
                             job_grade_id?: string;
                             employee_type_id?: string;
@@ -13290,6 +15737,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     job_data?: {
                                         id?: string;
+                                        version_id?: string;
                                         job_level_id?: string;
                                         job_grade_id?: string;
                                         employee_type_id: string;
@@ -15681,6 +18129,968 @@ export default abstract class Client extends contract {
              */
             person: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/create document }
+                 *
+                 * 创建个人信息
+                 *
+                 * 创建人员的个人信息
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name_list: Array<{
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            gender?: { enum_name: string };
+                            date_of_birth?: string;
+                            nationality_id?: string;
+                            race?: { enum_name: string };
+                            marital_status?: { enum_name: string };
+                            phone_list?: Array<{
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                device_type?: { enum_name: string };
+                                phone_usage?: { enum_name: string };
+                                is_primary?: boolean;
+                                is_public?: boolean;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            address_list?: Array<{
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            email_list?: Array<{
+                                email: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            work_experience_list?: Array<{
+                                company_organization?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                department?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                job?: Array<{ lang: string; value: string }>;
+                                description?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                start_date?: string;
+                                end_date?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            education_list?: Array<{
+                                school: Array<{ lang: string; value: string }>;
+                                level_of_education?: { enum_name: string };
+                                start_date?: string;
+                                end_date?: string;
+                                field_of_study?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                degree?: { enum_name: string };
+                                school_name?: { enum_name: string };
+                                field_of_study_name?: { enum_name: string };
+                                country_region_id?: string;
+                                expected_end_date?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            bank_account_list?: Array<{
+                                bank_name?: string;
+                                bank_account_number: string;
+                                account_holder: string;
+                                bank?: { enum_name: string };
+                                bank_identification_code?: string;
+                                branch_name?: string;
+                                bank_id?: string;
+                                branch_id?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                country_region_id?: string;
+                                bank_account_usage?: Array<{
+                                    enum_name: string;
+                                }>;
+                                bank_account_type?: { enum_name: string };
+                                currency_id?: string;
+                            }>;
+                            national_id_list?: Array<{
+                                national_id_type_id: string;
+                                national_id_number: string;
+                                issue_date?: string;
+                                expiration_date?: string;
+                                country_region_id: string;
+                                issued_by?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            dependent_list?: Array<{
+                                name?: {
+                                    local_primary?: string;
+                                    local_first_name?: string;
+                                    country_region_id: string;
+                                    name_type: { enum_name: string };
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                    additional_name_type?: {
+                                        enum_name: string;
+                                    };
+                                    first_name?: string;
+                                    full_name?: string;
+                                    hereditary?: string;
+                                    custom_name?: string;
+                                    custom_local_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    secondary?: string;
+                                    social?: { enum_name: string };
+                                    tertiary?: string;
+                                    title?: { enum_name: string };
+                                    local_middle_name?: string;
+                                    local_secondary?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                relationship: { enum_name: string };
+                                gender?: { enum_name: string };
+                                date_of_birth?: string;
+                                nationality_id?: string;
+                                national_id_list?: Array<{
+                                    national_id_type_id: string;
+                                    national_id_number: string;
+                                    issue_date?: string;
+                                    expiration_date?: string;
+                                    country_region_id: string;
+                                    issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                }>;
+                                spouses_working_status?: { enum_name: string };
+                                is_this_person_covered_by_health_insurance?: boolean;
+                                is_this_person_allowed_for_tax_deduction?: boolean;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                dependent_name?: string;
+                                employer?: string;
+                                job?: string;
+                                phone?: {
+                                    international_area_code?: {
+                                        enum_name: string;
+                                    };
+                                    phone_number: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                address?: {
+                                    id?: string;
+                                    country_region_id: string;
+                                    region_id?: string;
+                                    city_id?: string;
+                                    distinct_id?: string;
+                                    address_line1?: string;
+                                    address_line2?: string;
+                                    address_line3?: string;
+                                    address_line4?: string;
+                                    address_line5?: string;
+                                    address_line6?: string;
+                                    address_line7?: string;
+                                    address_line8?: string;
+                                    address_line9?: string;
+                                    local_address_line1?: string;
+                                    local_address_line2?: string;
+                                    local_address_line3?: string;
+                                    local_address_line4?: string;
+                                    local_address_line5?: string;
+                                    local_address_line6?: string;
+                                    local_address_line7?: string;
+                                    local_address_line8?: string;
+                                    local_address_line9?: string;
+                                    postal_code?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                birth_certificate_of_child?: Array<{
+                                    id?: string;
+                                }>;
+                            }>;
+                            emergency_contact_list?: Array<{
+                                name?: {
+                                    local_primary?: string;
+                                    local_first_name?: string;
+                                    country_region_id: string;
+                                    name_type: { enum_name: string };
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                    additional_name_type?: {
+                                        enum_name: string;
+                                    };
+                                    first_name?: string;
+                                    full_name?: string;
+                                    hereditary?: string;
+                                    custom_name?: string;
+                                    custom_local_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    secondary?: string;
+                                    social?: { enum_name: string };
+                                    tertiary?: string;
+                                    title?: { enum_name: string };
+                                    local_middle_name?: string;
+                                    local_secondary?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                relationship?: { enum_name: string };
+                                phone_ist?: Array<{
+                                    international_area_code?: {
+                                        enum_name: string;
+                                    };
+                                    phone_number: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                }>;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                legal_name?: string;
+                            }>;
+                            date_entered_workforce?: string;
+                            profile_image_id?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            resident_tax_id_list?: Array<string>;
+                            age?: number;
+                            personal_profile?: Array<{
+                                personal_profile_type?: { enum_name: string };
+                                files?: Array<{ id?: string }>;
+                            }>;
+                        };
+                        params?: { client_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    person?: {
+                                        phone_number?: string;
+                                        legal_name?: string;
+                                        preferred_name?: string;
+                                        id?: string;
+                                        name_list: Array<{
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        gender?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        date_of_birth?: string;
+                                        nationality_id?: string;
+                                        race?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        marital_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_list?: Array<{
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            formatted_phone_number?: string;
+                                            device_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_usage?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            is_primary?: boolean;
+                                            is_public?: boolean;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        address_list?: Array<{
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
+                                            postal_code?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        email_list?: Array<{
+                                            email: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        work_experience_list?: Array<{
+                                            company_organization?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            department?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            job?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            start_date?: string;
+                                            end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        education_list?: Array<{
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        bank_account_list?: Array<{
+                                            bank_name?: string;
+                                            bank_account_number: string;
+                                            account_holder: string;
+                                            bank?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            bank_identification_code?: string;
+                                            branch_name?: string;
+                                            bank_id?: string;
+                                            branch_id?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            country_region_id?: string;
+                                            bank_account_usage?: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            bank_account_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            currency_id?: string;
+                                        }>;
+                                        national_id_list?: Array<{
+                                            national_id_type_id: string;
+                                            national_id_number: string;
+                                            issue_date?: string;
+                                            expiration_date?: string;
+                                            country_region_id: string;
+                                            issued_by?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        dependent_list?: Array<{
+                                            name?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                tertiary?: string;
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            relationship: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            gender?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            date_of_birth?: string;
+                                            nationality_id?: string;
+                                            national_id_list?: Array<{
+                                                national_id_type_id: string;
+                                                national_id_number: string;
+                                                issue_date?: string;
+                                                expiration_date?: string;
+                                                country_region_id: string;
+                                                issued_by?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            spouses_working_status?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            is_this_person_covered_by_health_insurance?: boolean;
+                                            is_this_person_allowed_for_tax_deduction?: boolean;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            dependent_name?: string;
+                                            employer?: string;
+                                            job?: string;
+                                            phone?: {
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                formatted_phone_number?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            address?: {
+                                                full_address_local_script?: string;
+                                                full_address_western_script?: string;
+                                                id?: string;
+                                                country_region_id: string;
+                                                region_id?: string;
+                                                city_id?: string;
+                                                distinct_id?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
+                                                local_address_line1?: string;
+                                                local_address_line2?: string;
+                                                local_address_line3?: string;
+                                                local_address_line4?: string;
+                                                local_address_line5?: string;
+                                                local_address_line6?: string;
+                                                local_address_line7?: string;
+                                                local_address_line8?: string;
+                                                local_address_line9?: string;
+                                                postal_code?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            birth_certificate_of_child?: Array<{
+                                                id?: string;
+                                            }>;
+                                        }>;
+                                        emergency_contact_list?: Array<{
+                                            name?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                tertiary?: string;
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            relationship?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_ist?: Array<{
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            legal_name?: string;
+                                        }>;
+                                        date_entered_workforce?: string;
+                                        profile_image_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        email_address?: string;
+                                        resident_tax_id_list?: Array<string>;
+                                        age?: number;
+                                        highest_level_of_education?: {
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        highest_degree_of_education?: {
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        personal_profile?: Array<{
+                                            personal_profile_id?: string;
+                                            personal_profile_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            files?: Array<{ id?: string }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/persons`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/delete document }
@@ -16429,6 +19839,970 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=person&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/person/patch document }
+                 *
+                 * 更新个人信息
+                 *
+                 * 更新个人信息
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            name_list?: Array<{
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                social?: { enum_name: string };
+                                tertiary?: string;
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            gender?: { enum_name: string };
+                            date_of_birth?: string;
+                            nationality_id?: string;
+                            race?: { enum_name: string };
+                            marital_status?: { enum_name: string };
+                            phone_list?: Array<{
+                                international_area_code?: { enum_name: string };
+                                phone_number: string;
+                                device_type?: { enum_name: string };
+                                phone_usage?: { enum_name: string };
+                                is_primary?: boolean;
+                                is_public?: boolean;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            address_list?: Array<{
+                                country_region_id: string;
+                                region_id?: string;
+                                city_id?: string;
+                                distinct_id?: string;
+                                address_line1?: string;
+                                address_line2?: string;
+                                address_line3?: string;
+                                address_line4?: string;
+                                address_line5?: string;
+                                address_line6?: string;
+                                address_line7?: string;
+                                address_line8?: string;
+                                address_line9?: string;
+                                local_address_line1?: string;
+                                local_address_line2?: string;
+                                local_address_line3?: string;
+                                local_address_line4?: string;
+                                local_address_line5?: string;
+                                local_address_line6?: string;
+                                local_address_line7?: string;
+                                local_address_line8?: string;
+                                local_address_line9?: string;
+                                postal_code?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            email_list?: Array<{
+                                email: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            work_experience_list?: Array<{
+                                company_organization?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                department?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                job?: Array<{ lang: string; value: string }>;
+                                description?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                start_date?: string;
+                                end_date?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            education_list?: Array<{
+                                school: Array<{ lang: string; value: string }>;
+                                level_of_education?: { enum_name: string };
+                                start_date?: string;
+                                end_date?: string;
+                                field_of_study?: Array<{
+                                    lang: string;
+                                    value: string;
+                                }>;
+                                degree?: { enum_name: string };
+                                school_name?: { enum_name: string };
+                                field_of_study_name?: { enum_name: string };
+                                country_region_id?: string;
+                                expected_end_date?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            bank_account_list?: Array<{
+                                bank_name?: string;
+                                bank_account_number: string;
+                                account_holder: string;
+                                bank?: { enum_name: string };
+                                bank_identification_code?: string;
+                                branch_name?: string;
+                                bank_id?: string;
+                                branch_id?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                country_region_id?: string;
+                                bank_account_usage?: Array<{
+                                    enum_name: string;
+                                }>;
+                                bank_account_type?: { enum_name: string };
+                                currency_id?: string;
+                            }>;
+                            national_id_list?: Array<{
+                                national_id_type_id: string;
+                                national_id_number: string;
+                                issue_date?: string;
+                                expiration_date?: string;
+                                country_region_id: string;
+                                issued_by?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                            }>;
+                            dependent_list?: Array<{
+                                name?: {
+                                    local_primary?: string;
+                                    local_first_name?: string;
+                                    country_region_id: string;
+                                    name_type: { enum_name: string };
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                    additional_name_type?: {
+                                        enum_name: string;
+                                    };
+                                    first_name?: string;
+                                    full_name?: string;
+                                    hereditary?: string;
+                                    custom_name?: string;
+                                    custom_local_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    secondary?: string;
+                                    social?: { enum_name: string };
+                                    tertiary?: string;
+                                    title?: { enum_name: string };
+                                    local_middle_name?: string;
+                                    local_secondary?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                relationship: { enum_name: string };
+                                gender?: { enum_name: string };
+                                date_of_birth?: string;
+                                nationality_id?: string;
+                                national_id_list?: Array<{
+                                    national_id_type_id: string;
+                                    national_id_number: string;
+                                    issue_date?: string;
+                                    expiration_date?: string;
+                                    country_region_id: string;
+                                    issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                }>;
+                                spouses_working_status?: { enum_name: string };
+                                is_this_person_covered_by_health_insurance?: boolean;
+                                is_this_person_allowed_for_tax_deduction?: boolean;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                dependent_name?: string;
+                                employer?: string;
+                                job?: string;
+                                phone?: {
+                                    international_area_code?: {
+                                        enum_name: string;
+                                    };
+                                    phone_number: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                address?: {
+                                    id?: string;
+                                    country_region_id: string;
+                                    region_id?: string;
+                                    city_id?: string;
+                                    distinct_id?: string;
+                                    address_line1?: string;
+                                    address_line2?: string;
+                                    address_line3?: string;
+                                    address_line4?: string;
+                                    address_line5?: string;
+                                    address_line6?: string;
+                                    address_line7?: string;
+                                    address_line8?: string;
+                                    address_line9?: string;
+                                    local_address_line1?: string;
+                                    local_address_line2?: string;
+                                    local_address_line3?: string;
+                                    local_address_line4?: string;
+                                    local_address_line5?: string;
+                                    local_address_line6?: string;
+                                    local_address_line7?: string;
+                                    local_address_line8?: string;
+                                    local_address_line9?: string;
+                                    postal_code?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                birth_certificate_of_child?: Array<{
+                                    id?: string;
+                                }>;
+                            }>;
+                            emergency_contact_list?: Array<{
+                                name?: {
+                                    local_primary?: string;
+                                    local_first_name?: string;
+                                    country_region_id: string;
+                                    name_type: { enum_name: string };
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                    additional_name_type?: {
+                                        enum_name: string;
+                                    };
+                                    first_name?: string;
+                                    full_name?: string;
+                                    hereditary?: string;
+                                    custom_name?: string;
+                                    custom_local_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    secondary?: string;
+                                    social?: { enum_name: string };
+                                    tertiary?: string;
+                                    title?: { enum_name: string };
+                                    local_middle_name?: string;
+                                    local_secondary?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                };
+                                relationship?: { enum_name: string };
+                                phone_ist?: Array<{
+                                    international_area_code?: {
+                                        enum_name: string;
+                                    };
+                                    phone_number: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                }>;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
+                                legal_name?: string;
+                            }>;
+                            date_entered_workforce?: string;
+                            profile_image_id?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            resident_tax_id_list?: Array<string>;
+                            age?: number;
+                            personal_profile?: Array<{
+                                personal_profile_type?: { enum_name: string };
+                                files?: Array<{ id?: string }>;
+                            }>;
+                        };
+                        params?: { client_token?: string };
+                        path: { person_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    person?: {
+                                        phone_number?: string;
+                                        legal_name?: string;
+                                        preferred_name?: string;
+                                        id?: string;
+                                        name_list: Array<{
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            tertiary?: string;
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        gender?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        date_of_birth?: string;
+                                        nationality_id?: string;
+                                        race?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        marital_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        phone_list?: Array<{
+                                            international_area_code?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_number: string;
+                                            formatted_phone_number?: string;
+                                            device_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_usage?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            is_primary?: boolean;
+                                            is_public?: boolean;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        address_list?: Array<{
+                                            full_address_local_script?: string;
+                                            full_address_western_script?: string;
+                                            id?: string;
+                                            country_region_id: string;
+                                            region_id?: string;
+                                            city_id?: string;
+                                            distinct_id?: string;
+                                            address_line1?: string;
+                                            address_line2?: string;
+                                            address_line3?: string;
+                                            address_line4?: string;
+                                            address_line5?: string;
+                                            address_line6?: string;
+                                            address_line7?: string;
+                                            address_line8?: string;
+                                            address_line9?: string;
+                                            local_address_line1?: string;
+                                            local_address_line2?: string;
+                                            local_address_line3?: string;
+                                            local_address_line4?: string;
+                                            local_address_line5?: string;
+                                            local_address_line6?: string;
+                                            local_address_line7?: string;
+                                            local_address_line8?: string;
+                                            local_address_line9?: string;
+                                            postal_code?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        email_list?: Array<{
+                                            email: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        work_experience_list?: Array<{
+                                            company_organization?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            department?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            job?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            start_date?: string;
+                                            end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        education_list?: Array<{
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        bank_account_list?: Array<{
+                                            bank_name?: string;
+                                            bank_account_number: string;
+                                            account_holder: string;
+                                            bank?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            bank_identification_code?: string;
+                                            branch_name?: string;
+                                            bank_id?: string;
+                                            branch_id?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            country_region_id?: string;
+                                            bank_account_usage?: Array<{
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            bank_account_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            currency_id?: string;
+                                        }>;
+                                        national_id_list?: Array<{
+                                            national_id_type_id: string;
+                                            national_id_number: string;
+                                            issue_date?: string;
+                                            expiration_date?: string;
+                                            country_region_id: string;
+                                            issued_by?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        }>;
+                                        dependent_list?: Array<{
+                                            name?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                tertiary?: string;
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            relationship: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            gender?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            date_of_birth?: string;
+                                            nationality_id?: string;
+                                            national_id_list?: Array<{
+                                                national_id_type_id: string;
+                                                national_id_number: string;
+                                                issue_date?: string;
+                                                expiration_date?: string;
+                                                country_region_id: string;
+                                                issued_by?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            spouses_working_status?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            is_this_person_covered_by_health_insurance?: boolean;
+                                            is_this_person_allowed_for_tax_deduction?: boolean;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            dependent_name?: string;
+                                            employer?: string;
+                                            job?: string;
+                                            phone?: {
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                formatted_phone_number?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            address?: {
+                                                full_address_local_script?: string;
+                                                full_address_western_script?: string;
+                                                id?: string;
+                                                country_region_id: string;
+                                                region_id?: string;
+                                                city_id?: string;
+                                                distinct_id?: string;
+                                                address_line1?: string;
+                                                address_line2?: string;
+                                                address_line3?: string;
+                                                address_line4?: string;
+                                                address_line5?: string;
+                                                address_line6?: string;
+                                                address_line7?: string;
+                                                address_line8?: string;
+                                                address_line9?: string;
+                                                local_address_line1?: string;
+                                                local_address_line2?: string;
+                                                local_address_line3?: string;
+                                                local_address_line4?: string;
+                                                local_address_line5?: string;
+                                                local_address_line6?: string;
+                                                local_address_line7?: string;
+                                                local_address_line8?: string;
+                                                local_address_line9?: string;
+                                                postal_code?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            birth_certificate_of_child?: Array<{
+                                                id?: string;
+                                            }>;
+                                        }>;
+                                        emergency_contact_list?: Array<{
+                                            name?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                tertiary?: string;
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            relationship?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            phone_ist?: Array<{
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                formatted_phone_number?: string;
+                                                custom_fields?: Array<{
+                                                    field_name: string;
+                                                    value: string;
+                                                }>;
+                                            }>;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                            legal_name?: string;
+                                        }>;
+                                        date_entered_workforce?: string;
+                                        profile_image_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        email_address?: string;
+                                        resident_tax_id_list?: Array<string>;
+                                        age?: number;
+                                        highest_level_of_education?: {
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        highest_degree_of_education?: {
+                                            school: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            level_of_education?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            start_date?: string;
+                                            end_date?: string;
+                                            field_of_study?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            degree?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            school_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            field_of_study_name?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            country_region_id?: string;
+                                            expected_end_date?: string;
+                                            custom_fields?: Array<{
+                                                field_name: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        personal_profile?: Array<{
+                                            personal_profile_id?: string;
+                                            personal_profile_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            files?: Array<{ id?: string }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v1/persons/:person_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -18169,6 +22543,7 @@ export default abstract class Client extends contract {
                                                         }>;
                                                         country_region_subdivision_id?: string;
                                                         code?: string;
+                                                        subregion_code?: string;
                                                         status?: number;
                                                     }>;
                                                     page_token?: string;
@@ -18226,6 +22601,7 @@ export default abstract class Client extends contract {
                                         }>;
                                         country_region_subdivision_id?: string;
                                         code?: string;
+                                        subregion_code?: string;
                                         status?: number;
                                     }>;
                                     page_token?: string;
@@ -18655,7 +23031,7 @@ export default abstract class Client extends contract {
                                                 data?: {
                                                     items?: Array<{
                                                         currency_id?: string;
-                                                        country_region_id?: string;
+                                                        country_region_id_list?: Array<string>;
                                                         currency_name?: Array<{
                                                             lang: string;
                                                             value: string;
@@ -18712,7 +23088,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     items?: Array<{
                                         currency_id?: string;
-                                        country_region_id?: string;
+                                        country_region_id_list?: Array<string>;
                                         currency_name?: Array<{
                                             lang: string;
                                             value: string;
@@ -18818,6 +23194,7 @@ export default abstract class Client extends contract {
                                                             value: string;
                                                         }>;
                                                         city_id?: string;
+                                                        subregion_code?: string;
                                                         status?: number;
                                                     }>;
                                                     page_token?: string;
@@ -18874,6 +23251,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         city_id?: string;
+                                        subregion_code?: string;
                                         status?: number;
                                     }>;
                                     page_token?: string;
@@ -19364,6 +23742,7 @@ export default abstract class Client extends contract {
                                         currency?: {
                                             currency_id?: string;
                                             country_region_id?: string;
+                                            country_region_id_list?: Array<string>;
                                             currency_name?: Array<{
                                                 lang: string;
                                                 value: string;
@@ -20349,6 +24728,92 @@ export default abstract class Client extends contract {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=query_multi_timeline&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_multi_timeline&project=corehr&resource=department&version=v2 document }
+                 *
+                 * 查询任意日期部门信息
+                 */
+                queryMultiTimeline: async (
+                    payload?: {
+                        data: {
+                            department_ids: Array<string>;
+                            effective_date_start?: string;
+                            effective_date_end?: string;
+                            fields?: Array<string>;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        version_id?: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        parent_department_id?: string;
+                                        manager?: string;
+                                        code?: string;
+                                        effective_date?: string;
+                                        active?: boolean;
+                                        descriptions?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            custom_api_name: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/departments/query_multi_timeline`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=query_timeline&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_timeline&project=corehr&resource=department&version=v2 document }
@@ -20388,6 +24853,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     items?: Array<{
                                         id?: string;
+                                        version_id?: string;
                                         names?: Array<{
                                             lang: string;
                                             value: string;
@@ -20399,6 +24865,15 @@ export default abstract class Client extends contract {
                                         active?: boolean;
                                         descriptions?: Array<{
                                             lang: string;
+                                            value: string;
+                                        }>;
+                                        custom_fields?: Array<{
+                                            custom_api_name: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
                                             value: string;
                                         }>;
                                     }>;
@@ -21758,6 +26233,7 @@ export default abstract class Client extends contract {
                                                 value: string;
                                             }>;
                                         };
+                                        talent_pool_id_list?: Array<string>;
                                     }>;
                                 };
                             }
@@ -22908,6 +27384,7 @@ export default abstract class Client extends contract {
                                                                 value: string;
                                                             }>;
                                                         };
+                                                        talent_pool_id_list?: Array<string>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -24024,6 +28501,7 @@ export default abstract class Client extends contract {
                                                 value: string;
                                             }>;
                                         };
+                                        talent_pool_id_list?: Array<string>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -24224,6 +28702,7 @@ export default abstract class Client extends contract {
                                                 type?: number;
                                                 value: string;
                                             }>;
+                                            created_at?: string;
                                         }>;
                                     }>;
                                 };
@@ -24988,6 +29467,72 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/job_families/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * job_grade
+             */
+            jobGrade: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job_grade&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=corehr&resource=job_grade&version=v2 document }
+                 *
+                 * 查询职等信息
+                 */
+                query: async (
+                    payload?: {
+                        data?: {
+                            ids?: Array<string>;
+                            codes?: Array<string>;
+                            active?: boolean;
+                        };
+                        params: { page_size: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        job_grade_id?: string;
+                                        grade_order?: number;
+                                        code?: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        descriptions?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        active?: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/job_grades/query`,
                                 path
                             ),
                             method: "POST",
@@ -26112,6 +30657,33 @@ export default abstract class Client extends contract {
                                                 is_primary?: boolean;
                                                 is_public?: boolean;
                                             }>;
+                                            phone_list?: Array<{
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                formatted_phone_number?: string;
+                                                device_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_usage?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                is_primary?: boolean;
+                                                is_public?: boolean;
+                                            }>;
                                             legal_name?: string;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
@@ -27169,6 +31741,33 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             phone_ist?: Array<{
+                                                international_area_code?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_number: string;
+                                                formatted_phone_number?: string;
+                                                device_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                phone_usage?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                is_primary?: boolean;
+                                                is_public?: boolean;
+                                            }>;
+                                            phone_list?: Array<{
                                                 international_area_code?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -30642,6 +35241,7 @@ export default abstract class Client extends contract {
                                         complete_time?: string;
                                         node_definition_id?: string;
                                     }>;
+                                    properties?: number;
                                 };
                             }
                         >({

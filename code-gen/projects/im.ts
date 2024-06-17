@@ -2873,7 +2873,7 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * 消息加急
+         * 消息
          */
         message: {
             /**
@@ -7602,7 +7602,7 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * 消息加急
+             * 消息
              */
             message: {
                 /**

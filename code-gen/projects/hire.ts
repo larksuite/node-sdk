@@ -7576,6 +7576,137 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * role
+         */
+        role: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=role&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=role&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    path?: { role_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                role?: {
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    description?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    scope_of_application?: number;
+                                    has_business_management_scope?: boolean;
+                                    socail_permission_collection?: {
+                                        feature_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        management_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        data_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            select_status?: number;
+                                        }>;
+                                        business_management_scopes?: Array<{
+                                            entity?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            permission_groups?: Array<{
+                                                permission_ids?: Array<string>;
+                                                scope_rule?: {
+                                                    rule_type?: number;
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                    campus_permission_collection?: {
+                                        feature_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        management_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        data_permissions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            select_status?: number;
+                                        }>;
+                                        business_management_scopes?: Array<{
+                                            entity?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            permission_groups?: Array<{
+                                                permission_ids?: Array<string>;
+                                                scope_rule?: {
+                                                    rule_type?: number;
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/roles/:role_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 人才
          */
         talent: {
@@ -16251,6 +16382,140 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/resume_sources`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * role
+             */
+            role: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=role&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=role&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        path?: { role_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    role?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        scope_of_application?: number;
+                                        has_business_management_scope?: boolean;
+                                        socail_permission_collection?: {
+                                            feature_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            management_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            data_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                select_status?: number;
+                                            }>;
+                                            business_management_scopes?: Array<{
+                                                entity?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                permission_groups?: Array<{
+                                                    permission_ids?: Array<string>;
+                                                    scope_rule?: {
+                                                        rule_type?: number;
+                                                    };
+                                                }>;
+                                            }>;
+                                        };
+                                        campus_permission_collection?: {
+                                            feature_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            management_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            data_permissions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                select_status?: number;
+                                            }>;
+                                            business_management_scopes?: Array<{
+                                                entity?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                permission_groups?: Array<{
+                                                    permission_ids?: Array<string>;
+                                                    scope_rule?: {
+                                                        rule_type?: number;
+                                                    };
+                                                }>;
+                                            }>;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/roles/:role_id`,
                                 path
                             ),
                             method: "GET",

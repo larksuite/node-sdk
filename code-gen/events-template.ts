@@ -2001,6 +2001,81 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.offboarding.checklist_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        checklist_process_id?: string;
+        checklist_status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.offboarding.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        offboarding_id?: string;
+        process_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.offboarding.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        offboarding_info_id?: string;
+        process_id?: string;
+        checklist_process_id?: string;
+        employment_id?: string;
+        operator?: string;
+        status?: number;
+        checklist_status?: number;
+        updated_time?: string;
+        updated_fields?: Array<string>;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.probation.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2038,6 +2113,9 @@ export interface IHandles extends IOtherEventHandles {
         approver_id?: string;
         status?: number;
         biz_type?: string;
+        flow_definition_id?: string;
+        node_definition_id?: string;
+        node_id?: string;
     }) => Promise<any> | any;
     /**
          
@@ -2175,6 +2253,67 @@ export interface IHandles extends IOtherEventHandles {
             };
         }>;
         revision?: number;
+        subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        update_time?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.bitable_record_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        table_id?: string;
+        revision?: number;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        action_list?: Array<{
+            record_id: string;
+            action: string;
+            before_value?: Array<{
+                field_id: string;
+                field_value: string;
+                field_identity_value?: {
+                    users?: Array<{
+                        user_id: {
+                            union_id?: string;
+                            user_id?: string;
+                            open_id?: string;
+                        };
+                        name: string;
+                        en_name: string;
+                        avatar_url: string;
+                    }>;
+                };
+            }>;
+            after_value?: Array<{
+                field_id: string;
+                field_value: string;
+                field_identity_value?: {
+                    users?: Array<{
+                        user_id: {
+                            union_id?: string;
+                            user_id?: string;
+                            open_id?: string;
+                        };
+                        name: string;
+                        en_name: string;
+                        avatar_url: string;
+                    }>;
+                };
+            }>;
+        }>;
         subscriber_id_list?: Array<{
             union_id?: string;
             user_id?: string;

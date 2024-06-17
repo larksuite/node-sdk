@@ -1149,6 +1149,8 @@ export default abstract class Client extends approval {
                             early_minutes_as_lack: number;
                             off_delay_minutes: number;
                             late_minutes_as_serious_late?: number;
+                            no_need_on?: boolean;
+                            no_need_off?: boolean;
                         }>;
                         late_off_late_on_rule?: Array<{
                             late_off_minutes: number;
@@ -1167,6 +1169,15 @@ export default abstract class Client extends approval {
                             rest_begin_time: string;
                             rest_end_time: string;
                         }>;
+                        late_minutes_as_serious_late?: number;
+                        shift_middle_time_rule?: {
+                            middle_time_type?: number;
+                            fixed_middle_time?: string;
+                        };
+                        late_off_late_on_setting?: {
+                            late_off_base_on_time_type?: number;
+                            late_on_base_on_time_type?: number;
+                        };
                     };
                 },
                 options?: IRequestOptions
@@ -1203,6 +1214,8 @@ export default abstract class Client extends approval {
                                         early_minutes_as_lack: number;
                                         off_delay_minutes: number;
                                         late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
                                     }>;
                                     late_off_late_on_rule?: Array<{
                                         late_off_minutes: number;
@@ -1221,6 +1234,15 @@ export default abstract class Client extends approval {
                                         rest_begin_time: string;
                                         rest_end_time: string;
                                     }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
                                 };
                             };
                         }
@@ -1319,6 +1341,8 @@ export default abstract class Client extends approval {
                                     early_minutes_as_lack: number;
                                     off_delay_minutes: number;
                                     late_minutes_as_serious_late?: number;
+                                    no_need_on?: boolean;
+                                    no_need_off?: boolean;
                                 }>;
                                 late_off_late_on_rule?: Array<{
                                     late_off_minutes: number;
@@ -1337,6 +1361,15 @@ export default abstract class Client extends approval {
                                     rest_begin_time: string;
                                     rest_end_time: string;
                                 }>;
+                                late_minutes_as_serious_late?: number;
+                                shift_middle_time_rule?: {
+                                    middle_time_type?: number;
+                                    fixed_middle_time?: string;
+                                };
+                                late_off_late_on_setting?: {
+                                    late_off_base_on_time_type?: number;
+                                    late_on_base_on_time_type?: number;
+                                };
                             };
                         }
                     >({
@@ -1437,6 +1470,8 @@ export default abstract class Client extends approval {
                                                         early_minutes_as_lack: number;
                                                         off_delay_minutes: number;
                                                         late_minutes_as_serious_late?: number;
+                                                        no_need_on?: boolean;
+                                                        no_need_off?: boolean;
                                                     }>;
                                                     late_off_late_on_rule?: Array<{
                                                         late_off_minutes: number;
@@ -1455,6 +1490,15 @@ export default abstract class Client extends approval {
                                                         rest_begin_time: string;
                                                         rest_end_time: string;
                                                     }>;
+                                                    late_minutes_as_serious_late?: number;
+                                                    shift_middle_time_rule?: {
+                                                        middle_time_type?: number;
+                                                        fixed_middle_time?: string;
+                                                    };
+                                                    late_off_late_on_setting?: {
+                                                        late_off_base_on_time_type?: number;
+                                                        late_on_base_on_time_type?: number;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1524,6 +1568,8 @@ export default abstract class Client extends approval {
                                         early_minutes_as_lack: number;
                                         off_delay_minutes: number;
                                         late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
                                     }>;
                                     late_off_late_on_rule?: Array<{
                                         late_off_minutes: number;
@@ -1542,6 +1588,15 @@ export default abstract class Client extends approval {
                                         rest_begin_time: string;
                                         rest_end_time: string;
                                     }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1608,6 +1663,8 @@ export default abstract class Client extends approval {
                                     early_minutes_as_lack: number;
                                     off_delay_minutes: number;
                                     late_minutes_as_serious_late?: number;
+                                    no_need_on?: boolean;
+                                    no_need_off?: boolean;
                                 }>;
                                 late_off_late_on_rule?: Array<{
                                     late_off_minutes: number;
@@ -1626,6 +1683,15 @@ export default abstract class Client extends approval {
                                     rest_begin_time: string;
                                     rest_end_time: string;
                                 }>;
+                                late_minutes_as_serious_late?: number;
+                                shift_middle_time_rule?: {
+                                    middle_time_type?: number;
+                                    fixed_middle_time?: string;
+                                };
+                                late_off_late_on_setting?: {
+                                    late_off_base_on_time_type?: number;
+                                    late_on_base_on_time_type?: number;
+                                };
                             };
                         }
                     >({
@@ -1678,6 +1744,7 @@ export default abstract class Client extends approval {
                                 };
                                 default_locale: string;
                                 reason: string;
+                                idempotent_id?: string;
                             }>;
                             leaves?: Array<{
                                 uniq_id?: string;
@@ -1692,6 +1759,7 @@ export default abstract class Client extends approval {
                                 };
                                 default_locale: "ch" | "en" | "ja";
                                 reason: string;
+                                idempotent_id?: string;
                             }>;
                             overtime_works?: Array<{
                                 duration: number;
@@ -1701,6 +1769,7 @@ export default abstract class Client extends approval {
                                 start_time: string;
                                 end_time: string;
                                 reason?: string;
+                                idempotent_id?: string;
                             }>;
                             trips?: Array<{
                                 start_time: string;
@@ -1708,6 +1777,7 @@ export default abstract class Client extends approval {
                                 reason: string;
                                 approve_pass_time: string;
                                 approve_apply_time: string;
+                                idempotent_id?: string;
                             }>;
                             time_zone?: string;
                         };
@@ -1745,6 +1815,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     leaves?: Array<{
                                         approval_id?: string;
@@ -1762,6 +1833,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     overtime_works?: Array<{
                                         approval_id?: string;
@@ -1772,6 +1844,7 @@ export default abstract class Client extends approval {
                                         start_time: string;
                                         end_time: string;
                                         reason?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -1780,6 +1853,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time: string;
                                         approve_apply_time: string;
+                                        idempotent_id?: string;
                                     }>;
                                     time_zone?: string;
                                 };
@@ -1858,6 +1932,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     leaves?: Array<{
                                         approval_id?: string;
@@ -1875,6 +1950,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     overtime_works?: Array<{
                                         approval_id?: string;
@@ -1885,6 +1961,7 @@ export default abstract class Client extends approval {
                                         start_time: string;
                                         end_time: string;
                                         reason?: string;
+                                        idempotent_id?: string;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -1893,6 +1970,7 @@ export default abstract class Client extends approval {
                                         reason: string;
                                         approve_pass_time: string;
                                         approve_apply_time: string;
+                                        idempotent_id?: string;
                                     }>;
                                     time_zone?: string;
                                 }>;
@@ -2078,6 +2156,7 @@ export default abstract class Client extends approval {
                                 | "None"
                                 | "Todo";
                             external_id?: string;
+                            idempotent_id?: string;
                         }>;
                     };
                     params: { employee_type: "employee_id" | "employee_no" };
@@ -2122,6 +2201,7 @@ export default abstract class Client extends approval {
                                         | "None"
                                         | "Todo";
                                     external_id?: string;
+                                    idempotent_id?: string;
                                 }>;
                             };
                         }
@@ -2198,6 +2278,7 @@ export default abstract class Client extends approval {
                                     | "None"
                                     | "Todo";
                                 external_id?: string;
+                                idempotent_id?: string;
                             };
                         }
                     >({
@@ -2278,6 +2359,7 @@ export default abstract class Client extends approval {
                                         | "None"
                                         | "Todo";
                                     external_id?: string;
+                                    idempotent_id?: string;
                                 }>;
                             };
                         }
@@ -2764,6 +2846,7 @@ export default abstract class Client extends approval {
                                                 | "None"
                                                 | "Todo";
                                             external_id?: string;
+                                            idempotent_id?: string;
                                         };
                                         check_out_record_id: string;
                                         check_out_record?: {
@@ -2794,6 +2877,7 @@ export default abstract class Client extends approval {
                                                 | "None"
                                                 | "Todo";
                                             external_id?: string;
+                                            idempotent_id?: string;
                                         };
                                         check_in_result:
                                             | "NoNeedCheck"
@@ -4166,6 +4250,8 @@ export default abstract class Client extends approval {
                                 early_minutes_as_lack: number;
                                 off_delay_minutes: number;
                                 late_minutes_as_serious_late?: number;
+                                no_need_on?: boolean;
+                                no_need_off?: boolean;
                             }>;
                             late_off_late_on_rule?: Array<{
                                 late_off_minutes: number;
@@ -4184,6 +4270,15 @@ export default abstract class Client extends approval {
                                 rest_begin_time: string;
                                 rest_end_time: string;
                             }>;
+                            late_minutes_as_serious_late?: number;
+                            shift_middle_time_rule?: {
+                                middle_time_type?: number;
+                                fixed_middle_time?: string;
+                            };
+                            late_off_late_on_setting?: {
+                                late_off_base_on_time_type?: number;
+                                late_on_base_on_time_type?: number;
+                            };
                         };
                     },
                     options?: IRequestOptions
@@ -4220,6 +4315,8 @@ export default abstract class Client extends approval {
                                             early_minutes_as_lack: number;
                                             off_delay_minutes: number;
                                             late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
                                         }>;
                                         late_off_late_on_rule?: Array<{
                                             late_off_minutes: number;
@@ -4238,6 +4335,15 @@ export default abstract class Client extends approval {
                                             rest_begin_time: string;
                                             rest_end_time: string;
                                         }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
                                     };
                                 };
                             }
@@ -4339,6 +4445,8 @@ export default abstract class Client extends approval {
                                         early_minutes_as_lack: number;
                                         off_delay_minutes: number;
                                         late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
                                     }>;
                                     late_off_late_on_rule?: Array<{
                                         late_off_minutes: number;
@@ -4357,6 +4465,15 @@ export default abstract class Client extends approval {
                                         rest_begin_time: string;
                                         rest_end_time: string;
                                     }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
                                 };
                             }
                         >({
@@ -4457,6 +4574,8 @@ export default abstract class Client extends approval {
                                                             early_minutes_as_lack: number;
                                                             off_delay_minutes: number;
                                                             late_minutes_as_serious_late?: number;
+                                                            no_need_on?: boolean;
+                                                            no_need_off?: boolean;
                                                         }>;
                                                         late_off_late_on_rule?: Array<{
                                                             late_off_minutes: number;
@@ -4475,6 +4594,15 @@ export default abstract class Client extends approval {
                                                             rest_begin_time: string;
                                                             rest_end_time: string;
                                                         }>;
+                                                        late_minutes_as_serious_late?: number;
+                                                        shift_middle_time_rule?: {
+                                                            middle_time_type?: number;
+                                                            fixed_middle_time?: string;
+                                                        };
+                                                        late_off_late_on_setting?: {
+                                                            late_off_base_on_time_type?: number;
+                                                            late_on_base_on_time_type?: number;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -4544,6 +4672,8 @@ export default abstract class Client extends approval {
                                             early_minutes_as_lack: number;
                                             off_delay_minutes: number;
                                             late_minutes_as_serious_late?: number;
+                                            no_need_on?: boolean;
+                                            no_need_off?: boolean;
                                         }>;
                                         late_off_late_on_rule?: Array<{
                                             late_off_minutes: number;
@@ -4562,6 +4692,15 @@ export default abstract class Client extends approval {
                                             rest_begin_time: string;
                                             rest_end_time: string;
                                         }>;
+                                        late_minutes_as_serious_late?: number;
+                                        shift_middle_time_rule?: {
+                                            middle_time_type?: number;
+                                            fixed_middle_time?: string;
+                                        };
+                                        late_off_late_on_setting?: {
+                                            late_off_base_on_time_type?: number;
+                                            late_on_base_on_time_type?: number;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -4628,6 +4767,8 @@ export default abstract class Client extends approval {
                                         early_minutes_as_lack: number;
                                         off_delay_minutes: number;
                                         late_minutes_as_serious_late?: number;
+                                        no_need_on?: boolean;
+                                        no_need_off?: boolean;
                                     }>;
                                     late_off_late_on_rule?: Array<{
                                         late_off_minutes: number;
@@ -4646,6 +4787,15 @@ export default abstract class Client extends approval {
                                         rest_begin_time: string;
                                         rest_end_time: string;
                                     }>;
+                                    late_minutes_as_serious_late?: number;
+                                    shift_middle_time_rule?: {
+                                        middle_time_type?: number;
+                                        fixed_middle_time?: string;
+                                    };
+                                    late_off_late_on_setting?: {
+                                        late_off_base_on_time_type?: number;
+                                        late_on_base_on_time_type?: number;
+                                    };
                                 };
                             }
                         >({
@@ -4698,6 +4848,7 @@ export default abstract class Client extends approval {
                                     };
                                     default_locale: string;
                                     reason: string;
+                                    idempotent_id?: string;
                                 }>;
                                 leaves?: Array<{
                                     uniq_id?: string;
@@ -4712,6 +4863,7 @@ export default abstract class Client extends approval {
                                     };
                                     default_locale: "ch" | "en" | "ja";
                                     reason: string;
+                                    idempotent_id?: string;
                                 }>;
                                 overtime_works?: Array<{
                                     duration: number;
@@ -4721,6 +4873,7 @@ export default abstract class Client extends approval {
                                     start_time: string;
                                     end_time: string;
                                     reason?: string;
+                                    idempotent_id?: string;
                                 }>;
                                 trips?: Array<{
                                     start_time: string;
@@ -4728,6 +4881,7 @@ export default abstract class Client extends approval {
                                     reason: string;
                                     approve_pass_time: string;
                                     approve_apply_time: string;
+                                    idempotent_id?: string;
                                 }>;
                                 time_zone?: string;
                             };
@@ -4767,6 +4921,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         leaves?: Array<{
                                             approval_id?: string;
@@ -4784,6 +4939,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         overtime_works?: Array<{
                                             approval_id?: string;
@@ -4794,6 +4950,7 @@ export default abstract class Client extends approval {
                                             start_time: string;
                                             end_time: string;
                                             reason?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -4802,6 +4959,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time: string;
                                             approve_apply_time: string;
+                                            idempotent_id?: string;
                                         }>;
                                         time_zone?: string;
                                     };
@@ -4882,6 +5040,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         leaves?: Array<{
                                             approval_id?: string;
@@ -4899,6 +5058,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         overtime_works?: Array<{
                                             approval_id?: string;
@@ -4909,6 +5069,7 @@ export default abstract class Client extends approval {
                                             start_time: string;
                                             end_time: string;
                                             reason?: string;
+                                            idempotent_id?: string;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -4917,6 +5078,7 @@ export default abstract class Client extends approval {
                                             reason: string;
                                             approve_pass_time: string;
                                             approve_apply_time: string;
+                                            idempotent_id?: string;
                                         }>;
                                         time_zone?: string;
                                     }>;
@@ -5106,6 +5268,7 @@ export default abstract class Client extends approval {
                                     | "None"
                                     | "Todo";
                                 external_id?: string;
+                                idempotent_id?: string;
                             }>;
                         };
                         params: {
@@ -5152,6 +5315,7 @@ export default abstract class Client extends approval {
                                             | "None"
                                             | "Todo";
                                         external_id?: string;
+                                        idempotent_id?: string;
                                     }>;
                                 };
                             }
@@ -5228,6 +5392,7 @@ export default abstract class Client extends approval {
                                         | "None"
                                         | "Todo";
                                     external_id?: string;
+                                    idempotent_id?: string;
                                 };
                             }
                         >({
@@ -5308,6 +5473,7 @@ export default abstract class Client extends approval {
                                             | "None"
                                             | "Todo";
                                         external_id?: string;
+                                        idempotent_id?: string;
                                     }>;
                                 };
                             }
@@ -5806,6 +5972,7 @@ export default abstract class Client extends approval {
                                                     | "None"
                                                     | "Todo";
                                                 external_id?: string;
+                                                idempotent_id?: string;
                                             };
                                             check_out_record_id: string;
                                             check_out_record?: {
@@ -5836,6 +6003,7 @@ export default abstract class Client extends approval {
                                                     | "None"
                                                     | "Todo";
                                                 external_id?: string;
+                                                idempotent_id?: string;
                                             };
                                             check_in_result:
                                                 | "NoNeedCheck"
