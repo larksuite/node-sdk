@@ -123,7 +123,7 @@ export class UserAccessToken {
       });
 
       if (oidcAccessInfo.code === 0 && oidcAccessInfo.data) {
-        this.update({
+        await this.update({
           key: {
             token: oidcAccessInfo.data.access_token,
             refreshToken: oidcAccessInfo.data.refresh_token,
