@@ -19,6 +19,7 @@ import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { IRequestOptions, IClientParams, IPayload } from './types';
 import { TokenManager } from './token-manager';
 import { HttpInstance } from '@node-sdk/typings/http';
+import { UserAccessToken } from './user-access-token';
 
 export class Client extends RequestTemplate {
     appId: string = '';
@@ -42,6 +43,8 @@ export class Client extends RequestTemplate {
     domain: string;
 
     httpInstance: HttpInstance;
+
+    userAccessToken: UserAccessToken;
 
     constructor(params: IClientParams) {
         super();
@@ -77,6 +80,8 @@ export class Client extends RequestTemplate {
             appType: this.appType,
             httpInstance: this.httpInstance,
         });
+
+        this.userAccessToken = new UserAccessToken({client: this});
 
         this.logger.info('client ready');
     }
