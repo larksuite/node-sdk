@@ -98,7 +98,7 @@ export class UserAccessToken {
       });
 
       if (refreshAccessInfo.code === 0 && refreshAccessInfo.data) {
-        this.update({
+        await this.update({
           key: {
             token: refreshAccessInfo.data.access_token,
             refreshToken: refreshAccessInfo.data.refresh_token,
