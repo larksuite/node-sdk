@@ -135,7 +135,7 @@ export class UserAccessToken {
       }
     }
 
-    // step4 重拾完毕没结果后，返回undefine
+    // step4 重试完毕没结果后，返回undefine
     return;
   }
 }
