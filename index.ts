@@ -17,4 +17,4 @@ export { default as defaultHttpInstance } from './http';
 export { HttpInstance, HttpRequestOptions } from './typings/http';
 export * as messageCard from './utils/message-card';
 export { WSClient } from './ws-client';
-export { AilyClient } from './scene/aily/client';
+export { Aily } from './scene/aily/client';

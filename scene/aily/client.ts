@@ -35,7 +35,7 @@ export enum EExecStatus {
   OTHER = 4
 }
 
-export class AilyClient {
+export class Aily {
   client: Client;
   cache: Cache;
   logger: Logger;
