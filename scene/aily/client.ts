@@ -1,6 +1,5 @@
 import { Client } from '@node-sdk/client/client';
 import { IRequestOptions } from '@node-sdk/client/types';
-import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { Cache, Logger } from '@node-sdk/typings';
 import { CAilySessionRecord } from '@node-sdk/consts';
 import { SessionCache } from './session-cache';
@@ -23,7 +22,8 @@ interface ICreateParams {
   messageInfo?: Omit<TCreateMessageParams['data'], 'idempotent_id' | 'content_type' | 'content'>;
   // run
   ailyAppId: string;
-  runInfo?: Omit<TCreateRunParams['data'], 'app_id'>;
+  skillId?: string;
+  runInfo?: Omit<TCreateRunParams['data'], 'app_id' | 'skill_id'>;
 }
 
 export enum EExecStatus {
@@ -49,7 +49,7 @@ export class AilyClient {
   private async getSessionId(params: { sessionId?: string, payload?:TCreateSessionParams['data'], options?: IRequestOptions }) {
     const { sessionId, payload, options } = params;
     
-    const records = await this.getRecords();
+    const records = await this.getRecords() as Record<string, string>;
     if (sessionId && sessionId in records) {
       return records[sessionId];
     }
@@ -67,15 +67,13 @@ export class AilyClient {
     }
   }
 
-  private async create(params: ICreateParams, options?: IRequestOptions) {
-    const { sessionId, ailyAppId, message, sessionInfo, messageInfo, runInfo } = params;
+  private async waitReply(params: ICreateParams, options?: IRequestOptions) {
+    const { sessionId, ailyAppId, message, sessionInfo, messageInfo, runInfo, skillId } = params;
 
     // step1 get aily session id
     const ailySessionId = await this.getSessionId({ sessionId, payload: sessionInfo, options});
     if (!ailySessionId) {
-      return {
-        code: EExecStatus.ERROR,
-      };
+      throw EExecStatus.ERROR;
     }
 
     // step2 create message and run
@@ -92,31 +90,29 @@ export class AilyClient {
     }, options);
     if (!(ailySessionMessage.code === 0 && ailySessionMessage.data)) {
       this.logger.error('create aily message error', ailySessionMessage.msg);
-      return {
-        code: EExecStatus.ERROR,
-      };
+      throw EExecStatus.ERROR;
     }
+
+    const messageId = ailySessionMessage.data.message?.id;
+
     const ailySessionRun = await this.client.aily.v1.ailySessionRun.create({
       path: {
         aily_session_id: ailySessionId
       },
       data: {
         app_id: ailyAppId,
+        skill_id: skillId,
         ...runInfo
       }
     }, options);
     if (!(ailySessionRun.code === 0 && ailySessionRun.data)) {
       this.logger.error('create aily session run error', ailySessionRun.msg);
-      return {
-        code: EExecStatus.ERROR,
-      };
+      throw EExecStatus.ERROR;
     }
     const runId = ailySessionRun.data.run?.id;
     if (!runId) {
       this.logger.error('run id is empty');
-      return {
-        code: EExecStatus.ERROR,
-      };
+      throw EExecStatus.ERROR;
     }
 
     // step3 wait run complete
@@ -132,6 +128,7 @@ export class AilyClient {
 
           if (!(runStatusInfo.code === 0 && runStatusInfo.data)) {
             resolve(3);
+            return;
           }
       
           const status = runStatusInfo.data?.run?.status;
@@ -155,12 +152,22 @@ export class AilyClient {
     const pollingRet = await polling();
     if (pollingRet !== EExecStatus.SUCCESS) {
       this.logger.error('aily run error');
-      return {
-        code: pollingRet
-      }
+      throw pollingRet;
     }
 
-    // step4 get aily reply
+    return {
+      ailySessionId,
+      runId,
+      messageId
+    }
+  }
+
+  private async create(params: ICreateParams, options?: IRequestOptions) {
+    const {
+      ailySessionId,
+      runId
+    } = await this.waitReply(params, options);
+
     let reply: TMessage | undefined;
     for await (const items of await this.client.aily.v1.ailySessionAilyMessage.listWithIterator({
       path: {
@@ -168,6 +175,7 @@ export class AilyClient {
       },
       params: {
         run_id: runId,
+        with_partial_message: false,
       }
     }, options)) {
       if(!items) {
@@ -181,19 +189,53 @@ export class AilyClient {
     } 
     if (!reply) {
       this.logger.error('no aily reply');
-      return {
-        code: EExecStatus.ERROR
-      }
-    } 
-
-    return {
-      code: EExecStatus.SUCCESS,
-      message: reply
+      throw EExecStatus.ERROR;
     }
+
+    return reply;
   }
 
-  private createWithStream() {
+  private async createWithStream(params: ICreateParams, options?: IRequestOptions) {
+    const {
+      ailySessionId,
+      runId,
+      messageId
+    } = await this.waitReply(params, options);
 
+    const listMessages = () => this.client.aily.v1.ailySessionAilyMessage.listWithIterator({
+      path: {
+        aily_session_id: ailySessionId,
+      },
+      params: {
+        run_id: runId,
+        with_partial_message: true,
+      }
+    }, options);
+
+    let startOutput = false;
+    const Iterable = {
+      async *[Symbol.asyncIterator]() {
+        for await (const items of await listMessages()) {
+          if(!items) {
+            continue;
+          }
+
+          for (const message of items.messages || []) {
+            if (startOutput) {
+              yield message;
+
+              if (message.status === 'COMPLETED') {
+                return;
+              }
+            } else if (message.id === messageId && message.status === 'COMPLETED') {
+              startOutput = true;
+            }
+          }
+        }
+      }
+    }
+
+    return Iterable;
   }
 
   private async getRecords() {
