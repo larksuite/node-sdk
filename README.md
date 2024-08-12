@@ -1,5 +1,10 @@
 # Feishu open interface SDK
 
+![GitHub Repo stars](https://img.shields.io/github/stars/larksuite/node-sdk)
+![NPM Downloads](https://img.shields.io/npm/dw/%40larksuiteoapi%2Fnode-sdk)
+![NPM License](https://img.shields.io/npm/l/%40larksuiteoapi%2Fnode-sdk)
+
+
 [中文](https://github.com/larksuite/node-sdk/blob/main/README.zh.md)
 ## Overview
 [Feishu Open Platform](https://open.feishu.cn/document/ukTMukTMukTM/uITNz4iM1MjLyUzM) provides a series of atomic APIs on the server side to realize diversified functions, but the actual coding process is not very smooth: when using these APIs to complete operation, a lot of extra work needs to be considered, such as token acquisition and maintenance, data encryption and decryption, request signature verification, etc.; in the actual coding process, the semantics of function calls are missing, cause mental burden.
