@@ -4,3 +4,5 @@ export const CAppTicket = Symbol('app-ticket');
 export const CTenantAccessToken = Symbol('tenant-access-token');
 export const CWithHelpdeskAuthorization = Symbol('with-helpdesk-authorization');
 export const CWithUserAccessToken = Symbol('with-user-access-token');
+export const CUserAccessToken = Symbol('user-access-token');
+export const CAilySessionRecord = Symbol('aily-session-record');

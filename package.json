@@ -22,7 +22,7 @@
   "scripts": {
     "build": "rm -r lib es types & rollup -c",
     "test": "jest",
-    "test:watch": "jest --watch --testPathPattern=ws-client/__tests__"
+    "test:watch": "jest --watch --testPathPattern=utils/__tests__"
   },
   "author": "mazhe.nerd",
   "license": "MIT",
