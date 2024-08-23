@@ -32,7 +32,286 @@ export default abstract class Client extends helpdesk {
      */
     hire = {
         /**
-         * 投递
+         * advertisement
+         */
+        advertisement: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=advertisement&apiName=publish&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/advertisement/publish document }
+             *
+             * 职位发布至官网
+             *
+             * 支持把职位发布至招聘官网、内推平台
+             */
+            publish: async (
+                payload?: {
+                    data?: { job_channel_id?: string };
+                    path: { advertisement_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/advertisements/:advertisement_id/publish`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 猎头（灰度租户可见）
+         */
+        agency: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/get document }
+             *
+             * 获取猎头供应商信息
+             *
+             * 根据猎头供应商 ID 获取猎头供应商信息
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                    path?: { agency_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                agency?: {
+                                    id?: string;
+                                    name?: string;
+                                    contactor_id?: string;
+                                    contactor_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/agencies/:agency_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=protect&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/protect document }
+             *
+             * 设置猎头保护期
+             *
+             * 设置猎头保护期
+             */
+            protect: async (
+                payload?: {
+                    data: {
+                        talent_id: string;
+                        supplier_id: string;
+                        consultant_id: string;
+                        protect_create_time: number;
+                        protect_expire_time: number;
+                        comment?: string;
+                        current_salary?: string;
+                        expected_salary?: string;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/agencies/protect`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=protect_search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=protect_search&project=hire&resource=agency&version=v1 document }
+             */
+            protectSearch: async (
+                payload?: {
+                    data: { talent_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                is_onboarded?: boolean;
+                                onboarded_in_protection?: boolean;
+                                onboarded_protection?: {
+                                    protection_type?: number;
+                                    application_id?: string;
+                                    start_time?: string;
+                                    expire_time?: string;
+                                    agency_supplier_id?: string;
+                                    agency_supplier_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    agency_supplier_user_id?: string;
+                                    agency_supplier_user_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                };
+                                protection_list?: Array<{
+                                    protection_type?: number;
+                                    application_id?: string;
+                                    start_time?: string;
+                                    expire_time?: string;
+                                    agency_supplier_id?: string;
+                                    agency_supplier_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    agency_supplier_user_id?: string;
+                                    agency_supplier_user_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/agencies/protection_period/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/query document }
+             *
+             * 查询猎头供应商信息
+             *
+             * 根据猎头供应商名称查询猎头供应商信息
+             */
+            query: async (
+                payload?: {
+                    params: {
+                        name: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    contactor_id?: string;
+                                    contactor_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/agencies/query`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 入职
          */
         application: {
             /**
@@ -199,6 +478,7 @@ export default abstract class Client extends helpdesk {
                         talent_id?: string;
                         active_status?: string;
                         job_id?: string;
+                        lock_status?: number;
                         page_token?: string;
                         page_size?: number;
                         update_start_time?: string;
@@ -418,6 +698,7 @@ export default abstract class Client extends helpdesk {
                                             customize_value?: string;
                                         }>;
                                     }>;
+                                    job_requirement_id?: string;
                                 };
                             };
                         }
@@ -427,6 +708,36 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=recover&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recover&project=hire&resource=application&version=v1 document }
+             */
+            recover: async (
+                payload?: {
+                    path: { application_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/applications/:application_id/recover`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -544,12 +855,48 @@ export default abstract class Client extends helpdesk {
                                     sequence?: string;
                                     level?: string;
                                     employee_type?: string;
+                                    job_requirement_id?: string;
                                 };
                             };
                         }
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/applications/:application_id/transfer_onboard`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=transfer_stage&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/transfer_stage document }
+             *
+             * 转移阶段
+             *
+             * 转移投递阶段
+             */
+            transferStage: async (
+                payload?: {
+                    data: { stage_id: string };
+                    path: { application_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/applications/:application_id/transfer_stage`,
                             path
                         ),
                         method: "POST",
@@ -777,6 +1124,39 @@ export default abstract class Client extends helpdesk {
          */
         attachment: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDN1YjLyQTN24iM0UjN/create_attachment document }
+             */
+            create: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const res = await this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { id?: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/attachments`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+
+                return get(res, "data", null);
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/attachment/get document }
@@ -865,6 +1245,222 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * 背调 （灰度租户可见）
+         */
+        backgroundCheckOrder: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/background_check_order/list document }
+             *
+             * 获取背调信息
+             *
+             * 根据投递ID或背调更新时间获取背调信息
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                        application_id?: string;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    order_id?: string;
+                                    application_id?: string;
+                                    order_status?: number;
+                                    account_third_type?: number;
+                                    package?: string;
+                                    name?: string;
+                                    feedback_info_list?: Array<{
+                                        id?: string;
+                                        attachment_url?: string;
+                                        report_preview_url?: string;
+                                        result?: string;
+                                        report_type?: number;
+                                        create_time?: string;
+                                        report_name?: string;
+                                    }>;
+                                    process_info_list?: Array<{
+                                        process?: string;
+                                        update_time?: string;
+                                        en_process?: string;
+                                    }>;
+                                    upload_time?: string;
+                                    candidate_info?: {
+                                        name?: string;
+                                        mobile?: string;
+                                        email?: string;
+                                        first_name?: string;
+                                        last_name?: string;
+                                    };
+                                    creator_info?: { user_id?: string };
+                                    contactor_info?: {
+                                        name?: string;
+                                        mobile?: string;
+                                        email?: string;
+                                        first_name?: string;
+                                        last_name?: string;
+                                    };
+                                    begin_time?: string;
+                                    end_time?: string;
+                                    conclusion?: string;
+                                    provider_info?: {
+                                        provider_id?: string;
+                                        provider_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    custom_field_list?: Array<{
+                                        type:
+                                            | "text"
+                                            | "textarea"
+                                            | "number"
+                                            | "boolean"
+                                            | "select"
+                                            | "multiselect"
+                                            | "date"
+                                            | "file"
+                                            | "resume";
+                                        key: string;
+                                        name: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        is_required: boolean;
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        options?: Array<{
+                                            key: string;
+                                            name: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    custom_data_list?: Array<{
+                                        key?: string;
+                                        value?: string;
+                                    }>;
+                                    ext_item_info_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
+                                    update_time?: string;
+                                    geo?: "cn" | "sg" | "us" | "jp";
+                                    location_code?: string;
+                                    remark?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/background_check_orders`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * diversity_inclusion
+         */
+        diversityInclusion: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=diversity_inclusion&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=diversity_inclusion&version=v1 document }
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        talent_ids?: Array<string>;
+                        application_ids?: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    application_id?: string;
+                                    talent_id?: string;
+                                    source_type?: number;
+                                    create_time?: string;
+                                    update_time?: string;
+                                    di_data?: Array<{
+                                        value?: string;
+                                        object_attribute?: {
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            data_type?: number;
+                                            tags?: Array<number>;
+                                            is_fcf_data?: boolean;
+                                            is_di_data?: boolean;
+                                        };
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/applications/diversity_inclusions/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 生态对接账号自定义字段
          */
         ecoAccountCustomField: {
@@ -879,8 +1475,8 @@ export default abstract class Client extends helpdesk {
              */
             batchDelete: async (
                 payload?: {
-                    data?: {
-                        scope?: number;
+                    data: {
+                        scope: number;
                         custom_field_key_list?: Array<string>;
                     };
                 },
@@ -1712,6 +2308,7 @@ export default abstract class Client extends helpdesk {
                                     sequence?: string;
                                     level?: string;
                                     employee_type?: string;
+                                    job_requirement_id?: string;
                                 };
                             };
                         }
@@ -1787,6 +2384,7 @@ export default abstract class Client extends helpdesk {
                                     sequence?: string;
                                     level?: string;
                                     employee_type?: string;
+                                    job_requirement_id?: string;
                                 };
                             };
                         }
@@ -1870,6 +2468,7 @@ export default abstract class Client extends helpdesk {
                                     sequence?: string;
                                     level?: string;
                                     employee_type?: string;
+                                    job_requirement_id?: string;
                                 };
                             };
                         }
@@ -2067,6 +2666,403 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * 评估任务
+         */
+        evaluationTask: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/evaluation_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    id?: string;
+                                                    job_id?: string;
+                                                    talent_id?: string;
+                                                    application_id?: string;
+                                                    activity_status?: number;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=evaluation_task&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/evaluation_task/list document }
+             *
+             * 获取员工评估任务
+             *
+             * 获取员工评估任务
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    job_id?: string;
+                                    talent_id?: string;
+                                    application_id?: string;
+                                    activity_status?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/evaluation_tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 笔试 (灰度租户可见)
+         */
+        exam: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=exam&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/exam/create document }
+             *
+             * 添加笔试结果
+             *
+             * 根据投递 ID 添加该投递下的笔试结果
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        application_id: string;
+                        exam_resource_name: string;
+                        score: number;
+                        uuid?: string;
+                        operator_id: string;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                exam_id?: string;
+                                application_id?: string;
+                                exam_resource_name?: string;
+                                score?: number;
+                                uuid?: string;
+                                operator_id?: string;
+                                operate_time?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/exams`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 笔试阅卷任务
+         */
+        examMarkingTask: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/exam_marking_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    id?: string;
+                                                    job_id?: string;
+                                                    talent_id?: string;
+                                                    application_id?: string;
+                                                    activity_status?: number;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=exam_marking_task&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/exam_marking_task/list document }
+             *
+             * 获取员工笔试阅卷任务
+             *
+             * 获取员工笔试阅卷任务
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    job_id?: string;
+                                    talent_id?: string;
+                                    application_id?: string;
+                                    activity_status?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/exam_marking_tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 导入外部系统信息（灰度租户可见）
          */
         externalApplication: {
@@ -2184,6 +3180,164 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        talent_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/external_applications`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    job_recruitment_type?: number;
+                                                    job_title?: string;
+                                                    resume_source?: string;
+                                                    stage?: string;
+                                                    talent_id: string;
+                                                    termination_reason?: string;
+                                                    delivery_type?: number;
+                                                    modify_time?: number;
+                                                    create_time?: number;
+                                                    termination_type?: string;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_application&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=external_application&version=v1 document }
+             *
+             * 根据人才 id 获取外部投递列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        talent_id?: string;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    job_recruitment_type?: number;
+                                    job_title?: string;
+                                    resume_source?: string;
+                                    stage?: string;
+                                    talent_id: string;
+                                    termination_reason?: string;
+                                    delivery_type?: number;
+                                    modify_time?: number;
+                                    create_time?: number;
+                                    termination_type?: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_applications`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -2350,6 +3504,22 @@ export default abstract class Client extends helpdesk {
                         participate_status?: number;
                         begin_time?: number;
                         end_time?: number;
+                        interview_assessments?: Array<{
+                            external_id?: string;
+                            username?: string;
+                            conclusion?: number;
+                            assessment_dimension_list?: Array<{
+                                score?: number;
+                                option?: string;
+                                options?: Array<string>;
+                                content?: string;
+                                assessment_type?: number;
+                                title?: string;
+                                description?: string;
+                            }>;
+                            content?: string;
+                            external_interview_id?: string;
+                        }>;
                     };
                 },
                 options?: IRequestOptions
@@ -2371,6 +3541,23 @@ export default abstract class Client extends helpdesk {
                                     participate_status?: number;
                                     begin_time?: number;
                                     end_time?: number;
+                                    interview_assessments?: Array<{
+                                        id?: string;
+                                        external_id?: string;
+                                        username?: string;
+                                        conclusion?: number;
+                                        assessment_dimension_list?: Array<{
+                                            score?: number;
+                                            option?: string;
+                                            options?: Array<string>;
+                                            content?: string;
+                                            assessment_type?: number;
+                                            title?: string;
+                                            description?: string;
+                                        }>;
+                                        content?: string;
+                                        external_interview_id?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2405,7 +3592,7 @@ export default abstract class Client extends helpdesk {
              */
             create: async (
                 payload?: {
-                    data: {
+                    data?: {
                         external_id?: string;
                         username?: string;
                         conclusion?: number;
@@ -2419,7 +3606,7 @@ export default abstract class Client extends helpdesk {
                             description?: string;
                         }>;
                         content?: string;
-                        external_interview_id: string;
+                        external_interview_id?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -2449,7 +3636,7 @@ export default abstract class Client extends helpdesk {
                                         description?: string;
                                     }>;
                                     content?: string;
-                                    external_interview_id: string;
+                                    external_interview_id?: string;
                                 };
                             };
                         }
@@ -2468,11 +3655,469 @@ export default abstract class Client extends helpdesk {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_interview_assessment&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=hire&resource=external_interview_assessment&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data?: {
+                        username?: string;
+                        conclusion?: number;
+                        assessment_dimension_list?: Array<{
+                            score?: number;
+                            option?: string;
+                            options?: Array<string>;
+                            content?: string;
+                            assessment_type?: number;
+                            title?: string;
+                            description?: string;
+                        }>;
+                        content?: string;
+                    };
+                    path: { external_interview_assessment_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_interview_assessment?: {
+                                    id?: string;
+                                    username?: string;
+                                    conclusion?: number;
+                                    assessment_dimension_list?: Array<{
+                                        score?: number;
+                                        option?: string;
+                                        options?: Array<string>;
+                                        content?: string;
+                                        assessment_type?: number;
+                                        title?: string;
+                                        description?: string;
+                                    }>;
+                                    content?: string;
+                                    external_interview_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_interview_assessments/:external_interview_assessment_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * external_referral_reward
+         */
+        externalReferralReward: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_referral_reward&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=external_referral_reward&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        referral_user_id: string;
+                        create_user_id?: string;
+                        confirm_user_id?: string;
+                        pay_user_id?: string;
+                        external_id: string;
+                        application_id?: string;
+                        talent_id?: string;
+                        job_id?: string;
+                        reason?: string;
+                        rule_type: number;
+                        bonus: {
+                            bonus_type: number;
+                            point_bonus?: number;
+                            cash?: { currency_type: string; amount: number };
+                        };
+                        stage: number;
+                        create_time?: string;
+                        confirm_time?: string;
+                        pay_time?: string;
+                        onboard_time?: string;
+                        conversion_time?: string;
+                        comment?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { id?: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_referral_rewards`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_referral_reward&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=external_referral_reward&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path?: { external_referral_reward_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/external_referral_rewards/:external_referral_reward_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 面试
          */
         interview: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview&apiName=get_by_talent&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview/get_by_talent document }
+             *
+             * 获取人才面试信息
+             *
+             * 获取人才面试信息
+             */
+            getByTalent: async (
+                payload?: {
+                    params: {
+                        talent_id: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    application_id?: string;
+                                    interview_list?: Array<{
+                                        id?: string;
+                                        begin_time?: number;
+                                        end_time?: number;
+                                        round?: number;
+                                        interview_record_list?: Array<{
+                                            id?: string;
+                                            user_id?: string;
+                                            content?: string;
+                                            min_job_level_id?: string;
+                                            max_job_level_id?: string;
+                                            commit_status?: number;
+                                            conclusion?: number;
+                                            interview_score?: {
+                                                id?: string;
+                                                level?: number;
+                                                zh_name?: string;
+                                                zh_description?: string;
+                                                en_name?: string;
+                                                en_description?: string;
+                                            };
+                                            assessment_score?: {
+                                                calculate_type: number;
+                                                score: number;
+                                                full_score?: number;
+                                            };
+                                            question_list?: Array<{
+                                                id: string;
+                                                title?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                content?: string;
+                                                ability_list?: Array<{
+                                                    id: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                            }>;
+                                            code_question_list?: Array<{
+                                                id: string;
+                                                title?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                content?: string;
+                                                ability_list?: Array<{
+                                                    id: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                            }>;
+                                            interviewer?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            image_list?: Array<{
+                                                id: string;
+                                                url: string;
+                                                name?: string;
+                                                mime?: string;
+                                                create_time?: string;
+                                            }>;
+                                            dimension_assessment_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                full_score?: number;
+                                                content?: string;
+                                                dimension_id?: string;
+                                                dimension_score?: {
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                };
+                                                dimension_score_list?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                }>;
+                                                dimension_custom_score?: number;
+                                                ability_list?: Array<{
+                                                    id: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                question_list?: Array<{
+                                                    id: string;
+                                                    title?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    content?: string;
+                                                    ability_list?: Array<{
+                                                        id: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                dimension_type?: number;
+                                            }>;
+                                        }>;
+                                        feedback_submit_time?: number;
+                                        stage_id?: string;
+                                        application_id?: string;
+                                        stage?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        biz_create_time?: number;
+                                        biz_modify_time?: number;
+                                        interview_round_summary?: number;
+                                        interview_arrangement_id?: string;
+                                        interview_type?: number;
+                                        talent_time_zone?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        contact_user?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        contact_mobile?: string;
+                                        remark?: string;
+                                        address?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
+                                        video_type?: number;
+                                        arrangement_status?: number;
+                                        arrangement_type?: number;
+                                        arrangement_appointment_kind?: number;
+                                        meeting_room_list?: Array<{
+                                            room_id?: string;
+                                            room_name?: string;
+                                            building_name?: string;
+                                            reserved_status?: number;
+                                            floor_name?: string;
+                                        }>;
+                                        interview_round_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interviews/get_by_talent`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview&apiName=list&version=v1 click to debug }
              *
@@ -2771,9 +4416,1489 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * interview_feedback_form
+         */
+        interviewFeedbackForm: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        interview_feedback_form_ids?: number;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_feedback_forms`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    version?: number;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    type?: number;
+                                                    score_calculation_config?: {
+                                                        enabled?: boolean;
+                                                        calculation_mode?: number;
+                                                    };
+                                                    modules?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        type?: number;
+                                                        sequence?: number;
+                                                        weight?: number;
+                                                        dimensions?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            type?: number;
+                                                            enabled?: boolean;
+                                                            sequence?: number;
+                                                            is_required?: boolean;
+                                                            weight?: number;
+                                                            score_dimension_config?: {
+                                                                score_dimension_type?: number;
+                                                                lower_limit_score?: number;
+                                                                upper_limit_score?: number;
+                                                            };
+                                                            option_items?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                score_val?: number;
+                                                            }>;
+                                                            display_not_evident?: boolean;
+                                                            ability_list?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_feedback_form&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interview_feedback_form&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        interview_feedback_form_ids?: number;
+                        page_size?: number;
+                        page_token?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    version?: number;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    type?: number;
+                                    score_calculation_config?: {
+                                        enabled?: boolean;
+                                        calculation_mode?: number;
+                                    };
+                                    modules?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        type?: number;
+                                        sequence?: number;
+                                        weight?: number;
+                                        dimensions?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            enabled?: boolean;
+                                            sequence?: number;
+                                            is_required?: boolean;
+                                            weight?: number;
+                                            score_dimension_config?: {
+                                                score_dimension_type?: number;
+                                                lower_limit_score?: number;
+                                                upper_limit_score?: number;
+                                            };
+                                            option_items?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                score_val?: number;
+                                            }>;
+                                            display_not_evident?: boolean;
+                                            ability_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_feedback_forms`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * interview_record.attachment
+         */
+        interviewRecordAttachment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record.attachment&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=interview_record.attachment&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        application_id: string;
+                        interview_record_id?: string;
+                        language?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                attachment?: {
+                                    id?: string;
+                                    url?: string;
+                                    name?: string;
+                                    mime?: string;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_records/attachments`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * interview_record
+         */
+        interviewRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_record/get document }
+             *
+             * 获取面试评价详细信息
+             *
+             * 获取面试评价详细信息
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { interview_record_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                interview_record?: {
+                                    id?: string;
+                                    user_id?: string;
+                                    content?: string;
+                                    min_job_level_id?: string;
+                                    max_job_level_id?: string;
+                                    commit_status?: number;
+                                    feedback_submit_time?: number;
+                                    conclusion?: number;
+                                    interview_score?: {
+                                        id?: string;
+                                        level?: number;
+                                        zh_name?: string;
+                                        zh_description?: string;
+                                        en_name?: string;
+                                        en_description?: string;
+                                    };
+                                    assessment_score?: {
+                                        calculate_type: number;
+                                        score: number;
+                                        full_score?: number;
+                                    };
+                                    question_list?: Array<{
+                                        id: string;
+                                        title?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        content?: string;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    code_question_list?: Array<{
+                                        id: string;
+                                        title?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        content?: string;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    interviewer?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    image_list?: Array<{
+                                        id: string;
+                                        url: string;
+                                        name?: string;
+                                        mime?: string;
+                                        create_time?: string;
+                                    }>;
+                                    dimension_assessment_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        full_score?: number;
+                                        content?: string;
+                                        dimension_id?: string;
+                                        dimension_score?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            score_val?: number;
+                                        };
+                                        dimension_score_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            score_val?: number;
+                                        }>;
+                                        dimension_custom_score?: number;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        dimension_type?: number;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_records/:interview_record_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        ids?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_records`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    user_id?: string;
+                                                    content?: string;
+                                                    min_job_level_id?: string;
+                                                    max_job_level_id?: string;
+                                                    commit_status?: number;
+                                                    feedback_submit_time?: number;
+                                                    conclusion?: number;
+                                                    interview_score?: {
+                                                        id?: string;
+                                                        level?: number;
+                                                        zh_name?: string;
+                                                        zh_description?: string;
+                                                        en_name?: string;
+                                                        en_description?: string;
+                                                    };
+                                                    assessment_score?: {
+                                                        calculate_type: number;
+                                                        score: number;
+                                                        full_score?: number;
+                                                    };
+                                                    question_list?: Array<{
+                                                        id: string;
+                                                        title?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        content?: string;
+                                                        ability_list?: Array<{
+                                                            id: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    code_question_list?: Array<{
+                                                        id: string;
+                                                        title?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        content?: string;
+                                                        ability_list?: Array<{
+                                                            id: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    interviewer?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    image_list?: Array<{
+                                                        id: string;
+                                                        url: string;
+                                                        name?: string;
+                                                        mime?: string;
+                                                        create_time?: string;
+                                                    }>;
+                                                    dimension_assessment_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        full_score?: number;
+                                                        content?: string;
+                                                        dimension_id?: string;
+                                                        dimension_score?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            score_val?: number;
+                                                        };
+                                                        dimension_score_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            score_val?: number;
+                                                        }>;
+                                                        dimension_custom_score?: number;
+                                                        ability_list?: Array<{
+                                                            id: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        question_list?: Array<{
+                                                            id: string;
+                                                            title?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            content?: string;
+                                                            ability_list?: Array<{
+                                                                id: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                        }>;
+                                                        dimension_type?: number;
+                                                    }>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interview_record&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        ids?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    user_id?: string;
+                                    content?: string;
+                                    min_job_level_id?: string;
+                                    max_job_level_id?: string;
+                                    commit_status?: number;
+                                    feedback_submit_time?: number;
+                                    conclusion?: number;
+                                    interview_score?: {
+                                        id?: string;
+                                        level?: number;
+                                        zh_name?: string;
+                                        zh_description?: string;
+                                        en_name?: string;
+                                        en_description?: string;
+                                    };
+                                    assessment_score?: {
+                                        calculate_type: number;
+                                        score: number;
+                                        full_score?: number;
+                                    };
+                                    question_list?: Array<{
+                                        id: string;
+                                        title?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        content?: string;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    code_question_list?: Array<{
+                                        id: string;
+                                        title?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        content?: string;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    interviewer?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    image_list?: Array<{
+                                        id: string;
+                                        url: string;
+                                        name?: string;
+                                        mime?: string;
+                                        create_time?: string;
+                                    }>;
+                                    dimension_assessment_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        full_score?: number;
+                                        content?: string;
+                                        dimension_id?: string;
+                                        dimension_score?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            score_val?: number;
+                                        };
+                                        dimension_score_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            score_val?: number;
+                                        }>;
+                                        dimension_custom_score?: number;
+                                        ability_list?: Array<{
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        dimension_type?: number;
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_records`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * interview_registration_schema
+         */
+        interviewRegistrationSchema: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_registration_schemas`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: string;
+                                                    is_used_as_interview?: boolean;
+                                                    object_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        setting?: {
+                                                            object_type?: number;
+                                                            config?: {
+                                                                options?: Array<{
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    active_status?: number;
+                                                                }>;
+                                                            };
+                                                        };
+                                                        is_customized?: boolean;
+                                                        is_required?: boolean;
+                                                        is_visible?: boolean;
+                                                        active_status?: number;
+                                                        children_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            setting?: {
+                                                                object_type?: number;
+                                                                config?: {
+                                                                    options?: Array<{
+                                                                        key?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        description?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        active_status?: number;
+                                                                    }>;
+                                                                };
+                                                            };
+                                                            parent_id?: string;
+                                                            is_customized?: boolean;
+                                                            is_required?: boolean;
+                                                            is_visible?: boolean;
+                                                            active_status?: number;
+                                                        }>;
+                                                    }>;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_registration_schema&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_registration_schema/list document }
+             *
+             * 获取面试登记表模板列表
+             *
+             * 获取面试登记表模板列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    is_used_as_interview?: boolean;
+                                    object_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        setting?: {
+                                            object_type?: number;
+                                            config?: {
+                                                options?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    active_status?: number;
+                                                }>;
+                                            };
+                                        };
+                                        is_customized?: boolean;
+                                        is_required?: boolean;
+                                        is_visible?: boolean;
+                                        active_status?: number;
+                                        children_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            parent_id?: string;
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            is_visible?: boolean;
+                                            active_status?: number;
+                                        }>;
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_registration_schemas`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 面试轮次类型
+         */
+        interviewRoundType: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_round_type&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_round_type/list document }
+             *
+             * 获取面试轮次类型列表
+             *
+             * 获取面试轮次类型列表
+             */
+            list: async (
+                payload?: {
+                    params?: { process_type?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                active_status?: number;
+                                items?: Array<{
+                                    id?: string;
+                                    biz_id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    process_type?: number;
+                                    active_status?: number;
+                                    interview_assessment_template_info?: {
+                                        id?: string;
+                                        biz_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_round_types`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 面试任务
+         */
+        interviewTask: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    id?: string;
+                                                    job_id?: string;
+                                                    talent_id?: string;
+                                                    application_id?: string;
+                                                    activity_status?: number;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_task&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_task/list document }
+             *
+             * 获取员工面试任务
+             *
+             * 获取员工面试任务
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id: string;
+                        activity_status?: number;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    job_id?: string;
+                                    talent_id?: string;
+                                    application_id?: string;
+                                    activity_status?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interview_tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 职位
          */
         job: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=close&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/close document }
+             *
+             * 关闭职位
+             *
+             * 支持关闭职位，关闭后，职位将同步从官网、内推、猎头渠道下线
+             */
+            close: async (
+                payload?: {
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/close`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=combined_create&version=v1 click to debug }
              *
@@ -3036,7 +6161,7 @@ export default abstract class Client extends helpdesk {
                         min_level_id?: string;
                         min_salary?: number;
                         title?: string;
-                        job_managers?: {
+                        job_managers: {
                             id?: string;
                             recruiter_id: string;
                             hiring_manager_id_list: Array<string>;
@@ -3736,6 +6861,41 @@ export default abstract class Client extends helpdesk {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=open&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/open document }
+             *
+             * 重启职位
+             *
+             * 支持开启职位
+             */
+            open: async (
+                payload?: {
+                    data: { expiry_time?: number; is_never_expired: boolean };
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/open`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=recruiter&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recruiter&project=hire&resource=job&version=v1 document }
@@ -3966,6 +7126,64 @@ export default abstract class Client extends helpdesk {
          */
         jobManager: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job.manager&apiName=batch_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/batch_update document }
+             *
+             * 更新职位相关人员
+             *
+             * 更新职位相关人员
+             */
+            batchUpdate: async (
+                payload?: {
+                    data: {
+                        recruiter_id?: string;
+                        assistant_id_list?: Array<string>;
+                        hiring_manager_id_list?: Array<string>;
+                        update_option_list: Array<number>;
+                        creator_id?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { job_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                job_manager?: {
+                                    id?: string;
+                                    recruiter_id: string;
+                                    hiring_manager_id_list: Array<string>;
+                                    assistant_id_list?: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/jobs/:job_id/managers/batch_update`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job.manager&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/get document }
@@ -4008,6 +7226,152 @@ export default abstract class Client extends helpdesk {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/jobs/:job_id/managers/:manager_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * job_function
+         */
+        jobFunction: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/job_functions`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    active_status?: number;
+                                                    parent_id?: string;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_function&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_function/list document }
+             *
+             * 获取职能分类列表
+             *
+             * 获取职能分类列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    active_status?: number;
+                                    parent_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/job_functions`,
                             path
                         ),
                         method: "GET",
@@ -4072,6 +7436,252 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * job_publish_record
+         */
+        jobPublishRecord: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_publish_record&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_publish_record/search document }
+             *
+             * 获取职位广告发布记录
+             *
+             * 获取职位广告发布记录
+             */
+            search: async (
+                payload?: {
+                    data: { job_channel_id: string };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        job_family_id_type?:
+                            | "people_admin_job_category_id"
+                            | "job_family_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    title?: string;
+                                    job_id?: string;
+                                    job_code?: string;
+                                    job_expire_time?: string;
+                                    job_active_status?: number;
+                                    job_process_type?: number;
+                                    job_recruitment_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_department?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    };
+                                    min_salary?: string;
+                                    max_salary?: string;
+                                    required_degree?: number;
+                                    experience?: number;
+                                    headcount?: number;
+                                    high_light_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    description?: string;
+                                    requirement?: string;
+                                    creator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    create_time?: string;
+                                    modify_time?: string;
+                                    customized_data_list?: Array<{
+                                        object_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        value?: {
+                                            content?: string;
+                                            option?: {
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            option_list?: Array<{
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            time_range?: {
+                                                start_time?: string;
+                                                end_time?: string;
+                                            };
+                                            time?: string;
+                                            number?: string;
+                                        };
+                                    }>;
+                                    address_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    job_sequence_info?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    currency?: number;
+                                    target_major_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/job_publish_records/search`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -4280,6 +7890,9 @@ export default abstract class Client extends helpdesk {
                                         };
                                         parent_id?: string;
                                     };
+                                    create_time?: string;
+                                    creator_id?: string;
+                                    update_time?: string;
                                 };
                             };
                         }
@@ -4505,6 +8118,9 @@ export default abstract class Client extends helpdesk {
                                         };
                                         parent_id?: string;
                                     };
+                                    create_time?: string;
+                                    creator_id?: string;
+                                    update_time?: string;
                                 }>;
                             };
                         }
@@ -4686,6 +8302,9 @@ export default abstract class Client extends helpdesk {
                                         };
                                         parent_id?: string;
                                     };
+                                    create_time?: string;
+                                    creator_id?: string;
+                                    update_time?: string;
                                 }>;
                             };
                         }
@@ -4900,6 +8519,127 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * job_schema
+         */
+        jobSchema: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_schema&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_schema/list document }
+             *
+             * 获取职位模板
+             *
+             * 获取社招、校招职位模板中的职位字段，包括系统默认字段和自定义字段
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        scenario?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    scenario_type?: number;
+                                    object_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        setting?: {
+                                            object_type?: number;
+                                            config?: {
+                                                options?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    active_status?: number;
+                                                }>;
+                                            };
+                                        };
+                                        is_customized?: boolean;
+                                        is_required?: boolean;
+                                        active_status?: number;
+                                        children_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            parent_id?: string;
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            active_status?: number;
+                                        }>;
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/job_schemas`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * job_type
          */
         jobType: {
@@ -5040,6 +8780,301 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * 地址（灰度租户可见）
+         */
+        location: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_token?: string;
+                        page_size?: number;
+                        usage:
+                            | "position_location"
+                            | "interview_location"
+                            | "store_location";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/locations`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    district?: {
+                                                        code?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    city?: {
+                                                        code?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    state?: {
+                                                        code?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    country?: {
+                                                        code?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    active_status?: number;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=location&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/location/list document }
+             *
+             * 获取地址列表
+             *
+             * 获取地址列表
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_token?: string;
+                        page_size?: number;
+                        usage:
+                            | "position_location"
+                            | "interview_location"
+                            | "store_location";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    district?: {
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    city?: {
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    state?: {
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    country?: {
+                                        code?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    active_status?: number;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/locations`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=location&apiName=query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=hire&resource=location&version=v1 document }
+             */
+            query: async (
+                payload?: {
+                    data: { code_list?: Array<string>; location_type: number };
+                    params: { page_token?: string; page_size: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    country?: {
+                                        country_code?: string;
+                                        country_name_info?: {
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            py_name?: string;
+                                        };
+                                    };
+                                    state?: {
+                                        state_code?: string;
+                                        country_code?: string;
+                                        state_name_info?: {
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            py_name?: string;
+                                        };
+                                    };
+                                    city?: {
+                                        city_code?: string;
+                                        state_code?: string;
+                                        country_code?: string;
+                                        city_name_info?: {
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            py_name?: string;
+                                        };
+                                    };
+                                    district?: {
+                                        district_code?: string;
+                                        city_code?: string;
+                                        state_code?: string;
+                                        country_code?: string;
+                                        district_name_info?: {
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            py_name?: string;
+                                        };
+                                    };
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/locations/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 备注
          */
         note: {
@@ -5060,6 +9095,11 @@ export default abstract class Client extends helpdesk {
                         creator_id?: string;
                         content: string;
                         privacy?: number;
+                        notify_mentioned_user?: boolean;
+                        mention_entity_list?: Array<{
+                            offset: number;
+                            user_id: string;
+                        }>;
                     };
                     params?: {
                         user_id_type?:
@@ -5090,6 +9130,11 @@ export default abstract class Client extends helpdesk {
                                     modify_time?: number;
                                     creator_id?: string;
                                     content: string;
+                                    notify_mentioned_user?: boolean;
+                                    mention_entity_list?: Array<{
+                                        offset: number;
+                                        user_id: string;
+                                    }>;
                                 };
                             };
                         }
@@ -5099,6 +9144,36 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=note&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=note&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path?: { note_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/notes/:note_id`,
+                            path
+                        ),
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -5149,6 +9224,11 @@ export default abstract class Client extends helpdesk {
                                     modify_time?: number;
                                     creator_id?: string;
                                     content: string;
+                                    notify_mentioned_user?: boolean;
+                                    mention_entity_list?: Array<{
+                                        offset: number;
+                                        user_id: string;
+                                    }>;
                                 };
                             };
                         }
@@ -5210,6 +9290,11 @@ export default abstract class Client extends helpdesk {
                                     modify_time?: number;
                                     creator_id?: string;
                                     content: string;
+                                    notify_mentioned_user?: boolean;
+                                    mention_entity_list?: Array<{
+                                        offset: number;
+                                        user_id: string;
+                                    }>;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -5241,7 +9326,15 @@ export default abstract class Client extends helpdesk {
              */
             patch: async (
                 payload?: {
-                    data: { content: string };
+                    data: {
+                        content: string;
+                        operator_id?: string;
+                        notify_mentioned_user?: boolean;
+                        mention_entity_list?: Array<{
+                            offset: number;
+                            user_id: string;
+                        }>;
+                    };
                     params?: {
                         user_id_type?:
                             | "user_id"
@@ -5272,6 +9365,11 @@ export default abstract class Client extends helpdesk {
                                     modify_time?: number;
                                     creator_id?: string;
                                     content: string;
+                                    notify_mentioned_user?: boolean;
+                                    mention_entity_list?: Array<{
+                                        offset: number;
+                                        user_id: string;
+                                    }>;
                                 };
                             };
                         }
@@ -5308,7 +9406,7 @@ export default abstract class Client extends helpdesk {
                 payload?: {
                     data: {
                         application_id: string;
-                        schema_id: string;
+                        schema_id?: string;
                         offer_type?: number;
                         basic_info: {
                             department_id: string;
@@ -5623,6 +9721,43 @@ export default abstract class Client extends helpdesk {
                                             object_id?: string;
                                             customize_value?: string;
                                         }>;
+                                    }>;
+                                    job_requirement_id?: string;
+                                    offer_send_record_list?: Array<{
+                                        offer_send_record_id?: string;
+                                        operator_user_id?: string;
+                                        send_time?: string;
+                                        offer_letter_status?: number;
+                                        email_info?: {
+                                            cc_email_list?: Array<string>;
+                                            receiver_email_list?: Array<string>;
+                                            content?: string;
+                                        };
+                                        acceptance_list?: Array<{
+                                            operator_type?: number;
+                                            conclusion?: number;
+                                            memo?: string;
+                                            operate_time?: string;
+                                        }>;
+                                        offer_file_list?: Array<{
+                                            id?: string;
+                                            file_template_id?: string;
+                                            file_template_name?: string;
+                                            file_template_type_id?: string;
+                                            file_template_type_name?: string;
+                                        }>;
+                                        offer_signature_info?: {
+                                            id?: string;
+                                            signature_status?: number;
+                                            attachment_list?: Array<{
+                                                id?: string;
+                                                file_name?: string;
+                                                file_template_id?: string;
+                                                file_template_name?: string;
+                                                file_template_type_id?: string;
+                                                file_template_type_name?: string;
+                                            }>;
+                                        };
                                     }>;
                                 };
                             };
@@ -5957,6 +10092,219 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * Offer 申请表（灰度租户可见）
+         */
+        offerApplicationForm: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_application_form&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_application_form/get document }
+             *
+             * 获取Offer申请表模板信息
+             *
+             * 获取Offer申请表模板信息
+             */
+            get: async (
+                payload?: {
+                    path?: { offer_application_form_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                offer_apply_form?: {
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    schema?: {
+                                        id?: string;
+                                        module_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            is_customized?: boolean;
+                                            active_status?: number;
+                                            hint?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                module_id?: string;
+                                                is_customized?: boolean;
+                                                is_required?: boolean;
+                                                active_status?: number;
+                                                need_approve?: boolean;
+                                                is_sensitive?: boolean;
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                    formula?: {
+                                                        value?: string;
+                                                        result?: number;
+                                                        extra_map?: Array<{
+                                                            key?: string;
+                                                            value?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    };
+                                                    object_display_config?: {
+                                                        display_condition?: number;
+                                                        pre_object_config_list?: Array<{
+                                                            id?: string;
+                                                            operator?: number;
+                                                            value?: Array<string>;
+                                                        }>;
+                                                    };
+                                                };
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/offer_application_forms/:offer_application_form_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_application_form&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_application_form/list document }
+             *
+             * 获取 Offer 申请表列表
+             *
+             * 获取 Offer 申请表列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/offer_application_forms`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * offer_custom_field
+         */
+        offerCustomField: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_custom_field&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_custom_field/update document }
+             *
+             * 更新 Offer 申请表自定义字段
+             *
+             * - 本文档支持通过接口更新「飞书招聘」-「设置」-「Offer 申请表设置」中 Offer 申请表的自定义字段配置；;- 当前修改申请表信息（包括更新自定义字段）后，所有申请表的 schema_id 均会更新，即所有申请表均会新增一个版本，申请表的 schema_id 会在创建 offer、更新 offer 中使用；;- 「飞书招聘」中 Offer 申请表自定义字段创建后，不支持修改字段类型，本接口亦不支持更新字段类型；;- 当前字段类型为「公式」的，不支持通过接口更新
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        name: { zh_cn?: string; en_us?: string };
+                        config?: {
+                            options?: Array<{
+                                name: { zh_cn?: string; en_us?: string };
+                            }>;
+                        };
+                    };
+                    path?: { offer_custom_field_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/offer_custom_fields/:offer_custom_field_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * offer_schema
          */
         offerSchema: {
@@ -6171,6 +10519,63 @@ export default abstract class Client extends helpdesk {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=referral&version=v1 document }
+             */
+            search: async (
+                payload?: {
+                    data: {
+                        talent_id: string;
+                        start_time?: string;
+                        end_time?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    application_ids?: Array<string>;
+                                    create_time?: string;
+                                    referral_user?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/referrals/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * referral_account
@@ -6306,9 +10711,9 @@ export default abstract class Client extends helpdesk {
              */
             reconciliation: async (
                 payload?: {
-                    data?: {
-                        start_trans_time?: string;
-                        end_trans_time?: string;
+                    data: {
+                        start_trans_time: string;
+                        end_trans_time: string;
                         trade_details?: Array<{
                             account_id: string;
                             total_recharge_reward_info?: {
@@ -6377,8 +10782,8 @@ export default abstract class Client extends helpdesk {
              */
             withdraw: async (
                 payload?: {
-                    data?: {
-                        withdraw_bonus_type?: Array<number>;
+                    data: {
+                        withdraw_bonus_type: Array<number>;
                         external_order_id?: string;
                     };
                     path?: { referral_account_id?: string };
@@ -7500,7 +11905,7 @@ export default abstract class Client extends helpdesk {
                                                     zh_name?: string;
                                                     en_name?: string;
                                                     active_status?: number;
-                                                    resume_source_type?: number;
+                                                    resume_source_type?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -7553,7 +11958,7 @@ export default abstract class Client extends helpdesk {
                                     zh_name?: string;
                                     en_name?: string;
                                     active_status?: number;
-                                    resume_source_type?: number;
+                                    resume_source_type?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -7576,7 +11981,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * role
+         * 权限
          */
         role: {
             /**
@@ -7607,6 +12012,9 @@ export default abstract class Client extends helpdesk {
                                         zh_cn?: string;
                                         en_us?: string;
                                     };
+                                    modify_time?: string;
+                                    role_status?: number;
+                                    role_type?: number;
                                     scope_of_application?: number;
                                     has_business_management_scope?: boolean;
                                     socail_permission_collection?: {
@@ -7705,6 +12113,227 @@ export default abstract class Client extends helpdesk {
                         throw e;
                     });
             },
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/roles`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    scope_of_application?: number;
+                                                    modify_time?: string;
+                                                    role_status?: number;
+                                                    role_type?: number;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=role&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/list document }
+             *
+             * 获取角色列表
+             *
+             * 获取角色列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    description?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    scope_of_application?: number;
+                                    modify_time?: string;
+                                    role_status?: number;
+                                    role_type?: number;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/roles`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 项目（灰度租户可见）
+         */
+        subject: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=subject&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/subject/list document }
+             *
+             * 获取项目列表
+             *
+             * 获取项目列表（概念上一批集体启动和管理的职位可以定义为一个项目，例如 「2012 秋招项目」）
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        subject_ids?: number;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    create_time?: string;
+                                    active_status?: number;
+                                    application_limit?: number;
+                                    creator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/subjects`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * 人才
@@ -7721,10 +12350,7 @@ export default abstract class Client extends helpdesk {
              */
             addToFolder: async (
                 payload?: {
-                    data?: {
-                        talent_id_list?: Array<string>;
-                        folder_id?: string;
-                    };
+                    data: { talent_id_list?: Array<string>; folder_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -7801,6 +12427,406 @@ export default abstract class Client extends helpdesk {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/talents/batch_get_id`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=combined_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_create document }
+             *
+             * 创建人才
+             *
+             * 用于在企业内创建一个人才。姓名为系统预设的必填字段，邮箱/电话字段请在飞书招聘标准简历模板设置中确认是否必填。可配合[获取人才字段](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent_object/query)接口获取自定义字段信息。
+             */
+            combinedCreate: async (
+                payload?: {
+                    data: {
+                        init_source_id?: string;
+                        resume_source_id?: string;
+                        folder_id_list?: Array<string>;
+                        creator_id?: string;
+                        creator_account_type?: number;
+                        resume_attachment_id?: string;
+                        basic_info: {
+                            name: string;
+                            mobile?: string;
+                            mobile_country_code?: string;
+                            email?: string;
+                            identification?: {
+                                identification_type?: number;
+                                identification_number?: string;
+                            };
+                            start_work_time?: string;
+                            birthday?: string;
+                            gender?: number;
+                            nationality_id?: string;
+                            current_city_code?: string;
+                            hometown_city_code?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        education_list?: Array<{
+                            id?: string;
+                            degree?: number;
+                            school?: string;
+                            field_of_study?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            education_type?: number;
+                            academic_ranking?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        career_list?: Array<{
+                            id?: string;
+                            company?: string;
+                            title?: string;
+                            desc?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            career_type?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        project_list?: Array<{
+                            id?: string;
+                            name?: string;
+                            role?: string;
+                            link?: string;
+                            desc?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        works_list?: Array<{
+                            id?: string;
+                            link?: string;
+                            desc?: string;
+                            attachment_id?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        award_list?: Array<{
+                            id?: string;
+                            title?: string;
+                            award_time?: string;
+                            desc?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        language_list?: Array<{
+                            id?: string;
+                            language?: number;
+                            proficiency?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        sns_list?: Array<{
+                            id?: string;
+                            sns_type?: number;
+                            link?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        preferred_city_code_list?: Array<string>;
+                        self_evaluation?: {
+                            id?: string;
+                            content?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        customized_data?: Array<{
+                            object_id?: string;
+                            children?: Array<{
+                                object_id?: string;
+                                value?: string;
+                            }>;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                talent_id?: string;
+                                creator_id?: string;
+                                creator_account_type?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/combined_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=combined_update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_update document }
+             *
+             * 更新人才信息
+             *
+             * 用于在企业内更新一个人才。姓名为系统预设的必填字段，邮箱/电话字段请在飞书招聘标准简历模板设置中确认是否必填。可配合[获取人才字段](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent_object/query)接口获取自定义字段信息。
+             */
+            combinedUpdate: async (
+                payload?: {
+                    data: {
+                        talent_id: string;
+                        init_source_id?: string;
+                        folder_id_list?: Array<string>;
+                        operator_id?: string;
+                        operator_account_type?: number;
+                        resume_attachment_id?: string;
+                        basic_info: {
+                            name: string;
+                            mobile?: string;
+                            mobile_country_code?: string;
+                            email?: string;
+                            identification?: {
+                                identification_type?: number;
+                                identification_number?: string;
+                            };
+                            start_work_time?: string;
+                            birthday?: string;
+                            gender?: number;
+                            nationality_id?: string;
+                            current_city_code?: string;
+                            hometown_city_code?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        education_list?: Array<{
+                            id?: string;
+                            degree?: number;
+                            school?: string;
+                            field_of_study?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            education_type?: number;
+                            academic_ranking?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        career_list?: Array<{
+                            id?: string;
+                            company?: string;
+                            title?: string;
+                            desc?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            career_type?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        project_list?: Array<{
+                            id?: string;
+                            name?: string;
+                            role?: string;
+                            link?: string;
+                            desc?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        works_list?: Array<{
+                            id?: string;
+                            link?: string;
+                            desc?: string;
+                            attachment_id?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        award_list?: Array<{
+                            id?: string;
+                            title?: string;
+                            award_time?: string;
+                            desc?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        language_list?: Array<{
+                            id?: string;
+                            language?: number;
+                            proficiency?: number;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        sns_list?: Array<{
+                            id?: string;
+                            sns_type?: number;
+                            link?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        }>;
+                        preferred_city_code_list?: Array<string>;
+                        self_evaluation?: {
+                            id?: string;
+                            content?: string;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        customized_data?: Array<{
+                            object_id?: string;
+                            children?: Array<{
+                                object_id?: string;
+                                value?: string;
+                            }>;
+                        }>;
+                    };
+                    params?: {
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                talent_id?: string;
+                                operator_id?: string;
+                                operator_account_type?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/combined_update`,
                             path
                         ),
                         method: "POST",
@@ -8334,9 +13360,11 @@ export default abstract class Client extends helpdesk {
             list: async (
                 payload?: {
                     params?: {
+                        keyword?: string;
                         update_start_time?: string;
                         update_end_time?: string;
                         page_size?: number;
+                        sort_by?: number;
                         page_token?: string;
                         user_id_type?:
                             | "user_id"
@@ -8479,6 +13507,140 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=onboard_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=onboard_status&project=hire&resource=talent&version=v1 document }
+             */
+            onboardStatus: async (
+                payload?: {
+                    data: {
+                        operation: number;
+                        onboard_time?: string;
+                        overboard_time?: string;
+                    };
+                    path?: { talent_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/:talent_id/onboard_status`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 导入外部系统信息（灰度租户可见）
+         */
+        talentExternalInfo: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent.external_info&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent-external_info/create document }
+             *
+             * 创建人才外部信息
+             *
+             * 创建人才外部信息
+             */
+            create: async (
+                payload?: {
+                    data: { external_create_time: string };
+                    path: { talent_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_info?: {
+                                    talent_id?: string;
+                                    external_create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/:talent_id/external_info`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent.external_info&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent-external_info/update document }
+             *
+             * 更新人才外部信息
+             *
+             * 更新人才外部信息
+             */
+            update: async (
+                payload?: {
+                    data: { external_create_time: string };
+                    path: { talent_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                external_info?: {
+                                    talent_id?: string;
+                                    external_create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talents/:talent_id/external_info`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -8748,9 +13910,3437 @@ export default abstract class Client extends helpdesk {
                     });
             },
         },
+        /**
+         * talent_operation_log
+         */
+        talentOperationLog: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_operation_log&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/talent_operation_log/search document }
+             *
+             * 查询操作人对人才的操作记录
+             *
+             * 查询操作人对人才的操作记录
+             */
+            search: async (
+                payload?: {
+                    data: {
+                        job_id_list?: Array<string>;
+                        operator_id_list: Array<string>;
+                        operation_list: Array<number>;
+                    };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    application_id?: string;
+                                    talent_id?: string;
+                                    operator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    operation_type?: number;
+                                    operation_time?: string;
+                                    operator_type?: number;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talent_operation_logs/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * talent_pool
+         */
+        talentPool: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_pool&apiName=move_talent&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=move_talent&project=hire&resource=talent_pool&version=v1 document }
+             */
+            moveTalent: async (
+                payload?: {
+                    data: { talent_id: string; add_type: number };
+                    path?: { talent_pool_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                talent_pool_id?: string;
+                                talent_id?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talent_pools/:talent_pool_id/talent_relationship`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        id_list?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talent_pools/`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    i18n_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    i18n_description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    parent_id?: string;
+                                                    is_private?: number;
+                                                    create_time?: string;
+                                                    modify_time?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_pool&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=talent_pool&version=v1 document }
+             */
+            search: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        id_list?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    i18n_description?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    parent_id?: string;
+                                    is_private?: number;
+                                    create_time?: string;
+                                    modify_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/talent_pools/`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * termination_reason
+         */
+        terminationReason: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/termination_reasons`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    referral_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    termination_type?: number;
+                                                    is_used_as_evaluation?: boolean;
+                                                    active_status?: number;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=termination_reason&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/termination_reason/list document }
+             *
+             * 获取终止投递原因
+             *
+             * 获取终止投递原因
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    referral_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    termination_type?: number;
+                                    is_used_as_evaluation?: boolean;
+                                    active_status?: number;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/termination_reasons`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * test
+         */
+        test: {
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        application_id_list?: Array<string>;
+                        test_start_time_min?: string;
+                        test_start_time_max?: string;
+                    };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tests/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    test_id?: string;
+                                                    application_id?: string;
+                                                    test_paper_id?: string;
+                                                    test_paper_name?: string;
+                                                    test_paper_source_id?: string;
+                                                    test_paper_source_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    reply_status?: number;
+                                                    test_status?: number;
+                                                    test_schedule?: {
+                                                        start_time?: string;
+                                                        end_time?: string;
+                                                    };
+                                                    test_complete_time?: string;
+                                                    report_url_list?: Array<string>;
+                                                    result_detail_list?: Array<{
+                                                        subject?: string;
+                                                        result?: string;
+                                                    }>;
+                                                    result_upload_time?: string;
+                                                    score?: string;
+                                                    score_submit_time?: string;
+                                                    reviewer?: string;
+                                                    created_at?: string;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=test&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/test/search document }
+             *
+             * 获取笔试列表
+             *
+             * 批量获取人才在某投递流程中的笔试信息，如作答状态、笔试得分等。（目前仅支持获取 1w 条数据，若数据量较大，可通过控制 test_start_time 查询条件分批次获取全量数据）
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        application_id_list?: Array<string>;
+                        test_start_time_min?: string;
+                        test_start_time_max?: string;
+                    };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    test_id?: string;
+                                    application_id?: string;
+                                    test_paper_id?: string;
+                                    test_paper_name?: string;
+                                    test_paper_source_id?: string;
+                                    test_paper_source_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    reply_status?: number;
+                                    test_status?: number;
+                                    test_schedule?: {
+                                        start_time?: string;
+                                        end_time?: string;
+                                    };
+                                    test_complete_time?: string;
+                                    report_url_list?: Array<string>;
+                                    result_detail_list?: Array<{
+                                        subject?: string;
+                                        result?: string;
+                                    }>;
+                                    result_upload_time?: string;
+                                    score?: string;
+                                    score_submit_time?: string;
+                                    reviewer?: string;
+                                    created_at?: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/tests/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 待办
+         */
+        todo: {
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_token?: string;
+                        page_size?: string;
+                        user_id?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                        type: "evaluation" | "offer" | "exam" | "interview";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/todos`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    evaluation?: {
+                                                        talent_id?: string;
+                                                        job_id?: string;
+                                                        application_id?: string;
+                                                        id?: string;
+                                                    };
+                                                    offer?: {
+                                                        talent_id?: string;
+                                                        job_id?: string;
+                                                        application_id?: string;
+                                                        id?: string;
+                                                    };
+                                                    exam?: {
+                                                        talent_id?: string;
+                                                        job_id?: string;
+                                                        application_id?: string;
+                                                        id?: string;
+                                                    };
+                                                    interview?: {
+                                                        talent_id?: string;
+                                                        job_id?: string;
+                                                        application_id?: string;
+                                                        id?: string;
+                                                    };
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=todo&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/todo/list document }
+             *
+             * 获取待办列表
+             *
+             * 获取待办列表
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_token?: string;
+                        page_size?: string;
+                        user_id?: string;
+                        user_id_type?:
+                            | "user_id"
+                            | "union_id"
+                            | "open_id"
+                            | "people_admin_id";
+                        type: "evaluation" | "offer" | "exam" | "interview";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    evaluation?: {
+                                        talent_id?: string;
+                                        job_id?: string;
+                                        application_id?: string;
+                                        id?: string;
+                                    };
+                                    offer?: {
+                                        talent_id?: string;
+                                        job_id?: string;
+                                        application_id?: string;
+                                        id?: string;
+                                    };
+                                    exam?: {
+                                        talent_id?: string;
+                                        job_id?: string;
+                                        application_id?: string;
+                                        id?: string;
+                                    };
+                                    interview?: {
+                                        talent_id?: string;
+                                        job_id?: string;
+                                        application_id?: string;
+                                        id?: string;
+                                    };
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/todos`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * tripartite_agreement
+         */
+        tripartiteAgreement: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=tripartite_agreement&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        application_id: string;
+                        state: number;
+                        create_time: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { id?: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=tripartite_agreement&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path?: { tripartite_agreement_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        application_id?: string;
+                        tripartite_agreement_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    application_id?: string;
+                                                    state?: number;
+                                                    create_time?: string;
+                                                    modify_time?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=tripartite_agreement&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        application_id?: string;
+                        tripartite_agreement_id?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    application_id?: string;
+                                    state?: number;
+                                    create_time?: string;
+                                    modify_time?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=hire&resource=tripartite_agreement&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    data: { state: number; modify_time: string };
+                    path?: { tripartite_agreement_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tripartite_agreement?: {
+                                    id?: string;
+                                    application_id?: string;
+                                    state?: number;
+                                    create_time?: string;
+                                    modify_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * website.channel
+         */
+        websiteChannel: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/create document }
+             *
+             * 创建官网推广渠道
+             *
+             * 根据官网 ID 和推广渠道名称创建官网推广渠道
+             */
+            create: async (
+                payload?: {
+                    data: { channel_name: string };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                id?: string;
+                                name?: string;
+                                link?: string;
+                                code?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/channels`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/delete document }
+             *
+             * 删除官网推广渠道
+             *
+             * 根据官网 ID 和推广渠道 ID 删除官网推广渠道
+             */
+            delete: async (
+                payload?: {
+                    path?: { website_id?: string; channel_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/channels/:channel_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/list document }
+             *
+             * 获取官网推广渠道列表
+             *
+             * 根据官网 ID 分页获取推广渠道列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: string; page_token?: string };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                website_channel_list?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    link?: string;
+                                    code?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/channels`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/update document }
+             *
+             * 更新官网推广渠道
+             *
+             * 根据官网 ID 和推广渠道 ID 更改推广渠道名称
+             */
+            update: async (
+                payload?: {
+                    data: { channel_name: string };
+                    path?: { website_id?: string; channel_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                id?: string;
+                                name?: string;
+                                link?: string;
+                                code?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/channels/:channel_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * website.delivery
+         */
+        websiteDelivery: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery&apiName=create_by_attachment&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery/create_by_attachment document }
+             *
+             * 根据简历附件解析创建官网投递
+             *
+             * 根据简历附件解析创建官网投递
+             */
+            createByAttachment: async (
+                payload?: {
+                    data: {
+                        job_post_id: string;
+                        user_id: string;
+                        resume_file_id: string;
+                        channel_id?: string;
+                        application_preferred_city_code_list?: Array<string>;
+                        mobile_country_code?: string;
+                        mobile?: string;
+                        email?: string;
+                        identification?: {
+                            identification_type?: number;
+                            identification_number?: string;
+                        };
+                    };
+                    path: { website_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { task_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/deliveries/create_by_attachment`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery&apiName=create_by_resume&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery/create_by_resume document }
+             *
+             * 创建官网投递
+             *
+             * 创建官网投递。
+             *
+             * 对于自定义字段，若字段类型为单行文本，传值格式为"这是一个单行文本"；若字段类型为多行文本，传值格式为"这是一个多行文本"；若字段类型为单选，传值内容为选项的 ID，格式为"1";若字段类型为多选，传值内容为选项的ID 列表，格式为"["2", "3" ]"；若字段类型为时间段，传值格式为"["1609430400000", "1612108800000" ]"，单位是毫米级时间戳，结束时间是「至今」时，用「"-1"」表示；若字段类型为年份选择，传值格式为"1609430400000"，单位是毫秒级时间戳；若字段类型为月份选择，传值格式为"1625068800000"，单位是毫秒级时间戳；若字段类型为数字，传值格式为"1"
+             */
+            createByResume: async (
+                payload?: {
+                    data: {
+                        job_post_id: string;
+                        resume: {
+                            internship_list?: Array<{
+                                desc?: string;
+                                end_time?: number;
+                                start_time?: number;
+                                title?: string;
+                                company?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            basic_info: {
+                                nationality_id?: string;
+                                start_work_time?: number;
+                                current_home_address?: string;
+                                hometown_city_code?: string;
+                                mobile_country_code?: string;
+                                identification?: {
+                                    identification_number?: string;
+                                    identification_type?: number;
+                                };
+                                marital_status?: number;
+                                mobile?: string;
+                                current_city_code?: string;
+                                experience_years?: number;
+                                gender?: number;
+                                birthday?: number;
+                                name: string;
+                                preferred_city_code_list?: Array<string>;
+                                resume_source_id?: string;
+                                age?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                email?: string;
+                            };
+                            education_list?: Array<{
+                                education_type?: number;
+                                end_time?: number;
+                                end_time_v2?: number;
+                                field_of_study?: string;
+                                school?: string;
+                                start_time?: number;
+                                academic_ranking?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                degree?: number;
+                            }>;
+                            self_evaluation?: {
+                                content?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            };
+                            career_list?: Array<{
+                                desc?: string;
+                                end_time?: number;
+                                start_time?: number;
+                                title?: string;
+                                company?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            resume_attachment_id?: string;
+                            sns_list?: Array<{
+                                sns_type?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                link?: string;
+                            }>;
+                            works_list?: Array<{
+                                desc?: string;
+                                link?: string;
+                                attachment?: { file_id?: string };
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            award_list?: Array<{
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                desc?: string;
+                                title?: string;
+                                award_time?: number;
+                            }>;
+                            project_list?: Array<{
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                desc?: string;
+                                end_time?: number;
+                                link?: string;
+                                name?: string;
+                                role?: string;
+                                start_time?: number;
+                            }>;
+                            language_list?: Array<{
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                                language?: number;
+                                proficiency?: number;
+                            }>;
+                        };
+                        user_id: string;
+                        application_preferred_city_code_list?: Array<string>;
+                        channel_id?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { website_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                delivery?: {
+                                    application_id?: string;
+                                    id?: string;
+                                    job_id?: string;
+                                    job_post_id?: string;
+                                    portal_resume_id?: string;
+                                    user_id?: string;
+                                    talent_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/deliveries/create_by_resume`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * website.delivery_task
+         */
+        websiteDeliveryTask: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery_task&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery_task/get document }
+             *
+             * 获取简历解析创建官网投递任务结果
+             *
+             * 获取官网投递任务信息;，如果获取到的数据data为空，仍然继续轮询，直到data不为空时，再查询data里面的数据
+             */
+            get: async (
+                payload?: {
+                    path: { website_id: string; delivery_task_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                status?: number;
+                                delivery?: {
+                                    application_id?: string;
+                                    id?: string;
+                                    job_id?: string;
+                                    job_post_id?: string;
+                                    portal_resume_id?: string;
+                                    user_id?: string;
+                                    talent_id?: string;
+                                };
+                                status_msg?: string;
+                                extra_info?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/delivery_tasks/:delivery_task_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * website.job_post
+         */
+        websiteJobPost: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/get document }
+             *
+             * 获取自定义官网下职位广告详情
+             *
+             * 获取自定义官网下职位广告详情
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                    };
+                    path: { website_id: string; job_post_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                job_post?: {
+                                    id?: string;
+                                    title?: string;
+                                    job_id?: string;
+                                    job_code?: string;
+                                    job_expire_time?: string;
+                                    job_active_status?: number;
+                                    job_process_type?: number;
+                                    job_recruitment_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_department?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    };
+                                    min_salary?: string;
+                                    max_salary?: string;
+                                    required_degree?: number;
+                                    experience?: number;
+                                    headcount?: number;
+                                    high_light_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    description?: string;
+                                    requirement?: string;
+                                    creator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    create_time?: string;
+                                    modify_time?: string;
+                                    customized_data_list?: Array<{
+                                        object_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        value?: {
+                                            content?: string;
+                                            option?: {
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            option_list?: Array<{
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            time_range?: {
+                                                start_time?: string;
+                                                end_time?: string;
+                                            };
+                                            time?: string;
+                                            number?: string;
+                                        };
+                                    }>;
+                                    job_function?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    subject?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    job_sequence_info?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    currency?: number;
+                                    target_major_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/:job_post_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        create_start_time?: string;
+                        create_end_time?: string;
+                    };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    title?: string;
+                                                    job_id?: string;
+                                                    job_code?: string;
+                                                    job_expire_time?: string;
+                                                    job_active_status?: number;
+                                                    job_process_type?: number;
+                                                    job_recruitment_type?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    job_department?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    job_type?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    min_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    max_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    address?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        district?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        city?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        state?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        country?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                    };
+                                                    min_salary?: string;
+                                                    max_salary?: string;
+                                                    required_degree?: number;
+                                                    experience?: number;
+                                                    headcount?: number;
+                                                    high_light_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                    description?: string;
+                                                    requirement?: string;
+                                                    creator?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    create_time?: string;
+                                                    modify_time?: string;
+                                                    customized_data_list?: Array<{
+                                                        object_id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        object_type?: number;
+                                                        value?: {
+                                                            content?: string;
+                                                            option?: {
+                                                                key?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            option_list?: Array<{
+                                                                key?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                            time_range?: {
+                                                                start_time?: string;
+                                                                end_time?: string;
+                                                            };
+                                                            time?: string;
+                                                            number?: string;
+                                                        };
+                                                    }>;
+                                                    address_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        district?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        city?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        state?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        country?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                    }>;
+                                                    job_sequence_info?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    currency?: number;
+                                                    target_major_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/list document }
+             *
+             * 获取自定义官网下的职位列表
+             *
+             * 获取自定义官网下的职位列表。自定义数据暂不支持列表获取，请从「获取自定义官网下职位广告详情」接口获取。
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        create_start_time?: string;
+                        create_end_time?: string;
+                    };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    title?: string;
+                                    job_id?: string;
+                                    job_code?: string;
+                                    job_expire_time?: string;
+                                    job_active_status?: number;
+                                    job_process_type?: number;
+                                    job_recruitment_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_department?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    };
+                                    min_salary?: string;
+                                    max_salary?: string;
+                                    required_degree?: number;
+                                    experience?: number;
+                                    headcount?: number;
+                                    high_light_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    description?: string;
+                                    requirement?: string;
+                                    creator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    create_time?: string;
+                                    modify_time?: string;
+                                    customized_data_list?: Array<{
+                                        object_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        value?: {
+                                            content?: string;
+                                            option?: {
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            option_list?: Array<{
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            time_range?: {
+                                                start_time?: string;
+                                                end_time?: string;
+                                            };
+                                            time?: string;
+                                            number?: string;
+                                        };
+                                    }>;
+                                    address_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    job_sequence_info?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    currency?: number;
+                                    target_major_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        job_type_id_list?: Array<string>;
+                        city_code_list?: Array<string>;
+                        job_function_id_list?: Array<string>;
+                        subject_id_list?: Array<string>;
+                        keyword?: string;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        create_start_time?: string;
+                        create_end_time?: string;
+                    };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                    };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    title?: string;
+                                                    job_id?: string;
+                                                    job_code?: string;
+                                                    job_expire_time?: string;
+                                                    job_active_status?: number;
+                                                    job_process_type?: number;
+                                                    job_recruitment_type?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    job_department?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    job_type?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    min_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    max_job_level?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    address?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        district?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        city?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        state?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        country?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                    };
+                                                    min_salary?: string;
+                                                    max_salary?: string;
+                                                    required_degree?: number;
+                                                    experience?: number;
+                                                    headcount?: number;
+                                                    high_light_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                    description?: string;
+                                                    requirement?: string;
+                                                    creator?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    create_time?: string;
+                                                    modify_time?: string;
+                                                    customized_data_list?: Array<{
+                                                        object_id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        object_type?: number;
+                                                        value?: {
+                                                            content?: string;
+                                                            option?: {
+                                                                key?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            option_list?: Array<{
+                                                                key?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                            time_range?: {
+                                                                start_time?: string;
+                                                                end_time?: string;
+                                                            };
+                                                            time?: string;
+                                                            number?: string;
+                                                        };
+                                                    }>;
+                                                    job_function?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    subject?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    address_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        district?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        city?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        state?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        country?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                    }>;
+                                                    job_sequence_info?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    };
+                                                    currency?: number;
+                                                    target_major_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/search document }
+             *
+             * 搜索自定义官网下的职位列表
+             *
+             * 搜索自定义官网下的职位列表
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        job_type_id_list?: Array<string>;
+                        city_code_list?: Array<string>;
+                        job_function_id_list?: Array<string>;
+                        subject_id_list?: Array<string>;
+                        keyword?: string;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        create_start_time?: string;
+                        create_end_time?: string;
+                    };
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id";
+                        job_level_id_type?:
+                            | "people_admin_job_level_id"
+                            | "job_level_id";
+                    };
+                    path?: { website_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    title?: string;
+                                    job_id?: string;
+                                    job_code?: string;
+                                    job_expire_time?: string;
+                                    job_active_status?: number;
+                                    job_process_type?: number;
+                                    job_recruitment_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_department?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    job_type?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    min_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    max_job_level?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    };
+                                    min_salary?: string;
+                                    max_salary?: string;
+                                    required_degree?: number;
+                                    experience?: number;
+                                    headcount?: number;
+                                    high_light_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                    description?: string;
+                                    requirement?: string;
+                                    creator?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    create_time?: string;
+                                    modify_time?: string;
+                                    customized_data_list?: Array<{
+                                        object_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        value?: {
+                                            content?: string;
+                                            option?: {
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            option_list?: Array<{
+                                                key?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            time_range?: {
+                                                start_time?: string;
+                                                end_time?: string;
+                                            };
+                                            time?: string;
+                                            number?: string;
+                                        };
+                                    }>;
+                                    job_function?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    subject?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    address_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                    job_sequence_info?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    currency?: number;
+                                    target_major_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * 官网（灰度租户可见）
+         */
+        website: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    process_type_list?: Array<number>;
+                                                    job_channel_id?: string;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website/list document }
+             *
+             * 获取自定义官网列表
+             *
+             * 获取自定义官网列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    process_type_list?: Array<number>;
+                                    job_channel_id?: string;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * website.site_user
+         */
+        websiteSiteUser: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.site_user&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-site_user/create document }
+             *
+             * 创建官网用户
+             *
+             * 创建官网用户
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name?: string;
+                        email?: string;
+                        external_id: string;
+                        mobile?: string;
+                        mobile_country_code?: string;
+                    };
+                    path: { website_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                site_user?: {
+                                    user_id?: string;
+                                    name?: string;
+                                    email?: string;
+                                    external_id: string;
+                                    mobile?: string;
+                                    mobile_country_code?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/websites/:website_id/site_users`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
-             * 投递
+             * advertisement
+             */
+            advertisement: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=advertisement&apiName=publish&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/advertisement/publish document }
+                 *
+                 * 职位发布至官网
+                 *
+                 * 支持把职位发布至招聘官网、内推平台
+                 */
+                publish: async (
+                    payload?: {
+                        data?: { job_channel_id?: string };
+                        path: { advertisement_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/advertisements/:advertisement_id/publish`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 猎头（灰度租户可见）
+             */
+            agency: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/get document }
+                 *
+                 * 获取猎头供应商信息
+                 *
+                 * 根据猎头供应商 ID 获取猎头供应商信息
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                        path?: { agency_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    agency?: {
+                                        id?: string;
+                                        name?: string;
+                                        contactor_id?: string;
+                                        contactor_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/agencies/:agency_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=protect&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/protect document }
+                 *
+                 * 设置猎头保护期
+                 *
+                 * 设置猎头保护期
+                 */
+                protect: async (
+                    payload?: {
+                        data: {
+                            talent_id: string;
+                            supplier_id: string;
+                            consultant_id: string;
+                            protect_create_time: number;
+                            protect_expire_time: number;
+                            comment?: string;
+                            current_salary?: string;
+                            expected_salary?: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/agencies/protect`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=protect_search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=protect_search&project=hire&resource=agency&version=v1 document }
+                 */
+                protectSearch: async (
+                    payload?: {
+                        data: { talent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    is_onboarded?: boolean;
+                                    onboarded_in_protection?: boolean;
+                                    onboarded_protection?: {
+                                        protection_type?: number;
+                                        application_id?: string;
+                                        start_time?: string;
+                                        expire_time?: string;
+                                        agency_supplier_id?: string;
+                                        agency_supplier_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        agency_supplier_user_id?: string;
+                                        agency_supplier_user_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    protection_list?: Array<{
+                                        protection_type?: number;
+                                        application_id?: string;
+                                        start_time?: string;
+                                        expire_time?: string;
+                                        agency_supplier_id?: string;
+                                        agency_supplier_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        agency_supplier_user_id?: string;
+                                        agency_supplier_user_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/agencies/protection_period/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=agency&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/agency/query document }
+                 *
+                 * 查询猎头供应商信息
+                 *
+                 * 根据猎头供应商名称查询猎头供应商信息
+                 */
+                query: async (
+                    payload?: {
+                        params: {
+                            name: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        contactor_id?: string;
+                                        contactor_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/agencies/query`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 入职
              */
             application: {
                 /**
@@ -8921,6 +17511,7 @@ export default abstract class Client extends helpdesk {
                             talent_id?: string;
                             active_status?: string;
                             job_id?: string;
+                            lock_status?: number;
                             page_token?: string;
                             page_size?: number;
                             update_start_time?: string;
@@ -9140,6 +17731,7 @@ export default abstract class Client extends helpdesk {
                                                 customize_value?: string;
                                             }>;
                                         }>;
+                                        job_requirement_id?: string;
                                     };
                                 };
                             }
@@ -9149,6 +17741,39 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=recover&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recover&project=hire&resource=application&version=v1 document }
+                 */
+                recover: async (
+                    payload?: {
+                        path: { application_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/applications/:application_id/recover`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -9269,12 +17894,51 @@ export default abstract class Client extends helpdesk {
                                         sequence?: string;
                                         level?: string;
                                         employee_type?: string;
+                                        job_requirement_id?: string;
                                     };
                                 };
                             }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/applications/:application_id/transfer_onboard`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=transfer_stage&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/transfer_stage document }
+                 *
+                 * 转移阶段
+                 *
+                 * 转移投递阶段
+                 */
+                transferStage: async (
+                    payload?: {
+                        data: { stage_id: string };
+                        path: { application_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/applications/:application_id/transfer_stage`,
                                 path
                             ),
                             method: "POST",
@@ -9502,6 +18166,43 @@ export default abstract class Client extends helpdesk {
              */
             attachment: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uIDN1YjLyQTN24iM0UjN/create_attachment document }
+                 */
+                create: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/attachments`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return get(res, "data", null);
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/attachment/get document }
@@ -9594,6 +18295,222 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * 背调 （灰度租户可见）
+             */
+            backgroundCheckOrder: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/background_check_order/list document }
+                 *
+                 * 获取背调信息
+                 *
+                 * 根据投递ID或背调更新时间获取背调信息
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                            application_id?: string;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        order_id?: string;
+                                        application_id?: string;
+                                        order_status?: number;
+                                        account_third_type?: number;
+                                        package?: string;
+                                        name?: string;
+                                        feedback_info_list?: Array<{
+                                            id?: string;
+                                            attachment_url?: string;
+                                            report_preview_url?: string;
+                                            result?: string;
+                                            report_type?: number;
+                                            create_time?: string;
+                                            report_name?: string;
+                                        }>;
+                                        process_info_list?: Array<{
+                                            process?: string;
+                                            update_time?: string;
+                                            en_process?: string;
+                                        }>;
+                                        upload_time?: string;
+                                        candidate_info?: {
+                                            name?: string;
+                                            mobile?: string;
+                                            email?: string;
+                                            first_name?: string;
+                                            last_name?: string;
+                                        };
+                                        creator_info?: { user_id?: string };
+                                        contactor_info?: {
+                                            name?: string;
+                                            mobile?: string;
+                                            email?: string;
+                                            first_name?: string;
+                                            last_name?: string;
+                                        };
+                                        begin_time?: string;
+                                        end_time?: string;
+                                        conclusion?: string;
+                                        provider_info?: {
+                                            provider_id?: string;
+                                            provider_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        custom_field_list?: Array<{
+                                            type:
+                                                | "text"
+                                                | "textarea"
+                                                | "number"
+                                                | "boolean"
+                                                | "select"
+                                                | "multiselect"
+                                                | "date"
+                                                | "file"
+                                                | "resume";
+                                            key: string;
+                                            name: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            is_required: boolean;
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            options?: Array<{
+                                                key: string;
+                                                name: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        custom_data_list?: Array<{
+                                            key?: string;
+                                            value?: string;
+                                        }>;
+                                        ext_item_info_list?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
+                                        update_time?: string;
+                                        geo?: "cn" | "sg" | "us" | "jp";
+                                        location_code?: string;
+                                        remark?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/background_check_orders`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * diversity_inclusion
+             */
+            diversityInclusion: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=diversity_inclusion&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=diversity_inclusion&version=v1 document }
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            talent_ids?: Array<string>;
+                            application_ids?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        application_id?: string;
+                                        talent_id?: string;
+                                        source_type?: number;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        di_data?: Array<{
+                                            value?: string;
+                                            object_attribute?: {
+                                                title?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                data_type?: number;
+                                                tags?: Array<number>;
+                                                is_fcf_data?: boolean;
+                                                is_di_data?: boolean;
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/applications/diversity_inclusions/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 生态对接账号自定义字段
              */
             ecoAccountCustomField: {
@@ -9608,8 +18525,8 @@ export default abstract class Client extends helpdesk {
                  */
                 batchDelete: async (
                     payload?: {
-                        data?: {
-                            scope?: number;
+                        data: {
+                            scope: number;
                             custom_field_key_list?: Array<string>;
                         };
                     },
@@ -10510,6 +19427,7 @@ export default abstract class Client extends helpdesk {
                                         sequence?: string;
                                         level?: string;
                                         employee_type?: string;
+                                        job_requirement_id?: string;
                                     };
                                 };
                             }
@@ -10585,6 +19503,7 @@ export default abstract class Client extends helpdesk {
                                         sequence?: string;
                                         level?: string;
                                         employee_type?: string;
+                                        job_requirement_id?: string;
                                     };
                                 };
                             }
@@ -10670,6 +19589,7 @@ export default abstract class Client extends helpdesk {
                                         sequence?: string;
                                         level?: string;
                                         employee_type?: string;
+                                        job_requirement_id?: string;
                                     };
                                 };
                             }
@@ -10867,6 +19787,403 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * 评估任务
+             */
+            evaluationTask: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/evaluation_tasks`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        job_id?: string;
+                                                        talent_id?: string;
+                                                        application_id?: string;
+                                                        activity_status?: number;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=evaluation_task&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/evaluation_task/list document }
+                 *
+                 * 获取员工评估任务
+                 *
+                 * 获取员工评估任务
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        job_id?: string;
+                                        talent_id?: string;
+                                        application_id?: string;
+                                        activity_status?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/evaluation_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 笔试 (灰度租户可见)
+             */
+            exam: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=exam&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/exam/create document }
+                 *
+                 * 添加笔试结果
+                 *
+                 * 根据投递 ID 添加该投递下的笔试结果
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            application_id: string;
+                            exam_resource_name: string;
+                            score: number;
+                            uuid?: string;
+                            operator_id: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    exam_id?: string;
+                                    application_id?: string;
+                                    exam_resource_name?: string;
+                                    score?: number;
+                                    uuid?: string;
+                                    operator_id?: string;
+                                    operate_time?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/exams`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 笔试阅卷任务
+             */
+            examMarkingTask: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/exam_marking_tasks`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        job_id?: string;
+                                                        talent_id?: string;
+                                                        application_id?: string;
+                                                        activity_status?: number;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=exam_marking_task&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/exam_marking_task/list document }
+                 *
+                 * 获取员工笔试阅卷任务
+                 *
+                 * 获取员工笔试阅卷任务
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        job_id?: string;
+                                        talent_id?: string;
+                                        application_id?: string;
+                                        activity_status?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/exam_marking_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 导入外部系统信息（灰度租户可见）
              */
             externalApplication: {
@@ -10984,6 +20301,164 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            talent_id?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/external_applications`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        job_recruitment_type?: number;
+                                                        job_title?: string;
+                                                        resume_source?: string;
+                                                        stage?: string;
+                                                        talent_id: string;
+                                                        termination_reason?: string;
+                                                        delivery_type?: number;
+                                                        modify_time?: number;
+                                                        create_time?: number;
+                                                        termination_type?: string;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_application&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=external_application&version=v1 document }
+                 *
+                 * 根据人才 id 获取外部投递列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            talent_id?: string;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        job_recruitment_type?: number;
+                                        job_title?: string;
+                                        resume_source?: string;
+                                        stage?: string;
+                                        talent_id: string;
+                                        termination_reason?: string;
+                                        delivery_type?: number;
+                                        modify_time?: number;
+                                        create_time?: number;
+                                        termination_type?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/external_applications`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -11150,6 +20625,22 @@ export default abstract class Client extends helpdesk {
                             participate_status?: number;
                             begin_time?: number;
                             end_time?: number;
+                            interview_assessments?: Array<{
+                                external_id?: string;
+                                username?: string;
+                                conclusion?: number;
+                                assessment_dimension_list?: Array<{
+                                    score?: number;
+                                    option?: string;
+                                    options?: Array<string>;
+                                    content?: string;
+                                    assessment_type?: number;
+                                    title?: string;
+                                    description?: string;
+                                }>;
+                                content?: string;
+                                external_interview_id?: string;
+                            }>;
                         };
                     },
                     options?: IRequestOptions
@@ -11171,6 +20662,23 @@ export default abstract class Client extends helpdesk {
                                         participate_status?: number;
                                         begin_time?: number;
                                         end_time?: number;
+                                        interview_assessments?: Array<{
+                                            id?: string;
+                                            external_id?: string;
+                                            username?: string;
+                                            conclusion?: number;
+                                            assessment_dimension_list?: Array<{
+                                                score?: number;
+                                                option?: string;
+                                                options?: Array<string>;
+                                                content?: string;
+                                                assessment_type?: number;
+                                                title?: string;
+                                                description?: string;
+                                            }>;
+                                            content?: string;
+                                            external_interview_id?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -11205,7 +20713,7 @@ export default abstract class Client extends helpdesk {
                  */
                 create: async (
                     payload?: {
-                        data: {
+                        data?: {
                             external_id?: string;
                             username?: string;
                             conclusion?: number;
@@ -11219,7 +20727,7 @@ export default abstract class Client extends helpdesk {
                                 description?: string;
                             }>;
                             content?: string;
-                            external_interview_id: string;
+                            external_interview_id?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -11249,7 +20757,7 @@ export default abstract class Client extends helpdesk {
                                             description?: string;
                                         }>;
                                         content?: string;
-                                        external_interview_id: string;
+                                        external_interview_id?: string;
                                     };
                                 };
                             }
@@ -11268,11 +20776,479 @@ export default abstract class Client extends helpdesk {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_interview_assessment&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=hire&resource=external_interview_assessment&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            username?: string;
+                            conclusion?: number;
+                            assessment_dimension_list?: Array<{
+                                score?: number;
+                                option?: string;
+                                options?: Array<string>;
+                                content?: string;
+                                assessment_type?: number;
+                                title?: string;
+                                description?: string;
+                            }>;
+                            content?: string;
+                        };
+                        path: { external_interview_assessment_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    external_interview_assessment?: {
+                                        id?: string;
+                                        username?: string;
+                                        conclusion?: number;
+                                        assessment_dimension_list?: Array<{
+                                            score?: number;
+                                            option?: string;
+                                            options?: Array<string>;
+                                            content?: string;
+                                            assessment_type?: number;
+                                            title?: string;
+                                            description?: string;
+                                        }>;
+                                        content?: string;
+                                        external_interview_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/external_interview_assessments/:external_interview_assessment_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * external_referral_reward
+             */
+            externalReferralReward: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_referral_reward&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=external_referral_reward&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            referral_user_id: string;
+                            create_user_id?: string;
+                            confirm_user_id?: string;
+                            pay_user_id?: string;
+                            external_id: string;
+                            application_id?: string;
+                            talent_id?: string;
+                            job_id?: string;
+                            reason?: string;
+                            rule_type: number;
+                            bonus: {
+                                bonus_type: number;
+                                point_bonus?: number;
+                                cash?: {
+                                    currency_type: string;
+                                    amount: number;
+                                };
+                            };
+                            stage: number;
+                            create_time?: string;
+                            confirm_time?: string;
+                            pay_time?: string;
+                            onboard_time?: string;
+                            conversion_time?: string;
+                            comment?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/external_referral_rewards`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=external_referral_reward&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=external_referral_reward&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { external_referral_reward_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/external_referral_rewards/:external_referral_reward_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * 面试
              */
             interview: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview&apiName=get_by_talent&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview/get_by_talent document }
+                 *
+                 * 获取人才面试信息
+                 *
+                 * 获取人才面试信息
+                 */
+                getByTalent: async (
+                    payload?: {
+                        params: {
+                            talent_id: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        application_id?: string;
+                                        interview_list?: Array<{
+                                            id?: string;
+                                            begin_time?: number;
+                                            end_time?: number;
+                                            round?: number;
+                                            interview_record_list?: Array<{
+                                                id?: string;
+                                                user_id?: string;
+                                                content?: string;
+                                                min_job_level_id?: string;
+                                                max_job_level_id?: string;
+                                                commit_status?: number;
+                                                conclusion?: number;
+                                                interview_score?: {
+                                                    id?: string;
+                                                    level?: number;
+                                                    zh_name?: string;
+                                                    zh_description?: string;
+                                                    en_name?: string;
+                                                    en_description?: string;
+                                                };
+                                                assessment_score?: {
+                                                    calculate_type: number;
+                                                    score: number;
+                                                    full_score?: number;
+                                                };
+                                                question_list?: Array<{
+                                                    id: string;
+                                                    title?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    content?: string;
+                                                    ability_list?: Array<{
+                                                        id: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                code_question_list?: Array<{
+                                                    id: string;
+                                                    title?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    content?: string;
+                                                    ability_list?: Array<{
+                                                        id: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                interviewer?: {
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                image_list?: Array<{
+                                                    id: string;
+                                                    url: string;
+                                                    name?: string;
+                                                    mime?: string;
+                                                    create_time?: string;
+                                                }>;
+                                                dimension_assessment_list?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    full_score?: number;
+                                                    content?: string;
+                                                    dimension_id?: string;
+                                                    dimension_score?: {
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        score_val?: number;
+                                                    };
+                                                    dimension_score_list?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        score_val?: number;
+                                                    }>;
+                                                    dimension_custom_score?: number;
+                                                    ability_list?: Array<{
+                                                        id: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                    question_list?: Array<{
+                                                        id: string;
+                                                        title?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        content?: string;
+                                                        ability_list?: Array<{
+                                                            id: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    dimension_type?: number;
+                                                }>;
+                                            }>;
+                                            feedback_submit_time?: number;
+                                            stage_id?: string;
+                                            application_id?: string;
+                                            stage?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            creator?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            biz_create_time?: number;
+                                            biz_modify_time?: number;
+                                            interview_round_summary?: number;
+                                            interview_arrangement_id?: string;
+                                            interview_type?: number;
+                                            talent_time_zone?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            contact_user?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            contact_mobile?: string;
+                                            remark?: string;
+                                            address?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                district?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                city?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                state?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                country?: {
+                                                    code?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                            };
+                                            video_type?: number;
+                                            arrangement_status?: number;
+                                            arrangement_type?: number;
+                                            arrangement_appointment_kind?: number;
+                                            meeting_room_list?: Array<{
+                                                room_id?: string;
+                                                room_name?: string;
+                                                building_name?: string;
+                                                reserved_status?: number;
+                                                floor_name?: string;
+                                            }>;
+                                            interview_round_type?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interviews/get_by_talent`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview&apiName=list&version=v1 click to debug }
                  *
@@ -11571,9 +21547,1498 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * interview_feedback_form
+             */
+            interviewFeedbackForm: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            interview_feedback_form_ids?: number;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/interview_feedback_forms`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        version?: number;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        type?: number;
+                                                        score_calculation_config?: {
+                                                            enabled?: boolean;
+                                                            calculation_mode?: number;
+                                                        };
+                                                        modules?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            type?: number;
+                                                            sequence?: number;
+                                                            weight?: number;
+                                                            dimensions?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                type?: number;
+                                                                enabled?: boolean;
+                                                                sequence?: number;
+                                                                is_required?: boolean;
+                                                                weight?: number;
+                                                                score_dimension_config?: {
+                                                                    score_dimension_type?: number;
+                                                                    lower_limit_score?: number;
+                                                                    upper_limit_score?: number;
+                                                                };
+                                                                option_items?: Array<{
+                                                                    id?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    score_val?: number;
+                                                                }>;
+                                                                display_not_evident?: boolean;
+                                                                ability_list?: Array<{
+                                                                    id?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                }>;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_feedback_form&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interview_feedback_form&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            interview_feedback_form_ids?: number;
+                            page_size?: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        version?: number;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        type?: number;
+                                        score_calculation_config?: {
+                                            enabled?: boolean;
+                                            calculation_mode?: number;
+                                        };
+                                        modules?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            sequence?: number;
+                                            weight?: number;
+                                            dimensions?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                enabled?: boolean;
+                                                sequence?: number;
+                                                is_required?: boolean;
+                                                weight?: number;
+                                                score_dimension_config?: {
+                                                    score_dimension_type?: number;
+                                                    lower_limit_score?: number;
+                                                    upper_limit_score?: number;
+                                                };
+                                                option_items?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                }>;
+                                                display_not_evident?: boolean;
+                                                ability_list?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_feedback_forms`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * interview_record.attachment
+             */
+            interviewRecordAttachment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record.attachment&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=interview_record.attachment&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            application_id: string;
+                            interview_record_id?: string;
+                            language?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    attachment?: {
+                                        id?: string;
+                                        url?: string;
+                                        name?: string;
+                                        mime?: string;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_records/attachments`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * interview_record
+             */
+            interviewRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_record/get document }
+                 *
+                 * 获取面试评价详细信息
+                 *
+                 * 获取面试评价详细信息
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { interview_record_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    interview_record?: {
+                                        id?: string;
+                                        user_id?: string;
+                                        content?: string;
+                                        min_job_level_id?: string;
+                                        max_job_level_id?: string;
+                                        commit_status?: number;
+                                        feedback_submit_time?: number;
+                                        conclusion?: number;
+                                        interview_score?: {
+                                            id?: string;
+                                            level?: number;
+                                            zh_name?: string;
+                                            zh_description?: string;
+                                            en_name?: string;
+                                            en_description?: string;
+                                        };
+                                        assessment_score?: {
+                                            calculate_type: number;
+                                            score: number;
+                                            full_score?: number;
+                                        };
+                                        question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        code_question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        interviewer?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        image_list?: Array<{
+                                            id: string;
+                                            url: string;
+                                            name?: string;
+                                            mime?: string;
+                                            create_time?: string;
+                                        }>;
+                                        dimension_assessment_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            full_score?: number;
+                                            content?: string;
+                                            dimension_id?: string;
+                                            dimension_score?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                score_val?: number;
+                                            };
+                                            dimension_score_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                score_val?: number;
+                                            }>;
+                                            dimension_custom_score?: number;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            question_list?: Array<{
+                                                id: string;
+                                                title?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                content?: string;
+                                                ability_list?: Array<{
+                                                    id: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                            }>;
+                                            dimension_type?: number;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_records/:interview_record_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            ids?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/interview_records`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        user_id?: string;
+                                                        content?: string;
+                                                        min_job_level_id?: string;
+                                                        max_job_level_id?: string;
+                                                        commit_status?: number;
+                                                        feedback_submit_time?: number;
+                                                        conclusion?: number;
+                                                        interview_score?: {
+                                                            id?: string;
+                                                            level?: number;
+                                                            zh_name?: string;
+                                                            zh_description?: string;
+                                                            en_name?: string;
+                                                            en_description?: string;
+                                                        };
+                                                        assessment_score?: {
+                                                            calculate_type: number;
+                                                            score: number;
+                                                            full_score?: number;
+                                                        };
+                                                        question_list?: Array<{
+                                                            id: string;
+                                                            title?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            content?: string;
+                                                            ability_list?: Array<{
+                                                                id: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                        }>;
+                                                        code_question_list?: Array<{
+                                                            id: string;
+                                                            title?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            content?: string;
+                                                            ability_list?: Array<{
+                                                                id: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                        }>;
+                                                        interviewer?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        image_list?: Array<{
+                                                            id: string;
+                                                            url: string;
+                                                            name?: string;
+                                                            mime?: string;
+                                                            create_time?: string;
+                                                        }>;
+                                                        dimension_assessment_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            full_score?: number;
+                                                            content?: string;
+                                                            dimension_id?: string;
+                                                            dimension_score?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                score_val?: number;
+                                                            };
+                                                            dimension_score_list?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                score_val?: number;
+                                                            }>;
+                                                            dimension_custom_score?: number;
+                                                            ability_list?: Array<{
+                                                                id: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                            question_list?: Array<{
+                                                                id: string;
+                                                                title?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                content?: string;
+                                                                ability_list?: Array<{
+                                                                    id: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                }>;
+                                                            }>;
+                                                            dimension_type?: number;
+                                                        }>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interview_record&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            ids?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        user_id?: string;
+                                        content?: string;
+                                        min_job_level_id?: string;
+                                        max_job_level_id?: string;
+                                        commit_status?: number;
+                                        feedback_submit_time?: number;
+                                        conclusion?: number;
+                                        interview_score?: {
+                                            id?: string;
+                                            level?: number;
+                                            zh_name?: string;
+                                            zh_description?: string;
+                                            en_name?: string;
+                                            en_description?: string;
+                                        };
+                                        assessment_score?: {
+                                            calculate_type: number;
+                                            score: number;
+                                            full_score?: number;
+                                        };
+                                        question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        code_question_list?: Array<{
+                                            id: string;
+                                            title?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            content?: string;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        interviewer?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        image_list?: Array<{
+                                            id: string;
+                                            url: string;
+                                            name?: string;
+                                            mime?: string;
+                                            create_time?: string;
+                                        }>;
+                                        dimension_assessment_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            full_score?: number;
+                                            content?: string;
+                                            dimension_id?: string;
+                                            dimension_score?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                score_val?: number;
+                                            };
+                                            dimension_score_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                score_val?: number;
+                                            }>;
+                                            dimension_custom_score?: number;
+                                            ability_list?: Array<{
+                                                id: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                            question_list?: Array<{
+                                                id: string;
+                                                title?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                content?: string;
+                                                ability_list?: Array<{
+                                                    id: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                            }>;
+                                            dimension_type?: number;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_records`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * interview_registration_schema
+             */
+            interviewRegistrationSchema: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/interview_registration_schemas`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: string;
+                                                        is_used_as_interview?: boolean;
+                                                        object_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            setting?: {
+                                                                object_type?: number;
+                                                                config?: {
+                                                                    options?: Array<{
+                                                                        key?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        description?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        active_status?: number;
+                                                                    }>;
+                                                                };
+                                                            };
+                                                            is_customized?: boolean;
+                                                            is_required?: boolean;
+                                                            is_visible?: boolean;
+                                                            active_status?: number;
+                                                            children_list?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                setting?: {
+                                                                    object_type?: number;
+                                                                    config?: {
+                                                                        options?: Array<{
+                                                                            key?: string;
+                                                                            name?: {
+                                                                                zh_cn?: string;
+                                                                                en_us?: string;
+                                                                            };
+                                                                            description?: {
+                                                                                zh_cn?: string;
+                                                                                en_us?: string;
+                                                                            };
+                                                                            active_status?: number;
+                                                                        }>;
+                                                                    };
+                                                                };
+                                                                parent_id?: string;
+                                                                is_customized?: boolean;
+                                                                is_required?: boolean;
+                                                                is_visible?: boolean;
+                                                                active_status?: number;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_registration_schema&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_registration_schema/list document }
+                 *
+                 * 获取面试登记表模板列表
+                 *
+                 * 获取面试登记表模板列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        is_used_as_interview?: boolean;
+                                        object_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            is_visible?: boolean;
+                                            active_status?: number;
+                                            children_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                setting?: {
+                                                    object_type?: number;
+                                                    config?: {
+                                                        options?: Array<{
+                                                            key?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            active_status?: number;
+                                                        }>;
+                                                    };
+                                                };
+                                                parent_id?: string;
+                                                is_customized?: boolean;
+                                                is_required?: boolean;
+                                                is_visible?: boolean;
+                                                active_status?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_registration_schemas`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 面试轮次类型
+             */
+            interviewRoundType: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_round_type&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_round_type/list document }
+                 *
+                 * 获取面试轮次类型列表
+                 *
+                 * 获取面试轮次类型列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { process_type?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    active_status?: number;
+                                    items?: Array<{
+                                        id?: string;
+                                        biz_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        process_type?: number;
+                                        active_status?: number;
+                                        interview_assessment_template_info?: {
+                                            id?: string;
+                                            biz_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_round_types`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 面试任务
+             */
+            interviewTask: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/interview_tasks`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        job_id?: string;
+                                                        talent_id?: string;
+                                                        application_id?: string;
+                                                        activity_status?: number;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_task&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/interview_task/list document }
+                 *
+                 * 获取员工面试任务
+                 *
+                 * 获取员工面试任务
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id: string;
+                            activity_status?: number;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        job_id?: string;
+                                        talent_id?: string;
+                                        application_id?: string;
+                                        activity_status?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interview_tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 职位
              */
             job: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=close&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/close document }
+                 *
+                 * 关闭职位
+                 *
+                 * 支持关闭职位，关闭后，职位将同步从官网、内推、猎头渠道下线
+                 */
+                close: async (
+                    payload?: {
+                        path: { job_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/jobs/:job_id/close`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=combined_create&version=v1 click to debug }
                  *
@@ -11836,7 +23301,7 @@ export default abstract class Client extends helpdesk {
                             min_level_id?: string;
                             min_salary?: number;
                             title?: string;
-                            job_managers?: {
+                            job_managers: {
                                 id?: string;
                                 recruiter_id: string;
                                 hiring_manager_id_list: Array<string>;
@@ -12536,6 +24001,47 @@ export default abstract class Client extends helpdesk {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=open&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job/open document }
+                 *
+                 * 重启职位
+                 *
+                 * 支持开启职位
+                 */
+                open: async (
+                    payload?: {
+                        data: {
+                            expiry_time?: number;
+                            is_never_expired: boolean;
+                        };
+                        path: { job_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/jobs/:job_id/open`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job&apiName=recruiter&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recruiter&project=hire&resource=job&version=v1 document }
@@ -12766,6 +24272,64 @@ export default abstract class Client extends helpdesk {
              */
             jobManager: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job.manager&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/batch_update document }
+                 *
+                 * 更新职位相关人员
+                 *
+                 * 更新职位相关人员
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data: {
+                            recruiter_id?: string;
+                            assistant_id_list?: Array<string>;
+                            hiring_manager_id_list?: Array<string>;
+                            update_option_list: Array<number>;
+                            creator_id?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { job_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_manager?: {
+                                        id?: string;
+                                        recruiter_id: string;
+                                        hiring_manager_id_list: Array<string>;
+                                        assistant_id_list?: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/jobs/:job_id/managers/batch_update`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job.manager&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job-manager/get document }
@@ -12808,6 +24372,155 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/jobs/:job_id/managers/:manager_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * job_function
+             */
+            jobFunction: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/job_functions`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                        parent_id?: string;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_function&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_function/list document }
+                 *
+                 * 获取职能分类列表
+                 *
+                 * 获取职能分类列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        active_status?: number;
+                                        parent_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/job_functions`,
                                 path
                             ),
                             method: "GET",
@@ -12872,6 +24585,252 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * job_publish_record
+             */
+            jobPublishRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_publish_record&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_publish_record/search document }
+                 *
+                 * 获取职位广告发布记录
+                 *
+                 * 获取职位广告发布记录
+                 */
+                search: async (
+                    payload?: {
+                        data: { job_channel_id: string };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            job_family_id_type?:
+                                | "people_admin_job_category_id"
+                                | "job_family_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        title?: string;
+                                        job_id?: string;
+                                        job_code?: string;
+                                        job_expire_time?: string;
+                                        job_active_status?: number;
+                                        job_process_type?: number;
+                                        job_recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
+                                        min_salary?: string;
+                                        max_salary?: string;
+                                        required_degree?: number;
+                                        experience?: number;
+                                        headcount?: number;
+                                        high_light_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        requirement?: string;
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                            };
+                                        }>;
+                                        address_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        }>;
+                                        job_sequence_info?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        currency?: number;
+                                        target_major_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/job_publish_records/search`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -13080,6 +25039,9 @@ export default abstract class Client extends helpdesk {
                                             };
                                             parent_id?: string;
                                         };
+                                        create_time?: string;
+                                        creator_id?: string;
+                                        update_time?: string;
                                     };
                                 };
                             }
@@ -13308,6 +25270,9 @@ export default abstract class Client extends helpdesk {
                                             };
                                             parent_id?: string;
                                         };
+                                        create_time?: string;
+                                        creator_id?: string;
+                                        update_time?: string;
                                     }>;
                                 };
                             }
@@ -13489,6 +25454,9 @@ export default abstract class Client extends helpdesk {
                                             };
                                             parent_id?: string;
                                         };
+                                        create_time?: string;
+                                        creator_id?: string;
+                                        update_time?: string;
                                     }>;
                                 };
                             }
@@ -13709,6 +25677,130 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * job_schema
+             */
+            jobSchema: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=job_schema&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/job_schema/list document }
+                 *
+                 * 获取职位模板
+                 *
+                 * 获取社招、校招职位模板中的职位字段，包括系统默认字段和自定义字段
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            scenario?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        scenario_type?: number;
+                                        object_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            active_status?: number;
+                                            children_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                setting?: {
+                                                    object_type?: number;
+                                                    config?: {
+                                                        options?: Array<{
+                                                            key?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            active_status?: number;
+                                                        }>;
+                                                    };
+                                                };
+                                                parent_id?: string;
+                                                is_customized?: boolean;
+                                                is_required?: boolean;
+                                                active_status?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/job_schemas`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * job_type
              */
             jobType: {
@@ -13852,6 +25944,307 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * 地址（灰度租户可见）
+             */
+            location: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_token?: string;
+                            page_size?: number;
+                            usage:
+                                | "position_location"
+                                | "interview_location"
+                                | "store_location";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/locations`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        district?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        city?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        state?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        country?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=location&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/location/list document }
+                 *
+                 * 获取地址列表
+                 *
+                 * 获取地址列表
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_token?: string;
+                            page_size?: number;
+                            usage:
+                                | "position_location"
+                                | "interview_location"
+                                | "store_location";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        district?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        country?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        active_status?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/locations`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=location&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=hire&resource=location&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            code_list?: Array<string>;
+                            location_type: number;
+                        };
+                        params: { page_token?: string; page_size: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        country?: {
+                                            country_code?: string;
+                                            country_name_info?: {
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                py_name?: string;
+                                            };
+                                        };
+                                        state?: {
+                                            state_code?: string;
+                                            country_code?: string;
+                                            state_name_info?: {
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                py_name?: string;
+                                            };
+                                        };
+                                        city?: {
+                                            city_code?: string;
+                                            state_code?: string;
+                                            country_code?: string;
+                                            city_name_info?: {
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                py_name?: string;
+                                            };
+                                        };
+                                        district?: {
+                                            district_code?: string;
+                                            city_code?: string;
+                                            state_code?: string;
+                                            country_code?: string;
+                                            district_name_info?: {
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                py_name?: string;
+                                            };
+                                        };
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/locations/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 备注
              */
             note: {
@@ -13872,6 +26265,11 @@ export default abstract class Client extends helpdesk {
                             creator_id?: string;
                             content: string;
                             privacy?: number;
+                            notify_mentioned_user?: boolean;
+                            mention_entity_list?: Array<{
+                                offset: number;
+                                user_id: string;
+                            }>;
                         };
                         params?: {
                             user_id_type?:
@@ -13902,6 +26300,11 @@ export default abstract class Client extends helpdesk {
                                         modify_time?: number;
                                         creator_id?: string;
                                         content: string;
+                                        notify_mentioned_user?: boolean;
+                                        mention_entity_list?: Array<{
+                                            offset: number;
+                                            user_id: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -13911,6 +26314,39 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=note&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=note&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { note_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/notes/:note_id`,
+                                path
+                            ),
+                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -13961,6 +26397,11 @@ export default abstract class Client extends helpdesk {
                                         modify_time?: number;
                                         creator_id?: string;
                                         content: string;
+                                        notify_mentioned_user?: boolean;
+                                        mention_entity_list?: Array<{
+                                            offset: number;
+                                            user_id: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -14022,6 +26463,11 @@ export default abstract class Client extends helpdesk {
                                         modify_time?: number;
                                         creator_id?: string;
                                         content: string;
+                                        notify_mentioned_user?: boolean;
+                                        mention_entity_list?: Array<{
+                                            offset: number;
+                                            user_id: string;
+                                        }>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -14053,7 +26499,15 @@ export default abstract class Client extends helpdesk {
                  */
                 patch: async (
                     payload?: {
-                        data: { content: string };
+                        data: {
+                            content: string;
+                            operator_id?: string;
+                            notify_mentioned_user?: boolean;
+                            mention_entity_list?: Array<{
+                                offset: number;
+                                user_id: string;
+                            }>;
+                        };
                         params?: {
                             user_id_type?:
                                 | "user_id"
@@ -14084,6 +26538,11 @@ export default abstract class Client extends helpdesk {
                                         modify_time?: number;
                                         creator_id?: string;
                                         content: string;
+                                        notify_mentioned_user?: boolean;
+                                        mention_entity_list?: Array<{
+                                            offset: number;
+                                            user_id: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -14120,7 +26579,7 @@ export default abstract class Client extends helpdesk {
                     payload?: {
                         data: {
                             application_id: string;
-                            schema_id: string;
+                            schema_id?: string;
                             offer_type?: number;
                             basic_info: {
                                 department_id: string;
@@ -14435,6 +26894,43 @@ export default abstract class Client extends helpdesk {
                                                 object_id?: string;
                                                 customize_value?: string;
                                             }>;
+                                        }>;
+                                        job_requirement_id?: string;
+                                        offer_send_record_list?: Array<{
+                                            offer_send_record_id?: string;
+                                            operator_user_id?: string;
+                                            send_time?: string;
+                                            offer_letter_status?: number;
+                                            email_info?: {
+                                                cc_email_list?: Array<string>;
+                                                receiver_email_list?: Array<string>;
+                                                content?: string;
+                                            };
+                                            acceptance_list?: Array<{
+                                                operator_type?: number;
+                                                conclusion?: number;
+                                                memo?: string;
+                                                operate_time?: string;
+                                            }>;
+                                            offer_file_list?: Array<{
+                                                id?: string;
+                                                file_template_id?: string;
+                                                file_template_name?: string;
+                                                file_template_type_id?: string;
+                                                file_template_type_name?: string;
+                                            }>;
+                                            offer_signature_info?: {
+                                                id?: string;
+                                                signature_status?: number;
+                                                attachment_list?: Array<{
+                                                    id?: string;
+                                                    file_name?: string;
+                                                    file_template_id?: string;
+                                                    file_template_name?: string;
+                                                    file_template_type_id?: string;
+                                                    file_template_type_name?: string;
+                                                }>;
+                                            };
                                         }>;
                                     };
                                 };
@@ -14774,6 +27270,228 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * Offer 申请表（灰度租户可见）
+             */
+            offerApplicationForm: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_application_form&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_application_form/get document }
+                 *
+                 * 获取Offer申请表模板信息
+                 *
+                 * 获取Offer申请表模板信息
+                 */
+                get: async (
+                    payload?: {
+                        path?: { offer_application_form_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    offer_apply_form?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        schema?: {
+                                            id?: string;
+                                            module_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                is_customized?: boolean;
+                                                active_status?: number;
+                                                hint?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                object_list?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    module_id?: string;
+                                                    is_customized?: boolean;
+                                                    is_required?: boolean;
+                                                    active_status?: number;
+                                                    need_approve?: boolean;
+                                                    is_sensitive?: boolean;
+                                                    object_type?: number;
+                                                    config?: {
+                                                        options?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        formula?: {
+                                                            value?: string;
+                                                            result?: number;
+                                                            extra_map?: Array<{
+                                                                key?: string;
+                                                                value?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            }>;
+                                                        };
+                                                        object_display_config?: {
+                                                            display_condition?: number;
+                                                            pre_object_config_list?: Array<{
+                                                                id?: string;
+                                                                operator?: number;
+                                                                value?: Array<string>;
+                                                            }>;
+                                                        };
+                                                    };
+                                                }>;
+                                            }>;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/offer_application_forms/:offer_application_form_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_application_form&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_application_form/list document }
+                 *
+                 * 获取 Offer 申请表列表
+                 *
+                 * 获取 Offer 申请表列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/offer_application_forms`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * offer_custom_field
+             */
+            offerCustomField: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_custom_field&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_custom_field/update document }
+                 *
+                 * 更新 Offer 申请表自定义字段
+                 *
+                 * - 本文档支持通过接口更新「飞书招聘」-「设置」-「Offer 申请表设置」中 Offer 申请表的自定义字段配置；;- 当前修改申请表信息（包括更新自定义字段）后，所有申请表的 schema_id 均会更新，即所有申请表均会新增一个版本，申请表的 schema_id 会在创建 offer、更新 offer 中使用；;- 「飞书招聘」中 Offer 申请表自定义字段创建后，不支持修改字段类型，本接口亦不支持更新字段类型；;- 当前字段类型为「公式」的，不支持通过接口更新
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            name: { zh_cn?: string; en_us?: string };
+                            config?: {
+                                options?: Array<{
+                                    name: { zh_cn?: string; en_us?: string };
+                                }>;
+                            };
+                        };
+                        path?: { offer_custom_field_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/offer_custom_fields/:offer_custom_field_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * offer_schema
              */
             offerSchema: {
@@ -14991,6 +27709,63 @@ export default abstract class Client extends helpdesk {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=referral&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=referral&version=v1 document }
+                 */
+                search: async (
+                    payload?: {
+                        data: {
+                            talent_id: string;
+                            start_time?: string;
+                            end_time?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        application_ids?: Array<string>;
+                                        create_time?: string;
+                                        referral_user?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/referrals/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * referral_account
@@ -15126,9 +27901,9 @@ export default abstract class Client extends helpdesk {
                  */
                 reconciliation: async (
                     payload?: {
-                        data?: {
-                            start_trans_time?: string;
-                            end_trans_time?: string;
+                        data: {
+                            start_trans_time: string;
+                            end_trans_time: string;
                             trade_details?: Array<{
                                 account_id: string;
                                 total_recharge_reward_info?: {
@@ -15197,8 +27972,8 @@ export default abstract class Client extends helpdesk {
                  */
                 withdraw: async (
                     payload?: {
-                        data?: {
-                            withdraw_bonus_type?: Array<number>;
+                        data: {
+                            withdraw_bonus_type: Array<number>;
                             external_order_id?: string;
                         };
                         path?: { referral_account_id?: string };
@@ -16320,7 +29095,7 @@ export default abstract class Client extends helpdesk {
                                                         zh_name?: string;
                                                         en_name?: string;
                                                         active_status?: number;
-                                                        resume_source_type?: number;
+                                                        resume_source_type?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -16373,7 +29148,7 @@ export default abstract class Client extends helpdesk {
                                         zh_name?: string;
                                         en_name?: string;
                                         active_status?: number;
-                                        resume_source_type?: number;
+                                        resume_source_type?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -16396,7 +29171,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * role
+             * 权限
              */
             role: {
                 /**
@@ -16430,6 +29205,9 @@ export default abstract class Client extends helpdesk {
                                             zh_cn?: string;
                                             en_us?: string;
                                         };
+                                        modify_time?: string;
+                                        role_status?: number;
+                                        role_type?: number;
                                         scope_of_application?: number;
                                         has_business_management_scope?: boolean;
                                         socail_permission_collection?: {
@@ -16528,6 +29306,233 @@ export default abstract class Client extends helpdesk {
                             throw e;
                         });
                 },
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/roles`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        scope_of_application?: number;
+                                                        modify_time?: string;
+                                                        role_status?: number;
+                                                        role_type?: number;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=role&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/role/list document }
+                 *
+                 * 获取角色列表
+                 *
+                 * 获取角色列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        scope_of_application?: number;
+                                        modify_time?: string;
+                                        role_status?: number;
+                                        role_type?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/roles`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 项目（灰度租户可见）
+             */
+            subject: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=subject&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/subject/list document }
+                 *
+                 * 获取项目列表
+                 *
+                 * 获取项目列表（概念上一批集体启动和管理的职位可以定义为一个项目，例如 「2012 秋招项目」）
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            subject_ids?: number;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                        active_status?: number;
+                                        application_limit?: number;
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/subjects`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * 人才
@@ -16544,9 +29549,9 @@ export default abstract class Client extends helpdesk {
                  */
                 addToFolder: async (
                     payload?: {
-                        data?: {
+                        data: {
                             talent_id_list?: Array<string>;
-                            folder_id?: string;
+                            folder_id: string;
                         };
                     },
                     options?: IRequestOptions
@@ -16624,6 +29629,406 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/talents/batch_get_id`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=combined_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_create document }
+                 *
+                 * 创建人才
+                 *
+                 * 用于在企业内创建一个人才。姓名为系统预设的必填字段，邮箱/电话字段请在飞书招聘标准简历模板设置中确认是否必填。可配合[获取人才字段](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent_object/query)接口获取自定义字段信息。
+                 */
+                combinedCreate: async (
+                    payload?: {
+                        data: {
+                            init_source_id?: string;
+                            resume_source_id?: string;
+                            folder_id_list?: Array<string>;
+                            creator_id?: string;
+                            creator_account_type?: number;
+                            resume_attachment_id?: string;
+                            basic_info: {
+                                name: string;
+                                mobile?: string;
+                                mobile_country_code?: string;
+                                email?: string;
+                                identification?: {
+                                    identification_type?: number;
+                                    identification_number?: string;
+                                };
+                                start_work_time?: string;
+                                birthday?: string;
+                                gender?: number;
+                                nationality_id?: string;
+                                current_city_code?: string;
+                                hometown_city_code?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            };
+                            education_list?: Array<{
+                                id?: string;
+                                degree?: number;
+                                school?: string;
+                                field_of_study?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                education_type?: number;
+                                academic_ranking?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            career_list?: Array<{
+                                id?: string;
+                                company?: string;
+                                title?: string;
+                                desc?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                career_type?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            project_list?: Array<{
+                                id?: string;
+                                name?: string;
+                                role?: string;
+                                link?: string;
+                                desc?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            works_list?: Array<{
+                                id?: string;
+                                link?: string;
+                                desc?: string;
+                                attachment_id?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            award_list?: Array<{
+                                id?: string;
+                                title?: string;
+                                award_time?: string;
+                                desc?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            language_list?: Array<{
+                                id?: string;
+                                language?: number;
+                                proficiency?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            sns_list?: Array<{
+                                id?: string;
+                                sns_type?: number;
+                                link?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            preferred_city_code_list?: Array<string>;
+                            self_evaluation?: {
+                                id?: string;
+                                content?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            };
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    talent_id?: string;
+                                    creator_id?: string;
+                                    creator_account_type?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents/combined_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=combined_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/combined_update document }
+                 *
+                 * 更新人才信息
+                 *
+                 * 用于在企业内更新一个人才。姓名为系统预设的必填字段，邮箱/电话字段请在飞书招聘标准简历模板设置中确认是否必填。可配合[获取人才字段](https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent_object/query)接口获取自定义字段信息。
+                 */
+                combinedUpdate: async (
+                    payload?: {
+                        data: {
+                            talent_id: string;
+                            init_source_id?: string;
+                            folder_id_list?: Array<string>;
+                            operator_id?: string;
+                            operator_account_type?: number;
+                            resume_attachment_id?: string;
+                            basic_info: {
+                                name: string;
+                                mobile?: string;
+                                mobile_country_code?: string;
+                                email?: string;
+                                identification?: {
+                                    identification_type?: number;
+                                    identification_number?: string;
+                                };
+                                start_work_time?: string;
+                                birthday?: string;
+                                gender?: number;
+                                nationality_id?: string;
+                                current_city_code?: string;
+                                hometown_city_code?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            };
+                            education_list?: Array<{
+                                id?: string;
+                                degree?: number;
+                                school?: string;
+                                field_of_study?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                education_type?: number;
+                                academic_ranking?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            career_list?: Array<{
+                                id?: string;
+                                company?: string;
+                                title?: string;
+                                desc?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                career_type?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            project_list?: Array<{
+                                id?: string;
+                                name?: string;
+                                role?: string;
+                                link?: string;
+                                desc?: string;
+                                start_time?: string;
+                                end_time?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            works_list?: Array<{
+                                id?: string;
+                                link?: string;
+                                desc?: string;
+                                attachment_id?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            award_list?: Array<{
+                                id?: string;
+                                title?: string;
+                                award_time?: string;
+                                desc?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            language_list?: Array<{
+                                id?: string;
+                                language?: number;
+                                proficiency?: number;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            sns_list?: Array<{
+                                id?: string;
+                                sns_type?: number;
+                                link?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            }>;
+                            preferred_city_code_list?: Array<string>;
+                            self_evaluation?: {
+                                id?: string;
+                                content?: string;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                            };
+                            customized_data?: Array<{
+                                object_id?: string;
+                                children?: Array<{
+                                    object_id?: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    talent_id?: string;
+                                    operator_id?: string;
+                                    operator_account_type?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents/combined_update`,
                                 path
                             ),
                             method: "POST",
@@ -17157,9 +30562,11 @@ export default abstract class Client extends helpdesk {
                 list: async (
                     payload?: {
                         params?: {
+                            keyword?: string;
                             update_start_time?: string;
                             update_end_time?: string;
                             page_size?: number;
+                            sort_by?: number;
                             page_token?: string;
                             user_id_type?:
                                 | "user_id"
@@ -17302,6 +30709,143 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=onboard_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=onboard_status&project=hire&resource=talent&version=v1 document }
+                 */
+                onboardStatus: async (
+                    payload?: {
+                        data: {
+                            operation: number;
+                            onboard_time?: string;
+                            overboard_time?: string;
+                        };
+                        path?: { talent_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents/:talent_id/onboard_status`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 导入外部系统信息（灰度租户可见）
+             */
+            talentExternalInfo: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent.external_info&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent-external_info/create document }
+                 *
+                 * 创建人才外部信息
+                 *
+                 * 创建人才外部信息
+                 */
+                create: async (
+                    payload?: {
+                        data: { external_create_time: string };
+                        path: { talent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    external_info?: {
+                                        talent_id?: string;
+                                        external_create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents/:talent_id/external_info`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent.external_info&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent-external_info/update document }
+                 *
+                 * 更新人才外部信息
+                 *
+                 * 更新人才外部信息
+                 */
+                update: async (
+                    payload?: {
+                        data: { external_create_time: string };
+                        path: { talent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    external_info?: {
+                                        talent_id?: string;
+                                        external_create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talents/:talent_id/external_info`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -17564,6 +31108,3165 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * talent_operation_log
+             */
+            talentOperationLog: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_operation_log&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/talent_operation_log/search document }
+                 *
+                 * 查询操作人对人才的操作记录
+                 *
+                 * 查询操作人对人才的操作记录
+                 */
+                search: async (
+                    payload?: {
+                        data: {
+                            job_id_list?: Array<string>;
+                            operator_id_list: Array<string>;
+                            operation_list: Array<number>;
+                        };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        application_id?: string;
+                                        talent_id?: string;
+                                        operator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        operation_type?: number;
+                                        operation_time?: string;
+                                        operator_type?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talent_operation_logs/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * talent_pool
+             */
+            talentPool: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_pool&apiName=move_talent&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=move_talent&project=hire&resource=talent_pool&version=v1 document }
+                 */
+                moveTalent: async (
+                    payload?: {
+                        data: { talent_id: string; add_type: number };
+                        path?: { talent_pool_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    talent_pool_id?: string;
+                                    talent_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talent_pools/:talent_pool_id/talent_relationship`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            id_list?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/talent_pools/`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        i18n_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        i18n_description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        parent_id?: string;
+                                                        is_private?: number;
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent_pool&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=hire&resource=talent_pool&version=v1 document }
+                 */
+                search: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            id_list?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        i18n_description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        parent_id?: string;
+                                        is_private?: number;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/talent_pools/`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * termination_reason
+             */
+            terminationReason: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/termination_reasons`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        referral_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        termination_type?: number;
+                                                        is_used_as_evaluation?: boolean;
+                                                        active_status?: number;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=termination_reason&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/termination_reason/list document }
+                 *
+                 * 获取终止投递原因
+                 *
+                 * 获取终止投递原因
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        referral_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        termination_type?: number;
+                                        is_used_as_evaluation?: boolean;
+                                        active_status?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/termination_reasons`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * test
+             */
+            test: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            application_id_list?: Array<string>;
+                            test_start_time_min?: string;
+                            test_start_time_max?: string;
+                        };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/tests/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        test_id?: string;
+                                                        application_id?: string;
+                                                        test_paper_id?: string;
+                                                        test_paper_name?: string;
+                                                        test_paper_source_id?: string;
+                                                        test_paper_source_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        reply_status?: number;
+                                                        test_status?: number;
+                                                        test_schedule?: {
+                                                            start_time?: string;
+                                                            end_time?: string;
+                                                        };
+                                                        test_complete_time?: string;
+                                                        report_url_list?: Array<string>;
+                                                        result_detail_list?: Array<{
+                                                            subject?: string;
+                                                            result?: string;
+                                                        }>;
+                                                        result_upload_time?: string;
+                                                        score?: string;
+                                                        score_submit_time?: string;
+                                                        reviewer?: string;
+                                                        created_at?: string;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=test&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/test/search document }
+                 *
+                 * 获取笔试列表
+                 *
+                 * 批量获取人才在某投递流程中的笔试信息，如作答状态、笔试得分等。（目前仅支持获取 1w 条数据，若数据量较大，可通过控制 test_start_time 查询条件分批次获取全量数据）
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            application_id_list?: Array<string>;
+                            test_start_time_min?: string;
+                            test_start_time_max?: string;
+                        };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        test_id?: string;
+                                        application_id?: string;
+                                        test_paper_id?: string;
+                                        test_paper_name?: string;
+                                        test_paper_source_id?: string;
+                                        test_paper_source_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        reply_status?: number;
+                                        test_status?: number;
+                                        test_schedule?: {
+                                            start_time?: string;
+                                            end_time?: string;
+                                        };
+                                        test_complete_time?: string;
+                                        report_url_list?: Array<string>;
+                                        result_detail_list?: Array<{
+                                            subject?: string;
+                                            result?: string;
+                                        }>;
+                                        result_upload_time?: string;
+                                        score?: string;
+                                        score_submit_time?: string;
+                                        reviewer?: string;
+                                        created_at?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tests/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 待办
+             */
+            todo: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_token?: string;
+                            page_size?: string;
+                            user_id?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                            type: "evaluation" | "offer" | "exam" | "interview";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/todos`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        evaluation?: {
+                                                            talent_id?: string;
+                                                            job_id?: string;
+                                                            application_id?: string;
+                                                            id?: string;
+                                                        };
+                                                        offer?: {
+                                                            talent_id?: string;
+                                                            job_id?: string;
+                                                            application_id?: string;
+                                                            id?: string;
+                                                        };
+                                                        exam?: {
+                                                            talent_id?: string;
+                                                            job_id?: string;
+                                                            application_id?: string;
+                                                            id?: string;
+                                                        };
+                                                        interview?: {
+                                                            talent_id?: string;
+                                                            job_id?: string;
+                                                            application_id?: string;
+                                                            id?: string;
+                                                        };
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=todo&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/todo/list document }
+                 *
+                 * 获取待办列表
+                 *
+                 * 获取待办列表
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_token?: string;
+                            page_size?: string;
+                            user_id?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                            type: "evaluation" | "offer" | "exam" | "interview";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        evaluation?: {
+                                            talent_id?: string;
+                                            job_id?: string;
+                                            application_id?: string;
+                                            id?: string;
+                                        };
+                                        offer?: {
+                                            talent_id?: string;
+                                            job_id?: string;
+                                            application_id?: string;
+                                            id?: string;
+                                        };
+                                        exam?: {
+                                            talent_id?: string;
+                                            job_id?: string;
+                                            application_id?: string;
+                                            id?: string;
+                                        };
+                                        interview?: {
+                                            talent_id?: string;
+                                            job_id?: string;
+                                            application_id?: string;
+                                            id?: string;
+                                        };
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/todos`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tripartite_agreement
+             */
+            tripartiteAgreement: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=hire&resource=tripartite_agreement&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            application_id: string;
+                            state: number;
+                            create_time: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=hire&resource=tripartite_agreement&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { tripartite_agreement_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            application_id?: string;
+                            tripartite_agreement_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        application_id?: string;
+                                                        state?: number;
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=tripartite_agreement&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            application_id?: string;
+                            tripartite_agreement_id?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        application_id?: string;
+                                        state?: number;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tripartite_agreements`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=tripartite_agreement&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=hire&resource=tripartite_agreement&version=v1 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: { state: number; modify_time: string };
+                        path?: { tripartite_agreement_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tripartite_agreement?: {
+                                        id?: string;
+                                        application_id?: string;
+                                        state?: number;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * website.channel
+             */
+            websiteChannel: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/create document }
+                 *
+                 * 创建官网推广渠道
+                 *
+                 * 根据官网 ID 和推广渠道名称创建官网推广渠道
+                 */
+                create: async (
+                    payload?: {
+                        data: { channel_name: string };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    id?: string;
+                                    name?: string;
+                                    link?: string;
+                                    code?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/channels`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/delete document }
+                 *
+                 * 删除官网推广渠道
+                 *
+                 * 根据官网 ID 和推广渠道 ID 删除官网推广渠道
+                 */
+                delete: async (
+                    payload?: {
+                        path?: { website_id?: string; channel_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/channels/:channel_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/list document }
+                 *
+                 * 获取官网推广渠道列表
+                 *
+                 * 根据官网 ID 分页获取推广渠道列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: string; page_token?: string };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    website_channel_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        link?: string;
+                                        code?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/channels`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.channel&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-channel/update document }
+                 *
+                 * 更新官网推广渠道
+                 *
+                 * 根据官网 ID 和推广渠道 ID 更改推广渠道名称
+                 */
+                update: async (
+                    payload?: {
+                        data: { channel_name: string };
+                        path?: { website_id?: string; channel_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    id?: string;
+                                    name?: string;
+                                    link?: string;
+                                    code?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/channels/:channel_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * website.delivery
+             */
+            websiteDelivery: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery&apiName=create_by_attachment&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery/create_by_attachment document }
+                 *
+                 * 根据简历附件解析创建官网投递
+                 *
+                 * 根据简历附件解析创建官网投递
+                 */
+                createByAttachment: async (
+                    payload?: {
+                        data: {
+                            job_post_id: string;
+                            user_id: string;
+                            resume_file_id: string;
+                            channel_id?: string;
+                            application_preferred_city_code_list?: Array<string>;
+                            mobile_country_code?: string;
+                            mobile?: string;
+                            email?: string;
+                            identification?: {
+                                identification_type?: number;
+                                identification_number?: string;
+                            };
+                        };
+                        path: { website_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { task_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/deliveries/create_by_attachment`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery&apiName=create_by_resume&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery/create_by_resume document }
+                 *
+                 * 创建官网投递
+                 *
+                 * 创建官网投递。
+                 *
+                 * 对于自定义字段，若字段类型为单行文本，传值格式为"这是一个单行文本"；若字段类型为多行文本，传值格式为"这是一个多行文本"；若字段类型为单选，传值内容为选项的 ID，格式为"1";若字段类型为多选，传值内容为选项的ID 列表，格式为"["2", "3" ]"；若字段类型为时间段，传值格式为"["1609430400000", "1612108800000" ]"，单位是毫米级时间戳，结束时间是「至今」时，用「"-1"」表示；若字段类型为年份选择，传值格式为"1609430400000"，单位是毫秒级时间戳；若字段类型为月份选择，传值格式为"1625068800000"，单位是毫秒级时间戳；若字段类型为数字，传值格式为"1"
+                 */
+                createByResume: async (
+                    payload?: {
+                        data: {
+                            job_post_id: string;
+                            resume: {
+                                internship_list?: Array<{
+                                    desc?: string;
+                                    end_time?: number;
+                                    start_time?: number;
+                                    title?: string;
+                                    company?: string;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                                basic_info: {
+                                    nationality_id?: string;
+                                    start_work_time?: number;
+                                    current_home_address?: string;
+                                    hometown_city_code?: string;
+                                    mobile_country_code?: string;
+                                    identification?: {
+                                        identification_number?: string;
+                                        identification_type?: number;
+                                    };
+                                    marital_status?: number;
+                                    mobile?: string;
+                                    current_city_code?: string;
+                                    experience_years?: number;
+                                    gender?: number;
+                                    birthday?: number;
+                                    name: string;
+                                    preferred_city_code_list?: Array<string>;
+                                    resume_source_id?: string;
+                                    age?: number;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    email?: string;
+                                };
+                                education_list?: Array<{
+                                    education_type?: number;
+                                    end_time?: number;
+                                    end_time_v2?: number;
+                                    field_of_study?: string;
+                                    school?: string;
+                                    start_time?: number;
+                                    academic_ranking?: number;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    degree?: number;
+                                }>;
+                                self_evaluation?: {
+                                    content?: string;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                };
+                                career_list?: Array<{
+                                    desc?: string;
+                                    end_time?: number;
+                                    start_time?: number;
+                                    title?: string;
+                                    company?: string;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                                customized_data?: Array<{
+                                    object_id?: string;
+                                    children?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                                resume_attachment_id?: string;
+                                sns_list?: Array<{
+                                    sns_type?: number;
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    link?: string;
+                                }>;
+                                works_list?: Array<{
+                                    desc?: string;
+                                    link?: string;
+                                    attachment?: { file_id?: string };
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                }>;
+                                award_list?: Array<{
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    desc?: string;
+                                    title?: string;
+                                    award_time?: number;
+                                }>;
+                                project_list?: Array<{
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    desc?: string;
+                                    end_time?: number;
+                                    link?: string;
+                                    name?: string;
+                                    role?: string;
+                                    start_time?: number;
+                                }>;
+                                language_list?: Array<{
+                                    customized_data?: Array<{
+                                        object_id?: string;
+                                        value?: string;
+                                    }>;
+                                    language?: number;
+                                    proficiency?: number;
+                                }>;
+                            };
+                            user_id: string;
+                            application_preferred_city_code_list?: Array<string>;
+                            channel_id?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { website_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    delivery?: {
+                                        application_id?: string;
+                                        id?: string;
+                                        job_id?: string;
+                                        job_post_id?: string;
+                                        portal_resume_id?: string;
+                                        user_id?: string;
+                                        talent_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/deliveries/create_by_resume`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * website.delivery_task
+             */
+            websiteDeliveryTask: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.delivery_task&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-delivery_task/get document }
+                 *
+                 * 获取简历解析创建官网投递任务结果
+                 *
+                 * 获取官网投递任务信息;，如果获取到的数据data为空，仍然继续轮询，直到data不为空时，再查询data里面的数据
+                 */
+                get: async (
+                    payload?: {
+                        path: { website_id: string; delivery_task_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    status?: number;
+                                    delivery?: {
+                                        application_id?: string;
+                                        id?: string;
+                                        job_id?: string;
+                                        job_post_id?: string;
+                                        portal_resume_id?: string;
+                                        user_id?: string;
+                                        talent_id?: string;
+                                    };
+                                    status_msg?: string;
+                                    extra_info?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/delivery_tasks/:delivery_task_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * website.job_post
+             */
+            websiteJobPost: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/get document }
+                 *
+                 * 获取自定义官网下职位广告详情
+                 *
+                 * 获取自定义官网下职位广告详情
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                        };
+                        path: { website_id: string; job_post_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_post?: {
+                                        id?: string;
+                                        title?: string;
+                                        job_id?: string;
+                                        job_code?: string;
+                                        job_expire_time?: string;
+                                        job_active_status?: number;
+                                        job_process_type?: number;
+                                        job_recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
+                                        min_salary?: string;
+                                        max_salary?: string;
+                                        required_degree?: number;
+                                        experience?: number;
+                                        headcount?: number;
+                                        high_light_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        requirement?: string;
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                            };
+                                        }>;
+                                        job_function?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        subject?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        }>;
+                                        job_sequence_info?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        currency?: number;
+                                        target_major_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/:job_post_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            create_start_time?: string;
+                            create_end_time?: string;
+                        };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        title?: string;
+                                                        job_id?: string;
+                                                        job_code?: string;
+                                                        job_expire_time?: string;
+                                                        job_active_status?: number;
+                                                        job_process_type?: number;
+                                                        job_recruitment_type?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        job_department?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        job_type?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        min_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        max_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        address?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            district?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            city?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            state?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            country?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        min_salary?: string;
+                                                        max_salary?: string;
+                                                        required_degree?: number;
+                                                        experience?: number;
+                                                        headcount?: number;
+                                                        high_light_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        description?: string;
+                                                        requirement?: string;
+                                                        creator?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                        customized_data_list?: Array<{
+                                                            object_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            object_type?: number;
+                                                            value?: {
+                                                                content?: string;
+                                                                option?: {
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                };
+                                                                option_list?: Array<{
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                }>;
+                                                                time_range?: {
+                                                                    start_time?: string;
+                                                                    end_time?: string;
+                                                                };
+                                                                time?: string;
+                                                                number?: string;
+                                                            };
+                                                        }>;
+                                                        address_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            district?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            city?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            state?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            country?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        job_sequence_info?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        currency?: number;
+                                                        target_major_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/list document }
+                 *
+                 * 获取自定义官网下的职位列表
+                 *
+                 * 获取自定义官网下的职位列表。自定义数据暂不支持列表获取，请从「获取自定义官网下职位广告详情」接口获取。
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            create_start_time?: string;
+                            create_end_time?: string;
+                        };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        title?: string;
+                                        job_id?: string;
+                                        job_code?: string;
+                                        job_expire_time?: string;
+                                        job_active_status?: number;
+                                        job_process_type?: number;
+                                        job_recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
+                                        min_salary?: string;
+                                        max_salary?: string;
+                                        required_degree?: number;
+                                        experience?: number;
+                                        headcount?: number;
+                                        high_light_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        requirement?: string;
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                            };
+                                        }>;
+                                        address_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        }>;
+                                        job_sequence_info?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        currency?: number;
+                                        target_major_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            job_type_id_list?: Array<string>;
+                            city_code_list?: Array<string>;
+                            job_function_id_list?: Array<string>;
+                            subject_id_list?: Array<string>;
+                            keyword?: string;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            create_start_time?: string;
+                            create_end_time?: string;
+                        };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                        };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        title?: string;
+                                                        job_id?: string;
+                                                        job_code?: string;
+                                                        job_expire_time?: string;
+                                                        job_active_status?: number;
+                                                        job_process_type?: number;
+                                                        job_recruitment_type?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        job_department?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        job_type?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        min_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        max_job_level?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        address?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            district?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            city?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            state?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            country?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        min_salary?: string;
+                                                        max_salary?: string;
+                                                        required_degree?: number;
+                                                        experience?: number;
+                                                        headcount?: number;
+                                                        high_light_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        description?: string;
+                                                        requirement?: string;
+                                                        creator?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                        customized_data_list?: Array<{
+                                                            object_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            object_type?: number;
+                                                            value?: {
+                                                                content?: string;
+                                                                option?: {
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                };
+                                                                option_list?: Array<{
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                }>;
+                                                                time_range?: {
+                                                                    start_time?: string;
+                                                                    end_time?: string;
+                                                                };
+                                                                time?: string;
+                                                                number?: string;
+                                                            };
+                                                        }>;
+                                                        job_function?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        subject?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        address_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            district?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            city?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            state?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            country?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        job_sequence_info?: {
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        currency?: number;
+                                                        target_major_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.job_post&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-job_post/search document }
+                 *
+                 * 搜索自定义官网下的职位列表
+                 *
+                 * 搜索自定义官网下的职位列表
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            job_type_id_list?: Array<string>;
+                            city_code_list?: Array<string>;
+                            job_function_id_list?: Array<string>;
+                            subject_id_list?: Array<string>;
+                            keyword?: string;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            create_start_time?: string;
+                            create_end_time?: string;
+                        };
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            job_level_id_type?:
+                                | "people_admin_job_level_id"
+                                | "job_level_id";
+                        };
+                        path?: { website_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        title?: string;
+                                        job_id?: string;
+                                        job_code?: string;
+                                        job_expire_time?: string;
+                                        job_active_status?: number;
+                                        job_process_type?: number;
+                                        job_recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        min_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        max_job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
+                                        min_salary?: string;
+                                        max_salary?: string;
+                                        required_degree?: number;
+                                        experience?: number;
+                                        headcount?: number;
+                                        high_light_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                        description?: string;
+                                        requirement?: string;
+                                        creator?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                            };
+                                        }>;
+                                        job_function?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        subject?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        address_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            district?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            city?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            state?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            country?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        }>;
+                                        job_sequence_info?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        currency?: number;
+                                        target_major_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/job_posts/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 官网（灰度租户可见）
+             */
+            website: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/websites`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        process_type_list?: Array<number>;
+                                                        job_channel_id?: string;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website/list document }
+                 *
+                 * 获取自定义官网列表
+                 *
+                 * 获取自定义官网列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        process_type_list?: Array<number>;
+                                        job_channel_id?: string;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * website.site_user
+             */
+            websiteSiteUser: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=website.site_user&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/website-site_user/create document }
+                 *
+                 * 创建官网用户
+                 *
+                 * 创建官网用户
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name?: string;
+                            email?: string;
+                            external_id: string;
+                            mobile?: string;
+                            mobile_country_code?: string;
+                        };
+                        path: { website_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    site_user?: {
+                                        user_id?: string;
+                                        name?: string;
+                                        email?: string;
+                                        external_id: string;
+                                        mobile?: string;
+                                        mobile_country_code?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/websites/:website_id/site_users`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

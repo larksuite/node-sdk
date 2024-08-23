@@ -415,6 +415,64 @@ export default abstract class Client extends aily {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/message_push_overview document }
+             *
+             * 获取消息推送概览（灰度租户可见）
+             *
+             * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+             *
+             * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+             */
+            messagePushOverview: async (
+                payload?: {
+                    data: {
+                        date: string;
+                        cycle_type: number;
+                        department_id?: string;
+                    };
+                    params?: {
+                        department_id_type?:
+                            | "department_id"
+                            | "open_department_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    metric_name: string;
+                                    metric_value: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=overview&version=v6 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/overview document }
@@ -2375,6 +2433,64 @@ export default abstract class Client extends aily {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/department_overview`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=message_push_overview&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_usage/message_push_overview document }
+                 *
+                 * 获取消息推送概览（灰度租户可见）
+                 *
+                 * 目标：查看应用在某一天/某一周/某一个月的机器人消息推送数据，可以根据部门做筛选
+                 *
+                 * 1. 仅支持企业版/旗舰版租户使用;2. 一般每天早上10点产出两天前的数据。;3. 已经支持的指标包括：消息推送给用户的次数、消息触达的人数、消息1小时阅读量、消息12小时阅读量;4. 按照部门查看数据时，会展示当前部门以及其子部门的整体使用情况;5. 调用频控为100次/分
+                 */
+                messagePushOverview: async (
+                    payload?: {
+                        data: {
+                            date: string;
+                            cycle_type: number;
+                            department_id?: string;
+                        };
+                        params?: {
+                            department_id_type?:
+                                | "department_id"
+                                | "open_department_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        metric_name: string;
+                                        metric_value: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/app_usage/message_push_overview`,
                                 path
                             ),
                             method: "POST",

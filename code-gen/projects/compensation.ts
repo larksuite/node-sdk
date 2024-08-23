@@ -51,7 +51,11 @@ export default abstract class Client extends comment_sdk {
                         params: {
                             page_size: number;
                             page_token?: string;
-                            user_id_type: "user_id" | "union_id" | "open_id";
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
                         };
                     },
                     options?: IRequestOptions

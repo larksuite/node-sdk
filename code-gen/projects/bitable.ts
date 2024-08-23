@@ -68,7 +68,6 @@ export default abstract class Client extends baike {
                                     revision?: number;
                                     folder_token?: string;
                                     url?: string;
-                                    default_table_id?: string;
                                     time_zone?: string;
                                 };
                             };
@@ -1771,7 +1770,6 @@ export default abstract class Client extends baike {
                             auto_fill?: boolean;
                             multiple?: boolean;
                             table_id?: string;
-                            table_name?: string;
                             back_field_name?: string;
                             auto_serial?: {
                                 type: "custom" | "auto_increment_number";
@@ -2898,6 +2896,7 @@ export default abstract class Client extends baike {
                                 avatar_url?: string;
                             };
                             last_modified_time?: number;
+                            record_url?: string;
                         }>;
                     };
                     params?: {
@@ -2975,6 +2974,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 }>;
                             };
                         }
@@ -3030,6 +3030,113 @@ export default abstract class Client extends baike {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=bitable&resource=app.table.record&version=v1 document }
+             *
+             * 批量获取多维表格记录
+             */
+            batchGet: async (
+                payload?: {
+                    data: {
+                        record_ids: Array<string>;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        with_shared_url?: boolean;
+                        automatic_fields?: boolean;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                records?: Array<{
+                                    fields: Record<
+                                        string,
+                                        | string
+                                        | number
+                                        | number
+                                        | number
+                                        | boolean
+                                        | { text?: string; link?: string }
+                                        | {
+                                              location?: string;
+                                              pname?: string;
+                                              cityname?: string;
+                                              adname?: string;
+                                              address?: string;
+                                              name?: string;
+                                              full_address?: string;
+                                          }
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              avatar_url?: string;
+                                          }>
+                                        | Array<string>
+                                        | Array<{
+                                              id?: string;
+                                              name?: string;
+                                              en_name?: string;
+                                              email?: string;
+                                              avatar_url?: string;
+                                          }>
+                                        | Array<{
+                                              file_token?: string;
+                                              name?: string;
+                                              type?: string;
+                                              size?: number;
+                                              url?: string;
+                                              tmp_url?: string;
+                                          }>
+                                    >;
+                                    record_id?: string;
+                                    created_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                        avatar_url?: string;
+                                    };
+                                    created_time?: number;
+                                    last_modified_by?: {
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                        email?: string;
+                                        avatar_url?: string;
+                                    };
+                                    last_modified_time?: number;
+                                    record_url?: string;
+                                }>;
+                                forbidden_record_ids?: Array<string>;
+                                absent_record_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_get`,
                             path
                         ),
                         method: "POST",
@@ -3113,6 +3220,7 @@ export default abstract class Client extends baike {
                                 avatar_url?: string;
                             };
                             last_modified_time?: number;
+                            record_url?: string;
                         }>;
                     };
                     params?: {
@@ -3189,6 +3297,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 }>;
                             };
                         }
@@ -3335,6 +3444,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 };
                             };
                         }
@@ -3495,6 +3605,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 };
                             };
                         }
@@ -3649,6 +3760,7 @@ export default abstract class Client extends baike {
                                                         avatar_url?: string;
                                                     };
                                                     last_modified_time?: number;
+                                                    record_url?: string;
                                                 }>;
                                             };
                                         },
@@ -3768,6 +3880,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 }>;
                             };
                         }
@@ -3958,6 +4071,7 @@ export default abstract class Client extends baike {
                                                         avatar_url?: string;
                                                     };
                                                     last_modified_time?: number;
+                                                    record_url?: string;
                                                 }>;
                                                 has_more?: boolean;
                                                 page_token?: string;
@@ -4112,6 +4226,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -4264,6 +4379,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    record_url?: string;
                                 };
                             };
                         }
@@ -4863,7 +4979,6 @@ export default abstract class Client extends baike {
                                         revision?: number;
                                         folder_token?: string;
                                         url?: string;
-                                        default_table_id?: string;
                                         time_zone?: string;
                                     };
                                 };
@@ -6591,7 +6706,6 @@ export default abstract class Client extends baike {
                                 auto_fill?: boolean;
                                 multiple?: boolean;
                                 table_id?: string;
-                                table_name?: string;
                                 back_field_name?: string;
                                 auto_serial?: {
                                     type: "custom" | "auto_increment_number";
@@ -7724,6 +7838,7 @@ export default abstract class Client extends baike {
                                     avatar_url?: string;
                                 };
                                 last_modified_time?: number;
+                                record_url?: string;
                             }>;
                         };
                         params?: {
@@ -7801,6 +7916,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     }>;
                                 };
                             }
@@ -7856,6 +7972,113 @@ export default abstract class Client extends baike {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_delete`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.record&apiName=batch_get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=bitable&resource=app.table.record&version=v1 document }
+                 *
+                 * 批量获取多维表格记录
+                 */
+                batchGet: async (
+                    payload?: {
+                        data: {
+                            record_ids: Array<string>;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            with_shared_url?: boolean;
+                            automatic_fields?: boolean;
+                        };
+                        path: { app_token: string; table_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    records?: Array<{
+                                        fields: Record<
+                                            string,
+                                            | string
+                                            | number
+                                            | number
+                                            | number
+                                            | boolean
+                                            | { text?: string; link?: string }
+                                            | {
+                                                  location?: string;
+                                                  pname?: string;
+                                                  cityname?: string;
+                                                  adname?: string;
+                                                  address?: string;
+                                                  name?: string;
+                                                  full_address?: string;
+                                              }
+                                            | Array<{
+                                                  id?: string;
+                                                  name?: string;
+                                                  avatar_url?: string;
+                                              }>
+                                            | Array<string>
+                                            | Array<{
+                                                  id?: string;
+                                                  name?: string;
+                                                  en_name?: string;
+                                                  email?: string;
+                                                  avatar_url?: string;
+                                              }>
+                                            | Array<{
+                                                  file_token?: string;
+                                                  name?: string;
+                                                  type?: string;
+                                                  size?: number;
+                                                  url?: string;
+                                                  tmp_url?: string;
+                                              }>
+                                        >;
+                                        record_id?: string;
+                                        created_by?: {
+                                            id?: string;
+                                            name?: string;
+                                            en_name?: string;
+                                            email?: string;
+                                            avatar_url?: string;
+                                        };
+                                        created_time?: number;
+                                        last_modified_by?: {
+                                            id?: string;
+                                            name?: string;
+                                            en_name?: string;
+                                            email?: string;
+                                            avatar_url?: string;
+                                        };
+                                        last_modified_time?: number;
+                                        record_url?: string;
+                                    }>;
+                                    forbidden_record_ids?: Array<string>;
+                                    absent_record_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/batch_get`,
                                 path
                             ),
                             method: "POST",
@@ -7939,6 +8162,7 @@ export default abstract class Client extends baike {
                                     avatar_url?: string;
                                 };
                                 last_modified_time?: number;
+                                record_url?: string;
                             }>;
                         };
                         params?: {
@@ -8015,6 +8239,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     }>;
                                 };
                             }
@@ -8161,6 +8386,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     };
                                 };
                             }
@@ -8324,6 +8550,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     };
                                 };
                             }
@@ -8478,6 +8705,7 @@ export default abstract class Client extends baike {
                                                             avatar_url?: string;
                                                         };
                                                         last_modified_time?: number;
+                                                        record_url?: string;
                                                     }>;
                                                 };
                                             },
@@ -8597,6 +8825,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     }>;
                                 };
                             }
@@ -8790,6 +9019,7 @@ export default abstract class Client extends baike {
                                                             avatar_url?: string;
                                                         };
                                                         last_modified_time?: number;
+                                                        record_url?: string;
                                                     }>;
                                                     has_more?: boolean;
                                                     page_token?: string;
@@ -8947,6 +9177,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -9099,6 +9330,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        record_url?: string;
                                     };
                                 };
                             }

@@ -984,7 +984,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 异步任务状态
+         * 分片上传
          */
         file: {
             /**
@@ -2694,7 +2694,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 分片上传
+         * 素材
          */
         media: {
             /**
@@ -2827,7 +2827,8 @@ export default abstract class Client extends docx {
                             | "bitable_image"
                             | "bitable_file"
                             | "moments"
-                            | "ccm_import_open";
+                            | "ccm_import_open"
+                            | "calendar";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -3169,6 +3170,104 @@ export default abstract class Client extends docx {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=batch_create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=drive&resource=permission.member&version=v1 document }
+             */
+            batchCreate: async (
+                payload?: {
+                    data: {
+                        members: Array<{
+                            member_type:
+                                | "email"
+                                | "openid"
+                                | "unionid"
+                                | "openchat"
+                                | "opendepartmentid"
+                                | "userid"
+                                | "groupid"
+                                | "wikispaceid";
+                            member_id: string;
+                            perm: "view" | "edit" | "full_access";
+                            perm_type?: "container" | "single_page";
+                            type?:
+                                | "user"
+                                | "chat"
+                                | "department"
+                                | "group"
+                                | "wiki_space_member"
+                                | "wiki_space_viewer"
+                                | "wiki_space_editor";
+                        }>;
+                    };
+                    params: {
+                        type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "wiki"
+                            | "bitable"
+                            | "docx"
+                            | "folder"
+                            | "mindnote"
+                            | "minutes"
+                            | "slides";
+                        need_notification?: boolean;
+                    };
+                    path: { token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                members?: Array<{
+                                    member_type:
+                                        | "email"
+                                        | "openid"
+                                        | "unionid"
+                                        | "openchat"
+                                        | "opendepartmentid"
+                                        | "userid"
+                                        | "groupid"
+                                        | "wikispaceid";
+                                    member_id: string;
+                                    perm: "view" | "edit" | "full_access";
+                                    perm_type?: "container" | "single_page";
+                                    type?:
+                                        | "user"
+                                        | "chat"
+                                        | "department"
+                                        | "group"
+                                        | "wiki_space_member"
+                                        | "wiki_space_viewer"
+                                        | "wiki_space_editor";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/permissions/:token/members/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=create&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create document }
@@ -3191,6 +3290,7 @@ export default abstract class Client extends docx {
                             | "wikispaceid";
                         member_id: string;
                         perm: "view" | "edit" | "full_access";
+                        perm_type?: "container" | "single_page";
                         type?:
                             | "user"
                             | "chat"
@@ -3240,6 +3340,7 @@ export default abstract class Client extends docx {
                                         | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
+                                    perm_type?: "container" | "single_page";
                                     type?:
                                         | "user"
                                         | "chat"
@@ -3286,6 +3387,7 @@ export default abstract class Client extends docx {
                             | "wiki_space_member"
                             | "wiki_space_viewer"
                             | "wiki_space_editor";
+                        perm_type?: "container" | "single_page";
                     };
                     params: {
                         type:
@@ -3357,6 +3459,7 @@ export default abstract class Client extends docx {
                             | "minutes"
                             | "slides";
                         fields?: string;
+                        perm_type?: "container" | "single_page";
                     };
                     path: { token: string };
                 },
@@ -3384,6 +3487,7 @@ export default abstract class Client extends docx {
                                         | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
+                                    perm_type?: "container" | "single_page";
                                     type?:
                                         | "user"
                                         | "chat"
@@ -3487,6 +3591,7 @@ export default abstract class Client extends docx {
                             | "groupid"
                             | "wikispaceid";
                         perm: "view" | "edit" | "full_access";
+                        perm_type?: "container" | "single_page";
                         type?:
                             | "user"
                             | "chat"
@@ -3535,6 +3640,7 @@ export default abstract class Client extends docx {
                                         | "wikispaceid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
+                                    perm_type?: "container" | "single_page";
                                     type?:
                                         | "user"
                                         | "chat"
@@ -4870,7 +4976,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 异步任务状态
+             * 分片上传
              */
             file: {
                 /**
@@ -6603,7 +6709,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 分片上传
+             * 素材
              */
             media: {
                 /**
@@ -6736,7 +6842,8 @@ export default abstract class Client extends docx {
                                 | "bitable_image"
                                 | "bitable_file"
                                 | "moments"
-                                | "ccm_import_open";
+                                | "ccm_import_open"
+                                | "calendar";
                             parent_node: string;
                             size: number;
                             checksum?: string;
@@ -7081,6 +7188,104 @@ export default abstract class Client extends docx {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=drive&resource=permission.member&version=v1 document }
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data: {
+                            members: Array<{
+                                member_type:
+                                    | "email"
+                                    | "openid"
+                                    | "unionid"
+                                    | "openchat"
+                                    | "opendepartmentid"
+                                    | "userid"
+                                    | "groupid"
+                                    | "wikispaceid";
+                                member_id: string;
+                                perm: "view" | "edit" | "full_access";
+                                perm_type?: "container" | "single_page";
+                                type?:
+                                    | "user"
+                                    | "chat"
+                                    | "department"
+                                    | "group"
+                                    | "wiki_space_member"
+                                    | "wiki_space_viewer"
+                                    | "wiki_space_editor";
+                            }>;
+                        };
+                        params: {
+                            type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "wiki"
+                                | "bitable"
+                                | "docx"
+                                | "folder"
+                                | "mindnote"
+                                | "minutes"
+                                | "slides";
+                            need_notification?: boolean;
+                        };
+                        path: { token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    members?: Array<{
+                                        member_type:
+                                            | "email"
+                                            | "openid"
+                                            | "unionid"
+                                            | "openchat"
+                                            | "opendepartmentid"
+                                            | "userid"
+                                            | "groupid"
+                                            | "wikispaceid";
+                                        member_id: string;
+                                        perm: "view" | "edit" | "full_access";
+                                        perm_type?: "container" | "single_page";
+                                        type?:
+                                            | "user"
+                                            | "chat"
+                                            | "department"
+                                            | "group"
+                                            | "wiki_space_member"
+                                            | "wiki_space_viewer"
+                                            | "wiki_space_editor";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/permissions/:token/members/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=permission.member&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/permission-member/create document }
@@ -7103,6 +7308,7 @@ export default abstract class Client extends docx {
                                 | "wikispaceid";
                             member_id: string;
                             perm: "view" | "edit" | "full_access";
+                            perm_type?: "container" | "single_page";
                             type?:
                                 | "user"
                                 | "chat"
@@ -7152,6 +7358,7 @@ export default abstract class Client extends docx {
                                             | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
+                                        perm_type?: "container" | "single_page";
                                         type?:
                                             | "user"
                                             | "chat"
@@ -7198,6 +7405,7 @@ export default abstract class Client extends docx {
                                 | "wiki_space_member"
                                 | "wiki_space_viewer"
                                 | "wiki_space_editor";
+                            perm_type?: "container" | "single_page";
                         };
                         params: {
                             type:
@@ -7272,6 +7480,7 @@ export default abstract class Client extends docx {
                                 | "minutes"
                                 | "slides";
                             fields?: string;
+                            perm_type?: "container" | "single_page";
                         };
                         path: { token: string };
                     },
@@ -7299,6 +7508,7 @@ export default abstract class Client extends docx {
                                             | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
+                                        perm_type?: "container" | "single_page";
                                         type?:
                                             | "user"
                                             | "chat"
@@ -7405,6 +7615,7 @@ export default abstract class Client extends docx {
                                 | "groupid"
                                 | "wikispaceid";
                             perm: "view" | "edit" | "full_access";
+                            perm_type?: "container" | "single_page";
                             type?:
                                 | "user"
                                 | "chat"
@@ -7453,6 +7664,7 @@ export default abstract class Client extends docx {
                                             | "wikispaceid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
+                                        perm_type?: "container" | "single_page";
                                         type?:
                                             | "user"
                                             | "chat"

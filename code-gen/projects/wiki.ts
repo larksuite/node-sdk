@@ -48,7 +48,11 @@ export default abstract class Client extends verification {
              */
             create: async (
                 payload?: {
-                    data?: { name?: string; description?: string };
+                    data?: {
+                        name?: string;
+                        description?: string;
+                        open_sharing?: "open" | "closed";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -68,6 +72,7 @@ export default abstract class Client extends verification {
                                     space_id?: string;
                                     space_type?: "team" | "person";
                                     visibility?: "public" | "private";
+                                    open_sharing?: "open" | "closed";
                                 };
                             };
                         }
@@ -138,6 +143,7 @@ export default abstract class Client extends verification {
                                     space_id?: string;
                                     space_type?: "team" | "person";
                                     visibility?: "public" | "private";
+                                    open_sharing?: "open" | "closed";
                                 };
                             };
                         }
@@ -217,6 +223,7 @@ export default abstract class Client extends verification {
                                     node_create_time?: string;
                                     creator?: string;
                                     owner?: string;
+                                    node_creator?: string;
                                 };
                             };
                         }
@@ -326,6 +333,9 @@ export default abstract class Client extends verification {
                                                     visibility?:
                                                         | "public"
                                                         | "private";
+                                                    open_sharing?:
+                                                        | "open"
+                                                        | "closed";
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -401,6 +411,7 @@ export default abstract class Client extends verification {
                                     space_id?: string;
                                     space_type?: "team" | "person";
                                     visibility?: "public" | "private";
+                                    open_sharing?: "open" | "closed";
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -463,6 +474,7 @@ export default abstract class Client extends verification {
                                     member_type: string;
                                     member_id: string;
                                     member_role: string;
+                                    type?: "user" | "chat" | "department";
                                 };
                             };
                         }
@@ -494,7 +506,11 @@ export default abstract class Client extends verification {
              */
             delete: async (
                 payload?: {
-                    data: { member_type: string; member_role: string };
+                    data: {
+                        member_type: string;
+                        member_role: string;
+                        type?: "user" | "chat" | "department";
+                    };
                     path: { space_id: string; member_id: string };
                 },
                 options?: IRequestOptions
@@ -513,6 +529,7 @@ export default abstract class Client extends verification {
                                     member_type: string;
                                     member_id: string;
                                     member_role: string;
+                                    type?: "user" | "chat" | "department";
                                 };
                             };
                         }
@@ -522,6 +539,53 @@ export default abstract class Client extends verification {
                             path
                         ),
                         method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { space_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                members?: Array<{
+                                    member_type: string;
+                                    member_id: string;
+                                    member_role: string;
+                                    type?: "user" | "chat" | "department";
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -589,6 +653,7 @@ export default abstract class Client extends verification {
                                     node_create_time?: string;
                                     creator?: string;
                                     owner?: string;
+                                    node_creator?: string;
                                 };
                             };
                         }
@@ -671,6 +736,7 @@ export default abstract class Client extends verification {
                                     node_create_time?: string;
                                     creator?: string;
                                     owner?: string;
+                                    node_creator?: string;
                                 };
                             };
                         }
@@ -780,6 +846,7 @@ export default abstract class Client extends verification {
                                                     node_create_time?: string;
                                                     creator?: string;
                                                     owner?: string;
+                                                    node_creator?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -857,6 +924,7 @@ export default abstract class Client extends verification {
                                     node_create_time?: string;
                                     creator?: string;
                                     owner?: string;
+                                    node_creator?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -931,6 +999,7 @@ export default abstract class Client extends verification {
                                     node_create_time?: string;
                                     creator?: string;
                                     owner?: string;
+                                    node_creator?: string;
                                 };
                             };
                         }
@@ -1166,6 +1235,7 @@ export default abstract class Client extends verification {
                                             node_create_time?: string;
                                             creator?: string;
                                             owner?: string;
+                                            node_creator?: string;
                                         };
                                         status: number;
                                         status_msg: string;
@@ -1207,7 +1277,11 @@ export default abstract class Client extends verification {
                  */
                 create: async (
                     payload?: {
-                        data?: { name?: string; description?: string };
+                        data?: {
+                            name?: string;
+                            description?: string;
+                            open_sharing?: "open" | "closed";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1227,6 +1301,7 @@ export default abstract class Client extends verification {
                                         space_id?: string;
                                         space_type?: "team" | "person";
                                         visibility?: "public" | "private";
+                                        open_sharing?: "open" | "closed";
                                     };
                                 };
                             }
@@ -1297,6 +1372,7 @@ export default abstract class Client extends verification {
                                         space_id?: string;
                                         space_type?: "team" | "person";
                                         visibility?: "public" | "private";
+                                        open_sharing?: "open" | "closed";
                                     };
                                 };
                             }
@@ -1376,6 +1452,7 @@ export default abstract class Client extends verification {
                                         node_create_time?: string;
                                         creator?: string;
                                         owner?: string;
+                                        node_creator?: string;
                                     };
                                 };
                             }
@@ -1485,6 +1562,9 @@ export default abstract class Client extends verification {
                                                         visibility?:
                                                             | "public"
                                                             | "private";
+                                                        open_sharing?:
+                                                            | "open"
+                                                            | "closed";
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -1560,6 +1640,7 @@ export default abstract class Client extends verification {
                                         space_id?: string;
                                         space_type?: "team" | "person";
                                         visibility?: "public" | "private";
+                                        open_sharing?: "open" | "closed";
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -1622,6 +1703,7 @@ export default abstract class Client extends verification {
                                         member_type: string;
                                         member_id: string;
                                         member_role: string;
+                                        type?: "user" | "chat" | "department";
                                     };
                                 };
                             }
@@ -1653,7 +1735,11 @@ export default abstract class Client extends verification {
                  */
                 delete: async (
                     payload?: {
-                        data: { member_type: string; member_role: string };
+                        data: {
+                            member_type: string;
+                            member_role: string;
+                            type?: "user" | "chat" | "department";
+                        };
                         path: { space_id: string; member_id: string };
                     },
                     options?: IRequestOptions
@@ -1672,6 +1758,7 @@ export default abstract class Client extends verification {
                                         member_type: string;
                                         member_id: string;
                                         member_role: string;
+                                        type?: "user" | "chat" | "department";
                                     };
                                 };
                             }
@@ -1681,6 +1768,53 @@ export default abstract class Client extends verification {
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=wiki&resource=space.member&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path: { space_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    members?: Array<{
+                                        member_type: string;
+                                        member_id: string;
+                                        member_role: string;
+                                        type?: "user" | "chat" | "department";
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/wiki/v2/spaces/:space_id/members`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -1748,6 +1882,7 @@ export default abstract class Client extends verification {
                                         node_create_time?: string;
                                         creator?: string;
                                         owner?: string;
+                                        node_creator?: string;
                                     };
                                 };
                             }
@@ -1830,6 +1965,7 @@ export default abstract class Client extends verification {
                                         node_create_time?: string;
                                         creator?: string;
                                         owner?: string;
+                                        node_creator?: string;
                                     };
                                 };
                             }
@@ -1939,6 +2075,7 @@ export default abstract class Client extends verification {
                                                         node_create_time?: string;
                                                         creator?: string;
                                                         owner?: string;
+                                                        node_creator?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -2016,6 +2153,7 @@ export default abstract class Client extends verification {
                                         node_create_time?: string;
                                         creator?: string;
                                         owner?: string;
+                                        node_creator?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -2090,6 +2228,7 @@ export default abstract class Client extends verification {
                                         node_create_time?: string;
                                         creator?: string;
                                         owner?: string;
+                                        node_creator?: string;
                                     };
                                 };
                             }
@@ -2330,6 +2469,7 @@ export default abstract class Client extends verification {
                                                 node_create_time?: string;
                                                 creator?: string;
                                                 owner?: string;
+                                                node_creator?: string;
                                             };
                                             status: number;
                                             status_msg: string;

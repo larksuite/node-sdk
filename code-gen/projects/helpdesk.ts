@@ -1504,7 +1504,10 @@ export default abstract class Client extends gray_test_open_sg {
                             category_id?: string;
                             question: string;
                             answer?: string;
-                            answer_richtext?: string;
+                            answer_richtext?: Array<{
+                                content?: string;
+                                type?: string;
+                            }>;
                             tags?: Array<string>;
                         };
                     };
@@ -4750,7 +4753,10 @@ export default abstract class Client extends gray_test_open_sg {
                                 category_id?: string;
                                 question: string;
                                 answer?: string;
-                                answer_richtext?: string;
+                                answer_richtext?: Array<{
+                                    content?: string;
+                                    type?: string;
+                                }>;
                                 tags?: Array<string>;
                             };
                         };

@@ -2206,7 +2206,9 @@ export default abstract class Client extends human_authentication {
                                 | "meeting_minute"
                                 | "chat_announcement"
                                 | "url"
-                                | "file";
+                                | "file"
+                                | "files_resources"
+                                | "images_videos";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
@@ -2243,7 +2245,9 @@ export default abstract class Client extends human_authentication {
                                         | "meeting_minute"
                                         | "chat_announcement"
                                         | "url"
-                                        | "file";
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -2310,7 +2314,9 @@ export default abstract class Client extends human_authentication {
                                         | "meeting_minute"
                                         | "chat_announcement"
                                         | "url"
-                                        | "file";
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -2376,7 +2382,9 @@ export default abstract class Client extends human_authentication {
                                         | "meeting_minute"
                                         | "chat_announcement"
                                         | "url"
-                                        | "file";
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -2443,7 +2451,9 @@ export default abstract class Client extends human_authentication {
                                         | "meeting_minute"
                                         | "chat_announcement"
                                         | "url"
-                                        | "file";
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -2496,7 +2506,9 @@ export default abstract class Client extends human_authentication {
                                 | "meeting_minute"
                                 | "chat_announcement"
                                 | "url"
-                                | "file";
+                                | "file"
+                                | "files_resources"
+                                | "images_videos";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
@@ -2533,7 +2545,9 @@ export default abstract class Client extends human_authentication {
                                         | "meeting_minute"
                                         | "chat_announcement"
                                         | "url"
-                                        | "file";
+                                        | "file"
+                                        | "files_resources"
+                                        | "images_videos";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
@@ -3453,6 +3467,61 @@ export default abstract class Client extends human_authentication {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=push_follow_up&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=push_follow_up&project=im&resource=message&version=v1 document }
+             */
+            pushFollowUp: async (
+                payload?: {
+                    data: {
+                        follow_ups: Array<{
+                            content: string;
+                            i18n_contents?: Array<{
+                                content: string;
+                                language:
+                                    | "en_us"
+                                    | "zh_cn"
+                                    | "zh_hk"
+                                    | "zh_tw"
+                                    | "ja_jp"
+                                    | "id_id"
+                                    | "vi_vn"
+                                    | "th_th"
+                                    | "pt_br"
+                                    | "es_es"
+                                    | "ko_kr"
+                                    | "de_de"
+                                    | "fr_fr"
+                                    | "it_it"
+                                    | "ru_ru"
+                                    | "ms_my";
+                            }>;
+                        }>;
+                    };
+                    path: { message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/:message_id/push_follow_up`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -6929,7 +6998,9 @@ export default abstract class Client extends human_authentication {
                                     | "meeting_minute"
                                     | "chat_announcement"
                                     | "url"
-                                    | "file";
+                                    | "file"
+                                    | "files_resources"
+                                    | "images_videos";
                                 tab_content?: {
                                     url?: string;
                                     doc?: string;
@@ -6966,7 +7037,9 @@ export default abstract class Client extends human_authentication {
                                             | "meeting_minute"
                                             | "chat_announcement"
                                             | "url"
-                                            | "file";
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
@@ -7033,7 +7106,9 @@ export default abstract class Client extends human_authentication {
                                             | "meeting_minute"
                                             | "chat_announcement"
                                             | "url"
-                                            | "file";
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
@@ -7099,7 +7174,9 @@ export default abstract class Client extends human_authentication {
                                             | "meeting_minute"
                                             | "chat_announcement"
                                             | "url"
-                                            | "file";
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
@@ -7166,7 +7243,9 @@ export default abstract class Client extends human_authentication {
                                             | "meeting_minute"
                                             | "chat_announcement"
                                             | "url"
-                                            | "file";
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
@@ -7219,7 +7298,9 @@ export default abstract class Client extends human_authentication {
                                     | "meeting_minute"
                                     | "chat_announcement"
                                     | "url"
-                                    | "file";
+                                    | "file"
+                                    | "files_resources"
+                                    | "images_videos";
                                 tab_content?: {
                                     url?: string;
                                     doc?: string;
@@ -7256,7 +7337,9 @@ export default abstract class Client extends human_authentication {
                                             | "meeting_minute"
                                             | "chat_announcement"
                                             | "url"
-                                            | "file";
+                                            | "file"
+                                            | "files_resources"
+                                            | "images_videos";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
@@ -8190,6 +8273,64 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=push_follow_up&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=push_follow_up&project=im&resource=message&version=v1 document }
+                 */
+                pushFollowUp: async (
+                    payload?: {
+                        data: {
+                            follow_ups: Array<{
+                                content: string;
+                                i18n_contents?: Array<{
+                                    content: string;
+                                    language:
+                                        | "en_us"
+                                        | "zh_cn"
+                                        | "zh_hk"
+                                        | "zh_tw"
+                                        | "ja_jp"
+                                        | "id_id"
+                                        | "vi_vn"
+                                        | "th_th"
+                                        | "pt_br"
+                                        | "es_es"
+                                        | "ko_kr"
+                                        | "de_de"
+                                        | "fr_fr"
+                                        | "it_it"
+                                        | "ru_ru"
+                                        | "ms_my";
+                                }>;
+                            }>;
+                        };
+                        path: { message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/:message_id/push_follow_up`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

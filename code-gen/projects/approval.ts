@@ -1017,7 +1017,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批实例
          */
         instance: {
             /**
@@ -3829,7 +3829,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批实例
              */
             instance: {
                 /**

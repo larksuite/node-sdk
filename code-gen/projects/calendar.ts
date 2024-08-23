@@ -1808,7 +1808,6 @@ export default abstract class Client extends board {
                                     organizer_calendar_id?: string;
                                     summary?: string;
                                     description?: string;
-                                    need_notification?: boolean;
                                     start_time: {
                                         date?: string;
                                         timestamp?: string;
@@ -1924,7 +1923,7 @@ export default abstract class Client extends board {
              */
             delete: async (
                 payload?: {
-                    params?: { need_notification?: boolean };
+                    params?: { need_notification?: "true" | "false" };
                     path: { calendar_id: string; event_id: string };
                 },
                 options?: IRequestOptions
@@ -2098,14 +2097,6 @@ export default abstract class Client extends board {
                                         room_id?: string;
                                         third_party_email?: string;
                                         operate_id?: string;
-                                        resource_customization?: Array<{
-                                            index_key: string;
-                                            input_content?: string;
-                                            options?: Array<{
-                                                option_key?: string;
-                                                others_content?: string;
-                                            }>;
-                                        }>;
                                     }>;
                                     has_more_attendee?: boolean;
                                     attachments?: Array<{
@@ -2588,7 +2579,6 @@ export default abstract class Client extends board {
                                     organizer_calendar_id?: string;
                                     summary?: string;
                                     description?: string;
-                                    need_notification?: boolean;
                                     start_time: {
                                         date?: string;
                                         timestamp?: string;
@@ -3141,6 +3131,48 @@ export default abstract class Client extends board {
                             path
                         ),
                         method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * calendar.event.meeting_minute
+         */
+        calendarEventMeetingMinute: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_minute&apiName=create&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=calendar&resource=calendar.event.meeting_minute&version=v4 document }
+             */
+            create: async (
+                payload?: {
+                    path: { calendar_id: string; event_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { doc_url?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_minute`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5342,7 +5374,6 @@ export default abstract class Client extends board {
                                         organizer_calendar_id?: string;
                                         summary?: string;
                                         description?: string;
-                                        need_notification?: boolean;
                                         start_time: {
                                             date?: string;
                                             timestamp?: string;
@@ -5461,7 +5492,7 @@ export default abstract class Client extends board {
                  */
                 delete: async (
                     payload?: {
-                        params?: { need_notification?: boolean };
+                        params?: { need_notification?: "true" | "false" };
                         path: { calendar_id: string; event_id: string };
                     },
                     options?: IRequestOptions
@@ -5641,14 +5672,6 @@ export default abstract class Client extends board {
                                             room_id?: string;
                                             third_party_email?: string;
                                             operate_id?: string;
-                                            resource_customization?: Array<{
-                                                index_key: string;
-                                                input_content?: string;
-                                                options?: Array<{
-                                                    option_key?: string;
-                                                    others_content?: string;
-                                                }>;
-                                            }>;
                                         }>;
                                         has_more_attendee?: boolean;
                                         attachments?: Array<{
@@ -6140,7 +6163,6 @@ export default abstract class Client extends board {
                                         organizer_calendar_id?: string;
                                         summary?: string;
                                         description?: string;
-                                        need_notification?: boolean;
                                         start_time: {
                                             date?: string;
                                             timestamp?: string;
@@ -6710,6 +6732,48 @@ export default abstract class Client extends board {
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * calendar.event.meeting_minute
+             */
+            calendarEventMeetingMinute: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar.event.meeting_minute&apiName=create&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=calendar&resource=calendar.event.meeting_minute&version=v4 document }
+                 */
+                create: async (
+                    payload?: {
+                        path: { calendar_id: string; event_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { doc_url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/:calendar_id/events/:event_id/meeting_minute`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

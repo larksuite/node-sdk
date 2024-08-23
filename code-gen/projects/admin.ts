@@ -114,6 +114,10 @@ export default abstract class Client extends acs {
                                     email_receive_ext_count?: string;
                                     email_send_in_count?: string;
                                     email_receive_in_count?: string;
+                                    search_active_dau?: string;
+                                    total_search_count?: string;
+                                    quick_search_count?: string;
+                                    tab_search_count?: string;
                                 }>;
                             };
                         }
@@ -208,6 +212,10 @@ export default abstract class Client extends acs {
                                     email_receive_ext_count?: string;
                                     email_send_in_count?: string;
                                     email_receive_in_count?: string;
+                                    search_active_flag?: number;
+                                    total_search_count?: string;
+                                    quick_search_count?: string;
+                                    tab_search_count?: string;
                                 }>;
                             };
                         }
@@ -246,6 +254,7 @@ export default abstract class Client extends acs {
                         user_type?: number;
                         object_type?: number;
                         object_value?: string;
+                        ext_filter_object_by_ccm_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -473,6 +482,7 @@ export default abstract class Client extends acs {
                         user_type?: number;
                         object_type?: number;
                         object_value?: string;
+                        ext_filter_object_by_ccm_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -1638,6 +1648,10 @@ export default abstract class Client extends acs {
                                         email_receive_ext_count?: string;
                                         email_send_in_count?: string;
                                         email_receive_in_count?: string;
+                                        search_active_dau?: string;
+                                        total_search_count?: string;
+                                        quick_search_count?: string;
+                                        tab_search_count?: string;
                                     }>;
                                 };
                             }
@@ -1732,6 +1746,10 @@ export default abstract class Client extends acs {
                                         email_receive_ext_count?: string;
                                         email_send_in_count?: string;
                                         email_receive_in_count?: string;
+                                        search_active_flag?: number;
+                                        total_search_count?: string;
+                                        quick_search_count?: string;
+                                        tab_search_count?: string;
                                     }>;
                                 };
                             }
@@ -1770,6 +1788,7 @@ export default abstract class Client extends acs {
                             user_type?: number;
                             object_type?: number;
                             object_value?: string;
+                            ext_filter_object_by_ccm_token?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -1997,6 +2016,7 @@ export default abstract class Client extends acs {
                             user_type?: number;
                             object_type?: number;
                             object_value?: string;
+                            ext_filter_object_by_ccm_token?: string;
                         };
                     },
                     options?: IRequestOptions

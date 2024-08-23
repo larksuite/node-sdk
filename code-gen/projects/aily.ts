@@ -85,6 +85,10 @@ export default abstract class Client extends admin {
                                             file_name?: string;
                                             metadata?: string;
                                             created_at?: string;
+                                            preview_url?: {
+                                                url: string;
+                                                expired_at?: string;
+                                            };
                                         }>;
                                         quote_message_id?: string;
                                         sender?: {
@@ -159,6 +163,10 @@ export default abstract class Client extends admin {
                                             file_name?: string;
                                             metadata?: string;
                                             created_at?: string;
+                                            preview_url?: {
+                                                url: string;
+                                                expired_at?: string;
+                                            };
                                         }>;
                                         quote_message_id?: string;
                                         sender?: {
@@ -274,6 +282,10 @@ export default abstract class Client extends admin {
                                                             file_name?: string;
                                                             metadata?: string;
                                                             created_at?: string;
+                                                            preview_url?: {
+                                                                url: string;
+                                                                expired_at?: string;
+                                                            };
                                                         }>;
                                                         quote_message_id?: string;
                                                         sender?: {
@@ -355,6 +367,10 @@ export default abstract class Client extends admin {
                                             file_name?: string;
                                             metadata?: string;
                                             created_at?: string;
+                                            preview_url?: {
+                                                url: string;
+                                                expired_at?: string;
+                                            };
                                         }>;
                                         quote_message_id?: string;
                                         sender?: {

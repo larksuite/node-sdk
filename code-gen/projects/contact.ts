@@ -495,7 +495,6 @@ export default abstract class Client extends compensation {
                         department_id?: string;
                         leader_user_id?: string;
                         order?: string;
-                        unit_ids?: Array<string>;
                         create_group_chat?: boolean;
                         leaders?: Array<{
                             leaderType: number;
@@ -1087,7 +1086,6 @@ export default abstract class Client extends compensation {
                         parent_department_id?: string;
                         leader_user_id?: string;
                         order?: string;
-                        unit_ids?: Array<string>;
                         create_group_chat?: boolean;
                         leaders?: Array<{
                             leaderType: number;
@@ -1415,7 +1413,6 @@ export default abstract class Client extends compensation {
                         parent_department_id: string;
                         leader_user_id?: string;
                         order?: string;
-                        unit_ids?: Array<string>;
                         create_group_chat?: boolean;
                         leaders?: Array<{
                             leaderType: number;
@@ -6987,7 +6984,6 @@ export default abstract class Client extends compensation {
                             department_id?: string;
                             leader_user_id?: string;
                             order?: string;
-                            unit_ids?: Array<string>;
                             create_group_chat?: boolean;
                             leaders?: Array<{
                                 leaderType: number;
@@ -7582,7 +7578,6 @@ export default abstract class Client extends compensation {
                             parent_department_id?: string;
                             leader_user_id?: string;
                             order?: string;
-                            unit_ids?: Array<string>;
                             create_group_chat?: boolean;
                             leaders?: Array<{
                                 leaderType: number;
@@ -7913,7 +7908,6 @@ export default abstract class Client extends compensation {
                             parent_department_id: string;
                             leader_user_id?: string;
                             order?: string;
-                            unit_ids?: Array<string>;
                             create_group_chat?: boolean;
                             leaders?: Array<{
                                 leaderType: number;

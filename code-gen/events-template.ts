@@ -1626,6 +1626,7 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         department_id?: string;
+        code?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/department/events/updated document }
@@ -1859,6 +1860,7 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         };
+        job_change_id?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/employed document }
@@ -1997,6 +1999,60 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         pre_hire_id?: string;
         field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.employee.domain_event_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: number;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        sub_event_type?: number;
+        operator_user_id?: string;
+        opt_scene?: string;
+        opt_desc?: string;
+        opt_time?: string;
+        opt_id?: string;
+        employment_id?: string;
+        data?: Array<{
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            opt_type?: number;
+            fields?: Array<string>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_change.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        tenant_id?: string;
+        process_id?: string;
+        initiator?: string;
+        operator?: string;
+        updated_time?: string;
+        job_change_id?: string;
+        status?: number;
+        operate_reason?: string;
+        transfer_type?: number;
+        updated_fields?: Array<string>;
     }) => Promise<any> | any;
     /**
          
@@ -2172,6 +2228,7 @@ export interface IHandles extends IOtherEventHandles {
         process_id?: string;
         status?: number;
         biz_type?: string;
+        flow_definition_id?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
@@ -2924,6 +2981,43 @@ export interface IHandles extends IOtherEventHandles {
             };
         };
         modify_time?: string;
+    }) => Promise<any> | any;
+    /**
+     * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/talent/events/deleted document }
+     *
+     * 删除人才
+     *
+     * 删除人才
+     */
+    "hire.talent.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        talent_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "im.chat.access_event.bot_p2p_chat_entered_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        chat_id?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        last_message_id?: string;
+        last_message_create_time?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat/events/disbanded document }

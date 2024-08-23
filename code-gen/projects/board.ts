@@ -33,6 +33,60 @@ export default abstract class Client extends block {
     board = {
         v1: {
             /**
+             * whiteboard
+             */
+            whiteboard: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=board&resource=whiteboard&apiName=download_as_image&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_as_image&project=board&resource=whiteboard&version=v1 document }
+                 *
+                 * 下载画板为图片
+                 */
+                downloadAsImage: async (
+                    payload?: {
+                        path: { whiteboard_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/board/v1/whiteboards/:whiteboard_id/download_as_image`,
+                                path
+                            ),
+                            method: "GET",
+                            headers,
+                            data,
+                            params,
+                            responseType: "stream",
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+
+                    return {
+                        writeFile: async (filePath: string) => {
+                            return new Promise((resolve, reject) => {
+                                const writableStream =
+                                    fs.createWriteStream(filePath);
+                                writableStream.on("finish", () => {
+                                    resolve(filePath);
+                                });
+                                writableStream.on("error", (e) => {
+                                    reject(e);
+                                });
+                                res.pipe(writableStream);
+                            });
+                        },
+                    };
+                },
+            },
+            /**
              * whiteboard.node
              */
             whiteboardNode: {

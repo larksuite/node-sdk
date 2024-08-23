@@ -189,6 +189,7 @@ export default abstract class Client extends document_ai {
                                     indentation_level?:
                                         | "NoIndent"
                                         | "OneLevelIndent";
+                                    sequence?: string;
                                 };
                                 fields: Array<number>;
                             };
@@ -366,6 +367,7 @@ export default abstract class Client extends document_ai {
                                     indentation_level?:
                                         | "NoIndent"
                                         | "OneLevelIndent";
+                                    sequence?: string;
                                 };
                                 fields: Array<number>;
                             };
@@ -425,6 +427,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -562,6 +565,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -699,6 +703,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -836,6 +841,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -973,6 +979,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1110,6 +1117,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1247,6 +1255,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1384,6 +1393,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1521,6 +1531,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1658,6 +1669,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1795,6 +1807,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -1932,6 +1945,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2069,6 +2083,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2206,6 +2221,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2343,6 +2359,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2480,6 +2497,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2617,6 +2635,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -2866,6 +2885,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -3024,6 +3044,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -3349,6 +3370,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3486,6 +3508,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3623,6 +3646,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3760,6 +3784,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -3897,6 +3922,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4034,6 +4060,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4171,6 +4198,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4308,6 +4336,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4445,6 +4474,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4582,6 +4612,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4719,6 +4750,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4856,6 +4888,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -4993,6 +5026,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -5130,6 +5164,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -5267,6 +5302,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -5404,6 +5440,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -5541,6 +5578,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -5779,6 +5817,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -5937,6 +5976,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -6293,6 +6333,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6444,6 +6485,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6595,6 +6637,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6746,6 +6789,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -6897,6 +6941,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7048,6 +7093,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7199,6 +7245,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7350,6 +7397,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7501,6 +7549,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7652,6 +7701,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7803,6 +7853,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -7954,6 +8005,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8105,6 +8157,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8256,6 +8309,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8407,6 +8461,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8558,6 +8613,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8709,6 +8765,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -8977,6 +9034,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -9153,6 +9211,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -9516,6 +9575,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9653,6 +9713,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9790,6 +9851,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -9927,6 +9989,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10064,6 +10127,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10201,6 +10265,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10338,6 +10403,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10475,6 +10541,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10612,6 +10679,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10749,6 +10817,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -10886,6 +10955,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11023,6 +11093,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11160,6 +11231,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11297,6 +11369,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11434,6 +11507,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11571,6 +11645,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11708,6 +11783,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -11946,6 +12022,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -12104,6 +12181,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -12742,6 +12820,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -12879,6 +12958,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13016,6 +13096,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13153,6 +13234,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13290,6 +13372,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13427,6 +13510,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13564,6 +13648,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13701,6 +13786,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13838,6 +13924,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -13975,6 +14062,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14112,6 +14200,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14249,6 +14338,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14386,6 +14476,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14523,6 +14614,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14660,6 +14752,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14797,6 +14890,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -14934,6 +15028,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -15183,6 +15278,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -15341,6 +15437,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -17932,6 +18029,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18069,6 +18167,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18206,6 +18305,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18343,6 +18443,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18480,6 +18581,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18617,6 +18719,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18754,6 +18857,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -18891,6 +18995,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19028,6 +19133,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19165,6 +19271,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19302,6 +19409,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19439,6 +19547,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19576,6 +19685,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19713,6 +19823,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19850,6 +19961,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -19987,6 +20099,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20124,6 +20237,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -20373,6 +20487,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -20531,6 +20646,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -20890,6 +21006,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21041,6 +21158,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21192,6 +21310,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21343,6 +21462,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21494,6 +21614,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21645,6 +21766,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21796,6 +21918,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -21947,6 +22070,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22098,6 +22222,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22249,6 +22374,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22400,6 +22526,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22551,6 +22678,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22702,6 +22830,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -22853,6 +22982,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -23004,6 +23134,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -23155,6 +23286,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -23306,6 +23438,7 @@ export default abstract class Client extends document_ai {
                                                             indentation_level?:
                                                                 | "NoIndent"
                                                                 | "OneLevelIndent";
+                                                            sequence?: string;
                                                         };
                                                         elements: Array<{
                                                             text_run?: {
@@ -23574,6 +23707,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -23750,6 +23884,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -24113,6 +24248,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24250,6 +24386,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24387,6 +24524,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24524,6 +24662,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24661,6 +24800,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24798,6 +24938,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -24935,6 +25076,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25072,6 +25214,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25209,6 +25352,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25346,6 +25490,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25483,6 +25628,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25620,6 +25766,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25757,6 +25904,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -25894,6 +26042,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -26031,6 +26180,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -26168,6 +26318,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -26305,6 +26456,7 @@ export default abstract class Client extends document_ai {
                                             indentation_level?:
                                                 | "NoIndent"
                                                 | "OneLevelIndent";
+                                            sequence?: string;
                                         };
                                         elements: Array<{
                                             text_run?: {
@@ -26543,6 +26695,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -26701,6 +26854,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27302,6 +27456,7 @@ export default abstract class Client extends document_ai {
                                         indentation_level?:
                                             | "NoIndent"
                                             | "OneLevelIndent";
+                                        sequence?: string;
                                     };
                                     fields: Array<number>;
                                 };
@@ -27479,6 +27634,7 @@ export default abstract class Client extends document_ai {
                                         indentation_level?:
                                             | "NoIndent"
                                             | "OneLevelIndent";
+                                        sequence?: string;
                                     };
                                     fields: Array<number>;
                                 };
@@ -27538,6 +27694,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27675,6 +27832,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27812,6 +27970,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -27949,6 +28108,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28086,6 +28246,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28223,6 +28384,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28360,6 +28522,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28497,6 +28660,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28634,6 +28798,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28771,6 +28936,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -28908,6 +29074,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29045,6 +29212,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29182,6 +29350,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29319,6 +29488,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29456,6 +29626,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29593,6 +29764,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29730,6 +29902,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -29981,6 +30154,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -30155,6 +30329,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -30499,6 +30674,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -30636,6 +30812,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -30773,6 +30950,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -30910,6 +31088,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31047,6 +31226,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31184,6 +31364,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31321,6 +31502,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31458,6 +31640,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31595,6 +31778,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31732,6 +31916,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -31869,6 +32054,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32006,6 +32192,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32143,6 +32330,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32280,6 +32468,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32417,6 +32606,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32554,6 +32744,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32691,6 +32882,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -32931,6 +33123,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -33105,6 +33298,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -33480,6 +33674,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -33631,6 +33826,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -33782,6 +33978,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -33933,6 +34130,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34084,6 +34282,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34235,6 +34434,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34386,6 +34586,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34537,6 +34738,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34688,6 +34890,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34839,6 +35042,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -34990,6 +35194,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35141,6 +35346,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35292,6 +35498,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35443,6 +35650,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35594,6 +35802,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35745,6 +35954,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -35896,6 +36106,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -36166,6 +36377,7 @@ export default abstract class Client extends document_ai {
                                                                     indentation_level?:
                                                                         | "NoIndent"
                                                                         | "OneLevelIndent";
+                                                                    sequence?: string;
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -36342,6 +36554,7 @@ export default abstract class Client extends document_ai {
                                                                     indentation_level?:
                                                                         | "NoIndent"
                                                                         | "OneLevelIndent";
+                                                                    sequence?: string;
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -36705,6 +36918,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -36842,6 +37056,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -36979,6 +37194,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37116,6 +37332,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37253,6 +37470,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37390,6 +37608,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37527,6 +37746,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37664,6 +37884,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37801,6 +38022,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -37938,6 +38160,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38075,6 +38298,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38212,6 +38436,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38349,6 +38574,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38486,6 +38712,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38623,6 +38850,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38760,6 +38988,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -38897,6 +39126,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -39137,6 +39367,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -39311,6 +39542,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -39971,6 +40203,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40108,6 +40341,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40245,6 +40479,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40382,6 +40617,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40519,6 +40755,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40656,6 +40893,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40793,6 +41031,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -40930,6 +41169,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41067,6 +41307,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41204,6 +41445,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41341,6 +41583,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41478,6 +41721,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41615,6 +41859,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41752,6 +41997,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -41889,6 +42135,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -42026,6 +42273,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -42163,6 +42411,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -42414,6 +42663,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -42588,6 +42838,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -45201,6 +45452,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45338,6 +45590,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45475,6 +45728,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45612,6 +45866,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45749,6 +46004,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -45886,6 +46142,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46023,6 +46280,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46160,6 +46418,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46297,6 +46556,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46434,6 +46694,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46571,6 +46832,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46708,6 +46970,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46845,6 +47108,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -46982,6 +47246,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -47119,6 +47384,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -47256,6 +47522,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -47393,6 +47660,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -47644,6 +47912,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -47818,6 +48087,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -48196,6 +48466,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -48347,6 +48618,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -48498,6 +48770,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -48649,6 +48922,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -48800,6 +49074,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -48951,6 +49226,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49102,6 +49378,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49253,6 +49530,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49404,6 +49682,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49555,6 +49834,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49706,6 +49986,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -49857,6 +50138,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50008,6 +50290,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50159,6 +50442,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50310,6 +50594,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50461,6 +50746,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50612,6 +50898,7 @@ export default abstract class Client extends document_ai {
                                                                 indentation_level?:
                                                                     | "NoIndent"
                                                                     | "OneLevelIndent";
+                                                                sequence?: string;
                                                             };
                                                             elements: Array<{
                                                                 text_run?: {
@@ -50882,6 +51169,7 @@ export default abstract class Client extends document_ai {
                                                                     indentation_level?:
                                                                         | "NoIndent"
                                                                         | "OneLevelIndent";
+                                                                    sequence?: string;
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -51058,6 +51346,7 @@ export default abstract class Client extends document_ai {
                                                                     indentation_level?:
                                                                         | "NoIndent"
                                                                         | "OneLevelIndent";
+                                                                    sequence?: string;
                                                                 };
                                                                 elements: Array<{
                                                                     text_run?: {
@@ -51421,6 +51710,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -51558,6 +51848,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -51695,6 +51986,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -51832,6 +52124,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -51969,6 +52262,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52106,6 +52400,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52243,6 +52538,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52380,6 +52676,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52517,6 +52814,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52654,6 +52952,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52791,6 +53090,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -52928,6 +53228,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53065,6 +53366,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53202,6 +53504,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53339,6 +53642,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53476,6 +53780,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53613,6 +53918,7 @@ export default abstract class Client extends document_ai {
                                                 indentation_level?:
                                                     | "NoIndent"
                                                     | "OneLevelIndent";
+                                                sequence?: string;
                                             };
                                             elements: Array<{
                                                 text_run?: {
@@ -53853,6 +54159,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {
@@ -54027,6 +54334,7 @@ export default abstract class Client extends document_ai {
                                                     indentation_level?:
                                                         | "NoIndent"
                                                         | "OneLevelIndent";
+                                                    sequence?: string;
                                                 };
                                                 elements: Array<{
                                                     text_run?: {

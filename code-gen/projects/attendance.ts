@@ -95,6 +95,300 @@ export default abstract class Client extends approval {
             },
         },
         /**
+         * archive_rule
+         */
+        archiveRule: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
+             */
+            delReport: async (
+                payload?: {
+                    data: {
+                        month: string;
+                        operator_id: string;
+                        archive_rule_id: string;
+                        user_ids?: Array<string>;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    report_id?: string;
+                                                    report_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
+                                                    };
+                                                    archive_rule_id?: string;
+                                                    archive_rule_name?: {
+                                                        zh?: string;
+                                                        en?: string;
+                                                        ja?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    report_id?: string;
+                                    report_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                    archive_rule_id?: string;
+                                    archive_rule_name?: {
+                                        zh?: string;
+                                        en?: string;
+                                        ja?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
+             */
+            uploadReport: async (
+                payload?: {
+                    data: {
+                        month: string;
+                        operator_id: string;
+                        archive_report_datas?: Array<{
+                            member_id: string;
+                            start_time: string;
+                            end_time: string;
+                            field_datas?: Array<{
+                                code: string;
+                                value?: string;
+                            }>;
+                        }>;
+                        archive_rule_id: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                invalid_code?: Array<string>;
+                                invalid_member_id?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
+             */
+            userStatsFieldsQuery: async (
+                payload?: {
+                    data: {
+                        locale?: string;
+                        month: string;
+                        archive_rule_id: string;
+                        operator_id: string;
+                    };
+                    params: { employee_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                archive_report_fields?: Array<{
+                                    code?: string;
+                                    title?: string;
+                                    upper_titles?: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 文件
          */
         file: {
@@ -2231,12 +2525,7 @@ export default abstract class Client extends approval {
              */
             get: async (
                 payload?: {
-                    params: {
-                        employee_type:
-                            | "open_id"
-                            | "employee_id"
-                            | "employee_no";
-                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
                     path: { user_flow_id: string };
                 },
                 options?: IRequestOptions
@@ -2536,6 +2825,13 @@ export default abstract class Client extends approval {
                                             value: string;
                                         }>;
                                         title?: string;
+                                        duration_num?: {
+                                            day?: string;
+                                            half_day?: string;
+                                            hour?: string;
+                                            half_hour?: string;
+                                            minute?: string;
+                                        };
                                     }>;
                                 }>;
                                 invalid_user_list?: Array<string>;
@@ -3179,6 +3475,303 @@ export default abstract class Client extends approval {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/approval_infos/process`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * archive_rule
+             */
+            archiveRule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=del_report&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=del_report&project=attendance&resource=archive_rule&version=v1 document }
+                 */
+                delReport: async (
+                    payload?: {
+                        data: {
+                            month: string;
+                            operator_id: string;
+                            archive_rule_id: string;
+                            user_ids?: Array<string>;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/del_report`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/attendance/v1/archive_rule`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        report_id?: string;
+                                                        report_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
+                                                        };
+                                                        archive_rule_id?: string;
+                                                        archive_rule_name?: {
+                                                            zh?: string;
+                                                            en?: string;
+                                                            ja?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=attendance&resource=archive_rule&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        report_id?: string;
+                                        report_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                        archive_rule_id?: string;
+                                        archive_rule_name?: {
+                                            zh?: string;
+                                            en?: string;
+                                            ja?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=upload_report&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_report&project=attendance&resource=archive_rule&version=v1 document }
+                 */
+                uploadReport: async (
+                    payload?: {
+                        data: {
+                            month: string;
+                            operator_id: string;
+                            archive_report_datas?: Array<{
+                                member_id: string;
+                                start_time: string;
+                                end_time: string;
+                                field_datas?: Array<{
+                                    code: string;
+                                    value?: string;
+                                }>;
+                            }>;
+                            archive_rule_id: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    invalid_code?: Array<string>;
+                                    invalid_member_id?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/upload_report`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=archive_rule&apiName=user_stats_fields_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_stats_fields_query&project=attendance&resource=archive_rule&version=v1 document }
+                 */
+                userStatsFieldsQuery: async (
+                    payload?: {
+                        data: {
+                            locale?: string;
+                            month: string;
+                            archive_rule_id: string;
+                            operator_id: string;
+                        };
+                        params: { employee_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    archive_report_fields?: Array<{
+                                        code?: string;
+                                        title?: string;
+                                        upper_titles?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/archive_rule/user_stats_fields_query`,
                                 path
                             ),
                             method: "POST",
@@ -5346,10 +5939,7 @@ export default abstract class Client extends approval {
                 get: async (
                     payload?: {
                         params: {
-                            employee_type:
-                                | "open_id"
-                                | "employee_id"
-                                | "employee_no";
+                            employee_type: "employee_id" | "employee_no";
                         };
                         path: { user_flow_id: string };
                     },
@@ -5656,6 +6246,13 @@ export default abstract class Client extends approval {
                                                 value: string;
                                             }>;
                                             title?: string;
+                                            duration_num?: {
+                                                day?: string;
+                                                half_day?: string;
+                                                hour?: string;
+                                                half_hour?: string;
+                                                minute?: string;
+                                            };
                                         }>;
                                     }>;
                                     invalid_user_list?: Array<string>;

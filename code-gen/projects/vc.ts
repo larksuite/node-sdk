@@ -605,6 +605,7 @@ export default abstract class Client extends unified_kms_log {
                                         id?: string;
                                         user_type?: number;
                                     };
+                                    meeting_connect?: boolean;
                                     status?: number;
                                     participant_count?: string;
                                     participant_count_accumulated?: string;
@@ -831,6 +832,7 @@ export default abstract class Client extends unified_kms_log {
                                                     url?: string;
                                                     meeting_no?: string;
                                                     password?: string;
+                                                    meeting_connect?: boolean;
                                                 }>;
                                             };
                                         },
@@ -890,6 +892,7 @@ export default abstract class Client extends unified_kms_log {
                                     url?: string;
                                     meeting_no?: string;
                                     password?: string;
+                                    meeting_connect?: boolean;
                                 }>;
                             };
                         }
@@ -1947,6 +1950,7 @@ export default abstract class Client extends unified_kms_log {
                                 }>;
                             }>;
                             meeting_initial_type?: number;
+                            meeting_connect?: boolean;
                             call_setting?: {
                                 callee: {
                                     id?: string;
@@ -2097,6 +2101,7 @@ export default abstract class Client extends unified_kms_log {
                                             }>;
                                         }>;
                                         meeting_initial_type?: number;
+                                        meeting_connect?: boolean;
                                         call_setting?: {
                                             callee: {
                                                 id?: string;
@@ -2175,6 +2180,7 @@ export default abstract class Client extends unified_kms_log {
                                         id?: string;
                                         user_type?: number;
                                     };
+                                    meeting_connect?: boolean;
                                     status?: number;
                                     participant_count?: string;
                                     participant_count_accumulated?: string;
@@ -2241,6 +2247,7 @@ export default abstract class Client extends unified_kms_log {
                                 }>;
                             }>;
                             meeting_initial_type?: number;
+                            meeting_connect?: boolean;
                             call_setting?: {
                                 callee: {
                                     id?: string;
@@ -5035,6 +5042,7 @@ export default abstract class Client extends unified_kms_log {
                                             id?: string;
                                             user_type?: number;
                                         };
+                                        meeting_connect?: boolean;
                                         status?: number;
                                         participant_count?: string;
                                         participant_count_accumulated?: string;
@@ -5264,6 +5272,7 @@ export default abstract class Client extends unified_kms_log {
                                                         url?: string;
                                                         meeting_no?: string;
                                                         password?: string;
+                                                        meeting_connect?: boolean;
                                                     }>;
                                                 };
                                             },
@@ -5323,6 +5332,7 @@ export default abstract class Client extends unified_kms_log {
                                         url?: string;
                                         meeting_no?: string;
                                         password?: string;
+                                        meeting_connect?: boolean;
                                     }>;
                                 };
                             }
@@ -6395,6 +6405,7 @@ export default abstract class Client extends unified_kms_log {
                                     }>;
                                 }>;
                                 meeting_initial_type?: number;
+                                meeting_connect?: boolean;
                                 call_setting?: {
                                     callee: {
                                         id?: string;
@@ -6548,6 +6559,7 @@ export default abstract class Client extends unified_kms_log {
                                                 }>;
                                             }>;
                                             meeting_initial_type?: number;
+                                            meeting_connect?: boolean;
                                             call_setting?: {
                                                 callee: {
                                                     id?: string;
@@ -6626,6 +6638,7 @@ export default abstract class Client extends unified_kms_log {
                                             id?: string;
                                             user_type?: number;
                                         };
+                                        meeting_connect?: boolean;
                                         status?: number;
                                         participant_count?: string;
                                         participant_count_accumulated?: string;
@@ -6692,6 +6705,7 @@ export default abstract class Client extends unified_kms_log {
                                     }>;
                                 }>;
                                 meeting_initial_type?: number;
+                                meeting_connect?: boolean;
                                 call_setting?: {
                                     callee: {
                                         id?: string;
