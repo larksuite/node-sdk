@@ -1473,6 +1473,7 @@ export default abstract class Client extends approval {
                             late_on_base_on_time_type?: number;
                         };
                     };
+                    params?: { employee_type?: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2308,6 +2309,7 @@ export default abstract class Client extends approval {
                             month: number;
                             user_id: string;
                             day_no: number;
+                            is_clear_schedule?: boolean;
                         }>;
                         operator_id?: string;
                     };
@@ -2331,6 +2333,7 @@ export default abstract class Client extends approval {
                                     month: number;
                                     user_id: string;
                                     day_no: number;
+                                    is_clear_schedule?: boolean;
                                 }>;
                             };
                         }
@@ -2385,6 +2388,7 @@ export default abstract class Client extends approval {
                                     month: number;
                                     user_id: string;
                                     day_no: number;
+                                    is_clear_schedule?: boolean;
                                 }>;
                             };
                         }
@@ -4873,6 +4877,9 @@ export default abstract class Client extends approval {
                                 late_on_base_on_time_type?: number;
                             };
                         };
+                        params?: {
+                            employee_type?: "employee_id" | "employee_no";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5715,6 +5722,7 @@ export default abstract class Client extends approval {
                                 month: number;
                                 user_id: string;
                                 day_no: number;
+                                is_clear_schedule?: boolean;
                             }>;
                             operator_id?: string;
                         };
@@ -5740,6 +5748,7 @@ export default abstract class Client extends approval {
                                         month: number;
                                         user_id: string;
                                         day_no: number;
+                                        is_clear_schedule?: boolean;
                                     }>;
                                 };
                             }
@@ -5796,6 +5805,7 @@ export default abstract class Client extends approval {
                                         month: number;
                                         user_id: string;
                                         day_no: number;
+                                        is_clear_schedule?: boolean;
                                     }>;
                                 };
                             }

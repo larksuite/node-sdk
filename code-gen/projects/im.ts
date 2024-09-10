@@ -10070,6 +10070,56 @@ export default abstract class Client extends human_authentication {
              */
             feedCard: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=bot_time_sentive&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=bot_time_sentive&project=im&resource=feed_card&version=v2 document }
+                 */
+                botTimeSentive: async (
+                    payload?: {
+                        data: {
+                            bot_id?: string;
+                            time_sensitive: boolean;
+                            user_ids: Array<string>;
+                        };
+                        params: {
+                            user_id_type: "open_id" | "user_id" | "union_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    failed_user_reasons?: Array<{
+                                        error_code?: number;
+                                        error_message?: string;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/feed_cards/bot_time_sentive`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=feed_card&apiName=patch&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=im&resource=feed_card&version=v2 document }

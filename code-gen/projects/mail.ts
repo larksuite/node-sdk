@@ -2930,6 +2930,53 @@ export default abstract class Client extends lingo {
                     });
             },
         },
+        /**
+         * user_mailbox.message
+         */
+        userMailboxMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=send&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.message&version=v1 document }
+             */
+            send: async (
+                payload?: {
+                    data?: {
+                        raw?: string;
+                        subject?: string;
+                        to?: Array<{ mail_address: string; name?: string }>;
+                        cc?: Array<{ mail_address: string; name?: string }>;
+                        bcc?: Array<{ mail_address: string; name?: string }>;
+                        head_from?: { mail_address?: string; name?: string };
+                        body_html?: string;
+                        body_plain_text?: string;
+                        attachments?: Array<{ body: string; filename: string }>;
+                        thread_id?: string;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
              * 邮件组别名
@@ -5878,6 +5925,65 @@ export default abstract class Client extends lingo {
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.message
+             */
+            userMailboxMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=send&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.message&version=v1 document }
+                 */
+                send: async (
+                    payload?: {
+                        data?: {
+                            raw?: string;
+                            subject?: string;
+                            to?: Array<{ mail_address: string; name?: string }>;
+                            cc?: Array<{ mail_address: string; name?: string }>;
+                            bcc?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            head_from?: {
+                                mail_address?: string;
+                                name?: string;
+                            };
+                            body_html?: string;
+                            body_plain_text?: string;
+                            attachments?: Array<{
+                                body: string;
+                                filename: string;
+                            }>;
+                            thread_id?: string;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

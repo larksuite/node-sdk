@@ -137,6 +137,7 @@ export class Client extends RequestTemplate {
         return {
             params: { ...get(payload, 'params', {}), ...targetOptions.params },
             headers: {
+                'User-Agent': 'oapi-node-sdk/1.0.0',
                 ...get(payload, 'headers', {}),
                 ...targetOptions.headers,
             },

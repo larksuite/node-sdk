@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/node-sdk",
-  "version": "1.33.1",
+  "version": "1.34.0",
   "description": "larksuite open sdk for nodejs",
   "keywords": [
     "feishu",
