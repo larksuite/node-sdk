@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import okr from "./okr";
 
 // auto gen

@@ -180,6 +180,20 @@ const resp = await client.im.file.get({
 });
 await resp.writeFile(`filepath.suffix`);
 ````
+If you want to customize the processing of the stream, you can call the getReadableStream method to obtain the stream, such as writing the stream to a file:
+```typescript
+import * as fs from 'fs';
+
+const resp = await client.im.file.get({
+    path: {
+        file_key: 'file key',
+    },
+});
+const readableStream = resp.getReadableStream();
+const writableStream = fs.createWriteStream('file url');
+readableStream.pipe(writableStream);
+```
+> Note: The stream can only be consumed once, if writeFile is used to consume the stream, getReadableStream will report an error when obtaining the stream/the obtained stream is empty; If you need to consume multiple streams, you can use getReadableStream to obtain the stream, then read the data in the stream for caching, and use the cached data to the consumer.
 
 #### Normal call
 Some old versions of the open interface cannot generate corresponding semantic calling methods, and you need to use the request method on the client to make manual calls:
