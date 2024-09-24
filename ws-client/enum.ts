@@ -30,3 +30,10 @@ export enum MessageType {
   ping = "ping",
   pong = "pong"
 }
+
+export enum HttpStatusCode {
+  // 2xx Success
+  ok = 200,
+  // 5xx Server errors
+  internal_server_error = 500,
+}

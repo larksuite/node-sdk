@@ -11,7 +11,7 @@ import defaultHttpInstance from '@node-sdk/http';
 import * as protoBuf from './proto-buf';
 import { WSConfig } from './ws-config';
 import { DataCache } from './data-cache';
-import { ErrorCode, FrameType, HeaderKey, MessageType } from './enum';
+import { ErrorCode, FrameType, HeaderKey, HttpStatusCode, MessageType } from './enum';
 import { pbbp2 } from './proto-buf/pbbp2';
 
 interface IConstructorParams {
@@ -317,17 +317,26 @@ export class WSClient {
 
     this.logger.debug('[ws]', `receive message, message_type: ${type}; message_id: ${message_id}; trace_id: ${trace_id}; data: ${mergedData.data}`);
 
+    const respPayload: { code: number, data?: string } = {
+      code: HttpStatusCode.ok,
+    }
+
     const startTime = Date.now();
-    await this.eventDispatcher?.invoke(mergedData, { needCheck: false });
+    try {
+      const result = await this.eventDispatcher?.invoke(mergedData, { needCheck: false });
+      if (result) {
+        respPayload.data = Buffer.from(JSON.stringify(result)).toString("base64")
+      }
+    } catch (error) {
+      respPayload.code = HttpStatusCode.internal_server_error;
+      this.logger.error('[ws]', `invoke event failed, message_type: ${type}; message_id: ${message_id}; trace_id: ${trace_id}; error: ${error}`);
+    }
     const endTime = Date.now();
 
     this.sendMessage({
       ...data,
       headers: [...data.headers, {key: HeaderKey.biz_rt, value: String(startTime - endTime)}],
-      payload: new TextEncoder().encode(JSON.stringify({
-        // http code
-        code: 200
-      }))
+      payload: new TextEncoder().encode(JSON.stringify(respPayload))
     })
   }
 
@@ -335,7 +344,7 @@ export class WSClient {
     const wsInstance = this.wsConfig.getWSInstance();
     if (wsInstance?.readyState === WebSocket.OPEN) {
       const resp = pbbp2.Frame.encode(data).finish();
-      this.wsConfig.getWSInstance()?.send(resp, (err) => {
+      this.wsConfig.getWSInstance()?.send(resp,(err) => {
         if (err) {
           this.logger.error('[ws]', 'send data failed');
         }
@@ -346,14 +355,14 @@ export class WSClient {
   async start(params: { eventDispatcher: EventDispatcher }) {
     this.logger.info(
       '[ws]',
-      `receive events through persistent connection only available in self-build & Feishu app, Configured in:
+      `receive events or callbacks through persistent connection only available in self-build & Feishu app, Configured in:
         Developer Console(开发者后台) 
           ->
-        Events and Callbacks(事件配置)
+        Events and Callbacks(事件与回调)
           -> 
-        Mode of event subscription(配置订阅方式)
+        Mode of event/callback subscription(订阅方式)
           -> 
-        Receive events through persistent connection(使用长连接接收事件)`
+        Receive events/callbacks through persistent connection(使用 长连接 接收事件/回调)`
     );
 
     const { eventDispatcher } = params;
