@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import human_authentication from "./human_authentication";
 
 // auto gen
@@ -66,6 +67,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -119,6 +122,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -167,6 +172,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -235,6 +242,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -272,6 +281,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -416,6 +427,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -452,6 +465,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -555,6 +570,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -605,6 +622,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -640,6 +659,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -773,6 +794,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -808,6 +831,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -941,6 +966,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1020,6 +1047,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1079,6 +1108,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1133,6 +1164,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1194,6 +1227,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1245,6 +1280,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1280,6 +1317,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1397,6 +1436,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1440,6 +1481,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1476,6 +1519,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1564,6 +1609,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1701,6 +1748,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1792,6 +1841,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1882,6 +1933,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1973,6 +2026,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2013,6 +2068,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2128,6 +2185,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2172,6 +2231,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2270,6 +2331,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2339,6 +2402,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2407,6 +2472,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2476,6 +2543,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2570,6 +2639,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2611,6 +2682,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2653,6 +2726,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2716,6 +2791,8 @@ export default abstract class Client extends human_authentication {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2755,6 +2832,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2839,6 +2918,8 @@ export default abstract class Client extends human_authentication {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2878,6 +2959,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2995,6 +3078,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3031,6 +3116,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3107,6 +3194,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3181,6 +3270,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3219,6 +3310,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -3381,6 +3474,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3462,6 +3557,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3499,6 +3596,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3554,6 +3653,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3611,6 +3712,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3686,6 +3789,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3752,6 +3857,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3801,6 +3908,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3850,6 +3959,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3899,6 +4010,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3992,6 +4105,8 @@ export default abstract class Client extends human_authentication {
                         data: targetData,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4078,6 +4193,8 @@ export default abstract class Client extends human_authentication {
                         data: targetData,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4160,6 +4277,8 @@ export default abstract class Client extends human_authentication {
                         data: targetData,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4217,6 +4336,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4268,6 +4389,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4304,6 +4427,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4430,6 +4555,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4473,6 +4600,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4559,6 +4688,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4595,6 +4726,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4631,6 +4764,8 @@ export default abstract class Client extends human_authentication {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4749,6 +4884,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4830,6 +4967,8 @@ export default abstract class Client extends human_authentication {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4875,6 +5014,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4928,6 +5069,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4976,6 +5119,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5044,6 +5189,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5084,6 +5231,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5232,6 +5381,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5271,6 +5422,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5376,6 +5529,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5426,6 +5581,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5461,6 +5618,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5594,6 +5755,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5629,6 +5792,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5762,6 +5929,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5846,6 +6015,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5905,6 +6076,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5959,6 +6132,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6020,6 +6195,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6071,6 +6248,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6106,6 +6285,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6223,6 +6406,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6266,6 +6451,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6305,6 +6492,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6393,6 +6582,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6532,6 +6723,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6623,6 +6816,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6713,6 +6908,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6804,6 +7001,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6844,6 +7043,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6959,6 +7162,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7006,6 +7211,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7104,6 +7311,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7173,6 +7382,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7241,6 +7452,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7310,6 +7523,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7404,6 +7619,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7448,6 +7665,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7493,6 +7712,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7556,6 +7777,8 @@ export default abstract class Client extends human_authentication {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7595,6 +7818,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7679,6 +7904,8 @@ export default abstract class Client extends human_authentication {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7718,6 +7945,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7835,6 +8064,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7874,6 +8105,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7950,6 +8183,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8024,6 +8259,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8062,6 +8299,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -8226,6 +8467,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8307,6 +8550,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8347,6 +8592,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8405,6 +8652,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8462,6 +8711,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8537,6 +8788,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8603,6 +8856,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8652,6 +8907,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8701,6 +8958,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8750,6 +9009,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8843,6 +9104,8 @@ export default abstract class Client extends human_authentication {
                             data: targetData,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8929,6 +9192,8 @@ export default abstract class Client extends human_authentication {
                             data: targetData,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9011,6 +9276,8 @@ export default abstract class Client extends human_authentication {
                             data: targetData,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9068,6 +9335,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9119,6 +9388,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9155,6 +9426,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -9281,6 +9556,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9324,6 +9601,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9410,6 +9689,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9449,6 +9730,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9485,6 +9768,10 @@ export default abstract class Client extends human_authentication {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -9603,6 +9890,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9684,6 +9973,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9742,6 +10033,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9842,6 +10135,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9934,6 +10229,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -9977,6 +10274,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10033,6 +10332,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10071,6 +10372,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10143,6 +10446,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10198,6 +10503,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10248,6 +10555,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10305,6 +10614,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10368,6 +10679,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -10409,6 +10722,8 @@ export default abstract class Client extends human_authentication {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

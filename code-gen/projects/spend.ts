@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import speech_to_text from "./speech_to_text";
 
 // auto gen

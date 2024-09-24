@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import docx from "./docx";
 
 // auto gen
@@ -76,6 +77,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -111,6 +114,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -197,6 +202,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -286,6 +293,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -380,6 +389,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -457,6 +468,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -495,6 +508,8 @@ export default abstract class Client extends docx {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -677,6 +692,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -713,6 +730,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -757,6 +776,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -793,6 +814,8 @@ export default abstract class Client extends docx {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -939,6 +962,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -991,6 +1016,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1070,6 +1097,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1113,6 +1142,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1181,6 +1212,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1238,6 +1271,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1282,6 +1317,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1319,6 +1356,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1400,6 +1439,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1437,6 +1478,8 @@ export default abstract class Client extends docx {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1568,6 +1611,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1621,6 +1666,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1664,6 +1711,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1705,6 +1754,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1760,6 +1811,8 @@ export default abstract class Client extends docx {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1805,6 +1858,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1850,6 +1905,8 @@ export default abstract class Client extends docx {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1906,6 +1963,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1974,6 +2033,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2031,6 +2092,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2078,6 +2141,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2128,6 +2193,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2189,6 +2256,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2227,6 +2296,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2283,6 +2354,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2319,6 +2392,8 @@ export default abstract class Client extends docx {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2447,6 +2522,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2495,6 +2572,8 @@ export default abstract class Client extends docx {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2612,6 +2691,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2664,6 +2745,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2715,6 +2798,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2739,7 +2824,7 @@ export default abstract class Client extends docx {
              */
             batchGetTmpDownloadUrl: async (
                 payload?: {
-                    params: { file_tokens: number; extra?: string };
+                    params: { file_tokens: Array<string>; extra?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2768,6 +2853,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2806,6 +2893,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2904,6 +2993,8 @@ export default abstract class Client extends docx {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2949,6 +3040,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2994,6 +3087,8 @@ export default abstract class Client extends docx {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3063,6 +3158,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3143,6 +3240,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3206,6 +3305,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3304,6 +3405,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3404,6 +3507,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3471,6 +3576,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3554,6 +3661,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3604,6 +3713,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3704,6 +3815,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3785,6 +3898,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3880,6 +3995,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3934,6 +4051,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3976,6 +4095,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4025,6 +4146,8 @@ export default abstract class Client extends docx {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4077,6 +4200,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4112,6 +4237,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4202,6 +4329,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4295,6 +4424,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4393,6 +4524,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4474,6 +4607,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4512,6 +4647,10 @@ export default abstract class Client extends docx {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4698,6 +4837,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4739,6 +4880,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4788,6 +4931,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4824,6 +4969,10 @@ export default abstract class Client extends docx {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4970,6 +5119,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5025,6 +5176,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5104,6 +5257,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5147,6 +5302,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5215,6 +5372,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5272,6 +5431,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5319,6 +5480,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5356,6 +5519,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5437,6 +5602,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5474,6 +5641,10 @@ export default abstract class Client extends docx {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5605,6 +5776,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5658,6 +5831,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5704,6 +5879,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5745,6 +5922,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5800,6 +5979,8 @@ export default abstract class Client extends docx {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5845,6 +6026,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5893,6 +6076,8 @@ export default abstract class Client extends docx {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5949,6 +6134,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6017,6 +6204,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6074,6 +6263,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6124,6 +6315,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6177,6 +6370,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6238,6 +6433,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6279,6 +6476,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6335,6 +6534,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6371,6 +6572,10 @@ export default abstract class Client extends docx {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6504,6 +6709,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6552,6 +6759,10 @@ export default abstract class Client extends docx {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6669,6 +6880,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6721,6 +6934,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6772,6 +6987,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6796,7 +7013,7 @@ export default abstract class Client extends docx {
                  */
                 batchGetTmpDownloadUrl: async (
                     payload?: {
-                        params: { file_tokens: number; extra?: string };
+                        params: { file_tokens: Array<string>; extra?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -6825,6 +7042,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6863,6 +7082,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6961,6 +7182,8 @@ export default abstract class Client extends docx {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7006,6 +7229,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7054,6 +7279,8 @@ export default abstract class Client extends docx {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7123,6 +7350,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7203,6 +7432,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7266,6 +7497,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7364,6 +7597,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7464,6 +7699,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7534,6 +7771,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7617,6 +7856,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7670,6 +7911,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7770,6 +8013,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7851,6 +8096,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7948,6 +8195,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8002,6 +8251,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8047,6 +8298,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8096,6 +8349,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8184,6 +8439,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8295,6 +8552,8 @@ export default abstract class Client extends docx {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

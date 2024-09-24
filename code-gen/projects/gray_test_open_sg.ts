@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import feelgood from "./feelgood";
 
 // auto gen
@@ -78,6 +79,8 @@ export default abstract class Client extends feelgood {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -123,6 +126,8 @@ export default abstract class Client extends feelgood {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -157,6 +162,8 @@ export default abstract class Client extends feelgood {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -255,6 +262,8 @@ export default abstract class Client extends feelgood {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -309,6 +318,8 @@ export default abstract class Client extends feelgood {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -354,6 +365,8 @@ export default abstract class Client extends feelgood {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -388,6 +401,10 @@ export default abstract class Client extends feelgood {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -486,6 +503,8 @@ export default abstract class Client extends feelgood {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import unified_kms_log from "./unified_kms_log";
 
 // auto gen
@@ -67,6 +68,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -210,6 +213,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -250,6 +255,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -326,6 +333,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -378,6 +387,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -429,6 +440,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -480,6 +493,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -528,6 +543,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -569,6 +586,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -655,6 +674,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -710,6 +731,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -766,6 +789,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -802,6 +827,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -920,6 +947,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -972,6 +1001,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1022,6 +1053,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1069,6 +1102,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1106,6 +1141,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1142,6 +1179,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1188,6 +1227,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1343,6 +1384,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1388,6 +1431,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1546,6 +1591,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1591,6 +1638,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1805,6 +1854,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1869,6 +1920,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1927,6 +1980,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2023,6 +2078,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2059,6 +2116,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2145,6 +2204,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2230,6 +2291,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2321,6 +2384,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2372,6 +2437,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2412,6 +2479,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2467,6 +2536,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2509,6 +2580,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2579,6 +2652,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2638,6 +2713,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2704,6 +2781,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2773,6 +2852,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -2791,7 +2872,7 @@ export default abstract class Client extends unified_kms_log {
                         need_topic?: boolean;
                         start_time: string;
                         end_time: string;
-                        room_ids: number;
+                        room_ids: Array<string>;
                         is_exclude?: boolean;
                         page_size?: number;
                         page_token?: string;
@@ -2817,6 +2898,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2907,7 +2990,7 @@ export default abstract class Client extends unified_kms_log {
                         need_topic?: boolean;
                         start_time: string;
                         end_time: string;
-                        room_ids: number;
+                        room_ids: Array<string>;
                         is_exclude?: boolean;
                         page_size?: number;
                         page_token?: string;
@@ -2958,6 +3041,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3046,6 +3131,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3080,6 +3167,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3146,6 +3235,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3181,6 +3272,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -3326,6 +3419,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3392,6 +3487,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3447,6 +3544,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3522,6 +3621,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3621,6 +3722,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3710,6 +3813,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3755,6 +3860,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3800,6 +3907,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3859,6 +3968,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3893,6 +4004,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3943,6 +4056,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -3977,6 +4092,8 @@ export default abstract class Client extends unified_kms_log {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4093,6 +4210,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4143,6 +4262,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4182,6 +4303,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4223,6 +4346,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4318,6 +4443,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4472,6 +4599,8 @@ export default abstract class Client extends unified_kms_log {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -4515,6 +4644,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -4658,6 +4791,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4698,6 +4833,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4774,6 +4911,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4826,6 +4965,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4877,6 +5018,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4928,6 +5071,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -4976,6 +5121,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5020,6 +5167,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5106,6 +5255,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5164,6 +5315,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5220,6 +5373,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5256,6 +5411,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5374,6 +5533,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5429,6 +5590,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5482,6 +5645,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5532,6 +5697,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5572,6 +5739,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5611,6 +5780,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5657,6 +5828,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -5812,6 +5987,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -5857,6 +6034,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6015,6 +6196,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6060,6 +6243,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -6274,6 +6461,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6338,6 +6527,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6396,6 +6587,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6492,6 +6685,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6531,6 +6726,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6617,6 +6814,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6702,6 +6901,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6793,6 +6994,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6846,6 +7049,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6889,6 +7094,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6946,6 +7153,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -6993,6 +7202,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7065,6 +7276,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7127,6 +7340,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7196,6 +7411,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7267,6 +7484,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7285,7 +7504,7 @@ export default abstract class Client extends unified_kms_log {
                             need_topic?: boolean;
                             start_time: string;
                             end_time: string;
-                            room_ids: number;
+                            room_ids: Array<string>;
                             is_exclude?: boolean;
                             page_size?: number;
                             page_token?: string;
@@ -7311,6 +7530,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -7401,7 +7624,7 @@ export default abstract class Client extends unified_kms_log {
                             need_topic?: boolean;
                             start_time: string;
                             end_time: string;
-                            room_ids: number;
+                            room_ids: Array<string>;
                             is_exclude?: boolean;
                             page_size?: number;
                             page_token?: string;
@@ -7452,6 +7675,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7540,6 +7765,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7577,6 +7804,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7643,6 +7872,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7678,6 +7909,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -7823,6 +8058,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7889,6 +8126,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -7947,6 +8186,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8022,6 +8263,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8121,6 +8364,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8213,6 +8458,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8258,6 +8505,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8303,6 +8552,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8362,6 +8613,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8399,6 +8652,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8449,6 +8704,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8483,6 +8740,10 @@ export default abstract class Client extends unified_kms_log {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -8599,6 +8860,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8649,6 +8912,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8691,6 +8956,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8732,6 +8999,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8830,6 +9099,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -8984,6 +9255,8 @@ export default abstract class Client extends unified_kms_log {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

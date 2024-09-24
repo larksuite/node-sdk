@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import edu from "./edu";
 
 // auto gen
@@ -67,6 +68,8 @@ export default abstract class Client extends edu {
                         data,
                         params,
                         responseType: "stream",
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -112,12 +115,12 @@ export default abstract class Client extends edu {
                 payload?: {
                     params?: {
                         view?: "basic" | "full";
-                        status?: number;
-                        type?: number;
+                        status?: Array<number>;
+                        type?: Array<number>;
                         start_time?: string;
                         end_time?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
-                        user_ids?: number;
+                        user_ids?: Array<string>;
                         page_token?: string;
                         page_size?: number;
                     };
@@ -142,6 +145,8 @@ export default abstract class Client extends edu {
                             headers: pickBy(innerPayload.headers, identity),
                             params: pickBy(innerPayload.params, identity),
                             data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -379,12 +384,12 @@ export default abstract class Client extends edu {
                 payload?: {
                     params?: {
                         view?: "basic" | "full";
-                        status?: number;
-                        type?: number;
+                        status?: Array<number>;
+                        type?: Array<number>;
                         start_time?: string;
                         end_time?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
-                        user_ids?: number;
+                        user_ids?: Array<string>;
                         page_token?: string;
                         page_size?: number;
                     };
@@ -577,6 +582,8 @@ export default abstract class Client extends edu {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -620,6 +627,8 @@ export default abstract class Client extends edu {
                             data,
                             params,
                             responseType: "stream",
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -665,12 +674,12 @@ export default abstract class Client extends edu {
                     payload?: {
                         params?: {
                             view?: "basic" | "full";
-                            status?: number;
-                            type?: number;
+                            status?: Array<number>;
+                            type?: Array<number>;
                             start_time?: string;
                             end_time?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
-                            user_ids?: number;
+                            user_ids?: Array<string>;
                             page_token?: string;
                             page_size?: number;
                         };
@@ -695,6 +704,10 @@ export default abstract class Client extends edu {
                                 headers: pickBy(innerPayload.headers, identity),
                                 params: pickBy(innerPayload.params, identity),
                                 data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
                             })
                             .catch((e) => {
                                 this.logger.error(formatErrors(e));
@@ -932,12 +945,12 @@ export default abstract class Client extends edu {
                     payload?: {
                         params?: {
                             view?: "basic" | "full";
-                            status?: number;
-                            type?: number;
+                            status?: Array<number>;
+                            type?: Array<number>;
                             start_time?: string;
                             end_time?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
-                            user_ids?: number;
+                            user_ids?: Array<string>;
                             page_token?: string;
                             page_size?: number;
                         };
@@ -1133,6 +1146,8 @@ export default abstract class Client extends edu {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

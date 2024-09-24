@@ -24,4 +24,5 @@ export interface HttpRequestOptions<D> {
 	params?: Record<string, any>;
 	data?: D;
 	responseType?: ResponseType;
+	paramsSerializer?: (params: Record<string, any>) => string;
 }

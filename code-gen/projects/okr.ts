@@ -9,6 +9,7 @@ import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
+import { stringify } from "qs";
 import moments from "./moments";
 
 // auto gen
@@ -78,6 +79,8 @@ export default abstract class Client extends moments {
                             ...headers,
                             "Content-Type": "multipart/form-data",
                         },
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -110,7 +113,7 @@ export default abstract class Client extends moments {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
-                        okr_ids: number;
+                        okr_ids: Array<string>;
                         lang?: string;
                     };
                 },
@@ -209,6 +212,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -259,6 +264,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -313,6 +320,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -355,6 +364,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -403,6 +414,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -578,6 +591,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -612,6 +627,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -717,6 +734,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -882,6 +901,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -910,8 +931,8 @@ export default abstract class Client extends moments {
                             | "union_id"
                             | "open_id"
                             | "people_admin_id";
-                        user_ids: number;
-                        period_ids: number;
+                        user_ids: Array<string>;
+                        period_ids: Array<string>;
                     };
                 },
                 options?: IRequestOptions
@@ -954,6 +975,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -987,7 +1010,7 @@ export default abstract class Client extends moments {
                         offset: string;
                         limit: string;
                         lang?: string;
-                        period_ids?: number;
+                        period_ids?: Array<string>;
                     };
                     path?: { user_id?: string };
                 },
@@ -1087,6 +1110,8 @@ export default abstract class Client extends moments {
                         data,
                         params,
                         headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
                     })
                     .catch((e) => {
                         this.logger.error(formatErrors(e));
@@ -1141,6 +1166,8 @@ export default abstract class Client extends moments {
                                 ...headers,
                                 "Content-Type": "multipart/form-data",
                             },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1173,7 +1200,7 @@ export default abstract class Client extends moments {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
-                            okr_ids: number;
+                            okr_ids: Array<string>;
                             lang?: string;
                         };
                     },
@@ -1272,6 +1299,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1322,6 +1351,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1376,6 +1407,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1418,6 +1451,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1466,6 +1501,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1645,6 +1682,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1682,6 +1721,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1791,6 +1832,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1960,6 +2003,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1988,8 +2033,8 @@ export default abstract class Client extends moments {
                                 | "union_id"
                                 | "open_id"
                                 | "people_admin_id";
-                            user_ids: number;
-                            period_ids: number;
+                            user_ids: Array<string>;
+                            period_ids: Array<string>;
                         };
                     },
                     options?: IRequestOptions
@@ -2032,6 +2077,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -2065,7 +2112,7 @@ export default abstract class Client extends moments {
                             offset: string;
                             limit: string;
                             lang?: string;
-                            period_ids?: number;
+                            period_ids?: Array<string>;
                         };
                         path?: { user_id?: string };
                     },
@@ -2165,6 +2212,8 @@ export default abstract class Client extends moments {
                             data,
                             params,
                             headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));

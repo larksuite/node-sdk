@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/node-sdk",
-  "version": "1.36.0",
+  "version": "1.37.0",
   "description": "larksuite open sdk for nodejs",
   "keywords": [
     "feishu",
@@ -36,6 +36,7 @@
     "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
     "protobufjs": "^7.2.6",
+    "qs": "^6.13.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.merge": "^4.6.7",
     "@types/lodash.pick": "^4.4.7",
+    "@types/qs": "^6.9.16",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/parser": "^5.27.1",
     "body-parser": "^1.20.1",
