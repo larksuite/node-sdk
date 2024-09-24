@@ -179,6 +179,20 @@ const resp = await client.im.file.get({
 });
 await resp.writeFile(`filepath.suffix`);
 ```
+如果想要自定义对流的处理，可以调用getReadableStream方法获取到流，如将流写入文件：
+```typescript
+import * as fs from 'fs';
+
+const resp = await client.im.file.get({
+    path: {
+        file_key: 'file key',
+    },
+});
+const readableStream = resp.getReadableStream();
+const writableStream = fs.createWriteStream('file url');
+readableStream.pipe(writableStream);
+```
+> 注意：流只能被消费一次，即如果使用了writeFile消费了流，则getReadableStream获取流会报错/获取到的流为空；如需消费多次流，可以使用getReadableStream获取流，然后读取流中的数据做缓存，将缓存的数据给消费方使用。
 
 #### 普通调用
 某些老版本的开放接口，无法生成对应的语义化调用方法，需要使用client上的request方法来进行手动调用：

@@ -1863,6 +1863,36 @@ export interface IHandles extends IOtherEventHandles {
         job_change_id?: string;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "corehr.job_data.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_data.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/job_data/events/employed document }
      *
      * 员工完成入职
@@ -1886,6 +1916,21 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_data.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_data_id?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/corehr-v1/offboarding/events/updated document }
@@ -2032,6 +2077,34 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.job_change.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employment_id?: string;
+        target_user_id?: {
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        };
+        job_change_id?: string;
+        transfer_mode?: number;
+        transfer_type_unique_identifier?: string;
+        transfer_reason_unique_identifier?: string;
+        process_id?: string;
+        effective_date?: string;
+        status?: number;
+        transfer_key?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.job_change.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2053,6 +2126,8 @@ export interface IHandles extends IOtherEventHandles {
         operate_reason?: string;
         transfer_type?: number;
         updated_fields?: Array<string>;
+        transform_type?: string;
+        transform_reason?: string;
     }) => Promise<any> | any;
     /**
          
@@ -3513,6 +3588,167 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         room_name?: string;
         room_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.comment.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        id?: string;
+        post_id?: string;
+        reply_comment_id?: string;
+        root_comment_id?: string;
+        user_type?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.comment.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+        post_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.dislike.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_type?: number;
+        entity_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.dislike.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        entity_type?: number;
+        entity_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.post.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        category_ids?: Array<string>;
+        link?: string;
+        user_type?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.post.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.post_statistics.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        post_id?: string;
+        statistics_type?: number;
+        statistics?: { share_count?: number };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.reaction.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        entity_id?: string;
+        id?: string;
+        entity_type?: number;
+        user_type?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "moments.reaction.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        user_id?: { union_id?: string; user_id?: string; open_id?: string };
+        entity_id?: string;
+        id?: string;
+        entity_type?: number;
+        user_type?: number;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task-comment/events/updated document }

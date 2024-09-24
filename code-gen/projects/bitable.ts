@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import baike from "./baike";
 
 // auto gen
@@ -2896,6 +2897,7 @@ export default abstract class Client extends baike {
                                 avatar_url?: string;
                             };
                             last_modified_time?: number;
+                            shared_url?: string;
                             record_url?: string;
                         }>;
                     };
@@ -2974,6 +2976,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 }>;
                             };
@@ -3128,6 +3131,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 }>;
                                 forbidden_record_ids?: Array<string>;
@@ -3220,6 +3224,7 @@ export default abstract class Client extends baike {
                                 avatar_url?: string;
                             };
                             last_modified_time?: number;
+                            shared_url?: string;
                             record_url?: string;
                         }>;
                     };
@@ -3297,6 +3302,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 }>;
                             };
@@ -3444,6 +3450,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 };
                             };
@@ -3605,6 +3612,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 };
                             };
@@ -3760,6 +3768,7 @@ export default abstract class Client extends baike {
                                                         avatar_url?: string;
                                                     };
                                                     last_modified_time?: number;
+                                                    shared_url?: string;
                                                     record_url?: string;
                                                 }>;
                                             };
@@ -3880,6 +3889,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 }>;
                             };
@@ -4071,6 +4081,7 @@ export default abstract class Client extends baike {
                                                         avatar_url?: string;
                                                     };
                                                     last_modified_time?: number;
+                                                    shared_url?: string;
                                                     record_url?: string;
                                                 }>;
                                                 has_more?: boolean;
@@ -4226,6 +4237,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 }>;
                                 has_more?: boolean;
@@ -4379,6 +4391,7 @@ export default abstract class Client extends baike {
                                         avatar_url?: string;
                                     };
                                     last_modified_time?: number;
+                                    shared_url?: string;
                                     record_url?: string;
                                 };
                             };
@@ -7838,6 +7851,7 @@ export default abstract class Client extends baike {
                                     avatar_url?: string;
                                 };
                                 last_modified_time?: number;
+                                shared_url?: string;
                                 record_url?: string;
                             }>;
                         };
@@ -7916,6 +7930,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     }>;
                                 };
@@ -8070,6 +8085,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     }>;
                                     forbidden_record_ids?: Array<string>;
@@ -8162,6 +8178,7 @@ export default abstract class Client extends baike {
                                     avatar_url?: string;
                                 };
                                 last_modified_time?: number;
+                                shared_url?: string;
                                 record_url?: string;
                             }>;
                         };
@@ -8239,6 +8256,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     }>;
                                 };
@@ -8386,6 +8404,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     };
                                 };
@@ -8550,6 +8569,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     };
                                 };
@@ -8705,6 +8725,7 @@ export default abstract class Client extends baike {
                                                             avatar_url?: string;
                                                         };
                                                         last_modified_time?: number;
+                                                        shared_url?: string;
                                                         record_url?: string;
                                                     }>;
                                                 };
@@ -8825,6 +8846,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     }>;
                                 };
@@ -9019,6 +9041,7 @@ export default abstract class Client extends baike {
                                                             avatar_url?: string;
                                                         };
                                                         last_modified_time?: number;
+                                                        shared_url?: string;
                                                         record_url?: string;
                                                     }>;
                                                     has_more?: boolean;
@@ -9177,6 +9200,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     }>;
                                     has_more?: boolean;
@@ -9330,6 +9354,7 @@ export default abstract class Client extends baike {
                                             avatar_url?: string;
                                         };
                                         last_modified_time?: number;
+                                        shared_url?: string;
                                         record_url?: string;
                                     };
                                 };

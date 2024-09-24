@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import approval from "./approval";
 
 // auto gen
@@ -427,8 +428,18 @@ export default abstract class Client extends approval {
                         throw e;
                     });
 
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
                 return {
                     writeFile: async (filePath: string) => {
+                        checkIsReadable();
                         return new Promise((resolve, reject) => {
                             const writableStream =
                                 fs.createWriteStream(filePath);
@@ -440,6 +451,10 @@ export default abstract class Client extends approval {
                             });
                             res.pipe(writableStream);
                         });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res as Readable;
                     },
                 };
             },
@@ -1473,6 +1488,7 @@ export default abstract class Client extends approval {
                             late_on_base_on_time_type?: number;
                         };
                     };
+                    params?: { employee_type?: "employee_id" | "employee_no" };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2308,6 +2324,7 @@ export default abstract class Client extends approval {
                             month: number;
                             user_id: string;
                             day_no: number;
+                            is_clear_schedule?: boolean;
                         }>;
                         operator_id?: string;
                     };
@@ -2331,6 +2348,7 @@ export default abstract class Client extends approval {
                                     month: number;
                                     user_id: string;
                                     day_no: number;
+                                    is_clear_schedule?: boolean;
                                 }>;
                             };
                         }
@@ -2385,6 +2403,7 @@ export default abstract class Client extends approval {
                                     month: number;
                                     user_id: string;
                                     day_no: number;
+                                    is_clear_schedule?: boolean;
                                 }>;
                             };
                         }
@@ -3824,8 +3843,18 @@ export default abstract class Client extends approval {
                             throw e;
                         });
 
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
                     return {
                         writeFile: async (filePath: string) => {
+                            checkIsReadable();
                             return new Promise((resolve, reject) => {
                                 const writableStream =
                                     fs.createWriteStream(filePath);
@@ -3837,6 +3866,10 @@ export default abstract class Client extends approval {
                                 });
                                 res.pipe(writableStream);
                             });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res as Readable;
                         },
                     };
                 },
@@ -4873,6 +4906,9 @@ export default abstract class Client extends approval {
                                 late_on_base_on_time_type?: number;
                             };
                         };
+                        params?: {
+                            employee_type?: "employee_id" | "employee_no";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -5715,6 +5751,7 @@ export default abstract class Client extends approval {
                                 month: number;
                                 user_id: string;
                                 day_no: number;
+                                is_clear_schedule?: boolean;
                             }>;
                             operator_id?: string;
                         };
@@ -5740,6 +5777,7 @@ export default abstract class Client extends approval {
                                         month: number;
                                         user_id: string;
                                         day_no: number;
+                                        is_clear_schedule?: boolean;
                                     }>;
                                 };
                             }
@@ -5796,6 +5834,7 @@ export default abstract class Client extends approval {
                                         month: number;
                                         user_id: string;
                                         day_no: number;
+                                        is_clear_schedule?: boolean;
                                     }>;
                                 };
                             }

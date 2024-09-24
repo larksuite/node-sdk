@@ -99,7 +99,7 @@ export class UserAccessToken {
 
       if (refreshAccessInfo.code === 0 && refreshAccessInfo.data) {
         await this.update({
-          key: {
+          [key]: {
             token: refreshAccessInfo.data.access_token,
             refreshToken: refreshAccessInfo.data.refresh_token,
             expiredTime: this.calibrateTime(refreshAccessInfo.data.expires_in)
@@ -124,7 +124,7 @@ export class UserAccessToken {
 
       if (oidcAccessInfo.code === 0 && oidcAccessInfo.data) {
         await this.update({
-          key: {
+          [key]: {
             token: oidcAccessInfo.data.access_token,
             refreshToken: oidcAccessInfo.data.refresh_token,
             expiredTime: this.calibrateTime(oidcAccessInfo.data.expires_in)

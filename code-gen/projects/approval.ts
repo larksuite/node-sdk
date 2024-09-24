@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import application from "./application";
 
 // auto gen
@@ -2302,7 +2303,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 原生审批任务
+         * 审批查询
          */
         task: {
             /**
@@ -5130,7 +5131,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 原生审批任务
+             * 审批查询
              */
             task: {
                 /**

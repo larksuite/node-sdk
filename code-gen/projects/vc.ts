@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import unified_kms_log from "./unified_kms_log";
 
 // auto gen
@@ -255,8 +256,18 @@ export default abstract class Client extends unified_kms_log {
                         throw e;
                     });
 
+                const checkIsReadable = () => {
+                    const consumedError =
+                        "The stream has already been consumed";
+                    if (!res.readable) {
+                        this.logger.error(consumedError);
+                        throw new Error(consumedError);
+                    }
+                };
+
                 return {
                     writeFile: async (filePath: string) => {
+                        checkIsReadable();
                         return new Promise((resolve, reject) => {
                             const writableStream =
                                 fs.createWriteStream(filePath);
@@ -268,6 +279,10 @@ export default abstract class Client extends unified_kms_log {
                             });
                             res.pipe(writableStream);
                         });
+                    },
+                    getReadableStream: () => {
+                        checkIsReadable();
+                        return res as Readable;
                     },
                 };
             },
@@ -4689,8 +4704,18 @@ export default abstract class Client extends unified_kms_log {
                             throw e;
                         });
 
+                    const checkIsReadable = () => {
+                        const consumedError =
+                            "The stream has already been consumed";
+                        if (!res.readable) {
+                            this.logger.error(consumedError);
+                            throw new Error(consumedError);
+                        }
+                    };
+
                     return {
                         writeFile: async (filePath: string) => {
+                            checkIsReadable();
                             return new Promise((resolve, reject) => {
                                 const writableStream =
                                     fs.createWriteStream(filePath);
@@ -4702,6 +4727,10 @@ export default abstract class Client extends unified_kms_log {
                                 });
                                 res.pipe(writableStream);
                             });
+                        },
+                        getReadableStream: () => {
+                            checkIsReadable();
+                            return res as Readable;
                         },
                     };
                 },

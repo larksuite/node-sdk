@@ -8,6 +8,7 @@ import { formatErrors } from "@node-sdk/client/utils";
 import { IRequestOptions } from "@node-sdk/code-gen/types";
 import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
+import { Readable } from "stream";
 import helpdesk from "./helpdesk";
 
 // auto gen
@@ -311,7 +312,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 入职
+         * 投递
          */
         application: {
             /**
@@ -5862,6 +5863,208 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * interviewer
+         */
+        interviewer: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_ids?: number;
+                        verify_status?: number;
+                        earliest_update_time?: string;
+                        latest_update_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interviewers`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    user_id?: string;
+                                                    verify_status?: number;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interviewer&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interviewer&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_ids?: number;
+                        verify_status?: number;
+                        earliest_update_time?: string;
+                        latest_update_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    user_id?: string;
+                                    verify_status?: number;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interviewers`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interviewer&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=hire&resource=interviewer&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        interviewer: {
+                            user_id?: string;
+                            verify_status?: number;
+                        };
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path?: { interviewer_id?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                interviewer?: {
+                                    user_id?: string;
+                                    verify_status?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/interviewers/:interviewer_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 职位
          */
         job: {
@@ -9064,6 +9267,66 @@ export default abstract class Client extends helpdesk {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * minutes
+         */
+        minutes: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=minutes&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=minutes&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        interview_id: string;
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                minutes?: {
+                                    sentences?: Array<{
+                                        content?: string;
+                                        speak_time?: string;
+                                        user_type?: number;
+                                        speaker_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                };
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/minutes`,
+                            path
+                        ),
+                        method: "GET",
                         data,
                         params,
                         headers,
@@ -12421,6 +12684,7 @@ export default abstract class Client extends helpdesk {
                                     email?: string;
                                     identification_type?: number;
                                     identification_number?: string;
+                                    is_onboarded?: boolean;
                                 }>;
                             };
                         }
@@ -12658,7 +12922,7 @@ export default abstract class Client extends helpdesk {
                         operator_account_type?: number;
                         resume_attachment_id?: string;
                         basic_info: {
-                            name: string;
+                            name?: string;
                             mobile?: string;
                             mobile_country_code?: string;
                             email?: string;
@@ -15017,6 +15281,201 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * 权限
+         */
+        userRole: {
+            listWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id?: string;
+                        role_id?: string;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/user_roles`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    user_id?: string;
+                                                    role_id?: string;
+                                                    modify_time?: string;
+                                                    role_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    role_description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    business_management_scopes?: Array<{
+                                                        entity?: {
+                                                            code?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        scope_rule?: {
+                                                            rule_type?: number;
+                                                        };
+                                                    }>;
+                                                }>;
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=user_role&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/user_role/list document }
+             *
+             * 获取用户角色列表
+             *
+             * 获取用户角色列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        user_id?: string;
+                        role_id?: string;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    user_id?: string;
+                                    role_id?: string;
+                                    modify_time?: string;
+                                    role_name?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    role_description?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                    };
+                                    business_management_scopes?: Array<{
+                                        entity?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        scope_rule?: { rule_type?: number };
+                                    }>;
+                                }>;
+                                has_more?: boolean;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/user_roles`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * website.channel
          */
         websiteChannel: {
@@ -17340,7 +17799,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 入职
+             * 投递
              */
             application: {
                 /**
@@ -22999,6 +23458,208 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * interviewer
+             */
+            interviewer: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_ids?: number;
+                            verify_status?: number;
+                            earliest_update_time?: string;
+                            latest_update_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/interviewers`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        user_id?: string;
+                                                        verify_status?: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interviewer&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interviewer&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_ids?: number;
+                            verify_status?: number;
+                            earliest_update_time?: string;
+                            latest_update_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        user_id?: string;
+                                        verify_status?: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interviewers`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interviewer&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=hire&resource=interviewer&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            interviewer: {
+                                user_id?: string;
+                                verify_status?: number;
+                            };
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path?: { interviewer_id?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    interviewer?: {
+                                        user_id?: string;
+                                        verify_status?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/interviewers/:interviewer_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 职位
              */
             job: {
@@ -26234,6 +26895,66 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * minutes
+             */
+            minutes: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=minutes&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=minutes&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            interview_id: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    minutes?: {
+                                        sentences?: Array<{
+                                            content?: string;
+                                            speak_time?: string;
+                                            user_type?: number;
+                                            speaker_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    };
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/minutes`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -29623,6 +30344,7 @@ export default abstract class Client extends helpdesk {
                                         email?: string;
                                         identification_type?: number;
                                         identification_number?: string;
+                                        is_onboarded?: boolean;
                                     }>;
                                 };
                             }
@@ -29860,7 +30582,7 @@ export default abstract class Client extends helpdesk {
                             operator_account_type?: number;
                             resume_attachment_id?: string;
                             basic_info: {
-                                name: string;
+                                name?: string;
                                 mobile?: string;
                                 mobile_country_code?: string;
                                 email?: string;
@@ -32224,6 +32946,201 @@ export default abstract class Client extends helpdesk {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 权限
+             */
+            userRole: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id?: string;
+                            role_id?: string;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/user_roles`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        user_id?: string;
+                                                        role_id?: string;
+                                                        modify_time?: string;
+                                                        role_name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        role_description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        business_management_scopes?: Array<{
+                                                            entity?: {
+                                                                code?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            scope_rule?: {
+                                                                rule_type?: number;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=user_role&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/user_role/list document }
+                 *
+                 * 获取用户角色列表
+                 *
+                 * 获取用户角色列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            user_id?: string;
+                            role_id?: string;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        user_id?: string;
+                                        role_id?: string;
+                                        modify_time?: string;
+                                        role_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        role_description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        business_management_scopes?: Array<{
+                                            entity?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            scope_rule?: { rule_type?: number };
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/user_roles`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
