@@ -2270,11 +2270,13 @@ export default abstract class Client extends human_authentication {
                                 | "url"
                                 | "file"
                                 | "files_resources"
-                                | "images_videos";
+                                | "images_videos"
+                                | "task";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
                                 meeting_minute?: string;
+                                task?: string;
                             };
                             tab_config?: {
                                 icon_key?: string;
@@ -2309,11 +2311,13 @@ export default abstract class Client extends human_authentication {
                                         | "url"
                                         | "file"
                                         | "files_resources"
-                                        | "images_videos";
+                                        | "images_videos"
+                                        | "task";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
                                         meeting_minute?: string;
+                                        task?: string;
                                     };
                                     tab_config?: {
                                         icon_key?: string;
@@ -2380,11 +2384,13 @@ export default abstract class Client extends human_authentication {
                                         | "url"
                                         | "file"
                                         | "files_resources"
-                                        | "images_videos";
+                                        | "images_videos"
+                                        | "task";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
                                         meeting_minute?: string;
+                                        task?: string;
                                     };
                                     tab_config?: {
                                         icon_key?: string;
@@ -2450,11 +2456,13 @@ export default abstract class Client extends human_authentication {
                                         | "url"
                                         | "file"
                                         | "files_resources"
-                                        | "images_videos";
+                                        | "images_videos"
+                                        | "task";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
                                         meeting_minute?: string;
+                                        task?: string;
                                     };
                                     tab_config?: {
                                         icon_key?: string;
@@ -2521,11 +2529,13 @@ export default abstract class Client extends human_authentication {
                                         | "url"
                                         | "file"
                                         | "files_resources"
-                                        | "images_videos";
+                                        | "images_videos"
+                                        | "task";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
                                         meeting_minute?: string;
+                                        task?: string;
                                     };
                                     tab_config?: {
                                         icon_key?: string;
@@ -2578,11 +2588,13 @@ export default abstract class Client extends human_authentication {
                                 | "url"
                                 | "file"
                                 | "files_resources"
-                                | "images_videos";
+                                | "images_videos"
+                                | "task";
                             tab_content?: {
                                 url?: string;
                                 doc?: string;
                                 meeting_minute?: string;
+                                task?: string;
                             };
                             tab_config?: {
                                 icon_key?: string;
@@ -2617,11 +2629,13 @@ export default abstract class Client extends human_authentication {
                                         | "url"
                                         | "file"
                                         | "files_resources"
-                                        | "images_videos";
+                                        | "images_videos"
+                                        | "task";
                                     tab_content?: {
                                         url?: string;
                                         doc?: string;
                                         meeting_minute?: string;
+                                        task?: string;
                                     };
                                     tab_config?: {
                                         icon_key?: string;
@@ -7250,11 +7264,13 @@ export default abstract class Client extends human_authentication {
                                     | "url"
                                     | "file"
                                     | "files_resources"
-                                    | "images_videos";
+                                    | "images_videos"
+                                    | "task";
                                 tab_content?: {
                                     url?: string;
                                     doc?: string;
                                     meeting_minute?: string;
+                                    task?: string;
                                 };
                                 tab_config?: {
                                     icon_key?: string;
@@ -7289,11 +7305,13 @@ export default abstract class Client extends human_authentication {
                                             | "url"
                                             | "file"
                                             | "files_resources"
-                                            | "images_videos";
+                                            | "images_videos"
+                                            | "task";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
                                             meeting_minute?: string;
+                                            task?: string;
                                         };
                                         tab_config?: {
                                             icon_key?: string;
@@ -7360,11 +7378,13 @@ export default abstract class Client extends human_authentication {
                                             | "url"
                                             | "file"
                                             | "files_resources"
-                                            | "images_videos";
+                                            | "images_videos"
+                                            | "task";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
                                             meeting_minute?: string;
+                                            task?: string;
                                         };
                                         tab_config?: {
                                             icon_key?: string;
@@ -7430,11 +7450,13 @@ export default abstract class Client extends human_authentication {
                                             | "url"
                                             | "file"
                                             | "files_resources"
-                                            | "images_videos";
+                                            | "images_videos"
+                                            | "task";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
                                             meeting_minute?: string;
+                                            task?: string;
                                         };
                                         tab_config?: {
                                             icon_key?: string;
@@ -7501,11 +7523,13 @@ export default abstract class Client extends human_authentication {
                                             | "url"
                                             | "file"
                                             | "files_resources"
-                                            | "images_videos";
+                                            | "images_videos"
+                                            | "task";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
                                             meeting_minute?: string;
+                                            task?: string;
                                         };
                                         tab_config?: {
                                             icon_key?: string;
@@ -7558,11 +7582,13 @@ export default abstract class Client extends human_authentication {
                                     | "url"
                                     | "file"
                                     | "files_resources"
-                                    | "images_videos";
+                                    | "images_videos"
+                                    | "task";
                                 tab_content?: {
                                     url?: string;
                                     doc?: string;
                                     meeting_minute?: string;
+                                    task?: string;
                                 };
                                 tab_config?: {
                                     icon_key?: string;
@@ -7597,11 +7623,13 @@ export default abstract class Client extends human_authentication {
                                             | "url"
                                             | "file"
                                             | "files_resources"
-                                            | "images_videos";
+                                            | "images_videos"
+                                            | "task";
                                         tab_content?: {
                                             url?: string;
                                             doc?: string;
                                             meeting_minute?: string;
+                                            task?: string;
                                         };
                                         tab_config?: {
                                             icon_key?: string;

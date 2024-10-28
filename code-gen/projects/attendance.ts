@@ -1516,10 +1516,16 @@ export default abstract class Client extends approval {
                             middle_time_type?: number;
                             fixed_middle_time?: string;
                         };
+                        shift_attendance_time_config?: {
+                            attendance_time?: number;
+                            on_attendance_time?: number;
+                            off_attendance_time?: number;
+                        };
                         late_off_late_on_setting?: {
                             late_off_base_on_time_type?: number;
                             late_on_base_on_time_type?: number;
                         };
+                        id?: string;
                     };
                     params?: { employee_type?: "employee_id" | "employee_no" };
                 },
@@ -1582,10 +1588,16 @@ export default abstract class Client extends approval {
                                         middle_time_type?: number;
                                         fixed_middle_time?: string;
                                     };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
                                     late_off_late_on_setting?: {
                                         late_off_base_on_time_type?: number;
                                         late_on_base_on_time_type?: number;
                                     };
+                                    id?: string;
                                 };
                             };
                         }
@@ -1713,10 +1725,16 @@ export default abstract class Client extends approval {
                                     middle_time_type?: number;
                                     fixed_middle_time?: string;
                                 };
+                                shift_attendance_time_config?: {
+                                    attendance_time?: number;
+                                    on_attendance_time?: number;
+                                    off_attendance_time?: number;
+                                };
                                 late_off_late_on_setting?: {
                                     late_off_base_on_time_type?: number;
                                     late_on_base_on_time_type?: number;
                                 };
+                                id?: string;
                             };
                         }
                     >({
@@ -1846,10 +1864,16 @@ export default abstract class Client extends approval {
                                                         middle_time_type?: number;
                                                         fixed_middle_time?: string;
                                                     };
+                                                    shift_attendance_time_config?: {
+                                                        attendance_time?: number;
+                                                        on_attendance_time?: number;
+                                                        off_attendance_time?: number;
+                                                    };
                                                     late_off_late_on_setting?: {
                                                         late_off_base_on_time_type?: number;
                                                         late_on_base_on_time_type?: number;
                                                     };
+                                                    id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1944,10 +1968,16 @@ export default abstract class Client extends approval {
                                         middle_time_type?: number;
                                         fixed_middle_time?: string;
                                     };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
                                     late_off_late_on_setting?: {
                                         late_off_base_on_time_type?: number;
                                         late_on_base_on_time_type?: number;
                                     };
+                                    id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -2041,10 +2071,16 @@ export default abstract class Client extends approval {
                                     middle_time_type?: number;
                                     fixed_middle_time?: string;
                                 };
+                                shift_attendance_time_config?: {
+                                    attendance_time?: number;
+                                    on_attendance_time?: number;
+                                    off_attendance_time?: number;
+                                };
                                 late_off_late_on_setting?: {
                                     late_off_base_on_time_type?: number;
                                     late_on_base_on_time_type?: number;
                                 };
+                                id?: string;
                             };
                         }
                     >({
@@ -2100,6 +2136,9 @@ export default abstract class Client extends approval {
                                 default_locale: string;
                                 reason: string;
                                 idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
                             }>;
                             leaves?: Array<{
                                 uniq_id?: string;
@@ -2125,6 +2164,9 @@ export default abstract class Client extends approval {
                                 end_time: string;
                                 reason?: string;
                                 idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
                             }>;
                             trips?: Array<{
                                 start_time: string;
@@ -2133,6 +2175,9 @@ export default abstract class Client extends approval {
                                 approve_pass_time: string;
                                 approve_apply_time: string;
                                 idempotent_id?: string;
+                                correct_process_id?: Array<string>;
+                                cancel_process_id?: Array<string>;
+                                process_id?: Array<string>;
                             }>;
                             time_zone?: string;
                         };
@@ -2171,6 +2216,9 @@ export default abstract class Client extends approval {
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     leaves?: Array<{
                                         approval_id?: string;
@@ -2200,6 +2248,9 @@ export default abstract class Client extends approval {
                                         end_time: string;
                                         reason?: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -2209,6 +2260,9 @@ export default abstract class Client extends approval {
                                         approve_pass_time: string;
                                         approve_apply_time: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     time_zone?: string;
                                 };
@@ -2290,6 +2344,9 @@ export default abstract class Client extends approval {
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     leaves?: Array<{
                                         approval_id?: string;
@@ -2319,6 +2376,9 @@ export default abstract class Client extends approval {
                                         end_time: string;
                                         reason?: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     trips?: Array<{
                                         approval_id?: string;
@@ -2328,6 +2388,9 @@ export default abstract class Client extends approval {
                                         approve_pass_time: string;
                                         approve_apply_time: string;
                                         idempotent_id?: string;
+                                        correct_process_id?: Array<string>;
+                                        cancel_process_id?: Array<string>;
+                                        process_id?: Array<string>;
                                     }>;
                                     time_zone?: string;
                                 }>;
@@ -5016,10 +5079,16 @@ export default abstract class Client extends approval {
                                 middle_time_type?: number;
                                 fixed_middle_time?: string;
                             };
+                            shift_attendance_time_config?: {
+                                attendance_time?: number;
+                                on_attendance_time?: number;
+                                off_attendance_time?: number;
+                            };
                             late_off_late_on_setting?: {
                                 late_off_base_on_time_type?: number;
                                 late_on_base_on_time_type?: number;
                             };
+                            id?: string;
                         };
                         params?: {
                             employee_type?: "employee_id" | "employee_no";
@@ -5084,10 +5153,16 @@ export default abstract class Client extends approval {
                                             middle_time_type?: number;
                                             fixed_middle_time?: string;
                                         };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
                                         late_off_late_on_setting?: {
                                             late_off_base_on_time_type?: number;
                                             late_on_base_on_time_type?: number;
                                         };
+                                        id?: string;
                                     };
                                 };
                             }
@@ -5218,10 +5293,16 @@ export default abstract class Client extends approval {
                                         middle_time_type?: number;
                                         fixed_middle_time?: string;
                                     };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
                                     late_off_late_on_setting?: {
                                         late_off_base_on_time_type?: number;
                                         late_on_base_on_time_type?: number;
                                     };
+                                    id?: string;
                                 };
                             }
                         >({
@@ -5353,10 +5434,16 @@ export default abstract class Client extends approval {
                                                             middle_time_type?: number;
                                                             fixed_middle_time?: string;
                                                         };
+                                                        shift_attendance_time_config?: {
+                                                            attendance_time?: number;
+                                                            on_attendance_time?: number;
+                                                            off_attendance_time?: number;
+                                                        };
                                                         late_off_late_on_setting?: {
                                                             late_off_base_on_time_type?: number;
                                                             late_on_base_on_time_type?: number;
                                                         };
+                                                        id?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5451,10 +5538,16 @@ export default abstract class Client extends approval {
                                             middle_time_type?: number;
                                             fixed_middle_time?: string;
                                         };
+                                        shift_attendance_time_config?: {
+                                            attendance_time?: number;
+                                            on_attendance_time?: number;
+                                            off_attendance_time?: number;
+                                        };
                                         late_off_late_on_setting?: {
                                             late_off_base_on_time_type?: number;
                                             late_on_base_on_time_type?: number;
                                         };
+                                        id?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5548,10 +5641,16 @@ export default abstract class Client extends approval {
                                         middle_time_type?: number;
                                         fixed_middle_time?: string;
                                     };
+                                    shift_attendance_time_config?: {
+                                        attendance_time?: number;
+                                        on_attendance_time?: number;
+                                        off_attendance_time?: number;
+                                    };
                                     late_off_late_on_setting?: {
                                         late_off_base_on_time_type?: number;
                                         late_on_base_on_time_type?: number;
                                     };
+                                    id?: string;
                                 };
                             }
                         >({
@@ -5607,6 +5706,9 @@ export default abstract class Client extends approval {
                                     default_locale: string;
                                     reason: string;
                                     idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
                                 }>;
                                 leaves?: Array<{
                                     uniq_id?: string;
@@ -5632,6 +5734,9 @@ export default abstract class Client extends approval {
                                     end_time: string;
                                     reason?: string;
                                     idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
                                 }>;
                                 trips?: Array<{
                                     start_time: string;
@@ -5640,6 +5745,9 @@ export default abstract class Client extends approval {
                                     approve_pass_time: string;
                                     approve_apply_time: string;
                                     idempotent_id?: string;
+                                    correct_process_id?: Array<string>;
+                                    cancel_process_id?: Array<string>;
+                                    process_id?: Array<string>;
                                 }>;
                                 time_zone?: string;
                             };
@@ -5680,6 +5788,9 @@ export default abstract class Client extends approval {
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         leaves?: Array<{
                                             approval_id?: string;
@@ -5709,6 +5820,9 @@ export default abstract class Client extends approval {
                                             end_time: string;
                                             reason?: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -5718,6 +5832,9 @@ export default abstract class Client extends approval {
                                             approve_pass_time: string;
                                             approve_apply_time: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         time_zone?: string;
                                     };
@@ -5801,6 +5918,9 @@ export default abstract class Client extends approval {
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         leaves?: Array<{
                                             approval_id?: string;
@@ -5830,6 +5950,9 @@ export default abstract class Client extends approval {
                                             end_time: string;
                                             reason?: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         trips?: Array<{
                                             approval_id?: string;
@@ -5839,6 +5962,9 @@ export default abstract class Client extends approval {
                                             approve_pass_time: string;
                                             approve_apply_time: string;
                                             idempotent_id?: string;
+                                            correct_process_id?: Array<string>;
+                                            cancel_process_id?: Array<string>;
+                                            process_id?: Array<string>;
                                         }>;
                                         time_zone?: string;
                                     }>;

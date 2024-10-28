@@ -34,7 +34,7 @@ export default abstract class Client extends application {
      */
     approval = {
         /**
-         * 事件
+         * 原生审批定义
          */
         approval: {
             /**
@@ -1039,7 +1039,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 原生审批实例
+         * 审批查询
          */
         instance: {
             /**
@@ -2358,7 +2358,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批任务
          */
         task: {
             /**
@@ -2902,7 +2902,7 @@ export default abstract class Client extends application {
         },
         v4: {
             /**
-             * 事件
+             * 原生审批定义
              */
             approval: {
                 /**
@@ -3921,7 +3921,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 原生审批实例
+             * 审批查询
              */
             instance: {
                 /**
@@ -5262,7 +5262,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批任务
              */
             task: {
                 /**

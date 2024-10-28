@@ -253,7 +253,6 @@ export default abstract class Client extends compensation {
                                     unit_ids?: Array<string>;
                                     member_count?: number;
                                     status?: { is_deleted?: boolean };
-                                    create_group_chat?: boolean;
                                     leaders?: Array<{
                                         leaderType: number;
                                         leaderID: string;
@@ -373,7 +372,6 @@ export default abstract class Client extends compensation {
                                                     status?: {
                                                         is_deleted?: boolean;
                                                     };
-                                                    create_group_chat?: boolean;
                                                     leaders?: Array<{
                                                         leaderType: number;
                                                         leaderID: string;
@@ -455,7 +453,6 @@ export default abstract class Client extends compensation {
                                     unit_ids?: Array<string>;
                                     member_count?: number;
                                     status?: { is_deleted?: boolean };
-                                    create_group_chat?: boolean;
                                     leaders?: Array<{
                                         leaderType: number;
                                         leaderID: string;
@@ -1272,7 +1269,6 @@ export default abstract class Client extends compensation {
                                                     status?: {
                                                         is_deleted?: boolean;
                                                     };
-                                                    create_group_chat?: boolean;
                                                     leaders?: Array<{
                                                         leaderType: number;
                                                         leaderID: string;
@@ -1353,7 +1349,6 @@ export default abstract class Client extends compensation {
                                     unit_ids?: Array<string>;
                                     member_count?: number;
                                     status?: { is_deleted?: boolean };
-                                    create_group_chat?: boolean;
                                     leaders?: Array<{
                                         leaderType: number;
                                         leaderID: string;
@@ -5055,6 +5050,7 @@ export default abstract class Client extends compensation {
                             processing_type: "1" | "2" | "3";
                             acceptor_user_id?: string;
                         };
+                        anycross_acceptor_user_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -6914,7 +6910,6 @@ export default abstract class Client extends compensation {
                                         unit_ids?: Array<string>;
                                         member_count?: number;
                                         status?: { is_deleted?: boolean };
-                                        create_group_chat?: boolean;
                                         leaders?: Array<{
                                             leaderType: number;
                                             leaderID: string;
@@ -7036,7 +7031,6 @@ export default abstract class Client extends compensation {
                                                         status?: {
                                                             is_deleted?: boolean;
                                                         };
-                                                        create_group_chat?: boolean;
                                                         leaders?: Array<{
                                                             leaderType: number;
                                                             leaderID: string;
@@ -7118,7 +7112,6 @@ export default abstract class Client extends compensation {
                                         unit_ids?: Array<string>;
                                         member_count?: number;
                                         status?: { is_deleted?: boolean };
-                                        create_group_chat?: boolean;
                                         leaders?: Array<{
                                             leaderType: number;
                                             leaderID: string;
@@ -7944,7 +7937,6 @@ export default abstract class Client extends compensation {
                                                         status?: {
                                                             is_deleted?: boolean;
                                                         };
-                                                        create_group_chat?: boolean;
                                                         leaders?: Array<{
                                                             leaderType: number;
                                                             leaderID: string;
@@ -8025,7 +8017,6 @@ export default abstract class Client extends compensation {
                                         unit_ids?: Array<string>;
                                         member_count?: number;
                                         status?: { is_deleted?: boolean };
-                                        create_group_chat?: boolean;
                                         leaders?: Array<{
                                             leaderType: number;
                                             leaderID: string;
@@ -11815,6 +11806,7 @@ export default abstract class Client extends compensation {
                                 processing_type: "1" | "2" | "3";
                                 acceptor_user_id?: string;
                             };
+                            anycross_acceptor_user_id?: string;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";

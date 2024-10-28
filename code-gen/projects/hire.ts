@@ -717,6 +717,42 @@ export default abstract class Client extends helpdesk {
                                         }>;
                                     }>;
                                     job_requirement_id?: string;
+                                    offer_send_record_list?: Array<{
+                                        offer_send_record_id?: string;
+                                        operator_user_id?: string;
+                                        send_time?: string;
+                                        offer_letter_status?: number;
+                                        email_info?: {
+                                            cc_email_list?: Array<string>;
+                                            receiver_email_list?: Array<string>;
+                                            content?: string;
+                                        };
+                                        acceptance_list?: Array<{
+                                            operator_type?: number;
+                                            conclusion?: number;
+                                            memo?: string;
+                                            operate_time?: string;
+                                        }>;
+                                        offer_file_list?: Array<{
+                                            id?: string;
+                                            file_template_id?: string;
+                                            file_template_name?: string;
+                                            file_template_type_id?: string;
+                                            file_template_type_name?: string;
+                                        }>;
+                                        offer_signature_info?: {
+                                            id?: string;
+                                            signature_status?: number;
+                                            attachment_list?: Array<{
+                                                id?: string;
+                                                file_name?: string;
+                                                file_template_id?: string;
+                                                file_template_name?: string;
+                                                file_template_type_id?: string;
+                                                file_template_type_name?: string;
+                                            }>;
+                                        };
+                                    }>;
                                 };
                             };
                         }
@@ -3864,6 +3900,10 @@ export default abstract class Client extends helpdesk {
                             bonus_type: number;
                             point_bonus?: number;
                             cash?: { currency_type: string; amount: number };
+                            cash_bonus?: Array<{
+                                currency_type: string;
+                                amount: number;
+                            }>;
                         };
                         stage: number;
                         create_time?: string;
@@ -8118,6 +8158,7 @@ export default abstract class Client extends helpdesk {
                         }>;
                         process_type?: number;
                         job_type_id?: string;
+                        job_id_list?: Array<string>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -8752,6 +8793,7 @@ export default abstract class Client extends helpdesk {
                         }>;
                         process_type?: number;
                         job_type_id?: string;
+                        job_id_list?: Array<string>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -11096,6 +11138,9 @@ export default abstract class Client extends helpdesk {
                         mobile?: { code?: string; number?: string };
                         email?: string;
                     };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -11119,6 +11164,10 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                         paid_bonus?: {
                                             bonus_type?: number;
@@ -11127,9 +11176,22 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                     };
                                     status?: number;
+                                    referrer?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        email?: string;
+                                        mobile?: string;
+                                    };
                                 };
                             };
                         }
@@ -11157,6 +11219,9 @@ export default abstract class Client extends helpdesk {
              */
             deactivate: async (
                 payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path?: { referral_account_id?: string };
                 },
                 options?: IRequestOptions
@@ -11181,6 +11246,10 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                         paid_bonus?: {
                                             bonus_type?: number;
@@ -11189,9 +11258,22 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                     };
                                     status?: number;
+                                    referrer?: {
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        email?: string;
+                                        mobile?: string;
+                                    };
                                 };
                             };
                         }
@@ -11231,6 +11313,10 @@ export default abstract class Client extends helpdesk {
                                     currency_type: string;
                                     amount: number;
                                 };
+                                cash_bonus?: Array<{
+                                    currency_type: string;
+                                    amount: number;
+                                }>;
                             };
                         }>;
                     };
@@ -11256,6 +11342,10 @@ export default abstract class Client extends helpdesk {
                                             currency_type: string;
                                             amount: number;
                                         };
+                                        cash_bonus?: Array<{
+                                            currency_type: string;
+                                            amount: number;
+                                        }>;
                                     };
                                     total_recharge_reward_info?: {
                                         bonus_type?: number;
@@ -11264,6 +11354,10 @@ export default abstract class Client extends helpdesk {
                                             currency_type: string;
                                             amount: number;
                                         };
+                                        cash_bonus?: Array<{
+                                            currency_type: string;
+                                            amount: number;
+                                        }>;
                                     };
                                 }>;
                             };
@@ -11294,7 +11388,7 @@ export default abstract class Client extends helpdesk {
                 payload?: {
                     data: {
                         withdraw_bonus_type: Array<number>;
-                        external_order_id?: string;
+                        external_order_id: string;
                     };
                     path?: { referral_account_id?: string };
                 },
@@ -11319,6 +11413,10 @@ export default abstract class Client extends helpdesk {
                                         currency_type: string;
                                         amount: number;
                                     };
+                                    cash_bonus?: Array<{
+                                        currency_type: string;
+                                        amount: number;
+                                    }>;
                                 };
                             };
                         }
@@ -12884,7 +12982,7 @@ export default abstract class Client extends helpdesk {
              */
             addToFolder: async (
                 payload?: {
-                    data: { talent_id_list?: Array<string>; folder_id: string };
+                    data: { talent_id_list: Array<string>; folder_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -18566,6 +18664,42 @@ export default abstract class Client extends helpdesk {
                                             }>;
                                         }>;
                                         job_requirement_id?: string;
+                                        offer_send_record_list?: Array<{
+                                            offer_send_record_id?: string;
+                                            operator_user_id?: string;
+                                            send_time?: string;
+                                            offer_letter_status?: number;
+                                            email_info?: {
+                                                cc_email_list?: Array<string>;
+                                                receiver_email_list?: Array<string>;
+                                                content?: string;
+                                            };
+                                            acceptance_list?: Array<{
+                                                operator_type?: number;
+                                                conclusion?: number;
+                                                memo?: string;
+                                                operate_time?: string;
+                                            }>;
+                                            offer_file_list?: Array<{
+                                                id?: string;
+                                                file_template_id?: string;
+                                                file_template_name?: string;
+                                                file_template_type_id?: string;
+                                                file_template_type_name?: string;
+                                            }>;
+                                            offer_signature_info?: {
+                                                id?: string;
+                                                signature_status?: number;
+                                                attachment_list?: Array<{
+                                                    id?: string;
+                                                    file_name?: string;
+                                                    file_template_id?: string;
+                                                    file_template_name?: string;
+                                                    file_template_type_id?: string;
+                                                    file_template_type_name?: string;
+                                                }>;
+                                            };
+                                        }>;
                                     };
                                 };
                             }
@@ -21812,6 +21946,10 @@ export default abstract class Client extends helpdesk {
                                     currency_type: string;
                                     amount: number;
                                 };
+                                cash_bonus?: Array<{
+                                    currency_type: string;
+                                    amount: number;
+                                }>;
                             };
                             stage: number;
                             create_time?: string;
@@ -26103,6 +26241,7 @@ export default abstract class Client extends helpdesk {
                             }>;
                             process_type?: number;
                             job_type_id?: string;
+                            job_id_list?: Array<string>;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -26740,6 +26879,7 @@ export default abstract class Client extends helpdesk {
                             }>;
                             process_type?: number;
                             job_type_id?: string;
+                            job_id_list?: Array<string>;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -29126,6 +29266,9 @@ export default abstract class Client extends helpdesk {
                             mobile?: { code?: string; number?: string };
                             email?: string;
                         };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -29149,6 +29292,10 @@ export default abstract class Client extends helpdesk {
                                                     currency_type: string;
                                                     amount: number;
                                                 };
+                                                cash_bonus?: Array<{
+                                                    currency_type: string;
+                                                    amount: number;
+                                                }>;
                                             };
                                             paid_bonus?: {
                                                 bonus_type?: number;
@@ -29157,9 +29304,22 @@ export default abstract class Client extends helpdesk {
                                                     currency_type: string;
                                                     amount: number;
                                                 };
+                                                cash_bonus?: Array<{
+                                                    currency_type: string;
+                                                    amount: number;
+                                                }>;
                                             };
                                         };
                                         status?: number;
+                                        referrer?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            email?: string;
+                                            mobile?: string;
+                                        };
                                     };
                                 };
                             }
@@ -29187,6 +29347,9 @@ export default abstract class Client extends helpdesk {
                  */
                 deactivate: async (
                     payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                         path?: { referral_account_id?: string };
                     },
                     options?: IRequestOptions
@@ -29211,6 +29374,10 @@ export default abstract class Client extends helpdesk {
                                                     currency_type: string;
                                                     amount: number;
                                                 };
+                                                cash_bonus?: Array<{
+                                                    currency_type: string;
+                                                    amount: number;
+                                                }>;
                                             };
                                             paid_bonus?: {
                                                 bonus_type?: number;
@@ -29219,9 +29386,22 @@ export default abstract class Client extends helpdesk {
                                                     currency_type: string;
                                                     amount: number;
                                                 };
+                                                cash_bonus?: Array<{
+                                                    currency_type: string;
+                                                    amount: number;
+                                                }>;
                                             };
                                         };
                                         status?: number;
+                                        referrer?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            email?: string;
+                                            mobile?: string;
+                                        };
                                     };
                                 };
                             }
@@ -29261,6 +29441,10 @@ export default abstract class Client extends helpdesk {
                                         currency_type: string;
                                         amount: number;
                                     };
+                                    cash_bonus?: Array<{
+                                        currency_type: string;
+                                        amount: number;
+                                    }>;
                                 };
                             }>;
                         };
@@ -29286,6 +29470,10 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                         total_recharge_reward_info?: {
                                             bonus_type?: number;
@@ -29294,6 +29482,10 @@ export default abstract class Client extends helpdesk {
                                                 currency_type: string;
                                                 amount: number;
                                             };
+                                            cash_bonus?: Array<{
+                                                currency_type: string;
+                                                amount: number;
+                                            }>;
                                         };
                                     }>;
                                 };
@@ -29324,7 +29516,7 @@ export default abstract class Client extends helpdesk {
                     payload?: {
                         data: {
                             withdraw_bonus_type: Array<number>;
-                            external_order_id?: string;
+                            external_order_id: string;
                         };
                         path?: { referral_account_id?: string };
                     },
@@ -29349,6 +29541,10 @@ export default abstract class Client extends helpdesk {
                                             currency_type: string;
                                             amount: number;
                                         };
+                                        cash_bonus?: Array<{
+                                            currency_type: string;
+                                            amount: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -30932,7 +31128,7 @@ export default abstract class Client extends helpdesk {
                 addToFolder: async (
                     payload?: {
                         data: {
-                            talent_id_list?: Array<string>;
+                            talent_id_list: Array<string>;
                             folder_id: string;
                         };
                     },

@@ -2048,6 +2048,107 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.company.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.company.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.company.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        company_id?: string;
+        field_changes?: Array<string>;
+        sub_events?: {
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            agg_entity_field?: string;
+            opt_type?: number;
+            field_changes?: Array<string>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.cost_center.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.cost_center.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.cost_center.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        cost_center_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.employee.domain_event_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2132,6 +2233,199 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.job_family.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_family.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_family.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_family_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_grade.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_grade.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_grade.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_grade_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_level.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_level.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.job_level.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        job_level_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.location.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.location.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.location.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        location_id?: string;
+        field_changes?: Array<string>;
+        sub_events?: {
+            id?: string;
+            entity?: string;
+            agg_entity?: string;
+            agg_entity_id?: string;
+            agg_entity_field?: string;
+            opt_type?: number;
+            field_changes?: Array<string>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.offboarding.checklist_updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2203,6 +2497,48 @@ export interface IHandles extends IOtherEventHandles {
             user_id?: string;
             open_id?: string;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.pre_hire.onboarding_task_changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        tenant_id?: string;
+        pre_hire_id?: string;
+        onboarding_task_changes?: Array<{
+            after_status?:
+                | "uninitialized"
+                | "not_started"
+                | "in_progress"
+                | "in_review"
+                | "rejected"
+                | "failed"
+                | "skipped"
+                | "completed"
+                | "terminated"
+                | "initiating"
+                | "exception"
+                | "manual_skipped";
+            task_code?: string;
+        }>;
+        onboarding_flow_change?: {
+            after_status?:
+                | "not_started"
+                | "in_progress"
+                | "completed"
+                | "withdrawn"
+                | "others"
+                | "expired";
+        };
+        onboarding_flow_id?: string;
     }) => Promise<any> | any;
     /**
          
@@ -2290,6 +2626,25 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.process.status.update_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        process_id?: string;
+        status?: number;
+        biz_type?: string;
+        flow_definition_id?: string;
+        properties?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.process.updated_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2304,6 +2659,7 @@ export interface IHandles extends IOtherEventHandles {
         status?: number;
         biz_type?: string;
         flow_definition_id?: string;
+        properties?: number;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
@@ -3048,11 +3404,13 @@ export interface IHandles extends IOtherEventHandles {
                 bonus_type?: number;
                 point_bonus?: number;
                 cash?: { currency_type: string; amount: number };
+                cash_bonus?: Array<{ currency_type: string; amount: number }>;
             };
             paid_bonus?: {
                 bonus_type?: number;
                 point_bonus?: number;
                 cash?: { currency_type: string; amount: number };
+                cash_bonus?: Array<{ currency_type: string; amount: number }>;
             };
         };
         modify_time?: string;

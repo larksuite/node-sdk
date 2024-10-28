@@ -1026,7 +1026,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 上传
+         * 事件
          */
         file: {
             /**
@@ -2808,7 +2808,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -5186,7 +5186,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 上传
+             * 事件
              */
             file: {
                 /**
@@ -6997,7 +6997,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 素材
+             * 分片上传
              */
             media: {
                 /**

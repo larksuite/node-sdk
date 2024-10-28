@@ -217,6 +217,9 @@ export default abstract class Client extends personal_settings {
                                         field_value?: string;
                                     }>;
                                     rule_id?: string;
+                                    department_ids?: Array<string>;
+                                    to_user_ids?: Array<string>;
+                                    to_user_names?: Array<string>;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -428,6 +431,9 @@ export default abstract class Client extends personal_settings {
                                             field_value?: string;
                                         }>;
                                         rule_id?: string;
+                                        department_ids?: Array<string>;
+                                        to_user_ids?: Array<string>;
+                                        to_user_names?: Array<string>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;

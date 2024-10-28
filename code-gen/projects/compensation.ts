@@ -442,7 +442,14 @@ export default abstract class Client extends comment_sdk {
             item: {
                 listWithIterator: async (
                     payload?: {
-                        params: { page_size: number; page_token?: string };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            item_type?:
+                                | "salary"
+                                | "bonus"
+                                | "recurring_payment";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -534,6 +541,10 @@ export default abstract class Client extends comment_sdk {
                                                             locale?: string;
                                                             value?: string;
                                                         }>;
+                                                        item_type?:
+                                                            | "salary"
+                                                            | "bonus"
+                                                            | "recurring_payment";
                                                     }>;
                                                     page_token?: string;
                                                     has_more: boolean;
@@ -563,7 +574,14 @@ export default abstract class Client extends comment_sdk {
                  */
                 list: async (
                     payload?: {
-                        params: { page_size: number; page_token?: string };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            item_type?:
+                                | "salary"
+                                | "bonus"
+                                | "recurring_payment";
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -606,6 +624,10 @@ export default abstract class Client extends comment_sdk {
                                             locale?: string;
                                             value?: string;
                                         }>;
+                                        item_type?:
+                                            | "salary"
+                                            | "bonus"
+                                            | "recurring_payment";
                                     }>;
                                     page_token?: string;
                                     has_more: boolean;

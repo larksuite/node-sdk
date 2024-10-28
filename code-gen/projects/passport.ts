@@ -69,6 +69,7 @@ export default abstract class Client extends optical_char_recognition {
                                     create_time?: string;
                                     terminal_type?: number;
                                     user_id?: string;
+                                    sid?: string;
                                 }>;
                             };
                         }
@@ -127,6 +128,7 @@ export default abstract class Client extends optical_char_recognition {
                                         create_time?: string;
                                         terminal_type?: number;
                                         user_id?: string;
+                                        sid?: string;
                                     }>;
                                 };
                             }
