@@ -21,7 +21,10 @@ export const formatErrors = (e: any) => {
         const errors = [filteredErrorInfo];
         const specificError = get(e, 'response.data');
         if (specificError) {
-            errors.push(specificError);
+            errors.push({
+                ...specificError,
+                ...(specificError.error ? specificError.error : {})
+            });
         }
         return errors;
     }
