@@ -38,6 +38,48 @@ export default abstract class Client extends optical_char_recognition {
          */
         session: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=logout&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=logout&project=passport&resource=session&version=v1 document }
+             */
+            logout: async (
+                payload?: {
+                    data: {
+                        idp_credential_id?: string;
+                        logout_type: number;
+                        terminal_type?: Array<number>;
+                        user_id?: string;
+                        logout_reason?: number;
+                        sid?: string;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/passport/v1/sessions/logout`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=query&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/passport-v1/session/query document }
@@ -96,6 +138,51 @@ export default abstract class Client extends optical_char_recognition {
              * 登录态
              */
             session: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=logout&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=logout&project=passport&resource=session&version=v1 document }
+                 */
+                logout: async (
+                    payload?: {
+                        data: {
+                            idp_credential_id?: string;
+                            logout_type: number;
+                            terminal_type?: Array<number>;
+                            user_id?: string;
+                            logout_reason?: number;
+                            sid?: string;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/passport/v1/sessions/logout`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=passport&resource=session&apiName=query&version=v1 click to debug }
                  *

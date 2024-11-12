@@ -34,7 +34,7 @@ export default abstract class Client extends application {
      */
     approval = {
         /**
-         * 原生审批定义
+         * 事件
          */
         approval: {
             /**
@@ -644,6 +644,7 @@ export default abstract class Client extends application {
                             exclude_statistics?: boolean;
                             node_id?: string;
                             node_name?: string;
+                            generate_type?: "EXTERNAL_CONSIGN" | "DEFAULT";
                         }>;
                         cc_list?: Array<{
                             cc_id: string;
@@ -684,6 +685,7 @@ export default abstract class Client extends application {
                             form_vary_with_locale?: boolean;
                             form_version?: string;
                         };
+                        resource_region?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -768,6 +770,9 @@ export default abstract class Client extends application {
                                         exclude_statistics?: boolean;
                                         node_id?: string;
                                         node_name?: string;
+                                        generate_type?:
+                                            | "EXTERNAL_CONSIGN"
+                                            | "DEFAULT";
                                     }>;
                                     cc_list?: Array<{
                                         cc_id: string;
@@ -814,6 +819,7 @@ export default abstract class Client extends application {
                                         form_vary_with_locale?: boolean;
                                         form_version?: string;
                                     };
+                                    resource_region?: string;
                                 };
                             };
                         }
@@ -1039,7 +1045,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批实例
          */
         instance: {
             /**
@@ -2358,7 +2364,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 原生审批任务
+         * 审批查询
          */
         task: {
             /**
@@ -2902,7 +2908,7 @@ export default abstract class Client extends application {
         },
         v4: {
             /**
-             * 原生审批定义
+             * 事件
              */
             approval: {
                 /**
@@ -3521,6 +3527,7 @@ export default abstract class Client extends application {
                                 exclude_statistics?: boolean;
                                 node_id?: string;
                                 node_name?: string;
+                                generate_type?: "EXTERNAL_CONSIGN" | "DEFAULT";
                             }>;
                             cc_list?: Array<{
                                 cc_id: string;
@@ -3564,6 +3571,7 @@ export default abstract class Client extends application {
                                 form_vary_with_locale?: boolean;
                                 form_version?: string;
                             };
+                            resource_region?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -3648,6 +3656,9 @@ export default abstract class Client extends application {
                                             exclude_statistics?: boolean;
                                             node_id?: string;
                                             node_name?: string;
+                                            generate_type?:
+                                                | "EXTERNAL_CONSIGN"
+                                                | "DEFAULT";
                                         }>;
                                         cc_list?: Array<{
                                             cc_id: string;
@@ -3694,6 +3705,7 @@ export default abstract class Client extends application {
                                             form_vary_with_locale?: boolean;
                                             form_version?: string;
                                         };
+                                        resource_region?: string;
                                     };
                                 };
                             }
@@ -3921,7 +3933,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批实例
              */
             instance: {
                 /**
@@ -5262,7 +5274,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 原生审批任务
+             * 审批查询
              */
             task: {
                 /**

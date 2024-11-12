@@ -1547,6 +1547,21 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.common_data.meta_data.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        api_name?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.contract.created_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -3433,6 +3448,36 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         talent_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "hire.talent.tag_subscription_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        talent_id?: string;
+        application_id?: string;
+        tag?: {
+            id?: string;
+            name?: { zh_cn?: string; en_us?: string };
+            description?: { zh_cn?: string; en_us?: string };
+            type?: number;
+            active_status?: number;
+        };
+        lock_status?: number;
+        application_stage?: {
+            id?: string;
+            zh_name?: string;
+            en_name?: string;
+            type?: number;
+        };
     }) => Promise<any> | any;
     /**
          

@@ -4560,7 +4560,7 @@ export default abstract class Client extends contract {
                             data?: {
                                 job_change_id?: string;
                                 employment_id?: string;
-                                status?: "0" | "1" | "2" | "3" | "4";
+                                status?: number;
                                 transfer_type_unique_identifier?: string;
                                 transfer_reason_unique_identifier?: string;
                                 process_id?: string;
@@ -4949,6 +4949,8 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
+                                    employee_subtype_id?: string;
+                                    position_id?: string;
                                 };
                             };
                         }
@@ -5071,6 +5073,8 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
+                                    employee_subtype_id?: string;
+                                    position_id?: string;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -5135,6 +5139,8 @@ export default abstract class Client extends contract {
                         work_shift?: { enum_name: string };
                         compensation_type?: { enum_name: string };
                         service_company?: string;
+                        employee_subtype_id?: string;
+                        position_id?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -5216,6 +5222,8 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
+                                    employee_subtype_id?: string;
+                                    position_id?: string;
                                 };
                             };
                         }
@@ -5938,6 +5946,7 @@ export default abstract class Client extends contract {
                             | "open_id"
                             | "people_corehr_id";
                         time_zone?: string;
+                        include_offboard?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -5970,6 +5979,13 @@ export default abstract class Client extends contract {
                                         this_cycle_taken: string;
                                         leave_balance: string;
                                         leave_duration_unit: number;
+                                        history_cycle_accrual?: string;
+                                        balance_in_current_cycle?: string;
+                                        taken?: string;
+                                        taken_history_cycle?: string;
+                                        offboarding_balance?: string;
+                                        taken_current_date?: string;
+                                        offboarding_granted?: string;
                                     }>;
                                 }>;
                                 has_more?: boolean;
@@ -6088,6 +6104,11 @@ export default abstract class Client extends contract {
                                     leave_cancel_process_id?: Array<string>;
                                     leave_return_process_id?: Array<string>;
                                     wd_paid_type?: number;
+                                    leave_correct_process_info?: Array<{
+                                        process_id: string;
+                                        process_status: string;
+                                        process_apply_time: string;
+                                    }>;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -6564,8 +6585,6 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
-                                        city_id_v2?: string;
-                                        district_id_v2?: string;
                                         address_line1?: string;
                                         address_line2?: string;
                                         address_line3?: string;
@@ -6741,8 +6760,6 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
-                                        city_id_v2?: string;
-                                        district_id_v2?: string;
                                         address_line1?: string;
                                         address_line2?: string;
                                         address_line3?: string;
@@ -6882,8 +6899,6 @@ export default abstract class Client extends contract {
                                         region_id?: string;
                                         city_id?: string;
                                         distinct_id?: string;
-                                        city_id_v2?: string;
-                                        district_id_v2?: string;
                                         address_line1?: string;
                                         address_line2?: string;
                                         address_line3?: string;
@@ -16327,7 +16342,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     job_change_id?: string;
                                     employment_id?: string;
-                                    status?: "0" | "1" | "2" | "3" | "4";
+                                    status?: number;
                                     transfer_type_unique_identifier?: string;
                                     transfer_reason_unique_identifier?: string;
                                     process_id?: string;
@@ -16719,6 +16734,8 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
+                                        employee_subtype_id?: string;
+                                        position_id?: string;
                                     };
                                 };
                             }
@@ -16841,6 +16858,8 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
+                                        employee_subtype_id?: string;
+                                        position_id?: string;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -16905,6 +16924,8 @@ export default abstract class Client extends contract {
                             work_shift?: { enum_name: string };
                             compensation_type?: { enum_name: string };
                             service_company?: string;
+                            employee_subtype_id?: string;
+                            position_id?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -16986,6 +17007,8 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
+                                        employee_subtype_id?: string;
+                                        position_id?: string;
                                     };
                                 };
                             }
@@ -17720,6 +17743,7 @@ export default abstract class Client extends contract {
                                 | "open_id"
                                 | "people_corehr_id";
                             time_zone?: string;
+                            include_offboard?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -17752,6 +17776,13 @@ export default abstract class Client extends contract {
                                             this_cycle_taken: string;
                                             leave_balance: string;
                                             leave_duration_unit: number;
+                                            history_cycle_accrual?: string;
+                                            balance_in_current_cycle?: string;
+                                            taken?: string;
+                                            taken_history_cycle?: string;
+                                            offboarding_balance?: string;
+                                            taken_current_date?: string;
+                                            offboarding_granted?: string;
                                         }>;
                                     }>;
                                     has_more?: boolean;
@@ -17870,6 +17901,11 @@ export default abstract class Client extends contract {
                                         leave_cancel_process_id?: Array<string>;
                                         leave_return_process_id?: Array<string>;
                                         wd_paid_type?: number;
+                                        leave_correct_process_info?: Array<{
+                                            process_id: string;
+                                            process_status: string;
+                                            process_apply_time: string;
+                                        }>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -18351,8 +18387,6 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
-                                            city_id_v2?: string;
-                                            district_id_v2?: string;
                                             address_line1?: string;
                                             address_line2?: string;
                                             address_line3?: string;
@@ -18531,8 +18565,6 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
-                                            city_id_v2?: string;
-                                            district_id_v2?: string;
                                             address_line1?: string;
                                             address_line2?: string;
                                             address_line3?: string;
@@ -18672,8 +18704,6 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
-                                            city_id_v2?: string;
-                                            district_id_v2?: string;
                                             address_line1?: string;
                                             address_line2?: string;
                                             address_line3?: string;
@@ -23608,6 +23638,169 @@ export default abstract class Client extends contract {
         },
         v2: {
             /**
+             * approver
+             */
+            approver: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            user_id: string;
+                            approver_status?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/approvers`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    approvers?: Array<{
+                                                        approver_id?: string;
+                                                        process_id?: string;
+                                                        approver_status?: number;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=approver&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=corehr&resource=approver&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            user_id: string;
+                            approver_status?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    approvers?: Array<{
+                                        approver_id?: string;
+                                        process_id?: string;
+                                        approver_status?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/approvers`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * basic_info.bank
              */
             basicInfoBank: {
@@ -25512,6 +25705,46 @@ export default abstract class Client extends contract {
              */
             company: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=company&apiName=active&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=active&project=corehr&resource=company&version=v2 document }
+                 */
+                active: async (
+                    payload?: {
+                        data: {
+                            company_id: string;
+                            effective_time: string;
+                            active: boolean;
+                            operation_reason: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/companies/active`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=company&apiName=batch_get&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=company&version=v2 document }
@@ -25750,6 +25983,148 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/companies/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    company_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_company_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=company&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=company&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    company_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_company_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/companies/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -28607,7 +28982,7 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         talent_pool_id_list?: Array<string>;
-                                        custom_org_str?: string;
+                                        custom_org?: string;
                                     }>;
                                 };
                             }
@@ -28705,6 +29080,7 @@ export default abstract class Client extends contract {
                                         field_name: string;
                                         value?: string;
                                     }>;
+                                    additional_nationalities?: Array<string>;
                                 };
                                 emergency_contacts?: Array<{
                                     legal_name?: string;
@@ -28894,6 +29270,10 @@ export default abstract class Client extends contract {
                                             value?: string;
                                         }>;
                                     }>;
+                                }>;
+                                citizenship_statuses?: Array<{
+                                    country_region?: string;
+                                    citizenship_status?: string;
                                 }>;
                             };
                             employment_info?: {
@@ -29103,6 +29483,8 @@ export default abstract class Client extends contract {
                             email_address_list?: Array<string>;
                             user_name?: string;
                             department_id_list_include_sub?: Array<string>;
+                            additional_national_id_number_list?: Array<string>;
+                            citizenship_status_list?: Array<string>;
                             cost_center_id_list?: Array<string>;
                         };
                         params: {
@@ -30336,7 +30718,7 @@ export default abstract class Client extends contract {
                                                             }>;
                                                         };
                                                         talent_pool_id_list?: Array<string>;
-                                                        custom_org_str?: string;
+                                                        custom_org?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -30392,6 +30774,8 @@ export default abstract class Client extends contract {
                             email_address_list?: Array<string>;
                             user_name?: string;
                             department_id_list_include_sub?: Array<string>;
+                            additional_national_id_number_list?: Array<string>;
+                            citizenship_status_list?: Array<string>;
                             cost_center_id_list?: Array<string>;
                         };
                         params: {
@@ -31576,7 +31960,7 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         talent_pool_id_list?: Array<string>;
-                                        custom_org_str?: string;
+                                        custom_org?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -31682,6 +32066,8 @@ export default abstract class Client extends contract {
                             effective_date_start?: string;
                             effective_date_end?: string;
                             data_date?: string;
+                            primary_job_data?: boolean;
+                            assignment_start_reasons?: Array<string>;
                         };
                         params?: {
                             user_id_type?:
@@ -31783,7 +32169,7 @@ export default abstract class Client extends contract {
                                                 value: string;
                                             }>;
                                             created_at?: string;
-                                            weekly_working_hours_v2?: string;
+                                            weekly_working_hours_v2?: number;
                                             employee_subtype_id?: string;
                                         }>;
                                     }>;
@@ -31820,6 +32206,8 @@ export default abstract class Client extends contract {
                             effective_date_end?: string;
                             department_id?: string;
                             employment_ids?: Array<string>;
+                            primary_job_data?: boolean;
+                            assignment_start_reasons?: Array<string>;
                         };
                         params: {
                             page_size: number;
@@ -31922,7 +32310,7 @@ export default abstract class Client extends contract {
                                                 type?: number;
                                                 value: string;
                                             }>;
-                                            weekly_working_hours_v2?: string;
+                                            weekly_working_hours_v2?: number;
                                             employee_subtype_id?: string;
                                         }>;
                                     }>;
@@ -32898,6 +33286,48 @@ export default abstract class Client extends contract {
              */
             location: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location&apiName=active&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=active&project=corehr&resource=location&version=v2 document }
+                 *
+                 * 启停/停用地点
+                 */
+                active: async (
+                    payload?: {
+                        data: {
+                            location_id: string;
+                            effective_time: string;
+                            active: boolean;
+                            operation_reason: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/active`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location&apiName=batch_get&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=location&version=v2 document }
@@ -32965,8 +33395,6 @@ export default abstract class Client extends contract {
                                             region_id?: string;
                                             city_id?: string;
                                             distinct_id?: string;
-                                            city_id_v2?: string;
-                                            district_id_v2?: string;
                                             address_line1?: string;
                                             address_line2?: string;
                                             address_line3?: string;
@@ -33035,6 +33463,220 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=location&version=v2 document }
+                 *
+                 * 更新地点
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            parent_id?: string;
+                            names?: Array<{ lang: string; value: string }>;
+                            active?: boolean;
+                            effective_time: string;
+                            code?: string;
+                            descriptions?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            location_usages?: Array<{ enum_name: string }>;
+                            working_hours_type_id?: string;
+                            locale?: { enum_name: string };
+                            time_zone_id?: string;
+                            display_language_id?: string;
+                        };
+                        params?: { client_token?: string };
+                        path: { location_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/:location_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * location.address
+             */
+            locationAddress: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location.address&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=location.address&version=v2 document }
+                 *
+                 * 添加地点地址
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            country_region_id: string;
+                            region_id: string;
+                            city_id: string;
+                            distinct_id: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                            address_types?: Array<{ enum_name: string }>;
+                            is_primary?: boolean;
+                            is_public?: boolean;
+                        };
+                        params?: { client_token?: string };
+                        path: { location_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { address_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/:location_id/addresses`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location.address&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=location.address&version=v2 document }
+                 *
+                 * 删除地点地址
+                 */
+                delete: async (
+                    payload?: {
+                        path: { location_id: string; address_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/:location_id/addresses/:address_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location.address&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=location.address&version=v2 document }
+                 *
+                 * 更新地点地址
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            country_region_id?: string;
+                            region_id?: string;
+                            city_id?: string;
+                            distinct_id?: string;
+                            local_address_line1?: string;
+                            local_address_line2?: string;
+                            local_address_line3?: string;
+                            local_address_line4?: string;
+                            local_address_line5?: string;
+                            local_address_line6?: string;
+                            local_address_line7?: string;
+                            local_address_line8?: string;
+                            local_address_line9?: string;
+                            postal_code?: string;
+                            address_types?: Array<{ enum_name: string }>;
+                            is_primary?: boolean;
+                            is_public?: boolean;
+                        };
+                        params?: { client_token?: string };
+                        path: { location_id: string; address_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/:location_id/addresses/:address_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -35625,6 +36267,10 @@ export default abstract class Client extends contract {
                                 start_time?: string;
                                 end_time?: string;
                                 field_of_study?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
                             }>;
                             work_experience?: Array<{
                                 company_name?: string;
@@ -35633,6 +36279,10 @@ export default abstract class Client extends contract {
                                 job_title?: string;
                                 description?: string;
                                 department?: string;
+                                custom_fields?: Array<{
+                                    field_name: string;
+                                    value: string;
+                                }>;
                             }>;
                             ats_application_id?: string;
                             out_biz_id?: string;
@@ -36928,6 +37578,7 @@ export default abstract class Client extends contract {
                                                                 }>;
                                                             };
                                                             direct_leader_id?: string;
+                                                            dotted_line_manager_id?: string;
                                                             job_id?: string;
                                                             job_family_id?: string;
                                                             job_level_id?: string;
@@ -37037,6 +37688,21 @@ export default abstract class Client extends contract {
                                                             created_by?: string;
                                                             updated_by?: string;
                                                             seniority_date?: string;
+                                                            background_check_order_id?: string;
+                                                            background_check_order_name?: string;
+                                                            background_check_order_package_name?: string;
+                                                            background_check_order_result?: string;
+                                                            background_check_order_supplier_name?: string;
+                                                            background_check_order_account_name?: string;
+                                                            background_check_order_start_time?: string;
+                                                            background_check_order_complete_time?: string;
+                                                            background_check_order_status?: {
+                                                                enum_name: string;
+                                                                display?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                            };
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -38060,6 +38726,7 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             direct_leader_id?: string;
+                                            dotted_line_manager_id?: string;
                                             job_id?: string;
                                             job_family_id?: string;
                                             job_level_id?: string;
@@ -38169,6 +38836,21 @@ export default abstract class Client extends contract {
                                             created_by?: string;
                                             updated_by?: string;
                                             seniority_date?: string;
+                                            background_check_order_id?: string;
+                                            background_check_order_name?: string;
+                                            background_check_order_package_name?: string;
+                                            background_check_order_result?: string;
+                                            background_check_order_supplier_name?: string;
+                                            background_check_order_account_name?: string;
+                                            background_check_order_start_time?: string;
+                                            background_check_order_complete_time?: string;
+                                            background_check_order_status?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -39254,6 +39936,7 @@ export default abstract class Client extends contract {
                                                                 }>;
                                                             };
                                                             direct_leader_id?: string;
+                                                            dotted_line_manager_id?: string;
                                                             job_id?: string;
                                                             job_family_id?: string;
                                                             job_level_id?: string;
@@ -39363,6 +40046,21 @@ export default abstract class Client extends contract {
                                                             created_by?: string;
                                                             updated_by?: string;
                                                             seniority_date?: string;
+                                                            background_check_order_id?: string;
+                                                            background_check_order_name?: string;
+                                                            background_check_order_package_name?: string;
+                                                            background_check_order_result?: string;
+                                                            background_check_order_supplier_name?: string;
+                                                            background_check_order_account_name?: string;
+                                                            background_check_order_start_time?: string;
+                                                            background_check_order_complete_time?: string;
+                                                            background_check_order_status?: {
+                                                                enum_name: string;
+                                                                display?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                            };
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -40406,6 +41104,7 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             direct_leader_id?: string;
+                                            dotted_line_manager_id?: string;
                                             job_id?: string;
                                             job_family_id?: string;
                                             job_level_id?: string;
@@ -40515,6 +41214,21 @@ export default abstract class Client extends contract {
                                             created_by?: string;
                                             updated_by?: string;
                                             seniority_date?: string;
+                                            background_check_order_id?: string;
+                                            background_check_order_name?: string;
+                                            background_check_order_package_name?: string;
+                                            background_check_order_result?: string;
+                                            background_check_order_supplier_name?: string;
+                                            background_check_order_account_name?: string;
+                                            background_check_order_start_time?: string;
+                                            background_check_order_complete_time?: string;
+                                            background_check_order_status?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -41661,6 +42375,7 @@ export default abstract class Client extends contract {
                                             };
                                         }>;
                                     }>;
+                                    process_id?: string;
                                 };
                             }
                         >({
@@ -41884,11 +42599,11 @@ export default abstract class Client extends contract {
                 listWithIterator: async (
                     payload?: {
                         params: {
-                            modify_time_to: string;
                             statuses?: Array<number>;
                             page_token?: string;
                             page_size: number;
                             modify_time_from: string;
+                            modify_time_to: string;
                             flow_definition_id?: string;
                         };
                     },
@@ -41983,11 +42698,11 @@ export default abstract class Client extends contract {
                 list: async (
                     payload?: {
                         params: {
-                            modify_time_to: string;
                             statuses?: Array<number>;
                             page_token?: string;
                             page_size: number;
                             modify_time_from: string;
+                            modify_time_to: string;
                             flow_definition_id?: string;
                         };
                     },
@@ -42011,6 +42726,175 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/processes`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * workforce_plan
+             */
+            workforcePlan: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            limit?: number;
+                            offset?: number;
+                            get_all_plan?: boolean;
+                            active?: boolean;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/workforce_plans`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        workforce_plan_id: string;
+                                                        workforce_plan_name?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                        start_date?: string;
+                                                        end_date?: string;
+                                                        active?: boolean;
+                                                    }>;
+                                                    total?: number;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=workforce_plan&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=corehr&resource=workforce_plan&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            limit?: number;
+                            offset?: number;
+                            get_all_plan?: boolean;
+                            active?: boolean;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        workforce_plan_id: string;
+                                        workforce_plan_name?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        start_date?: string;
+                                        end_date?: string;
+                                        active?: boolean;
+                                    }>;
+                                    total?: number;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/workforce_plans`,
                                 path
                             ),
                             method: "GET",

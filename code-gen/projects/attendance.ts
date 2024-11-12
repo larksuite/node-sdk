@@ -3334,14 +3334,16 @@ export default abstract class Client extends approval {
                                             | "Normal"
                                             | "Early"
                                             | "Late"
-                                            | "Lack";
+                                            | "Lack"
+                                            | "Todo";
                                         check_out_result:
                                             | "NoNeedCheck"
                                             | "SystemCheck"
                                             | "Normal"
                                             | "Early"
                                             | "Late"
-                                            | "Lack";
+                                            | "Lack"
+                                            | "Todo";
                                         check_in_result_supplement:
                                             | "None"
                                             | "ManagerModification"
@@ -6928,14 +6930,16 @@ export default abstract class Client extends approval {
                                                 | "Normal"
                                                 | "Early"
                                                 | "Late"
-                                                | "Lack";
+                                                | "Lack"
+                                                | "Todo";
                                             check_out_result:
                                                 | "NoNeedCheck"
                                                 | "SystemCheck"
                                                 | "Normal"
                                                 | "Early"
                                                 | "Late"
-                                                | "Lack";
+                                                | "Lack"
+                                                | "Todo";
                                             check_in_result_supplement:
                                                 | "None"
                                                 | "ManagerModification"
