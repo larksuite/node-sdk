@@ -30,7 +30,7 @@ export default abstract class Client extends acs {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 管理后台-行为审计
+     * 管理后台-密码
      */
     admin = {
         /**

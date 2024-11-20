@@ -30,7 +30,7 @@ export default abstract class Client extends compensation {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 搜索
+     * 通讯录
      */
     contact = {
         /**

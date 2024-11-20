@@ -323,7 +323,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 投递
+         * 入职
          */
         application: {
             /**
@@ -18472,7 +18472,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 投递
+             * 入职
              */
             application: {
                 /**

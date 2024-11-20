@@ -1493,6 +1493,294 @@ export default abstract class Client extends aily {
                         throw e;
                     });
             },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: string;
+                        lang: string;
+                        status?: number;
+                        payment_type?: number;
+                        owner_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                app_list?: Array<{
+                                                    app_id: string;
+                                                    creator_id?: string;
+                                                    status?: number;
+                                                    scene_type?: number;
+                                                    payment_type?: number;
+                                                    create_source?:
+                                                        | "developer_console"
+                                                        | "base"
+                                                        | "app_engine"
+                                                        | "bot_builder"
+                                                        | "aily"
+                                                        | "unknown";
+                                                    redirect_urls?: Array<string>;
+                                                    online_version_id?: string;
+                                                    unaudit_version_id?: string;
+                                                    app_name?: string;
+                                                    avatar_url?: string;
+                                                    description?: string;
+                                                    scopes?: Array<{
+                                                        scope: string;
+                                                        description?: string;
+                                                        level?: number;
+                                                    }>;
+                                                    back_home_url?: string;
+                                                    i18n?: Array<{
+                                                        i18n_key:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp"
+                                                            | "zh_hk"
+                                                            | "zh_tw"
+                                                            | "id_id"
+                                                            | "ms_my"
+                                                            | "de_de"
+                                                            | "es_es"
+                                                            | "fr_fr"
+                                                            | "it_it"
+                                                            | "pt_br"
+                                                            | "vi_vn"
+                                                            | "ru_ru"
+                                                            | "th_th"
+                                                            | "ko_kr";
+                                                        name?: string;
+                                                        description?: string;
+                                                        help_use?: string;
+                                                    }>;
+                                                    primary_language?:
+                                                        | "zh_cn"
+                                                        | "en_us"
+                                                        | "ja_jp";
+                                                    common_categories?: Array<string>;
+                                                    owner?: {
+                                                        type: number;
+                                                        owner_id?: string;
+                                                        name?: string;
+                                                        help_desk?: string;
+                                                        email?: string;
+                                                        phone?: string;
+                                                        customer_service_account?: string;
+                                                    };
+                                                    mobile_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                    pc_default_ability?:
+                                                        | "gadget"
+                                                        | "web_app"
+                                                        | "bot";
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                total_count?: number;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/list document }
+             *
+             * 获取企业安装的应用
+             *
+             * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: string;
+                        lang: string;
+                        status?: number;
+                        payment_type?: number;
+                        owner_type?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                app_list?: Array<{
+                                    app_id: string;
+                                    creator_id?: string;
+                                    status?: number;
+                                    scene_type?: number;
+                                    payment_type?: number;
+                                    create_source?:
+                                        | "developer_console"
+                                        | "base"
+                                        | "app_engine"
+                                        | "bot_builder"
+                                        | "aily"
+                                        | "unknown";
+                                    redirect_urls?: Array<string>;
+                                    online_version_id?: string;
+                                    unaudit_version_id?: string;
+                                    app_name?: string;
+                                    avatar_url?: string;
+                                    description?: string;
+                                    scopes?: Array<{
+                                        scope: string;
+                                        description?: string;
+                                        level?: number;
+                                    }>;
+                                    back_home_url?: string;
+                                    i18n?: Array<{
+                                        i18n_key:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp"
+                                            | "zh_hk"
+                                            | "zh_tw"
+                                            | "id_id"
+                                            | "ms_my"
+                                            | "de_de"
+                                            | "es_es"
+                                            | "fr_fr"
+                                            | "it_it"
+                                            | "pt_br"
+                                            | "vi_vn"
+                                            | "ru_ru"
+                                            | "th_th"
+                                            | "ko_kr";
+                                        name?: string;
+                                        description?: string;
+                                        help_use?: string;
+                                    }>;
+                                    primary_language?:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp";
+                                    common_categories?: Array<string>;
+                                    owner?: {
+                                        type: number;
+                                        owner_id?: string;
+                                        name?: string;
+                                        help_desk?: string;
+                                        email?: string;
+                                        phone?: string;
+                                        customer_service_account?: string;
+                                    };
+                                    mobile_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                    pc_default_ability?:
+                                        | "gadget"
+                                        | "web_app"
+                                        | "bot";
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                total_count?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=patch&version=v6 click to debug }
              *
@@ -3636,6 +3924,296 @@ export default abstract class Client extends aily {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/applications/:app_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                            lang: string;
+                            status?: number;
+                            payment_type?: number;
+                            owner_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/application/v6/applications`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    app_list?: Array<{
+                                                        app_id: string;
+                                                        creator_id?: string;
+                                                        status?: number;
+                                                        scene_type?: number;
+                                                        payment_type?: number;
+                                                        create_source?:
+                                                            | "developer_console"
+                                                            | "base"
+                                                            | "app_engine"
+                                                            | "bot_builder"
+                                                            | "aily"
+                                                            | "unknown";
+                                                        redirect_urls?: Array<string>;
+                                                        online_version_id?: string;
+                                                        unaudit_version_id?: string;
+                                                        app_name?: string;
+                                                        avatar_url?: string;
+                                                        description?: string;
+                                                        scopes?: Array<{
+                                                            scope: string;
+                                                            description?: string;
+                                                            level?: number;
+                                                        }>;
+                                                        back_home_url?: string;
+                                                        i18n?: Array<{
+                                                            i18n_key:
+                                                                | "zh_cn"
+                                                                | "en_us"
+                                                                | "ja_jp"
+                                                                | "zh_hk"
+                                                                | "zh_tw"
+                                                                | "id_id"
+                                                                | "ms_my"
+                                                                | "de_de"
+                                                                | "es_es"
+                                                                | "fr_fr"
+                                                                | "it_it"
+                                                                | "pt_br"
+                                                                | "vi_vn"
+                                                                | "ru_ru"
+                                                                | "th_th"
+                                                                | "ko_kr";
+                                                            name?: string;
+                                                            description?: string;
+                                                            help_use?: string;
+                                                        }>;
+                                                        primary_language?:
+                                                            | "zh_cn"
+                                                            | "en_us"
+                                                            | "ja_jp";
+                                                        common_categories?: Array<string>;
+                                                        owner?: {
+                                                            type: number;
+                                                            owner_id?: string;
+                                                            name?: string;
+                                                            help_desk?: string;
+                                                            email?: string;
+                                                            phone?: string;
+                                                            customer_service_account?: string;
+                                                        };
+                                                        mobile_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                        pc_default_ability?:
+                                                            | "gadget"
+                                                            | "web_app"
+                                                            | "bot";
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    total_count?: number;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=list&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application/list document }
+                 *
+                 * 获取企业安装的应用
+                 *
+                 * 该接口用于查询企业安装的应用列表，只能被企业自建应用调用。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: string;
+                            lang: string;
+                            status?: number;
+                            payment_type?: number;
+                            owner_type?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    app_list?: Array<{
+                                        app_id: string;
+                                        creator_id?: string;
+                                        status?: number;
+                                        scene_type?: number;
+                                        payment_type?: number;
+                                        create_source?:
+                                            | "developer_console"
+                                            | "base"
+                                            | "app_engine"
+                                            | "bot_builder"
+                                            | "aily"
+                                            | "unknown";
+                                        redirect_urls?: Array<string>;
+                                        online_version_id?: string;
+                                        unaudit_version_id?: string;
+                                        app_name?: string;
+                                        avatar_url?: string;
+                                        description?: string;
+                                        scopes?: Array<{
+                                            scope: string;
+                                            description?: string;
+                                            level?: number;
+                                        }>;
+                                        back_home_url?: string;
+                                        i18n?: Array<{
+                                            i18n_key:
+                                                | "zh_cn"
+                                                | "en_us"
+                                                | "ja_jp"
+                                                | "zh_hk"
+                                                | "zh_tw"
+                                                | "id_id"
+                                                | "ms_my"
+                                                | "de_de"
+                                                | "es_es"
+                                                | "fr_fr"
+                                                | "it_it"
+                                                | "pt_br"
+                                                | "vi_vn"
+                                                | "ru_ru"
+                                                | "th_th"
+                                                | "ko_kr";
+                                            name?: string;
+                                            description?: string;
+                                            help_use?: string;
+                                        }>;
+                                        primary_language?:
+                                            | "zh_cn"
+                                            | "en_us"
+                                            | "ja_jp";
+                                        common_categories?: Array<string>;
+                                        owner?: {
+                                            type: number;
+                                            owner_id?: string;
+                                            name?: string;
+                                            help_desk?: string;
+                                            email?: string;
+                                            phone?: string;
+                                            customer_service_account?: string;
+                                        };
+                                        mobile_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                        pc_default_ability?:
+                                            | "gadget"
+                                            | "web_app"
+                                            | "bot";
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    total_count?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications`,
                                 path
                             ),
                             method: "GET",

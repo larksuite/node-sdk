@@ -1026,7 +1026,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 文件夹
+         * 文件
          */
         file: {
             /**
@@ -5186,7 +5186,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 文件夹
+             * 文件
              */
             file: {
                 /**

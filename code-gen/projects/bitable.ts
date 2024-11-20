@@ -2975,6 +2975,7 @@ export default abstract class Client extends baike {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         client_token?: string;
+                        ignore_consistency_check?: boolean;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -3307,6 +3308,7 @@ export default abstract class Client extends baike {
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        ignore_consistency_check?: boolean;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -3457,6 +3459,7 @@ export default abstract class Client extends baike {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         client_token?: string;
+                        ignore_consistency_check?: boolean;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -4408,6 +4411,7 @@ export default abstract class Client extends baike {
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        ignore_consistency_check?: boolean;
                     };
                     path: {
                         app_token: string;
@@ -8047,6 +8051,7 @@ export default abstract class Client extends baike {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             client_token?: string;
+                            ignore_consistency_check?: boolean;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -8379,6 +8384,7 @@ export default abstract class Client extends baike {
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            ignore_consistency_check?: boolean;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -8529,6 +8535,7 @@ export default abstract class Client extends baike {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             client_token?: string;
+                            ignore_consistency_check?: boolean;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -9493,6 +9500,7 @@ export default abstract class Client extends baike {
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            ignore_consistency_check?: boolean;
                         };
                         path: {
                             app_token: string;
