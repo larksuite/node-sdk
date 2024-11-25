@@ -33,7 +33,6 @@
     "lodash.get": "^4.4.2",
     "lodash.identity": "^3.0.0",
     "lodash.merge": "^4.6.2",
-    "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
     "protobufjs": "^7.2.6",
     "qs": "^6.13.0",

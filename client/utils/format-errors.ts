@@ -1,6 +1,6 @@
 import { AxiosError } from '@node-sdk/http';
 import get from 'lodash.get';
-import pick from 'lodash.pick';
+import { pick } from '@node-sdk/utils/pick';
 
 export const formatErrors = (e: any) => {
     if (e instanceof AxiosError) {
