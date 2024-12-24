@@ -47,6 +47,7 @@ export default abstract class Client extends comment_sdk {
                     payload?: {
                         data: {
                             user_id_list: Array<string>;
+                            tid_list?: Array<string>;
                             effective_start_date?: string;
                             effective_end_date?: string;
                         };
@@ -82,6 +83,7 @@ export default abstract class Client extends comment_sdk {
                                         change_reason_id: string;
                                         change_description: string;
                                         effective_date: string;
+                                        expiration_date?: string;
                                         salary_level_id?: string;
                                         archive_items: Array<{
                                             item_id: string;

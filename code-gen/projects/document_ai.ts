@@ -10,10 +10,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import docs_tool from "./docs_tool";
+import docs from "./docs";
 
 // auto gen
-export default abstract class Client extends docs_tool {
+export default abstract class Client extends docs {
     declare tokenManager;
 
     declare domain;
@@ -954,7 +954,17 @@ export default abstract class Client extends docs_tool {
                                                 | "end_time"
                                                 | "distance"
                                                 | "start_date"
-                                                | "total_amount";
+                                                | "total_amount"
+                                                | "invoice_code"
+                                                | "invoice_no"
+                                                | "price"
+                                                | "dispatch_fee"
+                                                | "additional_fee"
+                                                | "is_sealed"
+                                                | "seller_name_in_seal"
+                                                | "seller_taxpayer_no_in_seal"
+                                                | "title_trial"
+                                                | "invoice_special_seal";
                                             value?: string;
                                         }>;
                                     }>;
@@ -1018,7 +1028,13 @@ export default abstract class Client extends docs_tool {
                                                 | "seat_num"
                                                 | "ticket_num"
                                                 | "total_amount"
-                                                | "time";
+                                                | "time"
+                                                | "price"
+                                                | "seat_num"
+                                                | "seat_cls"
+                                                | "id_num"
+                                                | "sale_num"
+                                                | "sale_station";
                                             value?: string;
                                         }>;
                                     }>;
@@ -1153,8 +1169,24 @@ export default abstract class Client extends docs_tool {
                                                 | "seller_taxpayer_no"
                                                 | "seller_address_phone"
                                                 | "seller_account"
-                                                | "payee";
+                                                | "payee"
+                                                | "invoice_date"
+                                                | "password_area"
+                                                | "remarks"
+                                                | "reviewer"
+                                                | "drawer"
+                                                | "is_sealed"
+                                                | "seller_name_in_seal"
+                                                | "seller_taxpayer_no_in_seal"
+                                                | "invoice_special_seal"
+                                                | "machine_num";
                                             value?: string;
+                                            items?: Array<
+                                                Array<{
+                                                    type?: string;
+                                                    value?: string;
+                                                }>
+                                            >;
                                         }>;
                                     }>;
                                 };

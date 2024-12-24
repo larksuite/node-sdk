@@ -1558,6 +1558,8 @@ export interface IHandles extends IOtherEventHandles {
         type?: string;
         app_id?: string;
         api_name?: string;
+        field_changes?: Array<string>;
+        metadata_type?: string;
     }) => Promise<any> | any;
     /**
          
@@ -2059,6 +2061,30 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         pre_hire_id?: string;
         field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.approval_groups.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        approval_group_id?: string;
+        process_id?: string;
+        approval_group_status?: number;
+        topic?: string;
+        adjust_reason?: string;
+        effective_date?: string;
+        created_by?: string;
+        draft_id?: string;
+        draft_status?: number;
+        approval_group_status_v2?: number;
     }) => Promise<any> | any;
     /**
          
@@ -2825,6 +2851,29 @@ export interface IHandles extends IOtherEventHandles {
         update_time?: number;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "drive.file.created_in_folder_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        folder_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/ukTMukTMukTM/uUDN04SN0QjL1QDN/event/file-deleted-completely document }
      */
     "drive.file.deleted_v1"?: (data: {
@@ -2897,6 +2946,37 @@ export interface IHandles extends IOtherEventHandles {
         chat_list?: Array<string>;
         open_department_id_list?: Array<string>;
         subscriber_id_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "drive.file.permission_member_applied_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        file_type?: string;
+        file_token?: string;
+        operator_id?: { union_id?: string; user_id?: string; open_id?: string };
+        approver_id?: { union_id?: string; user_id?: string; open_id?: string };
+        application_user_list?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+        application_chat_list?: Array<string>;
+        application_department_list?: Array<string>;
+        permission?: "view" | "edit" | "full_access";
+        subscriber_ids?: Array<{
             union_id?: string;
             user_id?: string;
             open_id?: string;

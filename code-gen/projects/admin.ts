@@ -30,7 +30,7 @@ export default abstract class Client extends acs {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 管理后台-密码
+     * 管理后台-企业勋章
      */
     admin = {
         /**
@@ -61,6 +61,7 @@ export default abstract class Client extends acs {
                         page_size?: number;
                         page_token?: string;
                         target_geo?: string;
+                        with_product_version?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -120,6 +121,7 @@ export default abstract class Client extends acs {
                                     total_search_count?: string;
                                     quick_search_count?: string;
                                     tab_search_count?: string;
+                                    product_version?: string;
                                 }>;
                             };
                         }
@@ -448,6 +450,17 @@ export default abstract class Client extends acs {
                                                         city?: string;
                                                     };
                                                     operator_tenant?: string;
+                                                    operator_detail?: {
+                                                        operator_name: {
+                                                            default_name: string;
+                                                            i18n_value?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
+                                                        };
+                                                        tenant_name?: string;
+                                                    };
                                                 }>;
                                             };
                                         },
@@ -631,6 +644,17 @@ export default abstract class Client extends acs {
                                         city?: string;
                                     };
                                     operator_tenant?: string;
+                                    operator_detail?: {
+                                        operator_name: {
+                                            default_name: string;
+                                            i18n_value?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
+                                        };
+                                        tenant_name?: string;
+                                    };
                                 }>;
                             };
                         }
@@ -1629,6 +1653,7 @@ export default abstract class Client extends acs {
                             page_size?: number;
                             page_token?: string;
                             target_geo?: string;
+                            with_product_version?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -1688,6 +1713,7 @@ export default abstract class Client extends acs {
                                         total_search_count?: string;
                                         quick_search_count?: string;
                                         tab_search_count?: string;
+                                        product_version?: string;
                                     }>;
                                 };
                             }
@@ -2018,6 +2044,17 @@ export default abstract class Client extends acs {
                                                             city?: string;
                                                         };
                                                         operator_tenant?: string;
+                                                        operator_detail?: {
+                                                            operator_name: {
+                                                                default_name: string;
+                                                                i18n_value?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                    ja_jp?: string;
+                                                                };
+                                                            };
+                                                            tenant_name?: string;
+                                                        };
                                                     }>;
                                                 };
                                             },
@@ -2201,6 +2238,17 @@ export default abstract class Client extends acs {
                                             city?: string;
                                         };
                                         operator_tenant?: string;
+                                        operator_detail?: {
+                                            operator_name: {
+                                                default_name: string;
+                                                i18n_value?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                    ja_jp?: string;
+                                                };
+                                            };
+                                            tenant_name?: string;
+                                        };
                                     }>;
                                 };
                             }

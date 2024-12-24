@@ -2364,7 +2364,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 原生审批任务
+         * 审批查询
          */
         task: {
             /**
@@ -5274,7 +5274,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 原生审批任务
+             * 审批查询
              */
             task: {
                 /**

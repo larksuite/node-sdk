@@ -5065,6 +5065,178 @@ export default abstract class Client extends baike {
                     });
             },
         },
+        /**
+         * app.workflow
+         */
+        appWorkflow: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                    path?: { app_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    get<
+                                        {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                workflows: Array<{
+                                                    workflow_id: string;
+                                                    status?: string;
+                                                    title?: string;
+                                                }>;
+                                            };
+                                        },
+                                        "data"
+                                    >(res, "data") || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.workflow&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=bitable&resource=app.workflow&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_token?: string; page_size?: number };
+                    path?: { app_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                workflows: Array<{
+                                    workflow_id: string;
+                                    status?: string;
+                                    title?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.workflow&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=bitable&resource=app.workflow&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    data: { status: string };
+                    path: { app_token?: string; workflow_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows/:workflow_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
              * 多维表格
@@ -10147,6 +10319,183 @@ export default abstract class Client extends baike {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * app.workflow
+             */
+            appWorkflow: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                        path?: { app_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    workflows: Array<{
+                                                        workflow_id: string;
+                                                        status?: string;
+                                                        title?: string;
+                                                    }>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.workflow&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=bitable&resource=app.workflow&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_token?: string; page_size?: number };
+                        path?: { app_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    workflows: Array<{
+                                        workflow_id: string;
+                                        status?: string;
+                                        title?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.workflow&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=bitable&resource=app.workflow&version=v1 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: { status: string };
+                        path: { app_token?: string; workflow_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/workflows/:workflow_id`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,

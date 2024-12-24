@@ -1245,6 +1245,59 @@ export default abstract class Client extends approval {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+             */
+            listUser: async (
+                payload?: {
+                    params: {
+                        employee_type: string;
+                        dept_type: string;
+                        page_size?: number;
+                        page_token?: string;
+                        member_clock_type: number;
+                    };
+                    path: { group_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                users?: Array<{
+                                    user_id?: string;
+                                    department_ids?: Array<string>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/search document }
@@ -1526,6 +1579,10 @@ export default abstract class Client extends approval {
                             late_on_base_on_time_type?: number;
                         };
                         id?: string;
+                        rest_time_flexible_configs?: Array<{
+                            need_flexible?: boolean;
+                            late_mins?: number;
+                        }>;
                     };
                     params?: { employee_type?: "employee_id" | "employee_no" };
                 },
@@ -1598,6 +1655,10 @@ export default abstract class Client extends approval {
                                         late_on_base_on_time_type?: number;
                                     };
                                     id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 };
                             };
                         }
@@ -1735,6 +1796,10 @@ export default abstract class Client extends approval {
                                     late_on_base_on_time_type?: number;
                                 };
                                 id?: string;
+                                rest_time_flexible_configs?: Array<{
+                                    need_flexible?: boolean;
+                                    late_mins?: number;
+                                }>;
                             };
                         }
                     >({
@@ -1874,6 +1939,10 @@ export default abstract class Client extends approval {
                                                         late_on_base_on_time_type?: number;
                                                     };
                                                     id?: string;
+                                                    rest_time_flexible_configs?: Array<{
+                                                        need_flexible?: boolean;
+                                                        late_mins?: number;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1978,6 +2047,10 @@ export default abstract class Client extends approval {
                                         late_on_base_on_time_type?: number;
                                     };
                                     id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -2081,6 +2154,10 @@ export default abstract class Client extends approval {
                                     late_on_base_on_time_type?: number;
                                 };
                                 id?: string;
+                                rest_time_flexible_configs?: Array<{
+                                    need_flexible?: boolean;
+                                    late_mins?: number;
+                                }>;
                             };
                         }
                     >({
@@ -2178,11 +2255,27 @@ export default abstract class Client extends approval {
                                 correct_process_id?: Array<string>;
                                 cancel_process_id?: Array<string>;
                                 process_id?: Array<string>;
+                                departure?: {
+                                    region_level?: string;
+                                    region_id?: string;
+                                };
+                                destinations?: Array<{
+                                    region_level?: string;
+                                    region_id?: string;
+                                }>;
+                                transportation?: Array<number>;
+                                trip_type?: number;
+                                remarks?: string;
                             }>;
                             time_zone?: string;
                         };
                     };
-                    params: { employee_type: "employee_id" | "employee_no" };
+                    params: {
+                        employee_type:
+                            | "employee_id"
+                            | "employee_no"
+                            | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2263,6 +2356,17 @@ export default abstract class Client extends approval {
                                         correct_process_id?: Array<string>;
                                         cancel_process_id?: Array<string>;
                                         process_id?: Array<string>;
+                                        departure?: {
+                                            region_level?: string;
+                                            region_id?: string;
+                                        };
+                                        destinations?: Array<{
+                                            region_level?: string;
+                                            region_id?: string;
+                                        }>;
+                                        transportation?: Array<number>;
+                                        trip_type?: number;
+                                        remarks?: string;
                                     }>;
                                     time_zone?: string;
                                 };
@@ -2310,7 +2414,12 @@ export default abstract class Client extends approval {
                         check_time_from?: string;
                         check_time_to?: string;
                     };
-                    params: { employee_type: "employee_id" | "employee_no" };
+                    params: {
+                        employee_type:
+                            | "employee_id"
+                            | "employee_no"
+                            | "open_id";
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -2391,6 +2500,17 @@ export default abstract class Client extends approval {
                                         correct_process_id?: Array<string>;
                                         cancel_process_id?: Array<string>;
                                         process_id?: Array<string>;
+                                        departure?: {
+                                            region_level?: string;
+                                            region_id?: string;
+                                        };
+                                        destinations?: Array<{
+                                            region_level?: string;
+                                            region_id?: string;
+                                        }>;
+                                        transportation?: Array<number>;
+                                        trip_type?: number;
+                                        remarks?: string;
                                     }>;
                                     time_zone?: string;
                                 }>;
@@ -2467,6 +2587,69 @@ export default abstract class Client extends approval {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
+             */
+            batchCreateTemp: async (
+                payload?: {
+                    data: {
+                        user_tmp_daily_shifts: Array<{
+                            group_id: string;
+                            user_id: string;
+                            date: number;
+                            shift_name: string;
+                            punch_time_simple_rules: Array<{
+                                on_time: string;
+                                off_time: string;
+                            }>;
+                        }>;
+                        operator_id?: string;
+                    };
+                    params: { employee_type: "employee_id" | "employee_no" };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_tmp_daily_shifts?: Array<{
+                                    group_id: string;
+                                    user_id: string;
+                                    date: number;
+                                    shift_name: string;
+                                    punch_time_simple_rules: Array<{
+                                        on_time: string;
+                                        off_time: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
                             path
                         ),
                         method: "POST",
@@ -4810,6 +4993,59 @@ export default abstract class Client extends approval {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=list_user&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_user&project=attendance&resource=group&version=v1 document }
+                 */
+                listUser: async (
+                    payload?: {
+                        params: {
+                            employee_type: string;
+                            dept_type: string;
+                            page_size?: number;
+                            page_token?: string;
+                            member_clock_type: number;
+                        };
+                        path: { group_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    users?: Array<{
+                                        user_id?: string;
+                                        department_ids?: Array<string>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/groups/:group_id/list_user`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=group&apiName=search&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/group/search document }
@@ -5091,6 +5327,10 @@ export default abstract class Client extends approval {
                                 late_on_base_on_time_type?: number;
                             };
                             id?: string;
+                            rest_time_flexible_configs?: Array<{
+                                need_flexible?: boolean;
+                                late_mins?: number;
+                            }>;
                         };
                         params?: {
                             employee_type?: "employee_id" | "employee_no";
@@ -5165,6 +5405,10 @@ export default abstract class Client extends approval {
                                             late_on_base_on_time_type?: number;
                                         };
                                         id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -5305,6 +5549,10 @@ export default abstract class Client extends approval {
                                         late_on_base_on_time_type?: number;
                                     };
                                     id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 };
                             }
                         >({
@@ -5446,6 +5694,10 @@ export default abstract class Client extends approval {
                                                             late_on_base_on_time_type?: number;
                                                         };
                                                         id?: string;
+                                                        rest_time_flexible_configs?: Array<{
+                                                            need_flexible?: boolean;
+                                                            late_mins?: number;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5550,6 +5802,10 @@ export default abstract class Client extends approval {
                                             late_on_base_on_time_type?: number;
                                         };
                                         id?: string;
+                                        rest_time_flexible_configs?: Array<{
+                                            need_flexible?: boolean;
+                                            late_mins?: number;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5653,6 +5909,10 @@ export default abstract class Client extends approval {
                                         late_on_base_on_time_type?: number;
                                     };
                                     id?: string;
+                                    rest_time_flexible_configs?: Array<{
+                                        need_flexible?: boolean;
+                                        late_mins?: number;
+                                    }>;
                                 };
                             }
                         >({
@@ -5750,12 +6010,26 @@ export default abstract class Client extends approval {
                                     correct_process_id?: Array<string>;
                                     cancel_process_id?: Array<string>;
                                     process_id?: Array<string>;
+                                    departure?: {
+                                        region_level?: string;
+                                        region_id?: string;
+                                    };
+                                    destinations?: Array<{
+                                        region_level?: string;
+                                        region_id?: string;
+                                    }>;
+                                    transportation?: Array<number>;
+                                    trip_type?: number;
+                                    remarks?: string;
                                 }>;
                                 time_zone?: string;
                             };
                         };
                         params: {
-                            employee_type: "employee_id" | "employee_no";
+                            employee_type:
+                                | "employee_id"
+                                | "employee_no"
+                                | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -5837,6 +6111,17 @@ export default abstract class Client extends approval {
                                             correct_process_id?: Array<string>;
                                             cancel_process_id?: Array<string>;
                                             process_id?: Array<string>;
+                                            departure?: {
+                                                region_level?: string;
+                                                region_id?: string;
+                                            };
+                                            destinations?: Array<{
+                                                region_level?: string;
+                                                region_id?: string;
+                                            }>;
+                                            transportation?: Array<number>;
+                                            trip_type?: number;
+                                            remarks?: string;
                                         }>;
                                         time_zone?: string;
                                     };
@@ -5885,7 +6170,10 @@ export default abstract class Client extends approval {
                             check_time_to?: string;
                         };
                         params: {
-                            employee_type: "employee_id" | "employee_no";
+                            employee_type:
+                                | "employee_id"
+                                | "employee_no"
+                                | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -5967,6 +6255,17 @@ export default abstract class Client extends approval {
                                             correct_process_id?: Array<string>;
                                             cancel_process_id?: Array<string>;
                                             process_id?: Array<string>;
+                                            departure?: {
+                                                region_level?: string;
+                                                region_id?: string;
+                                            };
+                                            destinations?: Array<{
+                                                region_level?: string;
+                                                region_id?: string;
+                                            }>;
+                                            transportation?: Array<number>;
+                                            trip_type?: number;
+                                            remarks?: string;
                                         }>;
                                         time_zone?: string;
                                     }>;
@@ -6045,6 +6344,71 @@ export default abstract class Client extends approval {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_daily_shift&apiName=batch_create_temp&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create_temp&project=attendance&resource=user_daily_shift&version=v1 document }
+                 */
+                batchCreateTemp: async (
+                    payload?: {
+                        data: {
+                            user_tmp_daily_shifts: Array<{
+                                group_id: string;
+                                user_id: string;
+                                date: number;
+                                shift_name: string;
+                                punch_time_simple_rules: Array<{
+                                    on_time: string;
+                                    off_time: string;
+                                }>;
+                            }>;
+                            operator_id?: string;
+                        };
+                        params: {
+                            employee_type: "employee_id" | "employee_no";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_tmp_daily_shifts?: Array<{
+                                        group_id: string;
+                                        user_id: string;
+                                        date: number;
+                                        shift_name: string;
+                                        punch_time_simple_rules: Array<{
+                                            on_time: string;
+                                            off_time: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_daily_shifts/batch_create_temp`,
                                 path
                             ),
                             method: "POST",

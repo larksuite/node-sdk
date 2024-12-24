@@ -911,7 +911,7 @@ export default abstract class Client extends security_and_compliance {
             },
         },
         /**
-         * 工作表
+         * 行列
          */
         spreadsheetSheet: {
             /**
@@ -2409,7 +2409,7 @@ export default abstract class Client extends security_and_compliance {
                 },
             },
             /**
-             * 工作表
+             * 行列
              */
             spreadsheetSheet: {
                 /**

@@ -30,7 +30,7 @@ export default abstract class Client extends docx {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 云文档-文件管理
+     * 云文档-文档
      */
     drive = {
         /**
@@ -1428,7 +1428,7 @@ export default abstract class Client extends docx {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { is_subseribe?: boolean };
+                            data?: { is_subscribe?: boolean };
                         }
                     >({
                         url: fillApiPath(
@@ -2808,7 +2808,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -2960,7 +2960,9 @@ export default abstract class Client extends docx {
                             | "bitable_file"
                             | "moments"
                             | "ccm_import_open"
-                            | "calendar";
+                            | "calendar"
+                            | "base_global"
+                            | "lark_ai_media_analysis";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -3126,7 +3128,9 @@ export default abstract class Client extends docx {
                             | "bitable_file"
                             | "moments"
                             | "ccm_import_open"
-                            | "calendar";
+                            | "calendar"
+                            | "base_global"
+                            | "lark_ai_media_analysis";
                         size: number;
                         parent_node?: string;
                         extra?: string;
@@ -5591,7 +5595,7 @@ export default abstract class Client extends docx {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { is_subseribe?: boolean };
+                                data?: { is_subscribe?: boolean };
                             }
                         >({
                             url: fillApiPath(
@@ -6997,7 +7001,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 素材
+             * 分片上传
              */
             media: {
                 /**
@@ -7149,7 +7153,9 @@ export default abstract class Client extends docx {
                                 | "bitable_file"
                                 | "moments"
                                 | "ccm_import_open"
-                                | "calendar";
+                                | "calendar"
+                                | "base_global"
+                                | "lark_ai_media_analysis";
                             parent_node: string;
                             size: number;
                             checksum?: string;
@@ -7318,7 +7324,9 @@ export default abstract class Client extends docx {
                                 | "bitable_file"
                                 | "moments"
                                 | "ccm_import_open"
-                                | "calendar";
+                                | "calendar"
+                                | "base_global"
+                                | "lark_ai_media_analysis";
                             size: number;
                             parent_node?: string;
                             extra?: string;
