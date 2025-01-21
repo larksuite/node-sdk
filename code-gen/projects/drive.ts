@@ -2808,7 +2808,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 分片上传
+         * 素材
          */
         media: {
             /**
@@ -3198,7 +3198,8 @@ export default abstract class Client extends docx {
                                 | "wiki"
                                 | "docx"
                                 | "folder"
-                                | "synced_block";
+                                | "synced_block"
+                                | "slides";
                         }>;
                         with_url?: boolean;
                     };
@@ -3694,7 +3695,8 @@ export default abstract class Client extends docx {
                             | "docx"
                             | "mindnote"
                             | "minutes"
-                            | "slides";
+                            | "slides"
+                            | "folder";
                         need_notification?: boolean;
                         remove_old_owner?: boolean;
                         stay_put?: boolean;
@@ -7001,7 +7003,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 分片上传
+             * 素材
              */
             media: {
                 /**
@@ -7394,7 +7396,8 @@ export default abstract class Client extends docx {
                                     | "wiki"
                                     | "docx"
                                     | "folder"
-                                    | "synced_block";
+                                    | "synced_block"
+                                    | "slides";
                             }>;
                             with_url?: boolean;
                         };
@@ -7893,7 +7896,8 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "mindnote"
                                 | "minutes"
-                                | "slides";
+                                | "slides"
+                                | "folder";
                             need_notification?: boolean;
                             remove_old_owner?: boolean;
                             stay_put?: boolean;
@@ -8368,6 +8372,169 @@ export default abstract class Client extends docx {
             },
         },
         v2: {
+            /**
+             * file.like
+             */
+            fileLike: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            file_type: "doc" | "docx" | "file";
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/drive/v2/files/:file_token/likes`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        user_id?: string;
+                                                        last_liked_time?: string;
+                                                        user_name?: string;
+                                                        user_en_name?: string;
+                                                        user_avatar_url?: string;
+                                                        user_is_desensitized?: boolean;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.like&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=drive&resource=file.like&version=v2 document }
+                 *
+                 * 获取指定文件的点赞者列表并分页返回。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            file_type: "doc" | "docx" | "file";
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        user_id?: string;
+                                        last_liked_time?: string;
+                                        user_name?: string;
+                                        user_en_name?: string;
+                                        user_avatar_url?: string;
+                                        user_is_desensitized?: boolean;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v2/files/:file_token/likes`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * permission.public
              */

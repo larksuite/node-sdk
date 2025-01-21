@@ -49,13 +49,18 @@ export default abstract class Client extends admin {
                     payload?: {
                         data: {
                             idempotent_id: string;
-                            content_type: string;
+                            content_type:
+                                | "MDX"
+                                | "TEXT"
+                                | "CLIP"
+                                | "SmartCard"
+                                | "JSON";
                             content: string;
                             file_ids?: Array<string>;
                             quote_message_id?: string;
                             mentions?: Array<{
                                 entity_id?: string;
-                                identity_provider?: string;
+                                identity_provider?: "AILY" | "FEISHU";
                                 key?: string;
                                 name?: string;
                                 aily_id?: string;
@@ -79,7 +84,12 @@ export default abstract class Client extends admin {
                                         id?: string;
                                         session_id?: string;
                                         run_id?: string;
-                                        content_type?: string;
+                                        content_type?:
+                                            | "MDX"
+                                            | "TEXT"
+                                            | "CLIP"
+                                            | "SmartCard"
+                                            | "JSON";
                                         content?: string;
                                         files?: Array<{
                                             id?: string;
@@ -95,20 +105,24 @@ export default abstract class Client extends admin {
                                         quote_message_id?: string;
                                         sender?: {
                                             entity_id?: string;
-                                            identity_provider?: string;
-                                            sender_type?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
+                                            sender_type?: "USER" | "ASSISTANT";
                                             aily_id?: string;
                                         };
                                         mentions?: Array<{
                                             entity_id?: string;
-                                            identity_provider?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
                                             key?: string;
                                             name?: string;
                                             aily_id?: string;
                                         }>;
                                         plain_text?: string;
                                         created_at?: string;
-                                        status?: string;
+                                        status?: "IN_PROGRESS" | "COMPLETED";
                                     };
                                 };
                             }
@@ -159,7 +173,12 @@ export default abstract class Client extends admin {
                                         id?: string;
                                         session_id?: string;
                                         run_id?: string;
-                                        content_type?: string;
+                                        content_type?:
+                                            | "MDX"
+                                            | "TEXT"
+                                            | "CLIP"
+                                            | "SmartCard"
+                                            | "JSON";
                                         content?: string;
                                         files?: Array<{
                                             id?: string;
@@ -175,20 +194,24 @@ export default abstract class Client extends admin {
                                         quote_message_id?: string;
                                         sender?: {
                                             entity_id?: string;
-                                            identity_provider?: string;
-                                            sender_type?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
+                                            sender_type?: "USER" | "ASSISTANT";
                                             aily_id?: string;
                                         };
                                         mentions?: Array<{
                                             entity_id?: string;
-                                            identity_provider?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
                                             key?: string;
                                             name?: string;
                                             aily_id?: string;
                                         }>;
                                         plain_text?: string;
                                         created_at?: string;
-                                        status?: string;
+                                        status?: "IN_PROGRESS" | "COMPLETED";
                                     };
                                 };
                             }
@@ -284,7 +307,12 @@ export default abstract class Client extends admin {
                                                         id?: string;
                                                         session_id?: string;
                                                         run_id?: string;
-                                                        content_type?: string;
+                                                        content_type?:
+                                                            | "MDX"
+                                                            | "TEXT"
+                                                            | "CLIP"
+                                                            | "SmartCard"
+                                                            | "JSON";
                                                         content?: string;
                                                         files?: Array<{
                                                             id?: string;
@@ -300,20 +328,28 @@ export default abstract class Client extends admin {
                                                         quote_message_id?: string;
                                                         sender?: {
                                                             entity_id?: string;
-                                                            identity_provider?: string;
-                                                            sender_type?: string;
+                                                            identity_provider?:
+                                                                | "AILY"
+                                                                | "FEISHU";
+                                                            sender_type?:
+                                                                | "USER"
+                                                                | "ASSISTANT";
                                                             aily_id?: string;
                                                         };
                                                         mentions?: Array<{
                                                             entity_id?: string;
-                                                            identity_provider?: string;
+                                                            identity_provider?:
+                                                                | "AILY"
+                                                                | "FEISHU";
                                                             key?: string;
                                                             name?: string;
                                                             aily_id?: string;
                                                         }>;
                                                         plain_text?: string;
                                                         created_at?: string;
-                                                        status?: string;
+                                                        status?:
+                                                            | "IN_PROGRESS"
+                                                            | "COMPLETED";
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -369,7 +405,12 @@ export default abstract class Client extends admin {
                                         id?: string;
                                         session_id?: string;
                                         run_id?: string;
-                                        content_type?: string;
+                                        content_type?:
+                                            | "MDX"
+                                            | "TEXT"
+                                            | "CLIP"
+                                            | "SmartCard"
+                                            | "JSON";
                                         content?: string;
                                         files?: Array<{
                                             id?: string;
@@ -385,20 +426,24 @@ export default abstract class Client extends admin {
                                         quote_message_id?: string;
                                         sender?: {
                                             entity_id?: string;
-                                            identity_provider?: string;
-                                            sender_type?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
+                                            sender_type?: "USER" | "ASSISTANT";
                                             aily_id?: string;
                                         };
                                         mentions?: Array<{
                                             entity_id?: string;
-                                            identity_provider?: string;
+                                            identity_provider?:
+                                                | "AILY"
+                                                | "FEISHU";
                                             key?: string;
                                             name?: string;
                                             aily_id?: string;
                                         }>;
                                         plain_text?: string;
                                         created_at?: string;
-                                        status?: string;
+                                        status?: "IN_PROGRESS" | "COMPLETED";
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -647,7 +692,14 @@ export default abstract class Client extends admin {
                                         created_at: string;
                                         app_id: string;
                                         session_id: string;
-                                        status: string;
+                                        status:
+                                            | "QUEUED"
+                                            | "IN_PROGRESS"
+                                            | "REQUIRES_MESSAGE"
+                                            | "CANCELLED"
+                                            | "COMPLETED"
+                                            | "FAILED"
+                                            | "EXPIRED";
                                         started_at?: string;
                                         ended_at?: string;
                                         error?: {
@@ -709,7 +761,14 @@ export default abstract class Client extends admin {
                                         created_at: string;
                                         app_id: string;
                                         session_id: string;
-                                        status: string;
+                                        status:
+                                            | "QUEUED"
+                                            | "IN_PROGRESS"
+                                            | "REQUIRES_MESSAGE"
+                                            | "CANCELLED"
+                                            | "COMPLETED"
+                                            | "FAILED"
+                                            | "EXPIRED";
                                         started_at?: string;
                                         ended_at?: string;
                                         error?: {
@@ -765,7 +824,14 @@ export default abstract class Client extends admin {
                                         created_at: string;
                                         app_id: string;
                                         session_id: string;
-                                        status: string;
+                                        status:
+                                            | "QUEUED"
+                                            | "IN_PROGRESS"
+                                            | "REQUIRES_MESSAGE"
+                                            | "CANCELLED"
+                                            | "COMPLETED"
+                                            | "FAILED"
+                                            | "EXPIRED";
                                         started_at?: string;
                                         ended_at?: string;
                                         error?: {
@@ -864,7 +930,14 @@ export default abstract class Client extends admin {
                                                         created_at: string;
                                                         app_id: string;
                                                         session_id: string;
-                                                        status: string;
+                                                        status:
+                                                            | "QUEUED"
+                                                            | "IN_PROGRESS"
+                                                            | "REQUIRES_MESSAGE"
+                                                            | "CANCELLED"
+                                                            | "COMPLETED"
+                                                            | "FAILED"
+                                                            | "EXPIRED";
                                                         started_at?: string;
                                                         ended_at?: string;
                                                         error?: {
@@ -923,7 +996,14 @@ export default abstract class Client extends admin {
                                         created_at: string;
                                         app_id: string;
                                         session_id: string;
-                                        status: string;
+                                        status:
+                                            | "QUEUED"
+                                            | "IN_PROGRESS"
+                                            | "REQUIRES_MESSAGE"
+                                            | "CANCELLED"
+                                            | "COMPLETED"
+                                            | "FAILED"
+                                            | "EXPIRED";
                                         started_at?: string;
                                         ended_at?: string;
                                         error?: {

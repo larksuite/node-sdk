@@ -7828,6 +7828,7 @@ export default abstract class Client extends helpdesk {
                                                 items?: Array<{
                                                     user_id?: string;
                                                     verify_status?: number;
+                                                    tag_id_list?: Array<string>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -7882,6 +7883,7 @@ export default abstract class Client extends helpdesk {
                                 items?: Array<{
                                     user_id?: string;
                                     verify_status?: number;
+                                    tag_id_list?: Array<string>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -7915,6 +7917,7 @@ export default abstract class Client extends helpdesk {
                         interviewer: {
                             user_id?: string;
                             verify_status?: number;
+                            tag_id_list?: Array<string>;
                         };
                     };
                     params?: {
@@ -7937,6 +7940,7 @@ export default abstract class Client extends helpdesk {
                                 interviewer?: {
                                     user_id?: string;
                                     verify_status?: number;
+                                    tag_id_list?: Array<string>;
                                 };
                             };
                         }
@@ -8049,6 +8053,7 @@ export default abstract class Client extends helpdesk {
                         interview_registration_schema_id?: string;
                         onboard_registration_schema_id?: string;
                         target_major_id_list?: Array<string>;
+                        portal_website_apply_form_schema_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -8221,6 +8226,10 @@ export default abstract class Client extends helpdesk {
                                     zh_name?: string;
                                     en_name?: string;
                                 }>;
+                                portal_website_apply_form_schema_info?: {
+                                    schema_id?: string;
+                                    name?: string;
+                                };
                             };
                         }
                     >({
@@ -8460,6 +8469,10 @@ export default abstract class Client extends helpdesk {
                                     zh_name?: string;
                                     en_name?: string;
                                 }>;
+                                portal_website_apply_form_schema_info?: {
+                                    schema_id?: string;
+                                    name?: string;
+                                };
                             };
                         }
                     >({
@@ -8606,6 +8619,10 @@ export default abstract class Client extends helpdesk {
                                             appointment_notification_template_id?: string;
                                             cancel_interview_notification_template_id?: string;
                                         };
+                                    };
+                                    portal_website_apply_form_schema_info?: {
+                                        schema_id?: string;
+                                        name?: string;
                                     };
                                 };
                             };
@@ -9525,6 +9542,7 @@ export default abstract class Client extends helpdesk {
                                 cancel_interview_notification_template_id?: string;
                             };
                         };
+                        portal_website_apply_form_schema_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -9638,6 +9656,10 @@ export default abstract class Client extends helpdesk {
                                             appointment_notification_template_id?: string;
                                             cancel_interview_notification_template_id?: string;
                                         };
+                                    };
+                                    portal_website_apply_form_schema_info?: {
+                                        schema_id?: string;
+                                        name?: string;
                                     };
                                 };
                             };
@@ -17726,6 +17748,8 @@ export default abstract class Client extends helpdesk {
                                                 items?: Array<{
                                                     test_id?: string;
                                                     application_id?: string;
+                                                    talent_id?: string;
+                                                    job_id?: string;
                                                     test_paper_id?: string;
                                                     test_paper_name?: string;
                                                     test_paper_source_id?: string;
@@ -17749,6 +17773,7 @@ export default abstract class Client extends helpdesk {
                                                     score?: string;
                                                     score_submit_time?: string;
                                                     reviewer?: string;
+                                                    review_created_at?: string;
                                                     created_at?: string;
                                                 }>;
                                                 has_more?: boolean;
@@ -17809,6 +17834,8 @@ export default abstract class Client extends helpdesk {
                                 items?: Array<{
                                     test_id?: string;
                                     application_id?: string;
+                                    talent_id?: string;
+                                    job_id?: string;
                                     test_paper_id?: string;
                                     test_paper_name?: string;
                                     test_paper_source_id?: string;
@@ -17832,6 +17859,7 @@ export default abstract class Client extends helpdesk {
                                     score?: string;
                                     score_submit_time?: string;
                                     reviewer?: string;
+                                    review_created_at?: string;
                                     created_at?: string;
                                 }>;
                                 has_more?: boolean;
@@ -28549,6 +28577,7 @@ export default abstract class Client extends helpdesk {
                                                     items?: Array<{
                                                         user_id?: string;
                                                         verify_status?: number;
+                                                        tag_id_list?: Array<string>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -28603,6 +28632,7 @@ export default abstract class Client extends helpdesk {
                                     items?: Array<{
                                         user_id?: string;
                                         verify_status?: number;
+                                        tag_id_list?: Array<string>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -28636,6 +28666,7 @@ export default abstract class Client extends helpdesk {
                             interviewer: {
                                 user_id?: string;
                                 verify_status?: number;
+                                tag_id_list?: Array<string>;
                             };
                         };
                         params?: {
@@ -28658,6 +28689,7 @@ export default abstract class Client extends helpdesk {
                                     interviewer?: {
                                         user_id?: string;
                                         verify_status?: number;
+                                        tag_id_list?: Array<string>;
                                     };
                                 };
                             }
@@ -28773,6 +28805,7 @@ export default abstract class Client extends helpdesk {
                             interview_registration_schema_id?: string;
                             onboard_registration_schema_id?: string;
                             target_major_id_list?: Array<string>;
+                            portal_website_apply_form_schema_id?: string;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -28945,6 +28978,10 @@ export default abstract class Client extends helpdesk {
                                         zh_name?: string;
                                         en_name?: string;
                                     }>;
+                                    portal_website_apply_form_schema_info?: {
+                                        schema_id?: string;
+                                        name?: string;
+                                    };
                                 };
                             }
                         >({
@@ -29184,6 +29221,10 @@ export default abstract class Client extends helpdesk {
                                         zh_name?: string;
                                         en_name?: string;
                                     }>;
+                                    portal_website_apply_form_schema_info?: {
+                                        schema_id?: string;
+                                        name?: string;
+                                    };
                                 };
                             }
                         >({
@@ -29330,6 +29371,10 @@ export default abstract class Client extends helpdesk {
                                                 appointment_notification_template_id?: string;
                                                 cancel_interview_notification_template_id?: string;
                                             };
+                                        };
+                                        portal_website_apply_form_schema_info?: {
+                                            schema_id?: string;
+                                            name?: string;
                                         };
                                     };
                                 };
@@ -30255,6 +30300,7 @@ export default abstract class Client extends helpdesk {
                                     cancel_interview_notification_template_id?: string;
                                 };
                             };
+                            portal_website_apply_form_schema_id?: string;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -30368,6 +30414,10 @@ export default abstract class Client extends helpdesk {
                                                 appointment_notification_template_id?: string;
                                                 cancel_interview_notification_template_id?: string;
                                             };
+                                        };
+                                        portal_website_apply_form_schema_info?: {
+                                            schema_id?: string;
+                                            name?: string;
                                         };
                                     };
                                 };
@@ -38564,6 +38614,8 @@ export default abstract class Client extends helpdesk {
                                                     items?: Array<{
                                                         test_id?: string;
                                                         application_id?: string;
+                                                        talent_id?: string;
+                                                        job_id?: string;
                                                         test_paper_id?: string;
                                                         test_paper_name?: string;
                                                         test_paper_source_id?: string;
@@ -38587,6 +38639,7 @@ export default abstract class Client extends helpdesk {
                                                         score?: string;
                                                         score_submit_time?: string;
                                                         reviewer?: string;
+                                                        review_created_at?: string;
                                                         created_at?: string;
                                                     }>;
                                                     has_more?: boolean;
@@ -38647,6 +38700,8 @@ export default abstract class Client extends helpdesk {
                                     items?: Array<{
                                         test_id?: string;
                                         application_id?: string;
+                                        talent_id?: string;
+                                        job_id?: string;
                                         test_paper_id?: string;
                                         test_paper_name?: string;
                                         test_paper_source_id?: string;
@@ -38670,6 +38725,7 @@ export default abstract class Client extends helpdesk {
                                         score?: string;
                                         score_submit_time?: string;
                                         reviewer?: string;
+                                        review_created_at?: string;
                                         created_at?: string;
                                     }>;
                                     has_more?: boolean;

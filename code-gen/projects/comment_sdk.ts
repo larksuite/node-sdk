@@ -10,10 +10,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import calendar from "./calendar";
+import cardkit from "./cardkit";
 
 // auto gen
-export default abstract class Client extends calendar {
+export default abstract class Client extends cardkit {
     declare tokenManager;
 
     declare domain;

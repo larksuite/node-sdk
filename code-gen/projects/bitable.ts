@@ -183,6 +183,8 @@ export default abstract class Client extends baike {
                                     revision?: number;
                                     is_advanced?: boolean;
                                     time_zone?: string;
+                                    formula_type?: number;
+                                    advance_version?: "v1" | "v2";
                                 };
                             };
                         }
@@ -1357,6 +1359,24 @@ export default abstract class Client extends baike {
                                     range_customize?: boolean;
                                     currency_code?: string;
                                     rating?: { symbol?: string };
+                                    type?: {
+                                        data_type: number;
+                                        ui_property?: {
+                                            currency_code?: string;
+                                            formatter?: string;
+                                            range_customize?: boolean;
+                                            min?: number;
+                                            max?: number;
+                                            date_formatter?: string;
+                                            rating?: { symbol?: string };
+                                        };
+                                        ui_type?:
+                                            | "Number"
+                                            | "Progress"
+                                            | "Currency"
+                                            | "Rating"
+                                            | "DateTime";
+                                    };
                                 };
                                 description?: {
                                     disable_sync?: boolean;
@@ -1522,6 +1542,24 @@ export default abstract class Client extends baike {
                                     range_customize?: boolean;
                                     currency_code?: string;
                                     rating?: { symbol?: string };
+                                    type?: {
+                                        data_type: number;
+                                        ui_property?: {
+                                            currency_code?: string;
+                                            formatter?: string;
+                                            range_customize?: boolean;
+                                            min?: number;
+                                            max?: number;
+                                            date_formatter?: string;
+                                            rating?: { symbol?: string };
+                                        };
+                                        ui_type?:
+                                            | "Number"
+                                            | "Progress"
+                                            | "Currency"
+                                            | "Rating"
+                                            | "DateTime";
+                                    };
                                 };
                                 description?: {
                                     disable_sync?: boolean;
@@ -1846,6 +1884,24 @@ export default abstract class Client extends baike {
                             range_customize?: boolean;
                             currency_code?: string;
                             rating?: { symbol?: string };
+                            type?: {
+                                data_type: number;
+                                ui_property?: {
+                                    currency_code?: string;
+                                    formatter?: string;
+                                    range_customize?: boolean;
+                                    min?: number;
+                                    max?: number;
+                                    date_formatter?: string;
+                                    rating?: { symbol?: string };
+                                };
+                                ui_type?:
+                                    | "Number"
+                                    | "Progress"
+                                    | "Currency"
+                                    | "Rating"
+                                    | "DateTime";
+                            };
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
@@ -1933,6 +1989,24 @@ export default abstract class Client extends baike {
                                         range_customize?: boolean;
                                         currency_code?: string;
                                         rating?: { symbol?: string };
+                                        type?: {
+                                            data_type: number;
+                                            ui_property?: {
+                                                currency_code?: string;
+                                                formatter?: string;
+                                                range_customize?: boolean;
+                                                min?: number;
+                                                max?: number;
+                                                date_formatter?: string;
+                                                rating?: { symbol?: string };
+                                            };
+                                            ui_type?:
+                                                | "Number"
+                                                | "Progress"
+                                                | "Currency"
+                                                | "Rating"
+                                                | "DateTime";
+                                        };
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -2153,6 +2227,26 @@ export default abstract class Client extends baike {
                                                         rating?: {
                                                             symbol?: string;
                                                         };
+                                                        type?: {
+                                                            data_type: number;
+                                                            ui_property?: {
+                                                                currency_code?: string;
+                                                                formatter?: string;
+                                                                range_customize?: boolean;
+                                                                min?: number;
+                                                                max?: number;
+                                                                date_formatter?: string;
+                                                                rating?: {
+                                                                    symbol?: string;
+                                                                };
+                                                            };
+                                                            ui_type?:
+                                                                | "Number"
+                                                                | "Progress"
+                                                                | "Currency"
+                                                                | "Rating"
+                                                                | "DateTime";
+                                                        };
                                                     };
                                                     description?: string;
                                                     is_primary?: boolean;
@@ -2282,6 +2376,24 @@ export default abstract class Client extends baike {
                                         range_customize?: boolean;
                                         currency_code?: string;
                                         rating?: { symbol?: string };
+                                        type?: {
+                                            data_type: number;
+                                            ui_property?: {
+                                                currency_code?: string;
+                                                formatter?: string;
+                                                range_customize?: boolean;
+                                                min?: number;
+                                                max?: number;
+                                                date_formatter?: string;
+                                                rating?: { symbol?: string };
+                                            };
+                                            ui_type?:
+                                                | "Number"
+                                                | "Progress"
+                                                | "Currency"
+                                                | "Rating"
+                                                | "DateTime";
+                                        };
                                     };
                                     description?: string;
                                     is_primary?: boolean;
@@ -2384,6 +2496,24 @@ export default abstract class Client extends baike {
                             range_customize?: boolean;
                             currency_code?: string;
                             rating?: { symbol?: string };
+                            type?: {
+                                data_type: number;
+                                ui_property?: {
+                                    currency_code?: string;
+                                    formatter?: string;
+                                    range_customize?: boolean;
+                                    min?: number;
+                                    max?: number;
+                                    date_formatter?: string;
+                                    rating?: { symbol?: string };
+                                };
+                                ui_type?:
+                                    | "Number"
+                                    | "Progress"
+                                    | "Currency"
+                                    | "Rating"
+                                    | "DateTime";
+                            };
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
@@ -2474,6 +2604,24 @@ export default abstract class Client extends baike {
                                         range_customize?: boolean;
                                         currency_code?: string;
                                         rating?: { symbol?: string };
+                                        type?: {
+                                            data_type: number;
+                                            ui_property?: {
+                                                currency_code?: string;
+                                                formatter?: string;
+                                                range_customize?: boolean;
+                                                min?: number;
+                                                max?: number;
+                                                date_formatter?: string;
+                                                rating?: { symbol?: string };
+                                            };
+                                            ui_type?:
+                                                | "Number"
+                                                | "Progress"
+                                                | "Currency"
+                                                | "Rating"
+                                                | "DateTime";
+                                        };
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -5388,6 +5536,8 @@ export default abstract class Client extends baike {
                                         revision?: number;
                                         is_advanced?: boolean;
                                         time_zone?: string;
+                                        formula_type?: number;
+                                        advance_version?: "v1" | "v2";
                                     };
                                 };
                             }
@@ -6585,6 +6735,24 @@ export default abstract class Client extends baike {
                                         range_customize?: boolean;
                                         currency_code?: string;
                                         rating?: { symbol?: string };
+                                        type?: {
+                                            data_type: number;
+                                            ui_property?: {
+                                                currency_code?: string;
+                                                formatter?: string;
+                                                range_customize?: boolean;
+                                                min?: number;
+                                                max?: number;
+                                                date_formatter?: string;
+                                                rating?: { symbol?: string };
+                                            };
+                                            ui_type?:
+                                                | "Number"
+                                                | "Progress"
+                                                | "Currency"
+                                                | "Rating"
+                                                | "DateTime";
+                                        };
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -6755,6 +6923,24 @@ export default abstract class Client extends baike {
                                         range_customize?: boolean;
                                         currency_code?: string;
                                         rating?: { symbol?: string };
+                                        type?: {
+                                            data_type: number;
+                                            ui_property?: {
+                                                currency_code?: string;
+                                                formatter?: string;
+                                                range_customize?: boolean;
+                                                min?: number;
+                                                max?: number;
+                                                date_formatter?: string;
+                                                rating?: { symbol?: string };
+                                            };
+                                            ui_type?:
+                                                | "Number"
+                                                | "Progress"
+                                                | "Currency"
+                                                | "Rating"
+                                                | "DateTime";
+                                        };
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -7084,6 +7270,24 @@ export default abstract class Client extends baike {
                                 range_customize?: boolean;
                                 currency_code?: string;
                                 rating?: { symbol?: string };
+                                type?: {
+                                    data_type: number;
+                                    ui_property?: {
+                                        currency_code?: string;
+                                        formatter?: string;
+                                        range_customize?: boolean;
+                                        min?: number;
+                                        max?: number;
+                                        date_formatter?: string;
+                                        rating?: { symbol?: string };
+                                    };
+                                    ui_type?:
+                                        | "Number"
+                                        | "Progress"
+                                        | "Currency"
+                                        | "Rating"
+                                        | "DateTime";
+                                };
                             };
                             description?: {
                                 disable_sync?: boolean;
@@ -7174,6 +7378,26 @@ export default abstract class Client extends baike {
                                             range_customize?: boolean;
                                             currency_code?: string;
                                             rating?: { symbol?: string };
+                                            type?: {
+                                                data_type: number;
+                                                ui_property?: {
+                                                    currency_code?: string;
+                                                    formatter?: string;
+                                                    range_customize?: boolean;
+                                                    min?: number;
+                                                    max?: number;
+                                                    date_formatter?: string;
+                                                    rating?: {
+                                                        symbol?: string;
+                                                    };
+                                                };
+                                                ui_type?:
+                                                    | "Number"
+                                                    | "Progress"
+                                                    | "Currency"
+                                                    | "Rating"
+                                                    | "DateTime";
+                                            };
                                         };
                                         description?: {
                                             disable_sync?: boolean;
@@ -7396,6 +7620,26 @@ export default abstract class Client extends baike {
                                                             rating?: {
                                                                 symbol?: string;
                                                             };
+                                                            type?: {
+                                                                data_type: number;
+                                                                ui_property?: {
+                                                                    currency_code?: string;
+                                                                    formatter?: string;
+                                                                    range_customize?: boolean;
+                                                                    min?: number;
+                                                                    max?: number;
+                                                                    date_formatter?: string;
+                                                                    rating?: {
+                                                                        symbol?: string;
+                                                                    };
+                                                                };
+                                                                ui_type?:
+                                                                    | "Number"
+                                                                    | "Progress"
+                                                                    | "Currency"
+                                                                    | "Rating"
+                                                                    | "DateTime";
+                                                            };
                                                         };
                                                         description?: string;
                                                         is_primary?: boolean;
@@ -7525,6 +7769,26 @@ export default abstract class Client extends baike {
                                             range_customize?: boolean;
                                             currency_code?: string;
                                             rating?: { symbol?: string };
+                                            type?: {
+                                                data_type: number;
+                                                ui_property?: {
+                                                    currency_code?: string;
+                                                    formatter?: string;
+                                                    range_customize?: boolean;
+                                                    min?: number;
+                                                    max?: number;
+                                                    date_formatter?: string;
+                                                    rating?: {
+                                                        symbol?: string;
+                                                    };
+                                                };
+                                                ui_type?:
+                                                    | "Number"
+                                                    | "Progress"
+                                                    | "Currency"
+                                                    | "Rating"
+                                                    | "DateTime";
+                                            };
                                         };
                                         description?: string;
                                         is_primary?: boolean;
@@ -7627,6 +7891,24 @@ export default abstract class Client extends baike {
                                 range_customize?: boolean;
                                 currency_code?: string;
                                 rating?: { symbol?: string };
+                                type?: {
+                                    data_type: number;
+                                    ui_property?: {
+                                        currency_code?: string;
+                                        formatter?: string;
+                                        range_customize?: boolean;
+                                        min?: number;
+                                        max?: number;
+                                        date_formatter?: string;
+                                        rating?: { symbol?: string };
+                                    };
+                                    ui_type?:
+                                        | "Number"
+                                        | "Progress"
+                                        | "Currency"
+                                        | "Rating"
+                                        | "DateTime";
+                                };
                             };
                             description?: {
                                 disable_sync?: boolean;
@@ -7720,6 +8002,26 @@ export default abstract class Client extends baike {
                                             range_customize?: boolean;
                                             currency_code?: string;
                                             rating?: { symbol?: string };
+                                            type?: {
+                                                data_type: number;
+                                                ui_property?: {
+                                                    currency_code?: string;
+                                                    formatter?: string;
+                                                    range_customize?: boolean;
+                                                    min?: number;
+                                                    max?: number;
+                                                    date_formatter?: string;
+                                                    rating?: {
+                                                        symbol?: string;
+                                                    };
+                                                };
+                                                ui_type?:
+                                                    | "Number"
+                                                    | "Progress"
+                                                    | "Currency"
+                                                    | "Rating"
+                                                    | "DateTime";
+                                            };
                                         };
                                         description?: {
                                             disable_sync?: boolean;

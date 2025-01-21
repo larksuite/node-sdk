@@ -101,6 +101,7 @@ export interface IHandles extends IOtherEventHandles {
                 scope: string;
                 description?: string;
                 level?: number;
+                token_types?: Array<string>;
             }>;
             back_home_url?: string;
             i18n?: Array<{
@@ -220,6 +221,7 @@ export interface IHandles extends IOtherEventHandles {
                 scope: string;
                 description?: string;
                 level?: number;
+                token_types?: Array<string>;
             }>;
             back_home_url?: string;
             i18n?: Array<{
@@ -1560,6 +1562,7 @@ export interface IHandles extends IOtherEventHandles {
         api_name?: string;
         field_changes?: Array<string>;
         metadata_type?: string;
+        enum_value_changes?: Array<string>;
     }) => Promise<any> | any;
     /**
          
@@ -2131,7 +2134,7 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         company_id?: string;
         field_changes?: Array<string>;
-        sub_events?: {
+        sub_events?: Array<{
             id?: string;
             entity?: string;
             agg_entity?: string;
@@ -2139,7 +2142,7 @@ export interface IHandles extends IOtherEventHandles {
             agg_entity_field?: string;
             opt_type?: number;
             field_changes?: Array<string>;
-        };
+        }>;
     }) => Promise<any> | any;
     /**
          
@@ -2454,7 +2457,7 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         location_id?: string;
         field_changes?: Array<string>;
-        sub_events?: {
+        sub_events?: Array<{
             id?: string;
             entity?: string;
             agg_entity?: string;
@@ -2462,7 +2465,7 @@ export interface IHandles extends IOtherEventHandles {
             agg_entity_field?: string;
             opt_type?: number;
             field_changes?: Array<string>;
-        };
+        }>;
     }) => Promise<any> | any;
     /**
          

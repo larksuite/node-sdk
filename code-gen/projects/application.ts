@@ -649,6 +649,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
+                                        token_types?: Array<string>;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -873,6 +874,7 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
+                                                        token_types?: Array<string>;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -1063,6 +1065,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
+                                        token_types?: Array<string>;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1311,7 +1314,7 @@ export default abstract class Client extends aily {
             },
         },
         /**
-         * 应用
+         * 应用管理
          */
         application: {
             /**
@@ -1427,6 +1430,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
+                                        token_types?: Array<string>;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1587,6 +1591,7 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
+                                                        token_types?: Array<string>;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -1712,6 +1717,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
+                                        token_types?: Array<string>;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1910,6 +1916,7 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
+                                                        token_types?: Array<string>;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -2031,6 +2038,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
+                                        token_types?: Array<string>;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -3086,6 +3094,7 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
+                                            token_types?: Array<string>;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -3312,6 +3321,7 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
+                                                            token_types?: Array<string>;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -3502,6 +3512,7 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
+                                            token_types?: Array<string>;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -3756,7 +3767,7 @@ export default abstract class Client extends aily {
                 },
             },
             /**
-             * 应用
+             * 应用管理
              */
             application: {
                 /**
@@ -3872,6 +3883,7 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
+                                            token_types?: Array<string>;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -4034,6 +4046,7 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
+                                                            token_types?: Array<string>;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -4159,6 +4172,7 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
+                                            token_types?: Array<string>;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -4362,6 +4376,7 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
+                                                            token_types?: Array<string>;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -4483,6 +4498,7 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
+                                            token_types?: Array<string>;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{

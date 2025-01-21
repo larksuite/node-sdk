@@ -5007,6 +5007,13 @@ export default abstract class Client extends contract {
                                     service_company?: string;
                                     employee_subtype_id?: string;
                                     position_id?: string;
+                                    job_data_reason?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 };
                             };
                         }
@@ -5131,6 +5138,13 @@ export default abstract class Client extends contract {
                                     service_company?: string;
                                     employee_subtype_id?: string;
                                     position_id?: string;
+                                    job_data_reason?: {
+                                        enum_name: string;
+                                        display?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                    };
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -5195,8 +5209,6 @@ export default abstract class Client extends contract {
                         work_shift?: { enum_name: string };
                         compensation_type?: { enum_name: string };
                         service_company?: string;
-                        employee_subtype_id?: string;
-                        position_id?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -5278,8 +5290,6 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
-                                    employee_subtype_id?: string;
-                                    position_id?: string;
                                 };
                             };
                         }
@@ -16890,6 +16900,13 @@ export default abstract class Client extends contract {
                                         service_company?: string;
                                         employee_subtype_id?: string;
                                         position_id?: string;
+                                        job_data_reason?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                 };
                             }
@@ -17014,6 +17031,13 @@ export default abstract class Client extends contract {
                                         service_company?: string;
                                         employee_subtype_id?: string;
                                         position_id?: string;
+                                        job_data_reason?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -17078,8 +17102,6 @@ export default abstract class Client extends contract {
                             work_shift?: { enum_name: string };
                             compensation_type?: { enum_name: string };
                             service_company?: string;
-                            employee_subtype_id?: string;
-                            position_id?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -17161,8 +17183,6 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
-                                        employee_subtype_id?: string;
-                                        position_id?: string;
                                     };
                                 };
                             }
@@ -27133,6 +27153,148 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/cost_centers/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    cost_center_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_cost_center_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=cost_center&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    cost_center_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_cost_center_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_centers/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_center&apiName=search&version=v2 click to debug }
                  *
@@ -27745,6 +27907,13 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        sub_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                         parent_department_id?: string;
                                         manager?: string;
                                         code?: string;
@@ -27771,6 +27940,188 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/departments/query_multi_timeline`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryOperationLogsWithIterator: async (
+                    payload?: {
+                        data: {
+                            department_ids: Array<string>;
+                            start_date: string;
+                            end_date: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/departments/query_operation_logs`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    op_logs?: Array<{
+                                                        object_id?: string;
+                                                        changes?: Array<{
+                                                            field?: string;
+                                                            before?: string;
+                                                            after?: string;
+                                                        }>;
+                                                        operator?: string;
+                                                        operation_type?: number;
+                                                        operation_time?: string;
+                                                        effective_time?: string;
+                                                        operation_reason?: string;
+                                                        change_reasons?: Array<string>;
+                                                    }>;
+                                                    next_page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=department&apiName=query_operation_logs&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_operation_logs&project=corehr&resource=department&version=v2 document }
+                 *
+                 * 查询操作日志
+                 */
+                queryOperationLogs: async (
+                    payload?: {
+                        data: {
+                            department_ids: Array<string>;
+                            start_date: string;
+                            end_date: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    op_logs?: Array<{
+                                        object_id?: string;
+                                        changes?: Array<{
+                                            field?: string;
+                                            before?: string;
+                                            after?: string;
+                                        }>;
+                                        operator?: string;
+                                        operation_type?: number;
+                                        operation_time?: string;
+                                        effective_time?: string;
+                                        operation_reason?: string;
+                                        change_reasons?: Array<string>;
+                                    }>;
+                                    next_page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/departments/query_operation_logs`,
                                 path
                             ),
                             method: "POST",
@@ -27980,6 +28331,13 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        sub_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                         parent_department_id?: string;
                                         manager?: string;
                                         code?: string;
@@ -28584,6 +28942,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -28927,6 +29286,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -29113,6 +29473,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -29602,7 +29963,6 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         archive_cpst_plan_id?: string;
-                                        attendance_group_id?: string;
                                     }>;
                                 };
                             }
@@ -29675,6 +30035,7 @@ export default abstract class Client extends contract {
                                         first_name?: string;
                                         name_primary?: string;
                                     };
+                                    additional_name?: string;
                                     gender?: string;
                                     nationality_v2?: string;
                                     ethnicity_race?: string;
@@ -30134,7 +30495,6 @@ export default abstract class Client extends contract {
                             assignment_pay_group_id_list?: Array<string>;
                             contract_type_list?: Array<string>;
                             archive_cpst_plan_id_list?: Array<string>;
-                            attendance_group_id_list?: Array<string>;
                         };
                         params: {
                             page_size: number;
@@ -30374,6 +30734,7 @@ export default abstract class Client extends contract {
                                                             phone_number?: string;
                                                             legal_name?: string;
                                                             preferred_name?: string;
+                                                            additional_name?: string;
                                                             preferred_local_full_name?: string;
                                                             preferred_english_full_name?: string;
                                                             name_list?: Array<{
@@ -30389,6 +30750,7 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 local_first_name_2?: string;
                                                                 local_primary_2?: string;
+                                                                additional_name?: string;
                                                                 additional_name_type?: {
                                                                     enum_name: string;
                                                                     display?: Array<{
@@ -30732,6 +31094,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -30918,6 +31281,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -31407,7 +31771,6 @@ export default abstract class Client extends contract {
                                                             }>;
                                                         };
                                                         archive_cpst_plan_id?: string;
-                                                        attendance_group_id?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -31481,7 +31844,6 @@ export default abstract class Client extends contract {
                             assignment_pay_group_id_list?: Array<string>;
                             contract_type_list?: Array<string>;
                             archive_cpst_plan_id_list?: Array<string>;
-                            attendance_group_id_list?: Array<string>;
                         };
                         params: {
                             page_size: number;
@@ -31672,6 +32034,7 @@ export default abstract class Client extends contract {
                                             phone_number?: string;
                                             legal_name?: string;
                                             preferred_name?: string;
+                                            additional_name?: string;
                                             preferred_local_full_name?: string;
                                             preferred_english_full_name?: string;
                                             name_list?: Array<{
@@ -31687,6 +32050,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -32030,6 +32394,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -32216,6 +32581,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -32705,7 +33071,6 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         archive_cpst_plan_id?: string;
-                                        attendance_group_id?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -33413,6 +33778,13 @@ export default abstract class Client extends contract {
                                             weekly_working_hours_v2?: number;
                                             weekly_working_hours?: number;
                                             employee_subtype_id?: string;
+                                            job_data_reason?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
                                         }>;
                                     }>;
                                 };
@@ -33555,6 +33927,13 @@ export default abstract class Client extends contract {
                                             weekly_working_hours_v2?: number;
                                             weekly_working_hours?: number;
                                             employee_subtype_id?: string;
+                                            job_data_reason?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -33564,6 +33943,70 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/employees/job_datas/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * enum
+             */
+            enum: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=enum&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=corehr&resource=enum&version=v2 document }
+                 *
+                 * 通过apiname批量获取枚举信息
+                 */
+                search: async (
+                    payload?: {
+                        data?: { enum_apiname_lists?: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    enums?: Array<{
+                                        enum_apiname?: string;
+                                        enum_items?: Array<{
+                                            api_name?: string;
+                                            name?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            enum_api_name?: string;
+                                            order?: number;
+                                            status?: number;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/enums/search`,
                                 path
                             ),
                             method: "POST",
@@ -34531,6 +34974,148 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/job_families/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    job_family_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_job_family_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job_family&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=job_family&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_family_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_job_family_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/job_families/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * job_grade
@@ -34734,6 +35319,148 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/job_grades/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    job_grade_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_job_grade_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job_grade&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=job_grade&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_grade_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_job_grade_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/job_grades/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * job_level
@@ -34794,6 +35521,148 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/job_levels/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    job_level_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_job_level_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job_level&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=job_level&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_level_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_job_level_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/job_levels/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -35042,6 +35911,148 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/locations/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    location_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_location_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=location&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=location&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    location_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_location_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/locations/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,
@@ -35418,6 +36429,7 @@ export default abstract class Client extends contract {
                                 name_type: { enum_name: string };
                                 local_first_name_2?: string;
                                 local_primary_2?: string;
+                                additional_name?: string;
                                 additional_name_type?: { enum_name: string };
                                 first_name?: string;
                                 full_name?: string;
@@ -35640,6 +36652,7 @@ export default abstract class Client extends contract {
                                     name_type: { enum_name: string };
                                     local_first_name_2?: string;
                                     local_primary_2?: string;
+                                    additional_name?: string;
                                     additional_name_type?: {
                                         enum_name: string;
                                     };
@@ -35740,6 +36753,7 @@ export default abstract class Client extends contract {
                                             };
                                             local_first_name_2?: string;
                                             local_primary_2?: string;
+                                            additional_name?: string;
                                             additional_name_type?: {
                                                 enum_name: string;
                                                 display?: Array<{
@@ -36051,6 +37065,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -36236,6 +37251,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -36545,6 +37561,7 @@ export default abstract class Client extends contract {
                                 name_type: { enum_name: string };
                                 local_first_name_2?: string;
                                 local_primary_2?: string;
+                                additional_name?: string;
                                 additional_name_type?: { enum_name: string };
                                 first_name?: string;
                                 full_name?: string;
@@ -36767,6 +37784,7 @@ export default abstract class Client extends contract {
                                     name_type: { enum_name: string };
                                     local_first_name_2?: string;
                                     local_primary_2?: string;
+                                    additional_name?: string;
                                     additional_name_type?: {
                                         enum_name: string;
                                     };
@@ -36871,6 +37889,7 @@ export default abstract class Client extends contract {
                                             };
                                             local_first_name_2?: string;
                                             local_primary_2?: string;
+                                            additional_name?: string;
                                             additional_name_type?: {
                                                 enum_name: string;
                                                 display?: Array<{
@@ -37182,6 +38201,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -37367,6 +38387,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -37730,6 +38751,7 @@ export default abstract class Client extends contract {
                                     country_region_id?: string;
                                     custom_local_name?: string;
                                     custom_western_name?: string;
+                                    additional_name?: string;
                                 };
                                 phone_number?: string;
                                 international_area_code?: string;
@@ -37756,6 +38778,20 @@ export default abstract class Client extends contract {
                                     country_region_id?: string;
                                     custom_local_name?: string;
                                     custom_western_name?: string;
+                                    additional_name?: string;
+                                };
+                                additional_name?: {
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    country_region_id?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    additional_name?: string;
                                 };
                                 resident_tax_list?: Array<{
                                     tax_country_region?: string;
@@ -37892,6 +38928,7 @@ export default abstract class Client extends contract {
                                         is_public: boolean;
                                         email_usage: string;
                                     };
+                                    is_primary?: boolean;
                                 }>;
                                 address_list?: Array<{
                                     country_region_id: string;
@@ -37921,6 +38958,7 @@ export default abstract class Client extends contract {
                                     field_name: string;
                                     value: string;
                                 }>;
+                                expected_graduate_date?: string;
                             };
                             offer_info: {
                                 offer_id?: string;
@@ -37985,6 +39023,30 @@ export default abstract class Client extends contract {
                                     start_date?: string;
                                     end_date?: string;
                                 }>;
+                                notice_period_probation_voluntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_probation_involuntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_positive_voluntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_positive_involuntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                condition_worker?: boolean;
+                                non_compete_covenant?: boolean;
+                                company_sponsored_visa?: boolean;
+                                work_station?: string;
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -38103,6 +39165,7 @@ export default abstract class Client extends contract {
                                     custom_western_name?: string;
                                     country_region: string;
                                     name_type: string;
+                                    additional_name?: string;
                                 }>;
                                 phones?: Array<{
                                     international_area_code: string;
@@ -38255,6 +39318,7 @@ export default abstract class Client extends contract {
                                         is_public: boolean;
                                         email_usage: string;
                                     };
+                                    is_primary?: boolean;
                                 }>;
                                 address_list?: Array<{
                                     country_region_id: string;
@@ -38284,6 +39348,26 @@ export default abstract class Client extends contract {
                                 native_region?: string;
                                 hukou_type?: string;
                                 hukou_location?: string;
+                                gender_id?: string;
+                                date_of_birth?: string;
+                                date_entered_workforce?: string;
+                                expected_graduate_date?: string;
+                                citizenship_status_id_list?: Array<string>;
+                                work_experience?: Array<{
+                                    company_name?: string;
+                                    start_time?: string;
+                                    end_time?: string;
+                                    job_title?: string;
+                                    description?: string;
+                                    department?: string;
+                                }>;
+                                education_info?: Array<{
+                                    school_name?: string;
+                                    education?: string;
+                                    start_time?: string;
+                                    end_time?: string;
+                                    field_of_study?: string;
+                                }>;
                             };
                             offer_info_update?: {
                                 onboarding_date?: string;
@@ -38349,6 +39433,32 @@ export default abstract class Client extends contract {
                                     start_date?: string;
                                     end_date?: string;
                                 }>;
+                                notice_period_probation_voluntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_probation_involuntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_positive_voluntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                notice_period_positive_involuntary?: {
+                                    wk_id?: string;
+                                    value?: number;
+                                    value_unit?: string;
+                                };
+                                condition_worker?: boolean;
+                                company_sponsored_visa?: boolean;
+                                weekly_working_hours_v2?: number;
+                                work_station?: string;
+                                service_company?: string;
+                                non_compete_covenant?: boolean;
                             };
                             standard_update_fields?: Array<string>;
                             custom_update_fields?: Array<string>;
@@ -38488,6 +39598,7 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 local_first_name_2?: string;
                                                                 local_primary_2?: string;
+                                                                additional_name?: string;
                                                                 additional_name_type?: {
                                                                     enum_name: string;
                                                                     display?: Array<{
@@ -38824,6 +39935,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -39007,6 +40119,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -39114,6 +40227,7 @@ export default abstract class Client extends contract {
                                                                     type?: number;
                                                                     value: string;
                                                                 }>;
+                                                                is_primary?: boolean;
                                                             }>;
                                                             date_entered_workforce?: string;
                                                             working_years?: number;
@@ -39396,6 +40510,7 @@ export default abstract class Client extends contract {
                                                             working_calendar_id?: string;
                                                             updated_at?: string;
                                                             suspected_rehiring?: boolean;
+                                                            condition_worker?: boolean;
                                                             custom_fields?: Array<{
                                                                 custom_api_name: string;
                                                                 name?: {
@@ -39471,6 +40586,47 @@ export default abstract class Client extends contract {
                                                                     value: string;
                                                                 }>;
                                                             }>;
+                                                            notice_period_positive_voluntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_probation_involuntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_positive_involuntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_probation_voluntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            working_hours_type_manual_updated?: boolean;
+                                                            is_over_due?: boolean;
+                                                            task_completed?: boolean;
+                                                            expected_graduate_date?: string;
+                                                            service_company?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -39662,6 +40818,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -39998,6 +41155,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -40181,6 +41339,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -40288,6 +41447,7 @@ export default abstract class Client extends contract {
                                                     type?: number;
                                                     value: string;
                                                 }>;
+                                                is_primary?: boolean;
                                             }>;
                                             date_entered_workforce?: string;
                                             working_years?: number;
@@ -40570,6 +41730,7 @@ export default abstract class Client extends contract {
                                             working_calendar_id?: string;
                                             updated_at?: string;
                                             suspected_rehiring?: boolean;
+                                            condition_worker?: boolean;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
                                                 name?: {
@@ -40645,6 +41806,47 @@ export default abstract class Client extends contract {
                                                     value: string;
                                                 }>;
                                             }>;
+                                            notice_period_positive_voluntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_probation_involuntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_positive_involuntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_probation_voluntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            working_hours_type_manual_updated?: boolean;
+                                            is_over_due?: boolean;
+                                            task_completed?: boolean;
+                                            expected_graduate_date?: string;
+                                            service_company?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -40762,6 +41964,48 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/pre_hires/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pre_hire&apiName=restore_flow_instance&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=restore_flow_instance&project=corehr&resource=pre_hire&version=v2 document }
+                 */
+                restoreFlowInstance: async (
+                    payload?: {
+                        data: {
+                            pre_hire_id: string;
+                            confirm_workforce?: boolean;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { success?: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pre_hires/restore_flow_instance`,
                                 path
                             ),
                             method: "POST",
@@ -40898,6 +42142,7 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 local_first_name_2?: string;
                                                                 local_primary_2?: string;
+                                                                additional_name?: string;
                                                                 additional_name_type?: {
                                                                     enum_name: string;
                                                                     display?: Array<{
@@ -41234,6 +42479,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -41417,6 +42663,7 @@ export default abstract class Client extends contract {
                                                                     };
                                                                     local_first_name_2?: string;
                                                                     local_primary_2?: string;
+                                                                    additional_name?: string;
                                                                     additional_name_type?: {
                                                                         enum_name: string;
                                                                         display?: Array<{
@@ -41524,6 +42771,7 @@ export default abstract class Client extends contract {
                                                                     type?: number;
                                                                     value: string;
                                                                 }>;
+                                                                is_primary?: boolean;
                                                             }>;
                                                             date_entered_workforce?: string;
                                                             working_years?: number;
@@ -41806,6 +43054,7 @@ export default abstract class Client extends contract {
                                                             working_calendar_id?: string;
                                                             updated_at?: string;
                                                             suspected_rehiring?: boolean;
+                                                            condition_worker?: boolean;
                                                             custom_fields?: Array<{
                                                                 custom_api_name: string;
                                                                 name?: {
@@ -41881,6 +43130,47 @@ export default abstract class Client extends contract {
                                                                     value: string;
                                                                 }>;
                                                             }>;
+                                                            notice_period_positive_voluntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_probation_involuntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_positive_involuntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            notice_period_probation_voluntary?: {
+                                                                wk_id?: string;
+                                                                value?: number;
+                                                                value_unit?: string;
+                                                                name?: {
+                                                                    lang: string;
+                                                                    value: string;
+                                                                };
+                                                            };
+                                                            working_hours_type_manual_updated?: boolean;
+                                                            is_over_due?: boolean;
+                                                            task_completed?: boolean;
+                                                            expected_graduate_date?: string;
+                                                            service_company?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -42092,6 +43382,7 @@ export default abstract class Client extends contract {
                                                 };
                                                 local_first_name_2?: string;
                                                 local_primary_2?: string;
+                                                additional_name?: string;
                                                 additional_name_type?: {
                                                     enum_name: string;
                                                     display?: Array<{
@@ -42428,6 +43719,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -42611,6 +43903,7 @@ export default abstract class Client extends contract {
                                                     };
                                                     local_first_name_2?: string;
                                                     local_primary_2?: string;
+                                                    additional_name?: string;
                                                     additional_name_type?: {
                                                         enum_name: string;
                                                         display?: Array<{
@@ -42718,6 +44011,7 @@ export default abstract class Client extends contract {
                                                     type?: number;
                                                     value: string;
                                                 }>;
+                                                is_primary?: boolean;
                                             }>;
                                             date_entered_workforce?: string;
                                             working_years?: number;
@@ -43000,6 +44294,7 @@ export default abstract class Client extends contract {
                                             working_calendar_id?: string;
                                             updated_at?: string;
                                             suspected_rehiring?: boolean;
+                                            condition_worker?: boolean;
                                             custom_fields?: Array<{
                                                 custom_api_name: string;
                                                 name?: {
@@ -43075,6 +44370,47 @@ export default abstract class Client extends contract {
                                                     value: string;
                                                 }>;
                                             }>;
+                                            notice_period_positive_voluntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_probation_involuntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_positive_involuntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            notice_period_probation_voluntary?: {
+                                                wk_id?: string;
+                                                value?: number;
+                                                value_unit?: string;
+                                                name?: {
+                                                    lang: string;
+                                                    value: string;
+                                                };
+                                            };
+                                            working_hours_type_manual_updated?: boolean;
+                                            is_over_due?: boolean;
+                                            task_completed?: boolean;
+                                            expected_graduate_date?: string;
+                                            service_company?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -43234,6 +44570,45 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/pre_hires/:pre_hire_id/transit_task`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pre_hire&apiName=withdraw_onboarding&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=withdraw_onboarding&project=corehr&resource=pre_hire&version=v2 document }
+                 */
+                withdrawOnboarding: async (
+                    payload?: {
+                        data: { pre_hire_id: string; withdraw_reason: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { success?: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pre_hires/withdraw_onboarding`,
                                 path
                             ),
                             method: "POST",
@@ -44234,6 +45609,7 @@ export default abstract class Client extends contract {
                                             record_values?: Array<{
                                                 variable_api_name?: string;
                                                 sub_value_key?: string;
+                                                record_id?: string;
                                             }>;
                                             employment_value?: string;
                                             list_values?: Array<string>;
@@ -44266,6 +45642,7 @@ export default abstract class Client extends contract {
                                                 record_values?: Array<{
                                                     variable_api_name?: string;
                                                     sub_value_key?: string;
+                                                    record_id?: string;
                                                 }>;
                                                 employment_value?: string;
                                                 list_values?: Array<string>;
