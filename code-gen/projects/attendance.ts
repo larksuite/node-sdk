@@ -577,6 +577,15 @@ export default abstract class Client extends approval {
                             face_live_need_action?: boolean;
                             face_downgrade?: boolean;
                             replace_basic_pic?: boolean;
+                            anti_cheat_punch_cfg?: {
+                                intercept_suspected_cheat_punch?: boolean;
+                                check_cheat_software_punch?: boolean;
+                                check_buddy_punch?: boolean;
+                                check_simulate_wifi_punch?: boolean;
+                                check_change_device_punch?: boolean;
+                                allow_change_device_num?: number;
+                                suspected_cheat_handle_method: number;
+                            };
                             machines?: Array<{
                                 machine_sn: string;
                                 machine_name: string;
@@ -742,6 +751,15 @@ export default abstract class Client extends approval {
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
+                                    anti_cheat_punch_cfg?: {
+                                        intercept_suspected_cheat_punch?: boolean;
+                                        check_cheat_software_punch?: boolean;
+                                        check_buddy_punch?: boolean;
+                                        check_simulate_wifi_punch?: boolean;
+                                        check_change_device_punch?: boolean;
+                                        allow_change_device_num?: number;
+                                        suspected_cheat_handle_method: number;
+                                    };
                                     machines?: Array<{
                                         machine_sn: string;
                                         machine_name: string;
@@ -975,6 +993,15 @@ export default abstract class Client extends approval {
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
+                                anti_cheat_punch_cfg?: {
+                                    intercept_suspected_cheat_punch?: boolean;
+                                    check_cheat_software_punch?: boolean;
+                                    check_buddy_punch?: boolean;
+                                    check_simulate_wifi_punch?: boolean;
+                                    check_change_device_punch?: boolean;
+                                    allow_change_device_num?: number;
+                                    suspected_cheat_handle_method: number;
+                                };
                                 machines?: Array<{
                                     machine_sn: string;
                                     machine_name: string;
@@ -2835,6 +2862,50 @@ export default abstract class Client extends approval {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
+             *
+             * 批量删除流水
+             */
+            batchDel: async (
+                payload?: {
+                    data: { record_ids: Array<string> };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                success_record_ids?: Array<string>;
+                                fail_record_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/attendance-v1/user_flow/get document }
@@ -4320,6 +4391,15 @@ export default abstract class Client extends approval {
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
+                                anti_cheat_punch_cfg?: {
+                                    intercept_suspected_cheat_punch?: boolean;
+                                    check_cheat_software_punch?: boolean;
+                                    check_buddy_punch?: boolean;
+                                    check_simulate_wifi_punch?: boolean;
+                                    check_change_device_punch?: boolean;
+                                    allow_change_device_num?: number;
+                                    suspected_cheat_handle_method: number;
+                                };
                                 machines?: Array<{
                                     machine_sn: string;
                                     machine_name: string;
@@ -4485,6 +4565,15 @@ export default abstract class Client extends approval {
                                         face_live_need_action?: boolean;
                                         face_downgrade?: boolean;
                                         replace_basic_pic?: boolean;
+                                        anti_cheat_punch_cfg?: {
+                                            intercept_suspected_cheat_punch?: boolean;
+                                            check_cheat_software_punch?: boolean;
+                                            check_buddy_punch?: boolean;
+                                            check_simulate_wifi_punch?: boolean;
+                                            check_change_device_punch?: boolean;
+                                            allow_change_device_num?: number;
+                                            suspected_cheat_handle_method: number;
+                                        };
                                         machines?: Array<{
                                             machine_sn: string;
                                             machine_name: string;
@@ -4721,6 +4810,15 @@ export default abstract class Client extends approval {
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
+                                    anti_cheat_punch_cfg?: {
+                                        intercept_suspected_cheat_punch?: boolean;
+                                        check_cheat_software_punch?: boolean;
+                                        check_buddy_punch?: boolean;
+                                        check_simulate_wifi_punch?: boolean;
+                                        check_change_device_punch?: boolean;
+                                        allow_change_device_num?: number;
+                                        suspected_cheat_handle_method: number;
+                                    };
                                     machines?: Array<{
                                         machine_sn: string;
                                         machine_name: string;
@@ -6583,6 +6681,50 @@ export default abstract class Client extends approval {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/attendance/v1/user_flows/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=attendance&resource=user_flow&apiName=batch_del&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_del&project=attendance&resource=user_flow&version=v1 document }
+                 *
+                 * 批量删除流水
+                 */
+                batchDel: async (
+                    payload?: {
+                        data: { record_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    success_record_ids?: Array<string>;
+                                    fail_record_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/attendance/v1/user_flows/batch_del`,
                                 path
                             ),
                             method: "POST",

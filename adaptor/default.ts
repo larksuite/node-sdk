@@ -40,9 +40,5 @@ export const adaptDefault =
 
         const value = await dispatcher.invoke(data);
 
-        // event don't need response
-        if (dispatcher instanceof CardActionHandler) {
-            res.end(JSON.stringify(value));
-        }
-        res.end('');
+        res.end(JSON.stringify(value));
     };

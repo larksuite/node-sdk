@@ -52,9 +52,5 @@ export const adaptExpress =
 
         const value = await dispatcher.invoke(data);
 
-        // event don't need response
-        if (dispatcher instanceof CardActionHandler) {
-            res.json(value);
-        }
-        res.end('');
+        res.json(value);
     };

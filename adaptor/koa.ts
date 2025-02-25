@@ -56,12 +56,7 @@ export const adaptKoa =
 
             const value = await dispatcher.invoke(data);
 
-            // event don't need response
-            if (dispatcher instanceof CardActionHandler) {
-                ctx.body = JSON.stringify(value);
-            } else {
-                ctx.body = '';
-            }
+            ctx.body = JSON.stringify(value);
         }
 
         await next();

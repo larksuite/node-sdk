@@ -513,9 +513,50 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 投递
+         * 入职
          */
         application: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=cancel_onboard&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/cancel_onboard document }
+             *
+             * 取消候选人入职
+             *
+             * 操作候选人取消入职
+             */
+            cancelOnboard: async (
+                payload?: {
+                    data: {
+                        termination_type: number;
+                        termination_reason_id_list?: Array<string>;
+                        termination_reason_notes?: string;
+                    };
+                    path: { application_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/applications/:application_id/cancel_onboard`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=create&version=v1 click to debug }
              *
@@ -1493,6 +1534,7 @@ export default abstract class Client extends helpdesk {
                                         };
                                         position_id?: string;
                                         job_offered?: string;
+                                        job_grade_id?: string;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -12116,6 +12158,7 @@ export default abstract class Client extends helpdesk {
                             operator_user_id: string;
                             position_id?: string;
                             job_offered?: string;
+                            job_grade_id?: string;
                         };
                         salary_info?: {
                             currency: string;
@@ -12192,6 +12235,7 @@ export default abstract class Client extends helpdesk {
                                     operator_user_id: string;
                                     position_id?: string;
                                     job_offered?: string;
+                                    job_grade_id?: string;
                                 };
                                 salary_info?: {
                                     currency: string;
@@ -12384,6 +12428,7 @@ export default abstract class Client extends helpdesk {
                                         };
                                         position_id?: string;
                                         job_offered?: string;
+                                        job_grade_id?: string;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -12687,6 +12732,7 @@ export default abstract class Client extends helpdesk {
                             operator_user_id: string;
                             position_id?: string;
                             job_offered?: string;
+                            job_grade_id?: string;
                         };
                         salary_info?: {
                             currency: string;
@@ -12762,6 +12808,7 @@ export default abstract class Client extends helpdesk {
                                     operator_user_id: string;
                                     position_id?: string;
                                     job_offered?: string;
+                                    job_grade_id?: string;
                                 };
                                 salary_info?: {
                                     currency: string;
@@ -13672,7 +13719,6 @@ export default abstract class Client extends helpdesk {
                                 check_failed_list?: Array<{
                                     account_id?: string;
                                     total_withdraw_reward_info?: {
-                                        bonus_type?: number;
                                         point_bonus?: number;
                                         cash?: {
                                             currency_type: string;
@@ -13684,7 +13730,6 @@ export default abstract class Client extends helpdesk {
                                         }>;
                                     };
                                     total_recharge_reward_info?: {
-                                        bonus_type?: number;
                                         point_bonus?: number;
                                         cash?: {
                                             currency_type: string;
@@ -15447,6 +15492,7 @@ export default abstract class Client extends helpdesk {
                             hometown_city_code?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15464,6 +15510,7 @@ export default abstract class Client extends helpdesk {
                             academic_ranking?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15480,6 +15527,7 @@ export default abstract class Client extends helpdesk {
                             career_type?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15496,6 +15544,7 @@ export default abstract class Client extends helpdesk {
                             end_time?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15509,6 +15558,7 @@ export default abstract class Client extends helpdesk {
                             attachment_id?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15522,6 +15572,7 @@ export default abstract class Client extends helpdesk {
                             desc?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15534,6 +15585,7 @@ export default abstract class Client extends helpdesk {
                             proficiency?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15546,6 +15598,7 @@ export default abstract class Client extends helpdesk {
                             link?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15558,6 +15611,7 @@ export default abstract class Client extends helpdesk {
                             content?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15566,6 +15620,7 @@ export default abstract class Client extends helpdesk {
                         };
                         customized_data?: Array<{
                             object_id?: string;
+                            value?: string;
                             children?: Array<{
                                 object_id?: string;
                                 value?: string;
@@ -15649,6 +15704,7 @@ export default abstract class Client extends helpdesk {
                             hometown_city_code?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15666,6 +15722,7 @@ export default abstract class Client extends helpdesk {
                             academic_ranking?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15682,6 +15739,7 @@ export default abstract class Client extends helpdesk {
                             career_type?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15698,6 +15756,7 @@ export default abstract class Client extends helpdesk {
                             end_time?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15711,6 +15770,7 @@ export default abstract class Client extends helpdesk {
                             attachment_id?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15724,6 +15784,7 @@ export default abstract class Client extends helpdesk {
                             desc?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15736,6 +15797,7 @@ export default abstract class Client extends helpdesk {
                             proficiency?: number;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15748,6 +15810,7 @@ export default abstract class Client extends helpdesk {
                             link?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15760,6 +15823,7 @@ export default abstract class Client extends helpdesk {
                             content?: string;
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -15768,6 +15832,7 @@ export default abstract class Client extends helpdesk {
                         };
                         customized_data?: Array<{
                             object_id?: string;
+                            value?: string;
                             children?: Array<{
                                 object_id?: string;
                                 value?: string;
@@ -21121,9 +21186,53 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 投递
+             * 入职
              */
             application: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=cancel_onboard&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/application/cancel_onboard document }
+                 *
+                 * 取消候选人入职
+                 *
+                 * 操作候选人取消入职
+                 */
+                cancelOnboard: async (
+                    payload?: {
+                        data: {
+                            termination_type: number;
+                            termination_reason_id_list?: Array<string>;
+                            termination_reason_notes?: string;
+                        };
+                        path: { application_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/applications/:application_id/cancel_onboard`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=application&apiName=create&version=v1 click to debug }
                  *
@@ -22105,6 +22214,7 @@ export default abstract class Client extends helpdesk {
                                             };
                                             position_id?: string;
                                             job_offered?: string;
+                                            job_grade_id?: string;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -32911,6 +33021,7 @@ export default abstract class Client extends helpdesk {
                                 operator_user_id: string;
                                 position_id?: string;
                                 job_offered?: string;
+                                job_grade_id?: string;
                             };
                             salary_info?: {
                                 currency: string;
@@ -32987,6 +33098,7 @@ export default abstract class Client extends helpdesk {
                                         operator_user_id: string;
                                         position_id?: string;
                                         job_offered?: string;
+                                        job_grade_id?: string;
                                     };
                                     salary_info?: {
                                         currency: string;
@@ -33179,6 +33291,7 @@ export default abstract class Client extends helpdesk {
                                             };
                                             position_id?: string;
                                             job_offered?: string;
+                                            job_grade_id?: string;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -33487,6 +33600,7 @@ export default abstract class Client extends helpdesk {
                                 operator_user_id: string;
                                 position_id?: string;
                                 job_offered?: string;
+                                job_grade_id?: string;
                             };
                             salary_info?: {
                                 currency: string;
@@ -33562,6 +33676,7 @@ export default abstract class Client extends helpdesk {
                                         operator_user_id: string;
                                         position_id?: string;
                                         job_offered?: string;
+                                        job_grade_id?: string;
                                     };
                                     salary_info?: {
                                         currency: string;
@@ -34484,7 +34599,6 @@ export default abstract class Client extends helpdesk {
                                     check_failed_list?: Array<{
                                         account_id?: string;
                                         total_withdraw_reward_info?: {
-                                            bonus_type?: number;
                                             point_bonus?: number;
                                             cash?: {
                                                 currency_type: string;
@@ -34496,7 +34610,6 @@ export default abstract class Client extends helpdesk {
                                             }>;
                                         };
                                         total_recharge_reward_info?: {
-                                            bonus_type?: number;
                                             point_bonus?: number;
                                             cash?: {
                                                 currency_type: string;
@@ -36279,6 +36392,7 @@ export default abstract class Client extends helpdesk {
                                 hometown_city_code?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36296,6 +36410,7 @@ export default abstract class Client extends helpdesk {
                                 academic_ranking?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36312,6 +36427,7 @@ export default abstract class Client extends helpdesk {
                                 career_type?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36328,6 +36444,7 @@ export default abstract class Client extends helpdesk {
                                 end_time?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36341,6 +36458,7 @@ export default abstract class Client extends helpdesk {
                                 attachment_id?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36354,6 +36472,7 @@ export default abstract class Client extends helpdesk {
                                 desc?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36366,6 +36485,7 @@ export default abstract class Client extends helpdesk {
                                 proficiency?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36378,6 +36498,7 @@ export default abstract class Client extends helpdesk {
                                 link?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36390,6 +36511,7 @@ export default abstract class Client extends helpdesk {
                                 content?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36398,6 +36520,7 @@ export default abstract class Client extends helpdesk {
                             };
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;
@@ -36481,6 +36604,7 @@ export default abstract class Client extends helpdesk {
                                 hometown_city_code?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36498,6 +36622,7 @@ export default abstract class Client extends helpdesk {
                                 academic_ranking?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36514,6 +36639,7 @@ export default abstract class Client extends helpdesk {
                                 career_type?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36530,6 +36656,7 @@ export default abstract class Client extends helpdesk {
                                 end_time?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36543,6 +36670,7 @@ export default abstract class Client extends helpdesk {
                                 attachment_id?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36556,6 +36684,7 @@ export default abstract class Client extends helpdesk {
                                 desc?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36568,6 +36697,7 @@ export default abstract class Client extends helpdesk {
                                 proficiency?: number;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36580,6 +36710,7 @@ export default abstract class Client extends helpdesk {
                                 link?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36592,6 +36723,7 @@ export default abstract class Client extends helpdesk {
                                 content?: string;
                                 customized_data?: Array<{
                                     object_id?: string;
+                                    value?: string;
                                     children?: Array<{
                                         object_id?: string;
                                         value?: string;
@@ -36600,6 +36732,7 @@ export default abstract class Client extends helpdesk {
                             };
                             customized_data?: Array<{
                                 object_id?: string;
+                                value?: string;
                                 children?: Array<{
                                     object_id?: string;
                                     value?: string;

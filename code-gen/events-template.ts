@@ -101,7 +101,7 @@ export interface IHandles extends IOtherEventHandles {
                 scope: string;
                 description?: string;
                 level?: number;
-                token_types?: Array<string>;
+                token_types?: Array<"tenant" | "user">;
             }>;
             back_home_url?: string;
             i18n?: Array<{
@@ -221,7 +221,7 @@ export interface IHandles extends IOtherEventHandles {
                 scope: string;
                 description?: string;
                 level?: number;
-                token_types?: Array<string>;
+                token_types?: Array<"tenant" | "user">;
             }>;
             back_home_url?: string;
             i18n?: Array<{
@@ -2193,6 +2193,37 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.department.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.department.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.employee.domain_event_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -4110,42 +4141,6 @@ export interface IHandles extends IOtherEventHandles {
         app_id?: string;
         id?: string;
         post_id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.dislike.created_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        entity_type?: number;
-        entity_id?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        id?: string;
-    }) => Promise<any> | any;
-    /**
-         
-         */
-    "moments.dislike.deleted_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        entity_type?: number;
-        entity_id?: string;
-        user_id?: { union_id?: string; user_id?: string; open_id?: string };
-        id?: string;
     }) => Promise<any> | any;
     /**
          

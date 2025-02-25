@@ -85,6 +85,8 @@ export default abstract class Client extends comment_sdk {
                                         effective_date: string;
                                         expiration_date?: string;
                                         salary_level_id?: string;
+                                        created_time?: string;
+                                        updated_time?: string;
                                         archive_items: Array<{
                                             item_id: string;
                                             item_result: string;

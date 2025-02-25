@@ -649,7 +649,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
-                                        token_types?: Array<string>;
+                                        token_types?: Array<"tenant" | "user">;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -874,7 +874,9 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
-                                                        token_types?: Array<string>;
+                                                        token_types?: Array<
+                                                            "tenant" | "user"
+                                                        >;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -1065,7 +1067,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
-                                        token_types?: Array<string>;
+                                        token_types?: Array<"tenant" | "user">;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1255,6 +1257,103 @@ export default abstract class Client extends aily {
             },
         },
         /**
+         * application.collaborators
+         */
+        applicationCollaborators: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                collaborators?: Array<{
+                                    type:
+                                        | "administrator"
+                                        | "developer"
+                                        | "operator";
+                                    user_id: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
+             */
+            update: async (
+                payload?: {
+                    data?: {
+                        adds?: Array<{
+                            type: "administrator" | "developer" | "operator";
+                            user_id: string;
+                        }>;
+                        removes?: Array<string>;
+                    };
+                    params?: {
+                        user_id_type?: "open_id" | "union_id" | "user_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * application.contacts_range
          */
         applicationContactsRange: {
@@ -1430,7 +1529,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
-                                        token_types?: Array<string>;
+                                        token_types?: Array<"tenant" | "user">;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1591,7 +1690,9 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
-                                                        token_types?: Array<string>;
+                                                        token_types?: Array<
+                                                            "tenant" | "user"
+                                                        >;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -1717,7 +1818,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
-                                        token_types?: Array<string>;
+                                        token_types?: Array<"tenant" | "user">;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -1916,7 +2017,9 @@ export default abstract class Client extends aily {
                                                         scope: string;
                                                         description?: string;
                                                         level?: number;
-                                                        token_types?: Array<string>;
+                                                        token_types?: Array<
+                                                            "tenant" | "user"
+                                                        >;
                                                     }>;
                                                     back_home_url?: string;
                                                     i18n?: Array<{
@@ -2038,7 +2141,7 @@ export default abstract class Client extends aily {
                                         scope: string;
                                         description?: string;
                                         level?: number;
-                                        token_types?: Array<string>;
+                                        token_types?: Array<"tenant" | "user">;
                                     }>;
                                     back_home_url?: string;
                                     i18n?: Array<{
@@ -2250,6 +2353,47 @@ export default abstract class Client extends aily {
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * application.owner
+         */
+        applicationOwner: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
+             */
+            update: async (
+                payload?: {
+                    data: { owner_id: string };
+                    params?: {
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                    path: { app_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
                             path
                         ),
                         method: "PUT",
@@ -3094,7 +3238,9 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
-                                            token_types?: Array<string>;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -3321,7 +3467,10 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
-                                                            token_types?: Array<string>;
+                                                            token_types?: Array<
+                                                                | "tenant"
+                                                                | "user"
+                                                            >;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -3512,7 +3661,9 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
-                                            token_types?: Array<string>;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -3705,6 +3856,109 @@ export default abstract class Client extends aily {
                 },
             },
             /**
+             * application.collaborators
+             */
+            applicationCollaborators: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=application&resource=application.collaborators&version=v6 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    collaborators?: Array<{
+                                        type:
+                                            | "administrator"
+                                            | "developer"
+                                            | "operator";
+                                        user_id: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.collaborators&version=v6 document }
+                 */
+                update: async (
+                    payload?: {
+                        data?: {
+                            adds?: Array<{
+                                type:
+                                    | "administrator"
+                                    | "developer"
+                                    | "operator";
+                                user_id: string;
+                            }>;
+                            removes?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?: "open_id" | "union_id" | "user_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/collaborators`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * application.contacts_range
              */
             applicationContactsRange: {
@@ -3883,7 +4137,9 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
-                                            token_types?: Array<string>;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -4046,7 +4302,10 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
-                                                            token_types?: Array<string>;
+                                                            token_types?: Array<
+                                                                | "tenant"
+                                                                | "user"
+                                                            >;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -4172,7 +4431,9 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
-                                            token_types?: Array<string>;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -4376,7 +4637,10 @@ export default abstract class Client extends aily {
                                                             scope: string;
                                                             description?: string;
                                                             level?: number;
-                                                            token_types?: Array<string>;
+                                                            token_types?: Array<
+                                                                | "tenant"
+                                                                | "user"
+                                                            >;
                                                         }>;
                                                         back_home_url?: string;
                                                         i18n?: Array<{
@@ -4498,7 +4762,9 @@ export default abstract class Client extends aily {
                                             scope: string;
                                             description?: string;
                                             level?: number;
-                                            token_types?: Array<string>;
+                                            token_types?: Array<
+                                                "tenant" | "user"
+                                            >;
                                         }>;
                                         back_home_url?: string;
                                         i18n?: Array<{
@@ -4716,6 +4982,50 @@ export default abstract class Client extends aily {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/application/v6/applications/:app_id/management`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.owner
+             */
+            applicationOwner: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=application&resource=application.owner&version=v6 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: { owner_id: string };
+                        params?: {
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v6/applications/:app_id/owner`,
                                 path
                             ),
                             method: "PUT",

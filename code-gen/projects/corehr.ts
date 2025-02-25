@@ -3903,6 +3903,7 @@ export default abstract class Client extends contract {
                         employment_type?: { enum_name: string };
                         person_id?: string;
                         primary_employment?: boolean;
+                        condition_worker?: boolean;
                         custom_fields?: Array<{
                             field_name: string;
                             value: string;
@@ -3974,6 +3975,7 @@ export default abstract class Client extends contract {
                                     on_probation?: string;
                                     probation_end_date?: string;
                                     primary_employment: boolean;
+                                    condition_worker?: boolean;
                                     employment_status?: {
                                         enum_name: string;
                                         display?: Array<{
@@ -15784,6 +15786,7 @@ export default abstract class Client extends contract {
                             employment_type?: { enum_name: string };
                             person_id?: string;
                             primary_employment?: boolean;
+                            condition_worker?: boolean;
                             custom_fields?: Array<{
                                 field_name: string;
                                 value: string;
@@ -15855,6 +15858,7 @@ export default abstract class Client extends contract {
                                         on_probation?: string;
                                         probation_end_date?: string;
                                         primary_employment: boolean;
+                                        condition_worker?: boolean;
                                         employment_status?: {
                                             enum_name: string;
                                             display?: Array<{
@@ -24012,6 +24016,7 @@ export default abstract class Client extends contract {
                                             }>;
                                             original_cost_center?: {
                                                 cost_center_id?: string;
+                                                cost_center_version_id?: string;
                                                 name: Array<{
                                                     lang: string;
                                                     value: string;
@@ -24030,6 +24035,7 @@ export default abstract class Client extends contract {
                                             };
                                             target_cost_center?: {
                                                 cost_center_id?: string;
+                                                cost_center_version_id?: string;
                                                 name: Array<{
                                                     lang: string;
                                                     value: string;
@@ -26980,6 +26986,7 @@ export default abstract class Client extends contract {
                 create: async (
                     payload?: {
                         data: {
+                            cost_center_version_id?: string;
                             name: Array<{ lang: string; value: string }>;
                             code?: string;
                             parent_cost_center_id?: string;
@@ -27012,6 +27019,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     cost_center?: {
                                         cost_center_id?: string;
+                                        cost_center_version_id?: string;
                                         name: Array<{
                                             lang: string;
                                             value: string;
@@ -27119,6 +27127,7 @@ export default abstract class Client extends contract {
                                 data?: {
                                     cost_center?: {
                                         cost_center_id?: string;
+                                        cost_center_version_id?: string;
                                         name: Array<{
                                             lang: string;
                                             value: string;
@@ -28778,6 +28787,29 @@ export default abstract class Client extends contract {
                                         job_level?: {
                                             id?: string;
                                             level_order: number;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
+                                        pathway_id?: string;
+                                        pathway?: {
+                                            id?: string;
                                             code?: string;
                                             name: Array<{
                                                 lang: string;
@@ -30605,6 +30637,29 @@ export default abstract class Client extends contract {
                                                                 value: string;
                                                             }>;
                                                         };
+                                                        pathway_id?: string;
+                                                        pathway?: {
+                                                            id?: string;
+                                                            code?: string;
+                                                            name: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            description?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                            active: boolean;
+                                                            custom_fields?: Array<{
+                                                                custom_api_name: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                type?: number;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                         job_grade_id?: string;
                                                         work_location_id?: string;
                                                         job_family_id?: string;
@@ -31885,6 +31940,29 @@ export default abstract class Client extends contract {
                                         job_level?: {
                                             id?: string;
                                             level_order: number;
+                                            code?: string;
+                                            name: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            description?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            active: boolean;
+                                            custom_fields?: Array<{
+                                                custom_api_name: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                type?: number;
+                                                value: string;
+                                            }>;
+                                        };
+                                        pathway_id?: string;
+                                        pathway?: {
+                                            id?: string;
                                             code?: string;
                                             name: Array<{
                                                 lang: string;
@@ -33785,6 +33863,7 @@ export default abstract class Client extends contract {
                                                     value: string;
                                                 }>;
                                             };
+                                            pathway_id?: string;
                                         }>;
                                     }>;
                                 };
@@ -33934,6 +34013,7 @@ export default abstract class Client extends contract {
                                                     value: string;
                                                 }>;
                                             };
+                                            pathway_id?: string;
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -34436,7 +34516,11 @@ export default abstract class Client extends contract {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { result?: boolean; message?: string };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/job_changes/:job_change_id/revoke`,
@@ -34472,6 +34556,9 @@ export default abstract class Client extends contract {
                             updated_time_start?: string;
                             updated_time_end?: string;
                             target_department_ids?: Array<string>;
+                            transfer_type_unique_identifier?: Array<string>;
+                            transfer_reason_unique_identifier?: Array<string>;
+                            exception_statuses?: Array<"pending" | "processed">;
                         };
                         params: {
                             page_size: number;
@@ -34726,6 +34813,9 @@ export default abstract class Client extends contract {
                             updated_time_start?: string;
                             updated_time_end?: string;
                             target_department_ids?: Array<string>;
+                            transfer_type_unique_identifier?: Array<string>;
+                            transfer_reason_unique_identifier?: Array<string>;
+                            exception_statuses?: Array<"pending" | "processed">;
                         };
                         params: {
                             page_size: number;
@@ -34945,6 +35035,10 @@ export default abstract class Client extends contract {
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
+                                        description: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
                                         custom_fields?: Array<{
                                             custom_api_name: string;
                                             name?: {
@@ -42043,6 +42137,7 @@ export default abstract class Client extends contract {
                             employee_subtype_ids?: Array<string>;
                             job_family_ids?: Array<string>;
                             key_word?: string;
+                            condition_worker?: boolean;
                             rehire?: "to_be_confirmed" | "no" | "yes";
                             fields?: Array<string>;
                         };
@@ -43332,6 +43427,7 @@ export default abstract class Client extends contract {
                             employee_subtype_ids?: Array<string>;
                             job_family_ids?: Array<string>;
                             key_word?: string;
+                            condition_worker?: boolean;
                             rehire?: "to_be_confirmed" | "no" | "yes";
                             fields?: Array<string>;
                         };
