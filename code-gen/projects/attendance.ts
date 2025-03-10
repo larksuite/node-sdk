@@ -577,7 +577,7 @@ export default abstract class Client extends approval {
                             face_live_need_action?: boolean;
                             face_downgrade?: boolean;
                             replace_basic_pic?: boolean;
-                            anti_cheat_punch_cfg?: {
+                            anti_cheat_punch_config?: {
                                 intercept_suspected_cheat_punch?: boolean;
                                 check_cheat_software_punch?: boolean;
                                 check_buddy_punch?: boolean;
@@ -695,6 +695,9 @@ export default abstract class Client extends approval {
                             };
                             new_calendar_id?: string;
                             allow_apply_punch?: boolean;
+                            clock_in_abnormal_settings?: {
+                                ignore_until_latest_clockout?: boolean;
+                            };
                         };
                         operator_id?: string;
                     };
@@ -751,7 +754,7 @@ export default abstract class Client extends approval {
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
-                                    anti_cheat_punch_cfg?: {
+                                    anti_cheat_punch_config?: {
                                         intercept_suspected_cheat_punch?: boolean;
                                         check_cheat_software_punch?: boolean;
                                         check_buddy_punch?: boolean;
@@ -873,6 +876,9 @@ export default abstract class Client extends approval {
                                     };
                                     new_calendar_id?: string;
                                     allow_apply_punch?: boolean;
+                                    clock_in_abnormal_settings?: {
+                                        ignore_until_latest_clockout?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -993,7 +999,7 @@ export default abstract class Client extends approval {
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
-                                anti_cheat_punch_cfg?: {
+                                anti_cheat_punch_config?: {
                                     intercept_suspected_cheat_punch?: boolean;
                                     check_cheat_software_punch?: boolean;
                                     check_buddy_punch?: boolean;
@@ -1114,6 +1120,9 @@ export default abstract class Client extends approval {
                                 };
                                 new_calendar_id?: string;
                                 allow_apply_punch?: boolean;
+                                clock_in_abnormal_settings?: {
+                                    ignore_until_latest_clockout?: boolean;
+                                };
                             };
                         }
                     >({
@@ -4391,7 +4400,7 @@ export default abstract class Client extends approval {
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
-                                anti_cheat_punch_cfg?: {
+                                anti_cheat_punch_config?: {
                                     intercept_suspected_cheat_punch?: boolean;
                                     check_cheat_software_punch?: boolean;
                                     check_buddy_punch?: boolean;
@@ -4509,6 +4518,9 @@ export default abstract class Client extends approval {
                                 };
                                 new_calendar_id?: string;
                                 allow_apply_punch?: boolean;
+                                clock_in_abnormal_settings?: {
+                                    ignore_until_latest_clockout?: boolean;
+                                };
                             };
                             operator_id?: string;
                         };
@@ -4565,7 +4577,7 @@ export default abstract class Client extends approval {
                                         face_live_need_action?: boolean;
                                         face_downgrade?: boolean;
                                         replace_basic_pic?: boolean;
-                                        anti_cheat_punch_cfg?: {
+                                        anti_cheat_punch_config?: {
                                             intercept_suspected_cheat_punch?: boolean;
                                             check_cheat_software_punch?: boolean;
                                             check_buddy_punch?: boolean;
@@ -4687,6 +4699,9 @@ export default abstract class Client extends approval {
                                         };
                                         new_calendar_id?: string;
                                         allow_apply_punch?: boolean;
+                                        clock_in_abnormal_settings?: {
+                                            ignore_until_latest_clockout?: boolean;
+                                        };
                                     };
                                 };
                             }
@@ -4810,7 +4825,7 @@ export default abstract class Client extends approval {
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
-                                    anti_cheat_punch_cfg?: {
+                                    anti_cheat_punch_config?: {
                                         intercept_suspected_cheat_punch?: boolean;
                                         check_cheat_software_punch?: boolean;
                                         check_buddy_punch?: boolean;
@@ -4931,6 +4946,9 @@ export default abstract class Client extends approval {
                                     };
                                     new_calendar_id?: string;
                                     allow_apply_punch?: boolean;
+                                    clock_in_abnormal_settings?: {
+                                        ignore_until_latest_clockout?: boolean;
+                                    };
                                 };
                             }
                         >({

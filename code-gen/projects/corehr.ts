@@ -26986,7 +26986,6 @@ export default abstract class Client extends contract {
                 create: async (
                     payload?: {
                         data: {
-                            cost_center_version_id?: string;
                             name: Array<{ lang: string; value: string }>;
                             code?: string;
                             parent_cost_center_id?: string;
@@ -38911,6 +38910,10 @@ export default abstract class Client extends contract {
                                     };
                                     resident_status_specification?: string;
                                     year_resident_tax?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 born_country_region?: string;
                                 is_disabled?: boolean;
@@ -38929,6 +38932,10 @@ export default abstract class Client extends contract {
                                         issue_date?: string;
                                         expiration_date?: string;
                                         issued_by?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
                                     }>;
                                     spouses_working_status?: string;
                                     is_this_person_covered_by_health_insurance?: boolean;
@@ -38963,6 +38970,10 @@ export default abstract class Client extends contract {
                                         city_id_v2?: string;
                                         district_id_v2?: string;
                                     };
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 religion?: string;
                                 bank_account_list?: Array<{
@@ -38973,6 +38984,10 @@ export default abstract class Client extends contract {
                                     country_region_id?: string;
                                     bank_account_usages?: Array<string>;
                                     bank_account_type?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 national_id_list?: Array<{
                                     country_region_id: string;
@@ -38981,6 +38996,10 @@ export default abstract class Client extends contract {
                                     issue_date?: string;
                                     expiration_date?: string;
                                     issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 personal_profile_list?: Array<{
                                     personal_profile_type?: string;
@@ -39023,6 +39042,10 @@ export default abstract class Client extends contract {
                                         email_usage: string;
                                     };
                                     is_primary?: boolean;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 address_list?: Array<{
                                     country_region_id: string;
@@ -39116,6 +39139,10 @@ export default abstract class Client extends contract {
                                     reasons_for_seniority_adjustment?: string;
                                     start_date?: string;
                                     end_date?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 notice_period_probation_voluntary?: {
                                     wk_id?: string;
@@ -39301,6 +39328,10 @@ export default abstract class Client extends contract {
                                     };
                                     resident_status_specification?: string;
                                     year_resident_tax?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 born_country_region?: string;
                                 is_disabled?: boolean;
@@ -39319,6 +39350,10 @@ export default abstract class Client extends contract {
                                         issue_date?: string;
                                         expiration_date?: string;
                                         issued_by?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
                                     }>;
                                     spouses_working_status?: string;
                                     is_this_person_covered_by_health_insurance?: boolean;
@@ -39353,6 +39388,10 @@ export default abstract class Client extends contract {
                                         city_id_v2?: string;
                                         district_id_v2?: string;
                                     };
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 religion?: string;
                                 bank_account_list?: Array<{
@@ -39363,6 +39402,10 @@ export default abstract class Client extends contract {
                                     country_region_id?: string;
                                     bank_account_usages?: Array<string>;
                                     bank_account_type?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 national_id_list?: Array<{
                                     country_region_id: string;
@@ -39371,6 +39414,10 @@ export default abstract class Client extends contract {
                                     issue_date?: string;
                                     expiration_date?: string;
                                     issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 personal_profile_list?: Array<{
                                     personal_profile_type?: string;
@@ -39413,6 +39460,10 @@ export default abstract class Client extends contract {
                                         email_usage: string;
                                     };
                                     is_primary?: boolean;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 address_list?: Array<{
                                     country_region_id: string;
@@ -39526,6 +39577,10 @@ export default abstract class Client extends contract {
                                     reasons_for_seniority_adjustment?: string;
                                     start_date?: string;
                                     end_date?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
                                 }>;
                                 notice_period_probation_voluntary?: {
                                     wk_id?: string;
@@ -45517,6 +45572,16 @@ export default abstract class Client extends contract {
                                     department_value?: string;
                                     employment_value?: string;
                                     list_values?: Array<string>;
+                                    file_value?: {
+                                        open_file_id?: string;
+                                        file_name?: string;
+                                        length?: number;
+                                    };
+                                    record_values?: Array<{
+                                        variable_api_name?: string;
+                                        sub_value_key?: string;
+                                        record_id?: string;
+                                    }>;
                                 };
                                 sub_values?: Array<{
                                     key?: string;
@@ -45538,6 +45603,16 @@ export default abstract class Client extends contract {
                                         department_value?: string;
                                         employment_value?: string;
                                         list_values?: Array<string>;
+                                        file_value?: {
+                                            open_file_id?: string;
+                                            file_name?: string;
+                                            length?: number;
+                                        };
+                                        record_values?: Array<{
+                                            variable_api_name?: string;
+                                            sub_value_key?: string;
+                                            record_id?: string;
+                                        }>;
                                     };
                                 }>;
                             }>;
@@ -46301,6 +46376,12 @@ export default abstract class Client extends contract {
                                     estimated_active_individuals?: string;
                                 }>;
                                 plan_value?: string;
+                                multi_period_values?: Array<{
+                                    period_date?: string;
+                                    workforce_plan?: string;
+                                    individuals_to_be_added?: string;
+                                    individuals_to_be_removed?: string;
+                                }>;
                             }>;
                         };
                     },
@@ -46352,6 +46433,12 @@ export default abstract class Client extends contract {
                                     estimated_active_individuals?: string;
                                 }>;
                                 plan_value?: string;
+                                multi_period_values?: Array<{
+                                    period_date?: string;
+                                    workforce_plan?: string;
+                                    individuals_to_be_added?: string;
+                                    individuals_to_be_removed?: string;
+                                }>;
                             }>;
                         };
                     },
@@ -46675,6 +46762,90 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=workforce_plan_detail&apiName=batch_v2&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_v2&project=corehr&resource=workforce_plan_detail&version=v2 document }
+                 */
+                batchV2: async (
+                    payload?: {
+                        data?: {
+                            workforce_plan_id?: string;
+                            is_centralized_reporting_project?: boolean;
+                            centralized_reporting_project_id?: string;
+                            dimension_id_in_datas?: Array<{
+                                dimension_key?: string;
+                                dimension_ids?: Array<string>;
+                            }>;
+                        };
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    workforce_plan_id?: string;
+                                    centralized_reporting_project_id?: string;
+                                    items?: Array<{
+                                        workforce_plan_detail_id?: string;
+                                        dimension_info_datas?: Array<{
+                                            dimension_key?: string;
+                                            dimension_info?: {
+                                                id: string;
+                                                name?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                        }>;
+                                        workforce_plan?: string;
+                                        active_individuals?: string;
+                                        individuals_to_be_added?: string;
+                                        individuals_to_be_removed?: string;
+                                        vacancy?: string;
+                                        vacancy_including_individuals_to_be_added_and_removed?: string;
+                                        fulfillment_rate?: string;
+                                        fulfillment_rate_including_individuals_to_be_added_and_removed?: string;
+                                        estimated_active_individuals_details?: Array<{
+                                            date?: string;
+                                            estimated_active_individuals?: string;
+                                        }>;
+                                        multi_period_values?: Array<{
+                                            period_date?: string;
+                                            workforce_plan?: string;
+                                            individuals_to_be_added?: string;
+                                            individuals_to_be_removed?: string;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/workforce_plan_details/batch_v2`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * workforce_plan_detail_row
@@ -46701,6 +46872,12 @@ export default abstract class Client extends contract {
                                     estimated_active_individuals?: string;
                                 }>;
                                 plan_value?: string;
+                                multi_period_values?: Array<{
+                                    period_date?: string;
+                                    workforce_plan?: string;
+                                    individuals_to_be_added?: string;
+                                    individuals_to_be_removed?: string;
+                                }>;
                             }>;
                         };
                     },
@@ -46751,6 +46928,12 @@ export default abstract class Client extends contract {
                                     estimated_active_individuals?: string;
                                 }>;
                                 plan_value?: string;
+                                multi_period_values?: Array<{
+                                    period_date?: string;
+                                    workforce_plan?: string;
+                                    individuals_to_be_added?: string;
+                                    individuals_to_be_removed?: string;
+                                }>;
                             }>;
                         };
                     },

@@ -7870,7 +7870,6 @@ export default abstract class Client extends helpdesk {
                                                 items?: Array<{
                                                     user_id?: string;
                                                     verify_status?: number;
-                                                    tag_id_list?: Array<string>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -7925,7 +7924,6 @@ export default abstract class Client extends helpdesk {
                                 items?: Array<{
                                     user_id?: string;
                                     verify_status?: number;
-                                    tag_id_list?: Array<string>;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -7959,7 +7957,6 @@ export default abstract class Client extends helpdesk {
                         interviewer: {
                             user_id?: string;
                             verify_status?: number;
-                            tag_id_list?: Array<string>;
                         };
                     };
                     params?: {
@@ -7982,7 +7979,6 @@ export default abstract class Client extends helpdesk {
                                 interviewer?: {
                                     user_id?: string;
                                     verify_status?: number;
-                                    tag_id_list?: Array<string>;
                                 };
                             };
                         }
@@ -10514,6 +10510,8 @@ export default abstract class Client extends helpdesk {
                                     update_time?: string;
                                     employment_job_id?: string;
                                     position_id?: string;
+                                    completion_time?: string;
+                                    approval_status?: number;
                                 };
                             };
                         }
@@ -10748,6 +10746,8 @@ export default abstract class Client extends helpdesk {
                                     update_time?: string;
                                     employment_job_id?: string;
                                     position_id?: string;
+                                    completion_time?: string;
+                                    approval_status?: number;
                                 }>;
                             };
                         }
@@ -10777,7 +10777,10 @@ export default abstract class Client extends helpdesk {
              */
             listById: async (
                 payload?: {
-                    data?: { id_list?: Array<string> };
+                    data?: {
+                        id_list?: Array<string>;
+                        short_code_list?: Array<string>;
+                    };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         department_id_type?:
@@ -10936,6 +10939,8 @@ export default abstract class Client extends helpdesk {
                                     update_time?: string;
                                     employment_job_id?: string;
                                     position_id?: string;
+                                    completion_time?: string;
+                                    approval_status?: number;
                                 }>;
                             };
                         }
@@ -28687,7 +28692,6 @@ export default abstract class Client extends helpdesk {
                                                     items?: Array<{
                                                         user_id?: string;
                                                         verify_status?: number;
-                                                        tag_id_list?: Array<string>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -28742,7 +28746,6 @@ export default abstract class Client extends helpdesk {
                                     items?: Array<{
                                         user_id?: string;
                                         verify_status?: number;
-                                        tag_id_list?: Array<string>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -28776,7 +28779,6 @@ export default abstract class Client extends helpdesk {
                             interviewer: {
                                 user_id?: string;
                                 verify_status?: number;
-                                tag_id_list?: Array<string>;
                             };
                         };
                         params?: {
@@ -28799,7 +28801,6 @@ export default abstract class Client extends helpdesk {
                                     interviewer?: {
                                         user_id?: string;
                                         verify_status?: number;
-                                        tag_id_list?: Array<string>;
                                     };
                                 };
                             }
@@ -31347,6 +31348,8 @@ export default abstract class Client extends helpdesk {
                                         update_time?: string;
                                         employment_job_id?: string;
                                         position_id?: string;
+                                        completion_time?: string;
+                                        approval_status?: number;
                                     };
                                 };
                             }
@@ -31584,6 +31587,8 @@ export default abstract class Client extends helpdesk {
                                         update_time?: string;
                                         employment_job_id?: string;
                                         position_id?: string;
+                                        completion_time?: string;
+                                        approval_status?: number;
                                     }>;
                                 };
                             }
@@ -31613,7 +31618,10 @@ export default abstract class Client extends helpdesk {
                  */
                 listById: async (
                     payload?: {
-                        data?: { id_list?: Array<string> };
+                        data?: {
+                            id_list?: Array<string>;
+                            short_code_list?: Array<string>;
+                        };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             department_id_type?:
@@ -31772,6 +31780,8 @@ export default abstract class Client extends helpdesk {
                                         update_time?: string;
                                         employment_job_id?: string;
                                         position_id?: string;
+                                        completion_time?: string;
+                                        approval_status?: number;
                                     }>;
                                 };
                             }

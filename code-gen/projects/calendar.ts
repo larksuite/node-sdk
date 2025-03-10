@@ -1834,6 +1834,24 @@ export default abstract class Client extends board {
                             app_link?: string;
                         }>;
                         attachments?: Array<{ file_token?: string }>;
+                        event_check_in?: {
+                            enable_check_in: boolean;
+                            check_in_start_time?: {
+                                time_type:
+                                    | "before_event_start"
+                                    | "after_event_start"
+                                    | "after_event_end";
+                                duration: number;
+                            };
+                            check_in_end_time?: {
+                                time_type:
+                                    | "before_event_start"
+                                    | "after_event_start"
+                                    | "after_event_end";
+                                duration: number;
+                            };
+                            need_notify_attendees?: boolean;
+                        };
                     };
                     params?: {
                         idempotency_key?: string;
@@ -1942,6 +1960,24 @@ export default abstract class Client extends board {
                                         is_deleted?: boolean;
                                         name?: string;
                                     }>;
+                                    event_check_in?: {
+                                        enable_check_in: boolean;
+                                        check_in_start_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        check_in_end_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        need_notify_attendees?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -2158,6 +2194,24 @@ export default abstract class Client extends board {
                                         file_size?: string;
                                         name?: string;
                                     }>;
+                                    event_check_in?: {
+                                        enable_check_in: boolean;
+                                        check_in_start_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        check_in_end_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        need_notify_attendees?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -2618,6 +2672,24 @@ export default abstract class Client extends board {
                             file_token?: string;
                             is_deleted?: boolean;
                         }>;
+                        event_check_in?: {
+                            enable_check_in: boolean;
+                            check_in_start_time?: {
+                                time_type:
+                                    | "before_event_start"
+                                    | "after_event_start"
+                                    | "after_event_end";
+                                duration: number;
+                            };
+                            check_in_end_time?: {
+                                time_type:
+                                    | "before_event_start"
+                                    | "after_event_start"
+                                    | "after_event_end";
+                                duration: number;
+                            };
+                            need_notify_attendees?: boolean;
+                        };
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -2725,6 +2797,24 @@ export default abstract class Client extends board {
                                         is_deleted?: boolean;
                                         name?: string;
                                     }>;
+                                    event_check_in?: {
+                                        enable_check_in: boolean;
+                                        check_in_start_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        check_in_end_time?: {
+                                            time_type:
+                                                | "before_event_start"
+                                                | "after_event_start"
+                                                | "after_event_end";
+                                            duration: number;
+                                        };
+                                        need_notify_attendees?: boolean;
+                                    };
                                 };
                             };
                         }
@@ -5500,6 +5590,24 @@ export default abstract class Client extends board {
                                 app_link?: string;
                             }>;
                             attachments?: Array<{ file_token?: string }>;
+                            event_check_in?: {
+                                enable_check_in: boolean;
+                                check_in_start_time?: {
+                                    time_type:
+                                        | "before_event_start"
+                                        | "after_event_start"
+                                        | "after_event_end";
+                                    duration: number;
+                                };
+                                check_in_end_time?: {
+                                    time_type:
+                                        | "before_event_start"
+                                        | "after_event_start"
+                                        | "after_event_end";
+                                    duration: number;
+                                };
+                                need_notify_attendees?: boolean;
+                            };
                         };
                         params?: {
                             idempotency_key?: string;
@@ -5611,6 +5719,24 @@ export default abstract class Client extends board {
                                             is_deleted?: boolean;
                                             name?: string;
                                         }>;
+                                        event_check_in?: {
+                                            enable_check_in: boolean;
+                                            check_in_start_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            check_in_end_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            need_notify_attendees?: boolean;
+                                        };
                                     };
                                 };
                             }
@@ -5833,6 +5959,24 @@ export default abstract class Client extends board {
                                             file_size?: string;
                                             name?: string;
                                         }>;
+                                        event_check_in?: {
+                                            enable_check_in: boolean;
+                                            check_in_start_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            check_in_end_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            need_notify_attendees?: boolean;
+                                        };
                                     };
                                 };
                             }
@@ -6302,6 +6446,24 @@ export default abstract class Client extends board {
                                 file_token?: string;
                                 is_deleted?: boolean;
                             }>;
+                            event_check_in?: {
+                                enable_check_in: boolean;
+                                check_in_start_time?: {
+                                    time_type:
+                                        | "before_event_start"
+                                        | "after_event_start"
+                                        | "after_event_end";
+                                    duration: number;
+                                };
+                                check_in_end_time?: {
+                                    time_type:
+                                        | "before_event_start"
+                                        | "after_event_start"
+                                        | "after_event_end";
+                                    duration: number;
+                                };
+                                need_notify_attendees?: boolean;
+                            };
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -6412,6 +6574,24 @@ export default abstract class Client extends board {
                                             is_deleted?: boolean;
                                             name?: string;
                                         }>;
+                                        event_check_in?: {
+                                            enable_check_in: boolean;
+                                            check_in_start_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            check_in_end_time?: {
+                                                time_type:
+                                                    | "before_event_start"
+                                                    | "after_event_start"
+                                                    | "after_event_end";
+                                                duration: number;
+                                            };
+                                            need_notify_attendees?: boolean;
+                                        };
                                     };
                                 };
                             }
