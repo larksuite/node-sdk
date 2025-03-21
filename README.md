@@ -61,7 +61,7 @@ The SDK provides a semantic calling method. You only need to construct a client 
 ```typescript
 import * as lark from '@larksuiteoapi/node-sdk';
 
-const client = new lark. Client({
+const client = new lark.Client({
     appId: 'app id',
     appSecret: 'app secret',
     appType: lark.AppType.SelfBuild,
