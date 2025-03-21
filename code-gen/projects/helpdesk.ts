@@ -2364,14 +2364,14 @@ export default abstract class Client extends gray_test_open_sg {
                                 }>;
                                 ticket_customized_fields?: Array<{
                                     ticket_customized_field_id: string;
-                                    helpdesk_id: string;
+                                    helpdesk_id?: string;
                                     key_name: string;
                                     display_name: string;
                                     position: string;
                                     field_type: string;
                                     description: string;
                                     visible: boolean;
-                                    editable: boolean;
+                                    editable?: boolean;
                                     required: boolean;
                                     created_at?: string;
                                     updated_at?: string;
@@ -2525,6 +2525,10 @@ export default abstract class Client extends gray_test_open_sg {
                                         city?: string;
                                         country?: string;
                                     };
+                                    tags?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2675,6 +2679,10 @@ export default abstract class Client extends gray_test_open_sg {
                                         city?: string;
                                         country?: string;
                                     };
+                                    tags?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
                                 }>;
                             };
                         }
@@ -2724,7 +2732,7 @@ export default abstract class Client extends gray_test_open_sg {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { chat_id: string };
+                            data?: { chat_id: string; ticket_id?: string };
                         }
                     >({
                         url: fillApiPath(
@@ -2990,14 +2998,14 @@ export default abstract class Client extends gray_test_open_sg {
             create: async (
                 payload?: {
                     data: {
-                        helpdesk_id: string;
+                        helpdesk_id?: string;
                         key_name: string;
                         display_name: string;
                         position: string;
                         field_type: string;
                         description: string;
                         visible: boolean;
-                        editable: boolean;
+                        editable?: boolean;
                         required: boolean;
                         dropdown_allow_multiple?: boolean;
                     };
@@ -3087,14 +3095,14 @@ export default abstract class Client extends gray_test_open_sg {
                             msg?: string;
                             data?: {
                                 ticket_customized_field_id: string;
-                                helpdesk_id: string;
+                                helpdesk_id?: string;
                                 key_name: string;
                                 display_name: string;
                                 position: string;
                                 field_type: string;
                                 description: string;
                                 visible: boolean;
-                                editable: boolean;
+                                editable?: boolean;
                                 required: boolean;
                                 created_at?: string;
                                 updated_at?: string;
@@ -3204,14 +3212,14 @@ export default abstract class Client extends gray_test_open_sg {
                                                 next_page_token?: string;
                                                 items?: Array<{
                                                     ticket_customized_field_id: string;
-                                                    helpdesk_id: string;
+                                                    helpdesk_id?: string;
                                                     key_name: string;
                                                     display_name: string;
                                                     position: string;
                                                     field_type: string;
                                                     description: string;
                                                     visible: boolean;
-                                                    editable: boolean;
+                                                    editable?: boolean;
                                                     required: boolean;
                                                     created_at?: string;
                                                     updated_at?: string;
@@ -3284,14 +3292,14 @@ export default abstract class Client extends gray_test_open_sg {
                                 next_page_token?: string;
                                 items?: Array<{
                                     ticket_customized_field_id: string;
-                                    helpdesk_id: string;
+                                    helpdesk_id?: string;
                                     key_name: string;
                                     display_name: string;
                                     position: string;
                                     field_type: string;
                                     description: string;
                                     visible: boolean;
-                                    editable: boolean;
+                                    editable?: boolean;
                                     required: boolean;
                                     created_at?: string;
                                     updated_at?: string;
@@ -5778,14 +5786,14 @@ export default abstract class Client extends gray_test_open_sg {
                                     }>;
                                     ticket_customized_fields?: Array<{
                                         ticket_customized_field_id: string;
-                                        helpdesk_id: string;
+                                        helpdesk_id?: string;
                                         key_name: string;
                                         display_name: string;
                                         position: string;
                                         field_type: string;
                                         description: string;
                                         visible: boolean;
-                                        editable: boolean;
+                                        editable?: boolean;
                                         required: boolean;
                                         created_at?: string;
                                         updated_at?: string;
@@ -5939,6 +5947,10 @@ export default abstract class Client extends gray_test_open_sg {
                                             city?: string;
                                             country?: string;
                                         };
+                                        tags?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -6089,6 +6101,10 @@ export default abstract class Client extends gray_test_open_sg {
                                             city?: string;
                                             country?: string;
                                         };
+                                        tags?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
                                     }>;
                                 };
                             }
@@ -6138,7 +6154,7 @@ export default abstract class Client extends gray_test_open_sg {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { chat_id: string };
+                                data?: { chat_id: string; ticket_id?: string };
                             }
                         >({
                             url: fillApiPath(
@@ -6407,14 +6423,14 @@ export default abstract class Client extends gray_test_open_sg {
                 create: async (
                     payload?: {
                         data: {
-                            helpdesk_id: string;
+                            helpdesk_id?: string;
                             key_name: string;
                             display_name: string;
                             position: string;
                             field_type: string;
                             description: string;
                             visible: boolean;
-                            editable: boolean;
+                            editable?: boolean;
                             required: boolean;
                             dropdown_allow_multiple?: boolean;
                         };
@@ -6510,14 +6526,14 @@ export default abstract class Client extends gray_test_open_sg {
                                 msg?: string;
                                 data?: {
                                     ticket_customized_field_id: string;
-                                    helpdesk_id: string;
+                                    helpdesk_id?: string;
                                     key_name: string;
                                     display_name: string;
                                     position: string;
                                     field_type: string;
                                     description: string;
                                     visible: boolean;
-                                    editable: boolean;
+                                    editable?: boolean;
                                     required: boolean;
                                     created_at?: string;
                                     updated_at?: string;
@@ -6629,14 +6645,14 @@ export default abstract class Client extends gray_test_open_sg {
                                                     next_page_token?: string;
                                                     items?: Array<{
                                                         ticket_customized_field_id: string;
-                                                        helpdesk_id: string;
+                                                        helpdesk_id?: string;
                                                         key_name: string;
                                                         display_name: string;
                                                         position: string;
                                                         field_type: string;
                                                         description: string;
                                                         visible: boolean;
-                                                        editable: boolean;
+                                                        editable?: boolean;
                                                         required: boolean;
                                                         created_at?: string;
                                                         updated_at?: string;
@@ -6709,14 +6725,14 @@ export default abstract class Client extends gray_test_open_sg {
                                     next_page_token?: string;
                                     items?: Array<{
                                         ticket_customized_field_id: string;
-                                        helpdesk_id: string;
+                                        helpdesk_id?: string;
                                         key_name: string;
                                         display_name: string;
                                         position: string;
                                         field_type: string;
                                         description: string;
                                         visible: boolean;
-                                        editable: boolean;
+                                        editable?: boolean;
                                         required: boolean;
                                         created_at?: string;
                                         updated_at?: string;

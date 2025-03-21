@@ -123,6 +123,7 @@ export default abstract class Client extends admin {
                                         plain_text?: string;
                                         created_at?: string;
                                         status?: "IN_PROGRESS" | "COMPLETED";
+                                        reasoning_content?: string;
                                     };
                                 };
                             }
@@ -212,6 +213,7 @@ export default abstract class Client extends admin {
                                         plain_text?: string;
                                         created_at?: string;
                                         status?: "IN_PROGRESS" | "COMPLETED";
+                                        reasoning_content?: string;
                                     };
                                 };
                             }
@@ -350,6 +352,7 @@ export default abstract class Client extends admin {
                                                         status?:
                                                             | "IN_PROGRESS"
                                                             | "COMPLETED";
+                                                        reasoning_content?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -444,6 +447,7 @@ export default abstract class Client extends admin {
                                         plain_text?: string;
                                         created_at?: string;
                                         status?: "IN_PROGRESS" | "COMPLETED";
+                                        reasoning_content?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;

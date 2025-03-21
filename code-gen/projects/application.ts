@@ -1413,7 +1413,7 @@ export default abstract class Client extends aily {
             },
         },
         /**
-         * 应用管理
+         * 应用
          */
         application: {
             /**
@@ -4021,7 +4021,7 @@ export default abstract class Client extends aily {
                 },
             },
             /**
-             * 应用管理
+             * 应用
              */
             application: {
                 /**

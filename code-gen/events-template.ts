@@ -2614,6 +2614,7 @@ export interface IHandles extends IOtherEventHandles {
                 | "expired";
         };
         onboarding_flow_id?: string;
+        flow_info?: { id?: string; name?: { zh_cn?: string; en_us?: string } };
     }) => Promise<any> | any;
     /**
          

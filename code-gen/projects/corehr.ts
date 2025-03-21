@@ -4145,6 +4145,7 @@ export default abstract class Client extends contract {
                         description?: Array<{ lang: string; value: string }>;
                         active: boolean;
                         job_title?: Array<{ lang: string; value: string }>;
+                        pathway_id?: string;
                         job_family_id_list?: Array<string>;
                         job_level_id_list?: Array<string>;
                         working_hours_type_id?: string;
@@ -4185,6 +4186,7 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    pathway_id?: string;
                                     job_family_id_list?: Array<string>;
                                     job_level_id_list?: Array<string>;
                                     working_hours_type_id?: string;
@@ -4291,6 +4293,7 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    pathway_id?: string;
                                     job_family_id_list?: Array<string>;
                                     job_level_id_list?: Array<string>;
                                     working_hours_type_id?: string;
@@ -4366,6 +4369,7 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    pathway_id?: string;
                                     job_family_id_list?: Array<string>;
                                     job_level_id_list?: Array<string>;
                                     working_hours_type_id?: string;
@@ -4414,6 +4418,7 @@ export default abstract class Client extends contract {
                         description?: Array<{ lang: string; value: string }>;
                         active?: boolean;
                         job_title?: Array<{ lang: string; value: string }>;
+                        pathway_id?: string;
                         job_family_id_list?: Array<string>;
                         job_level_id_list?: Array<string>;
                         working_hours_type_id?: string;
@@ -4455,6 +4460,7 @@ export default abstract class Client extends contract {
                                         lang: string;
                                         value: string;
                                     }>;
+                                    pathway_id?: string;
                                     job_family_id_list?: Array<string>;
                                     job_level_id_list?: Array<string>;
                                     working_hours_type_id?: string;
@@ -4587,6 +4593,8 @@ export default abstract class Client extends contract {
                             target_service_company?: string;
                             original_position?: string;
                             target_position?: string;
+                            original_pathway?: string;
+                            target_pathway?: string;
                         };
                         transfer_key?: string;
                         initiator_id?: string;
@@ -4715,6 +4723,8 @@ export default abstract class Client extends contract {
                                     target_service_company?: string;
                                     original_position?: string;
                                     target_position?: string;
+                                    original_pathway?: string;
+                                    target_pathway?: string;
                                 };
                             };
                         }
@@ -4782,6 +4792,8 @@ export default abstract class Client extends contract {
                         work_shift?: { enum_name: string };
                         compensation_type?: { enum_name: string };
                         service_company?: string;
+                        position_id?: string;
+                        pathway_id?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -4861,6 +4873,7 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
+                                    pathway_id?: string;
                                 };
                             };
                         }
@@ -5009,6 +5022,7 @@ export default abstract class Client extends contract {
                                     service_company?: string;
                                     employee_subtype_id?: string;
                                     position_id?: string;
+                                    pathway_id?: string;
                                     job_data_reason?: {
                                         enum_name: string;
                                         display?: Array<{
@@ -5140,6 +5154,7 @@ export default abstract class Client extends contract {
                                     service_company?: string;
                                     employee_subtype_id?: string;
                                     position_id?: string;
+                                    pathway_id?: string;
                                     job_data_reason?: {
                                         enum_name: string;
                                         display?: Array<{
@@ -5211,6 +5226,7 @@ export default abstract class Client extends contract {
                         work_shift?: { enum_name: string };
                         compensation_type?: { enum_name: string };
                         service_company?: string;
+                        pathway_id?: string;
                     };
                     params?: {
                         client_token?: string;
@@ -5292,6 +5308,7 @@ export default abstract class Client extends contract {
                                         }>;
                                     };
                                     service_company?: string;
+                                    pathway_id?: string;
                                 };
                             };
                         }
@@ -5332,9 +5349,11 @@ export default abstract class Client extends contract {
                         name: Array<{ lang: string; value: string }>;
                         active: boolean;
                         parent_id?: string;
+                        pathway_ids?: Array<string>;
                         effective_time: string;
                         expiration_time?: string;
                         code?: string;
+                        description?: Array<{ lang: string; value: string }>;
                         custom_fields?: Array<{
                             field_name: string;
                             value: string;
@@ -5362,9 +5381,14 @@ export default abstract class Client extends contract {
                                     }>;
                                     active: boolean;
                                     parent_id?: string;
+                                    pathway_ids?: Array<string>;
                                     effective_time: string;
                                     expiration_time?: string;
                                     code?: string;
+                                    description?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
                                     custom_fields?: Array<{
                                         field_name: string;
                                         value: string;
@@ -5458,9 +5482,14 @@ export default abstract class Client extends contract {
                                     }>;
                                     active: boolean;
                                     parent_id?: string;
+                                    pathway_ids?: Array<string>;
                                     effective_time: string;
                                     expiration_time?: string;
                                     code?: string;
+                                    description?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
                                     custom_fields?: Array<{
                                         field_name: string;
                                         value: string;
@@ -5518,9 +5547,14 @@ export default abstract class Client extends contract {
                                     }>;
                                     active: boolean;
                                     parent_id?: string;
+                                    pathway_ids?: Array<string>;
                                     effective_time: string;
                                     expiration_time?: string;
                                     code?: string;
+                                    description?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
                                     custom_fields?: Array<{
                                         field_name: string;
                                         value: string;
@@ -5562,9 +5596,11 @@ export default abstract class Client extends contract {
                         name?: Array<{ lang: string; value: string }>;
                         active?: boolean;
                         parent_id?: string;
+                        pathway_ids?: Array<string>;
                         effective_time?: string;
                         expiration_time?: string;
                         code?: string;
+                        description?: Array<{ lang: string; value: string }>;
                         custom_fields?: Array<{
                             field_name: string;
                             value: string;
@@ -5593,9 +5629,14 @@ export default abstract class Client extends contract {
                                     }>;
                                     active: boolean;
                                     parent_id?: string;
+                                    pathway_ids?: Array<string>;
                                     effective_time: string;
                                     expiration_time?: string;
                                     code?: string;
+                                    description?: Array<{
+                                        lang: string;
+                                        value: string;
+                                    }>;
                                     custom_fields?: Array<{
                                         field_name: string;
                                         value: string;
@@ -5647,6 +5688,7 @@ export default abstract class Client extends contract {
                             value: string;
                         }>;
                         job_grade?: Array<string>;
+                        pathway_ids?: Array<string>;
                     };
                     params?: { client_token?: string };
                 },
@@ -5680,6 +5722,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     job_grade?: Array<string>;
+                                    pathway_ids?: Array<string>;
                                 };
                             };
                         }
@@ -5779,6 +5822,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     job_grade?: Array<string>;
+                                    pathway_ids?: Array<string>;
                                 };
                             };
                         }
@@ -5842,6 +5886,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     job_grade?: Array<string>;
+                                    pathway_ids?: Array<string>;
                                 }>;
                                 has_more?: boolean;
                                 page_token?: string;
@@ -5886,6 +5931,7 @@ export default abstract class Client extends contract {
                             value: string;
                         }>;
                         job_grade?: Array<string>;
+                        pathway_ids?: Array<string>;
                     };
                     params?: { client_token?: string };
                     path: { job_level_id: string };
@@ -5920,6 +5966,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     job_grade?: Array<string>;
+                                    pathway_ids?: Array<string>;
                                 };
                             };
                         }
@@ -16031,6 +16078,7 @@ export default abstract class Client extends contract {
                             }>;
                             active: boolean;
                             job_title?: Array<{ lang: string; value: string }>;
+                            pathway_id?: string;
                             job_family_id_list?: Array<string>;
                             job_level_id_list?: Array<string>;
                             working_hours_type_id?: string;
@@ -16071,6 +16119,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -16180,6 +16229,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -16255,6 +16305,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -16306,6 +16357,7 @@ export default abstract class Client extends contract {
                             }>;
                             active?: boolean;
                             job_title?: Array<{ lang: string; value: string }>;
+                            pathway_id?: string;
                             job_family_id_list?: Array<string>;
                             job_level_id_list?: Array<string>;
                             working_hours_type_id?: string;
@@ -16347,6 +16399,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -16479,6 +16532,8 @@ export default abstract class Client extends contract {
                                 target_service_company?: string;
                                 original_position?: string;
                                 target_position?: string;
+                                original_pathway?: string;
+                                target_pathway?: string;
                             };
                             transfer_key?: string;
                             initiator_id?: string;
@@ -16607,6 +16662,8 @@ export default abstract class Client extends contract {
                                         target_service_company?: string;
                                         original_position?: string;
                                         target_position?: string;
+                                        original_pathway?: string;
+                                        target_pathway?: string;
                                     };
                                 };
                             }
@@ -16674,6 +16731,8 @@ export default abstract class Client extends contract {
                             work_shift?: { enum_name: string };
                             compensation_type?: { enum_name: string };
                             service_company?: string;
+                            position_id?: string;
+                            pathway_id?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -16753,6 +16812,7 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
+                                        pathway_id?: string;
                                     };
                                 };
                             }
@@ -16904,6 +16964,7 @@ export default abstract class Client extends contract {
                                         service_company?: string;
                                         employee_subtype_id?: string;
                                         position_id?: string;
+                                        pathway_id?: string;
                                         job_data_reason?: {
                                             enum_name: string;
                                             display?: Array<{
@@ -17035,6 +17096,7 @@ export default abstract class Client extends contract {
                                         service_company?: string;
                                         employee_subtype_id?: string;
                                         position_id?: string;
+                                        pathway_id?: string;
                                         job_data_reason?: {
                                             enum_name: string;
                                             display?: Array<{
@@ -17106,6 +17168,7 @@ export default abstract class Client extends contract {
                             work_shift?: { enum_name: string };
                             compensation_type?: { enum_name: string };
                             service_company?: string;
+                            pathway_id?: string;
                         };
                         params?: {
                             client_token?: string;
@@ -17187,6 +17250,7 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         service_company?: string;
+                                        pathway_id?: string;
                                     };
                                 };
                             }
@@ -17227,9 +17291,14 @@ export default abstract class Client extends contract {
                             name: Array<{ lang: string; value: string }>;
                             active: boolean;
                             parent_id?: string;
+                            pathway_ids?: Array<string>;
                             effective_time: string;
                             expiration_time?: string;
                             code?: string;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
                             custom_fields?: Array<{
                                 field_name: string;
                                 value: string;
@@ -17257,9 +17326,14 @@ export default abstract class Client extends contract {
                                         }>;
                                         active: boolean;
                                         parent_id?: string;
+                                        pathway_ids?: Array<string>;
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
                                         custom_fields?: Array<{
                                             field_name: string;
                                             value: string;
@@ -17356,9 +17430,14 @@ export default abstract class Client extends contract {
                                         }>;
                                         active: boolean;
                                         parent_id?: string;
+                                        pathway_ids?: Array<string>;
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
                                         custom_fields?: Array<{
                                             field_name: string;
                                             value: string;
@@ -17416,9 +17495,14 @@ export default abstract class Client extends contract {
                                         }>;
                                         active: boolean;
                                         parent_id?: string;
+                                        pathway_ids?: Array<string>;
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
                                         custom_fields?: Array<{
                                             field_name: string;
                                             value: string;
@@ -17460,9 +17544,14 @@ export default abstract class Client extends contract {
                             name?: Array<{ lang: string; value: string }>;
                             active?: boolean;
                             parent_id?: string;
+                            pathway_ids?: Array<string>;
                             effective_time?: string;
                             expiration_time?: string;
                             code?: string;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
                             custom_fields?: Array<{
                                 field_name: string;
                                 value: string;
@@ -17491,9 +17580,14 @@ export default abstract class Client extends contract {
                                         }>;
                                         active: boolean;
                                         parent_id?: string;
+                                        pathway_ids?: Array<string>;
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
                                         custom_fields?: Array<{
                                             field_name: string;
                                             value: string;
@@ -17548,6 +17642,7 @@ export default abstract class Client extends contract {
                                 value: string;
                             }>;
                             job_grade?: Array<string>;
+                            pathway_ids?: Array<string>;
                         };
                         params?: { client_token?: string };
                     },
@@ -17581,6 +17676,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         job_grade?: Array<string>;
+                                        pathway_ids?: Array<string>;
                                     };
                                 };
                             }
@@ -17683,6 +17779,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         job_grade?: Array<string>;
+                                        pathway_ids?: Array<string>;
                                     };
                                 };
                             }
@@ -17746,6 +17843,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         job_grade?: Array<string>;
+                                        pathway_ids?: Array<string>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
@@ -17793,6 +17891,7 @@ export default abstract class Client extends contract {
                                 value: string;
                             }>;
                             job_grade?: Array<string>;
+                            pathway_ids?: Array<string>;
                         };
                         params?: { client_token?: string };
                         path: { job_level_id: string };
@@ -17827,6 +17926,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         job_grade?: Array<string>;
+                                        pathway_ids?: Array<string>;
                                     };
                                 };
                             }
@@ -24194,6 +24294,8 @@ export default abstract class Client extends contract {
                                             original_position?: string;
                                             target_position?: string;
                                             target_draft_position?: string;
+                                            original_pathway?: string;
+                                            target_pathway?: string;
                                             is_transfer_with_workforce?: boolean;
                                         };
                                     }>;
@@ -28884,6 +28986,7 @@ export default abstract class Client extends contract {
                                                 lang: string;
                                                 value: string;
                                             }>;
+                                            pathway_id?: string;
                                             job_family_id_list?: Array<string>;
                                             job_level_id_list?: Array<string>;
                                             working_hours_type_id?: string;
@@ -30331,6 +30434,7 @@ export default abstract class Client extends contract {
                                     work_location?: string;
                                     weekly_working_hours?: number;
                                     position?: string;
+                                    pathway?: string;
                                 };
                                 emp_contract_record?: {
                                     contract_number?: string;
@@ -30714,6 +30818,7 @@ export default abstract class Client extends contract {
                                                                 lang: string;
                                                                 value: string;
                                                             }>;
+                                                            pathway_id?: string;
                                                             job_family_id_list?: Array<string>;
                                                             job_level_id_list?: Array<string>;
                                                             working_hours_type_id?: string;
@@ -32037,6 +32142,7 @@ export default abstract class Client extends contract {
                                                 lang: string;
                                                 value: string;
                                             }>;
+                                            pathway_id?: string;
                                             job_family_id_list?: Array<string>;
                                             job_level_id_list?: Array<string>;
                                             working_hours_type_id?: string;
@@ -34144,6 +34250,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -34217,6 +34324,7 @@ export default abstract class Client extends contract {
                                             lang: string;
                                             value: string;
                                         }>;
+                                        pathway_id?: string;
                                         job_family_id_list?: Array<string>;
                                         job_level_id_list?: Array<string>;
                                         working_hours_type_id?: string;
@@ -34311,6 +34419,7 @@ export default abstract class Client extends contract {
                                 target_position?: string;
                                 target_social_security_city?: string;
                                 is_transfer_with_workforce?: boolean;
+                                target_pathway?: string;
                             };
                             transfer_key?: string;
                             initiator_id?: string;
@@ -34458,6 +34567,8 @@ export default abstract class Client extends contract {
                                         target_draft_position?: string;
                                         original_social_security_city?: string;
                                         target_social_security_city?: string;
+                                        original_pathway?: string;
+                                        target_pathway?: string;
                                         is_transfer_with_workforce?: boolean;
                                     };
                                     is_adjust_salary?: boolean;
@@ -34753,6 +34864,8 @@ export default abstract class Client extends contract {
                                                             target_draft_position?: string;
                                                             original_social_security_city?: string;
                                                             target_social_security_city?: string;
+                                                            original_pathway?: string;
+                                                            target_pathway?: string;
                                                             is_transfer_with_workforce?: boolean;
                                                         };
                                                         is_adjust_salary?: boolean;
@@ -34961,6 +35074,8 @@ export default abstract class Client extends contract {
                                             target_draft_position?: string;
                                             original_social_security_city?: string;
                                             target_social_security_city?: string;
+                                            original_pathway?: string;
+                                            target_pathway?: string;
                                             is_transfer_with_workforce?: boolean;
                                         };
                                         is_adjust_salary?: boolean;
@@ -35031,10 +35146,11 @@ export default abstract class Client extends contract {
                                         }>;
                                         active: boolean;
                                         parent_id?: string;
+                                        pathway_ids?: Array<string>;
                                         effective_time: string;
                                         expiration_time?: string;
                                         code?: string;
-                                        description: Array<{
+                                        description?: Array<{
                                             lang: string;
                                             value: string;
                                         }>;
@@ -35605,6 +35721,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         job_grade?: Array<string>;
+                                        pathway_ids?: Array<string>;
                                     }>;
                                 };
                             }
@@ -39168,6 +39285,7 @@ export default abstract class Client extends contract {
                                 non_compete_covenant?: boolean;
                                 company_sponsored_visa?: boolean;
                                 work_station?: string;
+                                pathway?: string;
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -39608,6 +39726,7 @@ export default abstract class Client extends contract {
                                 work_station?: string;
                                 service_company?: string;
                                 non_compete_covenant?: boolean;
+                                pathway?: string;
                             };
                             standard_update_fields?: Array<string>;
                             custom_update_fields?: Array<string>;
@@ -40776,6 +40895,7 @@ export default abstract class Client extends contract {
                                                             task_completed?: boolean;
                                                             expected_graduate_date?: string;
                                                             service_company?: string;
+                                                            pathway?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -41996,6 +42116,7 @@ export default abstract class Client extends contract {
                                             task_completed?: boolean;
                                             expected_graduate_date?: string;
                                             service_company?: string;
+                                            pathway?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -43321,6 +43442,7 @@ export default abstract class Client extends contract {
                                                             task_completed?: boolean;
                                                             expected_graduate_date?: string;
                                                             service_company?: string;
+                                                            pathway?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -44562,6 +44684,7 @@ export default abstract class Client extends contract {
                                             task_completed?: boolean;
                                             expected_graduate_date?: string;
                                             service_company?: string;
+                                            pathway?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
