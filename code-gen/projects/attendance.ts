@@ -572,19 +572,20 @@ export default abstract class Client extends approval {
                             show_cumulative_time?: boolean;
                             show_over_time?: boolean;
                             hide_staff_punch_time?: boolean;
+                            hide_clock_in_rule?: boolean;
                             face_punch?: boolean;
                             face_punch_cfg?: number;
                             face_live_need_action?: boolean;
                             face_downgrade?: boolean;
                             replace_basic_pic?: boolean;
                             anti_cheat_punch_config?: {
-                                intercept_suspected_cheat_punch?: boolean;
+                                intercept_suspected_cheat_punch: boolean;
                                 check_cheat_software_punch?: boolean;
                                 check_buddy_punch?: boolean;
                                 check_simulate_wifi_punch?: boolean;
                                 check_change_device_punch?: boolean;
                                 allow_change_device_num?: number;
-                                suspected_cheat_handle_method: number;
+                                suspected_cheat_handle_method?: number;
                             };
                             machines?: Array<{
                                 machine_sn: string;
@@ -642,6 +643,7 @@ export default abstract class Client extends approval {
                                 late_minutes_as_lack?: number;
                                 early_minutes_as_early?: number;
                                 early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
                             };
                             go_out_need_punch?: number;
                             go_out_need_punch_cfg?: {
@@ -649,6 +651,7 @@ export default abstract class Client extends approval {
                                 late_minutes_as_lack?: number;
                                 early_minutes_as_early?: number;
                                 early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
                             };
                             travel_need_punch?: number;
                             travel_need_punch_cfg?: {
@@ -656,6 +659,7 @@ export default abstract class Client extends approval {
                                 late_minutes_as_lack?: number;
                                 early_minutes_as_early?: number;
                                 early_minutes_as_lack?: number;
+                                not_during_shift?: boolean;
                             };
                             need_punch_members?: Array<{
                                 rule_scope_type?: number;
@@ -749,19 +753,20 @@ export default abstract class Client extends approval {
                                     show_cumulative_time?: boolean;
                                     show_over_time?: boolean;
                                     hide_staff_punch_time?: boolean;
+                                    hide_clock_in_rule?: boolean;
                                     face_punch?: boolean;
                                     face_punch_cfg?: number;
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
                                     anti_cheat_punch_config?: {
-                                        intercept_suspected_cheat_punch?: boolean;
+                                        intercept_suspected_cheat_punch: boolean;
                                         check_cheat_software_punch?: boolean;
                                         check_buddy_punch?: boolean;
                                         check_simulate_wifi_punch?: boolean;
                                         check_change_device_punch?: boolean;
                                         allow_change_device_num?: number;
-                                        suspected_cheat_handle_method: number;
+                                        suspected_cheat_handle_method?: number;
                                     };
                                     machines?: Array<{
                                         machine_sn: string;
@@ -823,6 +828,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     go_out_need_punch?: number;
                                     go_out_need_punch_cfg?: {
@@ -830,6 +836,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     travel_need_punch?: number;
                                     travel_need_punch_cfg?: {
@@ -837,6 +844,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     need_punch_members?: Array<{
                                         rule_scope_type?: number;
@@ -994,19 +1002,20 @@ export default abstract class Client extends approval {
                                 show_cumulative_time?: boolean;
                                 show_over_time?: boolean;
                                 hide_staff_punch_time?: boolean;
+                                hide_clock_in_rule?: boolean;
                                 face_punch?: boolean;
                                 face_punch_cfg?: number;
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
                                 anti_cheat_punch_config?: {
-                                    intercept_suspected_cheat_punch?: boolean;
+                                    intercept_suspected_cheat_punch: boolean;
                                     check_cheat_software_punch?: boolean;
                                     check_buddy_punch?: boolean;
                                     check_simulate_wifi_punch?: boolean;
                                     check_change_device_punch?: boolean;
                                     allow_change_device_num?: number;
-                                    suspected_cheat_handle_method: number;
+                                    suspected_cheat_handle_method?: number;
                                 };
                                 machines?: Array<{
                                     machine_sn: string;
@@ -1067,6 +1076,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 go_out_need_punch?: number;
                                 go_out_need_punch_cfg?: {
@@ -1074,6 +1084,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 travel_need_punch?: number;
                                 travel_need_punch_cfg?: {
@@ -1081,6 +1092,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 need_punch_members?: Array<{
                                     rule_scope_type?: number;
@@ -4395,19 +4407,20 @@ export default abstract class Client extends approval {
                                 show_cumulative_time?: boolean;
                                 show_over_time?: boolean;
                                 hide_staff_punch_time?: boolean;
+                                hide_clock_in_rule?: boolean;
                                 face_punch?: boolean;
                                 face_punch_cfg?: number;
                                 face_live_need_action?: boolean;
                                 face_downgrade?: boolean;
                                 replace_basic_pic?: boolean;
                                 anti_cheat_punch_config?: {
-                                    intercept_suspected_cheat_punch?: boolean;
+                                    intercept_suspected_cheat_punch: boolean;
                                     check_cheat_software_punch?: boolean;
                                     check_buddy_punch?: boolean;
                                     check_simulate_wifi_punch?: boolean;
                                     check_change_device_punch?: boolean;
                                     allow_change_device_num?: number;
-                                    suspected_cheat_handle_method: number;
+                                    suspected_cheat_handle_method?: number;
                                 };
                                 machines?: Array<{
                                     machine_sn: string;
@@ -4465,6 +4478,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 go_out_need_punch?: number;
                                 go_out_need_punch_cfg?: {
@@ -4472,6 +4486,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 travel_need_punch?: number;
                                 travel_need_punch_cfg?: {
@@ -4479,6 +4494,7 @@ export default abstract class Client extends approval {
                                     late_minutes_as_lack?: number;
                                     early_minutes_as_early?: number;
                                     early_minutes_as_lack?: number;
+                                    not_during_shift?: boolean;
                                 };
                                 need_punch_members?: Array<{
                                     rule_scope_type?: number;
@@ -4572,19 +4588,20 @@ export default abstract class Client extends approval {
                                         show_cumulative_time?: boolean;
                                         show_over_time?: boolean;
                                         hide_staff_punch_time?: boolean;
+                                        hide_clock_in_rule?: boolean;
                                         face_punch?: boolean;
                                         face_punch_cfg?: number;
                                         face_live_need_action?: boolean;
                                         face_downgrade?: boolean;
                                         replace_basic_pic?: boolean;
                                         anti_cheat_punch_config?: {
-                                            intercept_suspected_cheat_punch?: boolean;
+                                            intercept_suspected_cheat_punch: boolean;
                                             check_cheat_software_punch?: boolean;
                                             check_buddy_punch?: boolean;
                                             check_simulate_wifi_punch?: boolean;
                                             check_change_device_punch?: boolean;
                                             allow_change_device_num?: number;
-                                            suspected_cheat_handle_method: number;
+                                            suspected_cheat_handle_method?: number;
                                         };
                                         machines?: Array<{
                                             machine_sn: string;
@@ -4646,6 +4663,7 @@ export default abstract class Client extends approval {
                                             late_minutes_as_lack?: number;
                                             early_minutes_as_early?: number;
                                             early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
                                         };
                                         go_out_need_punch?: number;
                                         go_out_need_punch_cfg?: {
@@ -4653,6 +4671,7 @@ export default abstract class Client extends approval {
                                             late_minutes_as_lack?: number;
                                             early_minutes_as_early?: number;
                                             early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
                                         };
                                         travel_need_punch?: number;
                                         travel_need_punch_cfg?: {
@@ -4660,6 +4679,7 @@ export default abstract class Client extends approval {
                                             late_minutes_as_lack?: number;
                                             early_minutes_as_early?: number;
                                             early_minutes_as_lack?: number;
+                                            not_during_shift?: boolean;
                                         };
                                         need_punch_members?: Array<{
                                             rule_scope_type?: number;
@@ -4820,19 +4840,20 @@ export default abstract class Client extends approval {
                                     show_cumulative_time?: boolean;
                                     show_over_time?: boolean;
                                     hide_staff_punch_time?: boolean;
+                                    hide_clock_in_rule?: boolean;
                                     face_punch?: boolean;
                                     face_punch_cfg?: number;
                                     face_live_need_action?: boolean;
                                     face_downgrade?: boolean;
                                     replace_basic_pic?: boolean;
                                     anti_cheat_punch_config?: {
-                                        intercept_suspected_cheat_punch?: boolean;
+                                        intercept_suspected_cheat_punch: boolean;
                                         check_cheat_software_punch?: boolean;
                                         check_buddy_punch?: boolean;
                                         check_simulate_wifi_punch?: boolean;
                                         check_change_device_punch?: boolean;
                                         allow_change_device_num?: number;
-                                        suspected_cheat_handle_method: number;
+                                        suspected_cheat_handle_method?: number;
                                     };
                                     machines?: Array<{
                                         machine_sn: string;
@@ -4893,6 +4914,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     go_out_need_punch?: number;
                                     go_out_need_punch_cfg?: {
@@ -4900,6 +4922,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     travel_need_punch?: number;
                                     travel_need_punch_cfg?: {
@@ -4907,6 +4930,7 @@ export default abstract class Client extends approval {
                                         late_minutes_as_lack?: number;
                                         early_minutes_as_early?: number;
                                         early_minutes_as_lack?: number;
+                                        not_during_shift?: boolean;
                                     };
                                     need_punch_members?: Array<{
                                         rule_scope_type?: number;

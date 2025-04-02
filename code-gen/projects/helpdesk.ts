@@ -10,10 +10,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import gray_test_open_sg from "./gray_test_open_sg";
+import feelgood from "./feelgood";
 
 // auto gen
-export default abstract class Client extends gray_test_open_sg {
+export default abstract class Client extends feelgood {
     declare tokenManager;
 
     declare domain;

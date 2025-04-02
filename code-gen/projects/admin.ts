@@ -360,6 +360,10 @@ export default abstract class Client extends acs {
                                                         recipient_value?: string;
                                                         recipient_detail?: {
                                                             permission_action_type?: string;
+                                                            chat_id?: string;
+                                                            chat_name?: string;
+                                                            chat_type?: number;
+                                                            external_flag?: boolean;
                                                         };
                                                     }>;
                                                     event_time?: number;
@@ -554,6 +558,10 @@ export default abstract class Client extends acs {
                                         recipient_value?: string;
                                         recipient_detail?: {
                                             permission_action_type?: string;
+                                            chat_id?: string;
+                                            chat_name?: string;
+                                            chat_type?: number;
+                                            external_flag?: boolean;
                                         };
                                     }>;
                                     event_time?: number;
@@ -1954,6 +1962,10 @@ export default abstract class Client extends acs {
                                                             recipient_value?: string;
                                                             recipient_detail?: {
                                                                 permission_action_type?: string;
+                                                                chat_id?: string;
+                                                                chat_name?: string;
+                                                                chat_type?: number;
+                                                                external_flag?: boolean;
                                                             };
                                                         }>;
                                                         event_time?: number;
@@ -2148,6 +2160,10 @@ export default abstract class Client extends acs {
                                             recipient_value?: string;
                                             recipient_detail?: {
                                                 permission_action_type?: string;
+                                                chat_id?: string;
+                                                chat_name?: string;
+                                                chat_type?: number;
+                                                external_flag?: boolean;
                                             };
                                         }>;
                                         event_time?: number;

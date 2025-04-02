@@ -10,10 +10,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import people_bytedance from "./people_bytedance";
+import performance from "./performance";
 
 // auto gen
-export default abstract class Client extends people_bytedance {
+export default abstract class Client extends performance {
     declare tokenManager;
 
     declare domain;

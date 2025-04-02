@@ -10,10 +10,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import aily from "./aily";
+import apaas from "./apaas";
 
 // auto gen
-export default abstract class Client extends aily {
+export default abstract class Client extends apaas {
     declare tokenManager;
 
     declare domain;

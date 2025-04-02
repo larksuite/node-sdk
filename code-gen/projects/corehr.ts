@@ -24284,18 +24284,26 @@ export default abstract class Client extends contract {
                                             original_cost_center_rate?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             target_cost_center_rate?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
+                                            target_allocation_expiration_time?: string;
+                                            original_allocation_expiration_time?: string;
+                                            target_allocation_effective_time?: string;
+                                            original_allocation_effective_time?: string;
+                                            original_default_cost_center?: string;
+                                            target_default_cost_center?: string;
+                                            original_is_default_cost_center_inherited?: boolean;
+                                            target_is_default_cost_center_inherited?: boolean;
                                             original_job_grade?: string;
                                             target_job_grade?: string;
                                             original_position?: string;
                                             target_position?: string;
                                             target_draft_position?: string;
-                                            original_pathway?: string;
-                                            target_pathway?: string;
                                             is_transfer_with_workforce?: boolean;
                                         };
                                     }>;
@@ -29047,6 +29055,7 @@ export default abstract class Client extends contract {
                                         cost_center_list?: Array<{
                                             cost_center_id?: string;
                                             rate?: number;
+                                            new_rate?: number;
                                         }>;
                                         rehire?: {
                                             enum_name: string;
@@ -30475,6 +30484,20 @@ export default abstract class Client extends contract {
                                         value?: string;
                                     }>;
                                 }>;
+                                default_cost_center?: {
+                                    reason?: string;
+                                    is_inherit?: boolean;
+                                    cost_center_id?: { wk_id?: string };
+                                };
+                                cost_allocation?: {
+                                    effective_time?: string;
+                                    expiration_time?: string;
+                                    cost_center_rates?: Array<{
+                                        cost_center_id?: string;
+                                        rate?: number;
+                                        new_rate?: number;
+                                    }>;
+                                };
                             };
                             career?: {
                                 educations?: Array<{
@@ -30879,6 +30902,7 @@ export default abstract class Client extends contract {
                                                         cost_center_list?: Array<{
                                                             cost_center_id?: string;
                                                             rate?: number;
+                                                            new_rate?: number;
                                                         }>;
                                                         rehire?: {
                                                             enum_name: string;
@@ -32203,6 +32227,7 @@ export default abstract class Client extends contract {
                                         cost_center_list?: Array<{
                                             cost_center_id?: string;
                                             rate?: number;
+                                            new_rate?: number;
                                         }>;
                                         rehire?: {
                                             enum_name: string;
@@ -33932,6 +33957,7 @@ export default abstract class Client extends contract {
                                             cost_center_rates?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             work_shift?: {
                                                 enum_name: string;
@@ -34083,6 +34109,7 @@ export default abstract class Client extends contract {
                                             cost_center_rates?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             work_shift?: {
                                                 enum_name: string;
@@ -34356,6 +34383,148 @@ export default abstract class Client extends contract {
                             throw e;
                         });
                 },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/jobs/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    job_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_job_ids?: Array<string>;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=job&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    job_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_job_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/jobs/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * job_change
@@ -34403,6 +34572,7 @@ export default abstract class Client extends contract {
                                 target_cost_center_rates?: Array<{
                                     cost_center_id?: string;
                                     rate?: number;
+                                    new_rate?: number;
                                 }>;
                                 target_employment_change?: {
                                     regular_employee_start_date?: string;
@@ -34523,11 +34693,21 @@ export default abstract class Client extends contract {
                                         original_cost_center_rate?: Array<{
                                             cost_center_id?: string;
                                             rate?: number;
+                                            new_rate?: number;
                                         }>;
                                         target_cost_center_rate?: Array<{
                                             cost_center_id?: string;
                                             rate?: number;
+                                            new_rate?: number;
                                         }>;
+                                        target_allocation_expiration_time?: string;
+                                        original_allocation_expiration_time?: string;
+                                        target_allocation_effective_time?: string;
+                                        original_allocation_effective_time?: string;
+                                        original_default_cost_center?: string;
+                                        target_default_cost_center?: string;
+                                        original_is_default_cost_center_inherited?: boolean;
+                                        target_is_default_cost_center_inherited?: boolean;
                                         original_employment_change?: {
                                             regular_employee_start_date?: string;
                                             seniority_date?: string;
@@ -34820,11 +35000,21 @@ export default abstract class Client extends contract {
                                                             original_cost_center_rate?: Array<{
                                                                 cost_center_id?: string;
                                                                 rate?: number;
+                                                                new_rate?: number;
                                                             }>;
                                                             target_cost_center_rate?: Array<{
                                                                 cost_center_id?: string;
                                                                 rate?: number;
+                                                                new_rate?: number;
                                                             }>;
+                                                            target_allocation_expiration_time?: string;
+                                                            original_allocation_expiration_time?: string;
+                                                            target_allocation_effective_time?: string;
+                                                            original_allocation_effective_time?: string;
+                                                            original_default_cost_center?: string;
+                                                            target_default_cost_center?: string;
+                                                            original_is_default_cost_center_inherited?: boolean;
+                                                            target_is_default_cost_center_inherited?: boolean;
                                                             original_employment_change?: {
                                                                 regular_employee_start_date?: string;
                                                                 seniority_date?: string;
@@ -35030,11 +35220,21 @@ export default abstract class Client extends contract {
                                             original_cost_center_rate?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             target_cost_center_rate?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
+                                            target_allocation_expiration_time?: string;
+                                            original_allocation_expiration_time?: string;
+                                            target_allocation_effective_time?: string;
+                                            original_allocation_effective_time?: string;
+                                            original_default_cost_center?: string;
+                                            target_default_cost_center?: string;
+                                            original_is_default_cost_center_inherited?: boolean;
+                                            target_is_default_cost_center_inherited?: boolean;
                                             original_employment_change?: {
                                                 regular_employee_start_date?: string;
                                                 seniority_date?: string;
@@ -39228,6 +39428,7 @@ export default abstract class Client extends contract {
                                 cost_center_rate?: Array<{
                                     cost_center_id?: string;
                                     rate?: number;
+                                    new_rate?: number;
                                 }>;
                                 job_grade_id?: string;
                                 custom_fields?: Array<{
@@ -39650,6 +39851,7 @@ export default abstract class Client extends contract {
                                 cost_center_rates?: Array<{
                                     cost_center_id?: string;
                                     rate?: number;
+                                    new_rate?: number;
                                 }>;
                                 custom_fields?: Array<{
                                     field_name: string;
@@ -40693,6 +40895,7 @@ export default abstract class Client extends contract {
                                                             cost_center_rates?: Array<{
                                                                 cost_center_id?: string;
                                                                 rate?: number;
+                                                                new_rate?: number;
                                                             }>;
                                                             office_location_id?: string;
                                                             work_location_id?: string;
@@ -41002,6 +41205,7 @@ export default abstract class Client extends contract {
                                                             contract_type?: string;
                                                             duration_type?: string;
                                                             signing_type?: string;
+                                                            contract_file_ids?: Array<string>;
                                                         };
                                                         pre_hire_id?: string;
                                                         people_fields_json?: string;
@@ -41914,6 +42118,7 @@ export default abstract class Client extends contract {
                                             cost_center_rates?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             office_location_id?: string;
                                             work_location_id?: string;
@@ -42223,6 +42428,7 @@ export default abstract class Client extends contract {
                                             contract_type?: string;
                                             duration_type?: string;
                                             signing_type?: string;
+                                            contract_file_ids?: Array<string>;
                                         };
                                         pre_hire_id?: string;
                                         people_fields_json?: string;
@@ -43240,6 +43446,7 @@ export default abstract class Client extends contract {
                                                             cost_center_rates?: Array<{
                                                                 cost_center_id?: string;
                                                                 rate?: number;
+                                                                new_rate?: number;
                                                             }>;
                                                             office_location_id?: string;
                                                             work_location_id?: string;
@@ -43549,6 +43756,7 @@ export default abstract class Client extends contract {
                                                             contract_type?: string;
                                                             duration_type?: string;
                                                             signing_type?: string;
+                                                            contract_file_ids?: Array<string>;
                                                         };
                                                         pre_hire_id?: string;
                                                         people_fields_json?: string;
@@ -44482,6 +44690,7 @@ export default abstract class Client extends contract {
                                             cost_center_rates?: Array<{
                                                 cost_center_id?: string;
                                                 rate?: number;
+                                                new_rate?: number;
                                             }>;
                                             office_location_id?: string;
                                             work_location_id?: string;
@@ -44791,6 +45000,7 @@ export default abstract class Client extends contract {
                                             contract_type?: string;
                                             duration_type?: string;
                                             signing_type?: string;
+                                            contract_file_ids?: Array<string>;
                                         };
                                         pre_hire_id?: string;
                                         people_fields_json?: string;

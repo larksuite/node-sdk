@@ -4233,6 +4233,94 @@ export interface IHandles extends IOtherEventHandles {
         user_type?: number;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "payroll.payment_activity.approved_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "payroll.payment_activity.status_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        activity_id?: string;
+        status?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "performance.review_data.changed_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        items?: Array<{
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            semester_id?: string;
+            activity_id?: string;
+            stage_changes?: Array<{
+                stage_id?: string;
+                stage_type?:
+                    | "summarize_key_outputs"
+                    | "review"
+                    | "communication_and_open_result"
+                    | "view_result"
+                    | "reconsideration"
+                    | "leader_review";
+                review_stage_role?:
+                    | "reviewee"
+                    | "invited_reviewer"
+                    | "solid_line_leader"
+                    | "dotted_line_leader"
+                    | "secondary_solid_line_leader"
+                    | "direct_project_leader"
+                    | "custom_review_role";
+            }>;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "performance.stage_task.open_result_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        items?: Array<{
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            semester_id?: string;
+            activity_id?: string;
+            open_time?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task-comment/events/updated document }
      *
      * 任务评论信息变更

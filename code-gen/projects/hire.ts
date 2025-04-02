@@ -41666,5 +41666,1055 @@ export default abstract class Client extends helpdesk {
                 },
             },
         },
+        v2: {
+            /**
+             * interview_record
+             */
+            interviewRecord: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=hire&resource=interview_record&version=v2 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { interview_record_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    interview_record?: {
+                                        id?: string;
+                                        feedback_form_id?: string;
+                                        commit_status?: number;
+                                        submit_time?: string;
+                                        record_score?: {
+                                            score?: number;
+                                            total_score?: number;
+                                        };
+                                        interviewer?: {
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        attachments?: Array<{
+                                            file_id?: string;
+                                            file_name?: string;
+                                            content_type?: string;
+                                            file_size?: number;
+                                            create_time?: string;
+                                        }>;
+                                        module_assessments?: Array<{
+                                            interview_feedback_form_module_id?: string;
+                                            module_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            module_type?: number;
+                                            module_weight?: number;
+                                            module_score?: number;
+                                            dimension_assessments?: Array<{
+                                                interview_feedback_form_dimension_id?: string;
+                                                dimension_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                dimension_type?: number;
+                                                weight?: number;
+                                                dimension_content?: string;
+                                                dimension_option?: {
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                };
+                                                dimension_options?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                }>;
+                                                dimension_score?: number;
+                                                recommended_job_level?: {
+                                                    lower_limit_job_level_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    higher_limit_job_level_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                question_assessments?: Array<{
+                                                    question_type?: number;
+                                                    title?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    content?: string;
+                                                    abilities?: Array<{
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                            }>;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v2/interview_records/:interview_record_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v2/interview_records`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        get<
+                                            {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        feedback_form_id?: string;
+                                                        commit_status?: number;
+                                                        submit_time?: string;
+                                                        record_score?: {
+                                                            score?: number;
+                                                            total_score?: number;
+                                                        };
+                                                        interviewer?: {
+                                                            id: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        };
+                                                        attachments?: Array<{
+                                                            file_id?: string;
+                                                            file_name?: string;
+                                                            content_type?: string;
+                                                            file_size?: number;
+                                                            create_time?: string;
+                                                        }>;
+                                                        module_assessments?: Array<{
+                                                            interview_feedback_form_module_id?: string;
+                                                            module_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            module_type?: number;
+                                                            module_weight?: number;
+                                                            module_score?: number;
+                                                            dimension_assessments?: Array<{
+                                                                interview_feedback_form_dimension_id?: string;
+                                                                dimension_name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                dimension_type?: number;
+                                                                weight?: number;
+                                                                dimension_content?: string;
+                                                                dimension_option?: {
+                                                                    id?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    score_val?: number;
+                                                                };
+                                                                dimension_options?: Array<{
+                                                                    id?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    score_val?: number;
+                                                                }>;
+                                                                dimension_score?: number;
+                                                                recommended_job_level?: {
+                                                                    lower_limit_job_level_name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    higher_limit_job_level_name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                };
+                                                                question_assessments?: Array<{
+                                                                    question_type?: number;
+                                                                    title?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    content?: string;
+                                                                    abilities?: Array<{
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        description?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                    }>;
+                                                                }>;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            },
+                                            "data"
+                                        >(res, "data") || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=interview_record&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=interview_record&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            ids?: Array<string>;
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        feedback_form_id?: string;
+                                        commit_status?: number;
+                                        submit_time?: string;
+                                        record_score?: {
+                                            score?: number;
+                                            total_score?: number;
+                                        };
+                                        interviewer?: {
+                                            id: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        attachments?: Array<{
+                                            file_id?: string;
+                                            file_name?: string;
+                                            content_type?: string;
+                                            file_size?: number;
+                                            create_time?: string;
+                                        }>;
+                                        module_assessments?: Array<{
+                                            interview_feedback_form_module_id?: string;
+                                            module_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            module_type?: number;
+                                            module_weight?: number;
+                                            module_score?: number;
+                                            dimension_assessments?: Array<{
+                                                interview_feedback_form_dimension_id?: string;
+                                                dimension_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                dimension_type?: number;
+                                                weight?: number;
+                                                dimension_content?: string;
+                                                dimension_option?: {
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                };
+                                                dimension_options?: Array<{
+                                                    id?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    score_val?: number;
+                                                }>;
+                                                dimension_score?: number;
+                                                recommended_job_level?: {
+                                                    lower_limit_job_level_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    higher_limit_job_level_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                question_assessments?: Array<{
+                                                    question_type?: number;
+                                                    title?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    content?: string;
+                                                    abilities?: Array<{
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                    }>;
+                                                }>;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v2/interview_records`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * 人才
+             */
+            talent: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=talent&apiName=get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/hire-v2/talent/get document }
+                 *
+                 * 获取人才信息V2
+                 *
+                 * 根据人才 ID 获取人才信息
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                        path: { talent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    talent_id?: string;
+                                    basic_info?: {
+                                        name: string;
+                                        mobile_number?: string;
+                                        mobile_code?: string;
+                                        email?: string;
+                                        experience_years?: number;
+                                        age?: number;
+                                        nationality_code?: string;
+                                        gender?: number;
+                                        current_location_code?: string;
+                                        hometown_location_code?: string;
+                                        preferred_location_code_list?: Array<string>;
+                                        home_address?: string;
+                                        identification_type?: number;
+                                        identification_number?: string;
+                                        birthday?: number;
+                                        marital_status?: number;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                        hukou_location_code?: string;
+                                        update_time?: string;
+                                        create_time?: string;
+                                        confidential?: number;
+                                    };
+                                    education_list?: Array<{
+                                        degree?: number;
+                                        school_name?: string;
+                                        major?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                        education_type?: number;
+                                        academic_ranking?: number;
+                                        tag_list?: Array<number>;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    career_list?: Array<{
+                                        company_name?: string;
+                                        description?: string;
+                                        end_time?: string;
+                                        start_time?: string;
+                                        title?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    project_list?: Array<{
+                                        project_name?: string;
+                                        role?: string;
+                                        link?: string;
+                                        description?: string;
+                                        start_time?: string;
+                                        end_time?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    works_list?: Array<{
+                                        id?: string;
+                                        link?: string;
+                                        description?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    award_list?: Array<{
+                                        award_name?: string;
+                                        award_time?: string;
+                                        description?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    language_list?: Array<{
+                                        language?: number;
+                                        proficiency?: number;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    sns_list?: Array<{
+                                        sns_type?: number;
+                                        link?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    resume_source_list?: Array<{
+                                        id?: string;
+                                        zh_name?: string;
+                                        en_name?: string;
+                                    }>;
+                                    internship_list?: Array<{
+                                        company_name?: string;
+                                        description?: string;
+                                        end_time?: string;
+                                        start_time?: string;
+                                        title?: string;
+                                        customized_data_list?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    customized_data_list?: Array<{
+                                        module_id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        object_type?: number;
+                                        children?: Array<{
+                                            object_id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            object_type?: number;
+                                            value?: {
+                                                content?: string;
+                                                option?: {
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                };
+                                                option_list?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                }>;
+                                                time_range?: {
+                                                    start_time?: string;
+                                                    end_time?: string;
+                                                };
+                                                time?: string;
+                                                number?: string;
+                                                customized_attachment?: Array<{
+                                                    file_id?: string;
+                                                    file_name?: string;
+                                                    content_type?: string;
+                                                    file_size?: number;
+                                                }>;
+                                            };
+                                        }>;
+                                    }>;
+                                    resume_attachment_id_list?: Array<string>;
+                                    resume_attachment_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        mime?: string;
+                                        create_time?: string;
+                                    }>;
+                                    interview_registration_list?: Array<{
+                                        id?: string;
+                                        registration_time?: number;
+                                        download_url?: string;
+                                    }>;
+                                    registration_list?: Array<{
+                                        id?: string;
+                                        registration_time?: number;
+                                        download_url?: string;
+                                        scenario?: number;
+                                    }>;
+                                    is_onboarded?: boolean;
+                                    is_in_agency_period?: boolean;
+                                    top_degree?: number;
+                                    talent_pool_id_list?: Array<string>;
+                                    talent_folder_ref_list_v2?: Array<{
+                                        name?: string;
+                                        folder_id?: string;
+                                        owner_id?: string;
+                                        add_time?: string;
+                                    }>;
+                                    tag_list?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        type?: number;
+                                    }>;
+                                    similar_info_v2?: {
+                                        is_similar_talent?: boolean;
+                                        similar_talent_id_list?: Array<string>;
+                                    };
+                                    block_info?: {
+                                        blocked_time?: string;
+                                        creator_id?: string;
+                                        reason?: string;
+                                    };
+                                    talent_pool_ref_list_v2?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        add_time?: string;
+                                    }>;
+                                    note_list_v2?: Array<{
+                                        id?: string;
+                                        talent_id?: string;
+                                        application_id?: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        creator_id?: string;
+                                        content?: string;
+                                        privacy?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v2/talents/:talent_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
     };
 }
