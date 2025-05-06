@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -51,7 +50,7 @@ export default abstract class Client extends sheets {
             fileRecognize: async (
                 payload?: {
                     data: {
-                        speech: { speech?: string };
+                        speech: { speech?: string; speech_key?: string };
                         config: {
                             file_id: string;
                             format: string;
@@ -103,7 +102,7 @@ export default abstract class Client extends sheets {
             streamRecognize: async (
                 payload?: {
                     data: {
-                        speech: { speech?: string };
+                        speech: { speech?: string; speech_key?: string };
                         config: {
                             stream_id: string;
                             sequence_id: number;
@@ -167,7 +166,7 @@ export default abstract class Client extends sheets {
                 fileRecognize: async (
                     payload?: {
                         data: {
-                            speech: { speech?: string };
+                            speech: { speech?: string; speech_key?: string };
                             config: {
                                 file_id: string;
                                 format: string;
@@ -219,7 +218,7 @@ export default abstract class Client extends sheets {
                 streamRecognize: async (
                     payload?: {
                         data: {
-                            speech: { speech?: string };
+                            speech: { speech?: string; speech_key?: string };
                             config: {
                                 stream_id: string;
                                 sequence_id: number;

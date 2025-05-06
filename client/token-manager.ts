@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { CTenantKey, CTenantAccessToken } from '@node-sdk/consts';
 import { Cache, AppType, Logger } from '@node-sdk/typings';
 import { assert } from '@node-sdk/utils';
@@ -173,9 +172,7 @@ export class TokenManager {
         const tenantAccessToken =
             this.appType === AppType.SelfBuild
                 ? await this.getCustomTenantAccessToken()
-                : await this.getMarketTenantAccessToken(
-                      get(params, CTenantKey)!
-                );
+                : await this.getMarketTenantAccessToken(params?.[CTenantKey]!);
 
         return tenantAccessToken;
     }

@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -368,8 +367,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -380,9 +379,8 @@ export default abstract class Client extends baike {
                                                 page_token: string;
                                                 has_more: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -658,8 +656,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -705,9 +703,8 @@ export default abstract class Client extends baike {
                                                 has_more?: boolean;
                                                 total?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1168,8 +1165,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1191,9 +1188,8 @@ export default abstract class Client extends baike {
                                                 page_token?: string;
                                                 total?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1701,8 +1697,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1715,9 +1711,8 @@ export default abstract class Client extends baike {
                                                     name?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2174,8 +2169,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2279,9 +2274,8 @@ export default abstract class Client extends baike {
                                                     is_hidden?: boolean;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2744,8 +2738,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2760,9 +2754,8 @@ export default abstract class Client extends baike {
                                                 has_more: boolean;
                                                 total: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -3938,8 +3931,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4010,9 +4003,8 @@ export default abstract class Client extends baike {
                                                     record_url?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4258,8 +4250,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4330,9 +4322,8 @@ export default abstract class Client extends baike {
                                                 page_token?: string;
                                                 total?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4945,8 +4936,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4993,9 +4984,8 @@ export default abstract class Client extends baike {
                                                 has_more?: boolean;
                                                 total?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -5276,8 +5266,8 @@ export default abstract class Client extends baike {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -5287,9 +5277,8 @@ export default abstract class Client extends baike {
                                                     title?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -5723,8 +5712,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5735,9 +5724,8 @@ export default abstract class Client extends baike {
                                                     page_token: string;
                                                     has_more: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6018,8 +6006,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6065,9 +6053,8 @@ export default abstract class Client extends baike {
                                                     has_more?: boolean;
                                                     total?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6542,8 +6529,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6565,9 +6552,8 @@ export default abstract class Client extends baike {
                                                     page_token?: string;
                                                     total?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7087,8 +7073,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -7101,9 +7087,8 @@ export default abstract class Client extends baike {
                                                         name?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7567,8 +7552,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -7672,9 +7657,8 @@ export default abstract class Client extends baike {
                                                         is_hidden?: boolean;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -8146,8 +8130,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -8162,9 +8146,8 @@ export default abstract class Client extends baike {
                                                     has_more: boolean;
                                                     total: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9345,8 +9328,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9417,9 +9400,8 @@ export default abstract class Client extends baike {
                                                         record_url?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9670,8 +9652,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9742,9 +9724,8 @@ export default abstract class Client extends baike {
                                                     page_token?: string;
                                                     total?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -10365,8 +10346,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -10413,9 +10394,8 @@ export default abstract class Client extends baike {
                                                     has_more?: boolean;
                                                     total?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -10698,8 +10678,8 @@ export default abstract class Client extends baike {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -10709,9 +10689,8 @@ export default abstract class Client extends baike {
                                                         title?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 

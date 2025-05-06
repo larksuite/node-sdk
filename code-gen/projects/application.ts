@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -149,8 +148,8 @@ export default abstract class Client extends apaas {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -216,9 +215,8 @@ export default abstract class Client extends apaas {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -858,8 +856,8 @@ export default abstract class Client extends apaas {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1006,9 +1004,8 @@ export default abstract class Client extends apaas {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1576,6 +1573,29 @@ export default abstract class Client extends apaas {
                                         | "gadget"
                                         | "web_app"
                                         | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
                                 };
                             };
                         }
@@ -1662,8 +1682,8 @@ export default abstract class Client extends apaas {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1739,14 +1759,36 @@ export default abstract class Client extends apaas {
                                                         | "gadget"
                                                         | "web_app"
                                                         | "bot";
+                                                    secret?: string;
+                                                    event?: {
+                                                        subscription_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_events?: Array<string>;
+                                                    };
+                                                    callback?: {
+                                                        callback_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                    encryption?: {
+                                                        encryption_key?: string;
+                                                        verification_token?: string;
+                                                    };
+                                                    security?: {
+                                                        redirect_urls?: Array<string>;
+                                                        allowed_ips?: Array<string>;
+                                                        h5_trusted_domains?: Array<string>;
+                                                        web_view_trusted_domains?: Array<string>;
+                                                        allowed_schemas?: Array<string>;
+                                                        allowed_server_domains?: Array<string>;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
                                                 total_count?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1865,6 +1907,29 @@ export default abstract class Client extends apaas {
                                         | "gadget"
                                         | "web_app"
                                         | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1899,7 +1964,32 @@ export default abstract class Client extends apaas {
              */
             patch: async (
                 payload?: {
-                    data?: { common_categories?: Array<string> };
+                    data?: {
+                        common_categories?: Array<string>;
+                        secret?: string;
+                        event?: {
+                            subscription_type?: string;
+                            request_url?: string;
+                            subscribed_events?: Array<string>;
+                        };
+                        callback?: {
+                            callback_type?: string;
+                            request_url?: string;
+                            subscribed_callbacks?: Array<string>;
+                        };
+                        encryption?: {
+                            encryption_key?: string;
+                            verification_token?: string;
+                        };
+                        security?: {
+                            redirect_urls?: Array<string>;
+                            allowed_ips?: Array<string>;
+                            h5_trusted_domains?: Array<string>;
+                            web_view_trusted_domains?: Array<string>;
+                            allowed_schemas?: Array<string>;
+                            allowed_server_domains?: Array<string>;
+                        };
+                    };
                     params: { lang: "zh_cn" | "en_us" | "ja_jp" };
                     path: { app_id: string };
                 },
@@ -1989,8 +2079,8 @@ export default abstract class Client extends apaas {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2066,13 +2156,35 @@ export default abstract class Client extends apaas {
                                                         | "gadget"
                                                         | "web_app"
                                                         | "bot";
+                                                    secret?: string;
+                                                    event?: {
+                                                        subscription_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_events?: Array<string>;
+                                                    };
+                                                    callback?: {
+                                                        callback_type?: string;
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
+                                                    encryption?: {
+                                                        encryption_key?: string;
+                                                        verification_token?: string;
+                                                    };
+                                                    security?: {
+                                                        redirect_urls?: Array<string>;
+                                                        allowed_ips?: Array<string>;
+                                                        h5_trusted_domains?: Array<string>;
+                                                        web_view_trusted_domains?: Array<string>;
+                                                        allowed_schemas?: Array<string>;
+                                                        allowed_server_domains?: Array<string>;
+                                                    };
                                                 }>;
                                                 has_more: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2188,6 +2300,29 @@ export default abstract class Client extends apaas {
                                         | "gadget"
                                         | "web_app"
                                         | "bot";
+                                    secret?: string;
+                                    event?: {
+                                        subscription_type?: string;
+                                        request_url?: string;
+                                        subscribed_events?: Array<string>;
+                                    };
+                                    callback?: {
+                                        callback_type?: string;
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
+                                    encryption?: {
+                                        encryption_key?: string;
+                                        verification_token?: string;
+                                    };
+                                    security?: {
+                                        redirect_urls?: Array<string>;
+                                        allowed_ips?: Array<string>;
+                                        h5_trusted_domains?: Array<string>;
+                                        web_view_trusted_domains?: Array<string>;
+                                        allowed_schemas?: Array<string>;
+                                        allowed_server_domains?: Array<string>;
+                                    };
                                 }>;
                                 has_more: boolean;
                                 page_token?: string;
@@ -2736,8 +2871,8 @@ export default abstract class Client extends apaas {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -2805,9 +2940,8 @@ export default abstract class Client extends apaas {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3451,8 +3585,8 @@ export default abstract class Client extends apaas {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3600,9 +3734,8 @@ export default abstract class Client extends apaas {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4186,6 +4319,29 @@ export default abstract class Client extends apaas {
                                             | "gadget"
                                             | "web_app"
                                             | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
                                     };
                                 };
                             }
@@ -4274,8 +4430,8 @@ export default abstract class Client extends apaas {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4352,14 +4508,36 @@ export default abstract class Client extends apaas {
                                                             | "gadget"
                                                             | "web_app"
                                                             | "bot";
+                                                        secret?: string;
+                                                        event?: {
+                                                            subscription_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_events?: Array<string>;
+                                                        };
+                                                        callback?: {
+                                                            callback_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                        encryption?: {
+                                                            encryption_key?: string;
+                                                            verification_token?: string;
+                                                        };
+                                                        security?: {
+                                                            redirect_urls?: Array<string>;
+                                                            allowed_ips?: Array<string>;
+                                                            h5_trusted_domains?: Array<string>;
+                                                            web_view_trusted_domains?: Array<string>;
+                                                            allowed_schemas?: Array<string>;
+                                                            allowed_server_domains?: Array<string>;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                     total_count?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4480,6 +4658,29 @@ export default abstract class Client extends apaas {
                                             | "gadget"
                                             | "web_app"
                                             | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -4514,7 +4715,32 @@ export default abstract class Client extends apaas {
                  */
                 patch: async (
                     payload?: {
-                        data?: { common_categories?: Array<string> };
+                        data?: {
+                            common_categories?: Array<string>;
+                            secret?: string;
+                            event?: {
+                                subscription_type?: string;
+                                request_url?: string;
+                                subscribed_events?: Array<string>;
+                            };
+                            callback?: {
+                                callback_type?: string;
+                                request_url?: string;
+                                subscribed_callbacks?: Array<string>;
+                            };
+                            encryption?: {
+                                encryption_key?: string;
+                                verification_token?: string;
+                            };
+                            security?: {
+                                redirect_urls?: Array<string>;
+                                allowed_ips?: Array<string>;
+                                h5_trusted_domains?: Array<string>;
+                                web_view_trusted_domains?: Array<string>;
+                                allowed_schemas?: Array<string>;
+                                allowed_server_domains?: Array<string>;
+                            };
+                        };
                         params: { lang: "zh_cn" | "en_us" | "ja_jp" };
                         path: { app_id: string };
                     },
@@ -4609,8 +4835,8 @@ export default abstract class Client extends apaas {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4687,13 +4913,35 @@ export default abstract class Client extends apaas {
                                                             | "gadget"
                                                             | "web_app"
                                                             | "bot";
+                                                        secret?: string;
+                                                        event?: {
+                                                            subscription_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_events?: Array<string>;
+                                                        };
+                                                        callback?: {
+                                                            callback_type?: string;
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
+                                                        encryption?: {
+                                                            encryption_key?: string;
+                                                            verification_token?: string;
+                                                        };
+                                                        security?: {
+                                                            redirect_urls?: Array<string>;
+                                                            allowed_ips?: Array<string>;
+                                                            h5_trusted_domains?: Array<string>;
+                                                            web_view_trusted_domains?: Array<string>;
+                                                            allowed_schemas?: Array<string>;
+                                                            allowed_server_domains?: Array<string>;
+                                                        };
                                                     }>;
                                                     has_more: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4811,6 +5059,29 @@ export default abstract class Client extends apaas {
                                             | "gadget"
                                             | "web_app"
                                             | "bot";
+                                        secret?: string;
+                                        event?: {
+                                            subscription_type?: string;
+                                            request_url?: string;
+                                            subscribed_events?: Array<string>;
+                                        };
+                                        callback?: {
+                                            callback_type?: string;
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
+                                        encryption?: {
+                                            encryption_key?: string;
+                                            verification_token?: string;
+                                        };
+                                        security?: {
+                                            redirect_urls?: Array<string>;
+                                            allowed_ips?: Array<string>;
+                                            h5_trusted_domains?: Array<string>;
+                                            web_view_trusted_domains?: Array<string>;
+                                            allowed_schemas?: Array<string>;
+                                            allowed_server_domains?: Array<string>;
+                                        };
                                     }>;
                                     has_more: boolean;
                                     page_token?: string;

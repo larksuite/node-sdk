@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";

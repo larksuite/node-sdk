@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import get from 'lodash.get';
 import { CEventType } from '@node-sdk/consts';
 import { AESCipher } from '@node-sdk/utils';
 import { Logger } from '@node-sdk/typings';
@@ -51,7 +50,7 @@ export default class RequestHandle {
         if ('schema' in targetData) {
             const { header, event, ...rest } = targetData;
             return {
-                [CEventType]: get(targetData, 'header.event_type'),
+                [CEventType]: targetData?.header?.event_type,
                 ...rest,
                 ...header,
                 ...event,
@@ -59,7 +58,7 @@ export default class RequestHandle {
         }
         const { event, ...rest } = targetData;
         return {
-            [CEventType]: get(targetData, 'event.type'),
+            [CEventType]: targetData?.event?.type,
             ...event,
             ...rest,
         };

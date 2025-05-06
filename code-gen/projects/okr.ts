@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -86,8 +85,7 @@ export default abstract class Client extends moments {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
         },
         /**
@@ -1173,8 +1171,7 @@ export default abstract class Client extends moments {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
             },
             /**

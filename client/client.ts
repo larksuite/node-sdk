@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import defaultHttpInstance, { AxiosRequestConfig } from '@node-sdk/http';
 import { Cache, AppType, Domain, LoggerLevel, Logger } from '@node-sdk/typings';
 import {
@@ -63,7 +62,7 @@ export class Client extends RequestTemplate {
 
         this.helpDeskId = params.helpDeskId;
         this.helpDeskToken = params.helpDeskToken;
-        this.appType = get(params, 'appType', AppType.SelfBuild);
+        this.appType = params?.appType || AppType.SelfBuild;
 
         this.domain = formatDomain(params.domain || Domain.Feishu);
         this.logger.debug(`use domain url: ${this.domain}`);
@@ -97,11 +96,11 @@ export class Client extends RequestTemplate {
             'headers',
             'path',
         ].reduce((acc, key) => {
-            acc[key] = get(options, key, {});
+            acc[key] = options?.[key] || {};
             return acc;
         }, {} as Required<IRequestOptions>);
 
-        const userAccessToken = get(targetOptions.lark, CWithUserAccessToken);
+        const userAccessToken = targetOptions?.lark?.[CWithUserAccessToken];
 
         if (userAccessToken) {
             this.logger.debug('use passed token');
@@ -109,7 +108,7 @@ export class Client extends RequestTemplate {
         } else if (!this.disableTokenCache) {
             const tenantAccessToken =
                 await this.tokenManager.getTenantAccessToken({
-                    [CTenantKey]: get(targetOptions.lark, CTenantKey),
+                    [CTenantKey]: targetOptions?.lark?.[CTenantKey],
                 });
             if (tenantAccessToken) {
                 targetOptions.headers.Authorization = `Bearer ${tenantAccessToken}`;
@@ -119,10 +118,7 @@ export class Client extends RequestTemplate {
         }
 
         // helpDeskCredential
-        const withHelpDeskCredential = get(
-            targetOptions.lark,
-            CWithHelpdeskAuthorization
-        );
+        const withHelpDeskCredential = targetOptions?.lark?.[CWithHelpdeskAuthorization];
 
         if (withHelpDeskCredential) {
             this.logger.debug('generate help desk credential');
@@ -135,15 +131,15 @@ export class Client extends RequestTemplate {
         }
 
         return {
-            params: { ...get(payload, 'params', {}), ...targetOptions.params },
+            params: { ...(payload?.params || {}), ...targetOptions.params },
             headers: {
                 'User-Agent': 'oapi-node-sdk/1.0.0',
-                ...get(payload, 'headers', {}),
+                ...(payload?.headers || {}),
                 ...targetOptions.headers,
             },
-            data: { ...get(payload, 'data', {}), ...targetOptions.data },
+            data: { ...(payload?.data || {}), ...targetOptions.data },
             path: {
-                ...get(payload, 'path', {}),
+                ...(payload?.path || {}),
                 ...targetOptions.path,
             },
         };

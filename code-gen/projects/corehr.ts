@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -325,10 +324,14 @@ export default abstract class Client extends contract {
                                                 zh_cn?: string;
                                                 en_us?: string;
                                             };
+                                            active_status: number;
                                             description?: {
                                                 zh_cn?: string;
                                                 en_us?: string;
                                             };
+                                            group_type: number;
+                                            created_by: string;
+                                            update_time: string;
                                             org_truncation?: Array<{
                                                 org_key?: string;
                                                 type?: number;
@@ -1806,13 +1809,14 @@ export default abstract class Client extends contract {
                             | "open_department_id"
                             | "department_id"
                             | "people_corehr_department_id";
-                        employment_id: string;
+                        employment_id?: string;
                         reference_object_api?: "cpst_item" | "cpst_indicator";
                         reference_object_id: string;
                         department_id?: string;
                         work_location_id?: string;
                         company_id?: string;
                         job_family_id?: string;
+                        job_id?: string;
                         job_level_id?: string;
                         employee_type_id?: string;
                         recruitment_type?:
@@ -5348,6 +5352,7 @@ export default abstract class Client extends contract {
                     data: {
                         name: Array<{ lang: string; value: string }>;
                         active: boolean;
+                        selectable?: boolean;
                         parent_id?: string;
                         pathway_ids?: Array<string>;
                         effective_time: string;
@@ -5380,6 +5385,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     active: boolean;
+                                    selectable?: boolean;
                                     parent_id?: string;
                                     pathway_ids?: Array<string>;
                                     effective_time: string;
@@ -5481,6 +5487,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     active: boolean;
+                                    selectable?: boolean;
                                     parent_id?: string;
                                     pathway_ids?: Array<string>;
                                     effective_time: string;
@@ -5546,6 +5553,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     active: boolean;
+                                    selectable?: boolean;
                                     parent_id?: string;
                                     pathway_ids?: Array<string>;
                                     effective_time: string;
@@ -5595,6 +5603,7 @@ export default abstract class Client extends contract {
                     data?: {
                         name?: Array<{ lang: string; value: string }>;
                         active?: boolean;
+                        selectable?: boolean;
                         parent_id?: string;
                         pathway_ids?: Array<string>;
                         effective_time?: string;
@@ -5628,6 +5637,7 @@ export default abstract class Client extends contract {
                                         value: string;
                                     }>;
                                     active: boolean;
+                                    selectable?: boolean;
                                     parent_id?: string;
                                     pathway_ids?: Array<string>;
                                     effective_time: string;
@@ -7597,8 +7607,8 @@ export default abstract class Client extends contract {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -7686,9 +7696,8 @@ export default abstract class Client extends contract {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -10640,8 +10649,7 @@ export default abstract class Client extends contract {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
         },
         /**
@@ -12223,10 +12231,14 @@ export default abstract class Client extends contract {
                                                     zh_cn?: string;
                                                     en_us?: string;
                                                 };
+                                                active_status: number;
                                                 description?: {
                                                     zh_cn?: string;
                                                     en_us?: string;
                                                 };
+                                                group_type: number;
+                                                created_by: string;
+                                                update_time: string;
                                                 org_truncation?: Array<{
                                                     org_key?: string;
                                                     type?: number;
@@ -13713,7 +13725,7 @@ export default abstract class Client extends contract {
                                 | "open_department_id"
                                 | "department_id"
                                 | "people_corehr_department_id";
-                            employment_id: string;
+                            employment_id?: string;
                             reference_object_api?:
                                 | "cpst_item"
                                 | "cpst_indicator";
@@ -13722,6 +13734,7 @@ export default abstract class Client extends contract {
                             work_location_id?: string;
                             company_id?: string;
                             job_family_id?: string;
+                            job_id?: string;
                             job_level_id?: string;
                             employee_type_id?: string;
                             recruitment_type?:
@@ -17290,6 +17303,7 @@ export default abstract class Client extends contract {
                         data: {
                             name: Array<{ lang: string; value: string }>;
                             active: boolean;
+                            selectable?: boolean;
                             parent_id?: string;
                             pathway_ids?: Array<string>;
                             effective_time: string;
@@ -17325,6 +17339,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         active: boolean;
+                                        selectable?: boolean;
                                         parent_id?: string;
                                         pathway_ids?: Array<string>;
                                         effective_time: string;
@@ -17429,6 +17444,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         active: boolean;
+                                        selectable?: boolean;
                                         parent_id?: string;
                                         pathway_ids?: Array<string>;
                                         effective_time: string;
@@ -17494,6 +17510,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         active: boolean;
+                                        selectable?: boolean;
                                         parent_id?: string;
                                         pathway_ids?: Array<string>;
                                         effective_time: string;
@@ -17543,6 +17560,7 @@ export default abstract class Client extends contract {
                         data?: {
                             name?: Array<{ lang: string; value: string }>;
                             active?: boolean;
+                            selectable?: boolean;
                             parent_id?: string;
                             pathway_ids?: Array<string>;
                             effective_time?: string;
@@ -17579,6 +17597,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         active: boolean;
+                                        selectable?: boolean;
                                         parent_id?: string;
                                         pathway_ids?: Array<string>;
                                         effective_time: string;
@@ -19570,8 +19589,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -19659,9 +19678,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -22650,8 +22668,7 @@ export default abstract class Client extends contract {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
             },
             /**
@@ -24304,7 +24321,6 @@ export default abstract class Client extends contract {
                                             original_position?: string;
                                             target_position?: string;
                                             target_draft_position?: string;
-                                            is_transfer_with_workforce?: boolean;
                                         };
                                     }>;
                                 };
@@ -24401,8 +24417,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24414,9 +24430,8 @@ export default abstract class Client extends contract {
                                                         approver_status?: number;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -24561,8 +24576,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24581,9 +24596,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -24734,8 +24748,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24758,9 +24772,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -24913,8 +24926,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24932,9 +24945,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25077,8 +25089,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25100,9 +25112,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25249,8 +25260,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25274,9 +25285,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25425,8 +25435,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25444,9 +25454,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25589,8 +25598,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25607,9 +25616,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25751,8 +25759,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25768,9 +25776,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25911,8 +25918,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25931,9 +25938,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -26077,8 +26083,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -26095,9 +26101,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -26301,8 +26306,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -26313,9 +26318,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -26751,8 +26755,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -26761,9 +26765,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_company_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -26905,8 +26908,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -26960,9 +26963,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -27067,6 +27069,240 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/contracts/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * cost_allocation
+             */
+            costAllocation: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_allocation&apiName=batch_query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=corehr&resource=cost_allocation&version=v2 document }
+                 *
+                 * 通过员工ID批量获取通道信息
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { employment_ids: Array<string> };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        employment_id?: string;
+                                        cost_allocations?: Array<{
+                                            wk_id?: string;
+                                            effective_time?: string;
+                                            expiration_time?: string;
+                                            job_data_cost_center_id?: Array<{
+                                                cost_center_id?: string;
+                                                rate?: number;
+                                                new_rate?: number;
+                                            }>;
+                                            job_data_id?: { wk_id?: string };
+                                            reason?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_allocations/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_allocation&apiName=create_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_version&project=corehr&resource=cost_allocation&version=v2 document }
+                 *
+                 * 创建成本分摊
+                 */
+                createVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            cost_allocation?: {
+                                effective_time: string;
+                                expiration_time?: string;
+                                job_data_cost_center_id?: Array<{
+                                    cost_center_id: string;
+                                    new_rate: number;
+                                }>;
+                                reason?: string;
+                            };
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            client_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { cost_allocation_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_allocations/create_version`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_allocation&apiName=remove_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_version&project=corehr&resource=cost_allocation&version=v2 document }
+                 *
+                 * 删除成本分摊
+                 */
+                removeVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            cost_allocation?: { wk_id: string };
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            client_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_allocations/remove_version`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=cost_allocation&apiName=update_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_version&project=corehr&resource=cost_allocation&version=v2 document }
+                 *
+                 * 更新成本分摊
+                 */
+                updateVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            cost_allocation?: {
+                                wk_id: string;
+                                effective_time?: string;
+                                expiration_time?: string;
+                                job_data_cost_center_id?: Array<{
+                                    cost_center_id?: string;
+                                    new_rate?: number;
+                                }>;
+                                reason?: string;
+                            };
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            client_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/cost_allocations/update_version`,
                                 path
                             ),
                             method: "POST",
@@ -27336,8 +27572,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -27346,9 +27582,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_cost_center_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -27678,6 +27913,234 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * default_cost_center
+             */
+            defaultCostCenter: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=default_cost_center&apiName=batch_query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=corehr&resource=default_cost_center&version=v2 document }
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: { employment_ids: Array<string> };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        employment_id?: string;
+                                        default_cost_centers?: Array<{
+                                            wk_id?: string;
+                                            wk_tid?: string;
+                                            effective_time?: string;
+                                            cost_center_id?: string;
+                                            job_data_id?: string;
+                                            is_inherit?: boolean;
+                                            inherit_source?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            reason?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/default_cost_centers/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=default_cost_center&apiName=create_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create_version&project=corehr&resource=default_cost_center&version=v2 document }
+                 */
+                createVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            default_cost_center?: {
+                                effective_time: string;
+                                cost_center_id?: string;
+                                is_inherit?: boolean;
+                                reason?: string;
+                            };
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { wk_id?: string; wk_tid?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/default_cost_centers/create_version`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=default_cost_center&apiName=remove_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_version&project=corehr&resource=default_cost_center&version=v2 document }
+                 */
+                removeVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            default_cost_center?: {
+                                wk_id: string;
+                                wk_tid: string;
+                            };
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/default_cost_centers/remove_version`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=default_cost_center&apiName=update_version&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_version&project=corehr&resource=default_cost_center&version=v2 document }
+                 */
+                updateVersion: async (
+                    payload?: {
+                        data: {
+                            employment_id: string;
+                            default_cost_center?: {
+                                wk_id: string;
+                                wk_tid: string;
+                                effective_time?: string;
+                                cost_center_id?: string;
+                                is_inherit?: boolean;
+                                reason?: string;
+                            };
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/default_cost_centers/update_version`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -28144,8 +28607,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28166,9 +28629,8 @@ export default abstract class Client extends contract {
                                                     next_page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -28323,8 +28785,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28333,9 +28795,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -28577,8 +29038,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28639,9 +29100,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -30724,8 +31184,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -31958,9 +32418,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -33386,8 +33845,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -33428,9 +33887,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -34448,8 +34906,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -34458,9 +34916,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_job_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -34920,8 +35377,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35072,9 +35529,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -35345,6 +35801,7 @@ export default abstract class Client extends contract {
                                             value: string;
                                         }>;
                                         active: boolean;
+                                        selectable?: boolean;
                                         parent_id?: string;
                                         pathway_ids?: Array<string>;
                                         effective_time: string;
@@ -35448,8 +35905,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35458,9 +35915,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_job_family_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -35793,8 +36249,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35803,9 +36259,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_job_grade_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -36007,8 +36462,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -36017,9 +36472,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_job_level_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -36397,8 +36851,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -36407,9 +36861,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     deleted_location_ids?: Array<string>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -39487,6 +39940,19 @@ export default abstract class Client extends contract {
                                 company_sponsored_visa?: boolean;
                                 work_station?: string;
                                 pathway?: string;
+                                default_cost_center?: {
+                                    cost_center_id: string;
+                                    is_herit: boolean;
+                                };
+                                cost_allocation?: {
+                                    effective_time?: string;
+                                    expiration_time?: string;
+                                    cost_center_rates?: Array<{
+                                        cost_center_id?: string;
+                                        rate?: number;
+                                        new_rate?: number;
+                                    }>;
+                                };
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -39929,6 +40395,19 @@ export default abstract class Client extends contract {
                                 service_company?: string;
                                 non_compete_covenant?: boolean;
                                 pathway?: string;
+                                default_cost_center?: {
+                                    cost_center_id: string;
+                                    is_herit: boolean;
+                                };
+                                cost_allocation?: {
+                                    effective_time?: string;
+                                    expiration_time?: string;
+                                    cost_center_rates?: Array<{
+                                        cost_center_id?: string;
+                                        rate?: number;
+                                        new_rate?: number;
+                                    }>;
+                                };
                             };
                             standard_update_fields?: Array<string>;
                             custom_update_fields?: Array<string>;
@@ -40042,8 +40521,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -41099,6 +41578,21 @@ export default abstract class Client extends contract {
                                                             expected_graduate_date?: string;
                                                             service_company?: string;
                                                             pathway?: string;
+                                                            default_cost_center?: {
+                                                                cost_center_id?: string;
+                                                                effective_time?: string;
+                                                                is_herit?: boolean;
+                                                                inherit_source?: string;
+                                                            };
+                                                            cost_allocation?: {
+                                                                effective_time?: string;
+                                                                expiration_time?: string;
+                                                                cost_center_rates?: Array<{
+                                                                    cost_center_id?: string;
+                                                                    rate?: number;
+                                                                    new_rate?: number;
+                                                                }>;
+                                                            };
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -41213,9 +41707,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -42322,6 +42815,21 @@ export default abstract class Client extends contract {
                                             expected_graduate_date?: string;
                                             service_company?: string;
                                             pathway?: string;
+                                            default_cost_center?: {
+                                                cost_center_id?: string;
+                                                effective_time?: string;
+                                                is_herit?: boolean;
+                                                inherit_source?: string;
+                                            };
+                                            cost_allocation?: {
+                                                effective_time?: string;
+                                                expiration_time?: string;
+                                                cost_center_rates?: Array<{
+                                                    cost_center_id?: string;
+                                                    rate?: number;
+                                                    new_rate?: number;
+                                                }>;
+                                            };
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -42593,8 +43101,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -43650,6 +44158,21 @@ export default abstract class Client extends contract {
                                                             expected_graduate_date?: string;
                                                             service_company?: string;
                                                             pathway?: string;
+                                                            default_cost_center?: {
+                                                                cost_center_id?: string;
+                                                                effective_time?: string;
+                                                                is_herit?: boolean;
+                                                                inherit_source?: string;
+                                                            };
+                                                            cost_allocation?: {
+                                                                effective_time?: string;
+                                                                expiration_time?: string;
+                                                                cost_center_rates?: Array<{
+                                                                    cost_center_id?: string;
+                                                                    rate?: number;
+                                                                    new_rate?: number;
+                                                                }>;
+                                                            };
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -43764,9 +44287,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -44894,6 +45416,21 @@ export default abstract class Client extends contract {
                                             expected_graduate_date?: string;
                                             service_company?: string;
                                             pathway?: string;
+                                            default_cost_center?: {
+                                                cost_center_id?: string;
+                                                effective_time?: string;
+                                                is_herit?: boolean;
+                                                inherit_source?: string;
+                                            };
+                                            cost_allocation?: {
+                                                effective_time?: string;
+                                                expiration_time?: string;
+                                                cost_center_rates?: Array<{
+                                                    cost_center_id?: string;
+                                                    rate?: number;
+                                                    new_rate?: number;
+                                                }>;
+                                            };
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -45391,8 +45928,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -45503,9 +46040,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -46447,8 +46983,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -46456,9 +46992,8 @@ export default abstract class Client extends contract {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -46873,8 +47408,8 @@ export default abstract class Client extends contract {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -46892,9 +47427,8 @@ export default abstract class Client extends contract {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 

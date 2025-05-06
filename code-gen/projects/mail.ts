@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -395,8 +394,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -417,9 +416,8 @@ export default abstract class Client extends lingo {
                                                         | "CUSTOM_MEMBERS";
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -784,8 +782,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -795,9 +793,8 @@ export default abstract class Client extends lingo {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1218,8 +1215,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1240,9 +1237,8 @@ export default abstract class Client extends lingo {
                                                         | "OTHER_MEMBER";
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1670,8 +1666,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1689,9 +1685,8 @@ export default abstract class Client extends lingo {
                                                         | "PUBLIC_MAILBOX";
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2110,8 +2105,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2124,9 +2119,8 @@ export default abstract class Client extends lingo {
                                                     geo?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2237,6 +2231,39 @@ export default abstract class Client extends lingo {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=public_mailbox&apiName=remove_to_recycle_bin&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_to_recycle_bin&project=mail&resource=public_mailbox&version=v1 document }
+             */
+            removeToRecycleBin: async (
+                payload?: {
+                    data?: { to_mail_address?: string };
+                    path: { public_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/remove_to_recycle_bin`,
+                            path
+                        ),
+                        method: "DELETE",
                         data,
                         params,
                         headers,
@@ -2626,8 +2653,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2639,9 +2666,8 @@ export default abstract class Client extends lingo {
                                                     type?: "USER";
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2916,8 +2942,8 @@ export default abstract class Client extends lingo {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2926,9 +2952,8 @@ export default abstract class Client extends lingo {
                                                     email_alias?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -3037,9 +3062,889 @@ export default abstract class Client extends lingo {
             },
         },
         /**
+         * user_mailbox.event
+         */
+        userMailboxEvent: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscribe&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+             */
+            subscribe: async (
+                payload?: {
+                    data: { event_type: number };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/subscribe`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=mail&resource=user_mailbox.event&version=v1 document }
+             */
+            subscription: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { event_types?: Array<number> };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/subscription`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=unsubscribe&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+             */
+            unsubscribe: async (
+                payload?: {
+                    data: { event_type: number };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/unsubscribe`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.folder
+         */
+        userMailboxFolder: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.folder&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: { name: string; parent_folder_id: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                folder?: {
+                                    id?: string;
+                                    name: string;
+                                    parent_folder_id: string;
+                                    folder_type?: number;
+                                    unread_message_count?: number;
+                                    unread_thread_count?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.folder&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path: { user_mailbox_id: string; folder_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.folder&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { folder_type?: number };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name: string;
+                                    parent_folder_id: string;
+                                    folder_type?: number;
+                                    unread_message_count?: number;
+                                    unread_thread_count?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.folder&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data?: { name?: string; parent_folder_id?: string };
+                    path: { user_mailbox_id: string; folder_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.mail_contact
+         */
+        userMailboxMailContact: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        company?: string;
+                        phone?: string;
+                        mail_address?: string;
+                        tag?: string;
+                        remark?: string;
+                        position?: string;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                mail_contact?: {
+                                    id?: string;
+                                    name: string;
+                                    company?: string;
+                                    phone?: string;
+                                    mail_address?: string;
+                                    tag?: string;
+                                    remark?: string;
+                                    avatar?: string;
+                                    position?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path: { user_mailbox_id: string; mail_contact_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts/:mail_contact_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: { page_size: number; page_token?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name: string;
+                                                    company?: string;
+                                                    phone?: string;
+                                                    mail_address?: string;
+                                                    tag?: string;
+                                                    remark?: string;
+                                                    avatar?: string;
+                                                    position?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: { page_size: number; page_token?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name: string;
+                                    company?: string;
+                                    phone?: string;
+                                    mail_address?: string;
+                                    tag?: string;
+                                    remark?: string;
+                                    avatar?: string;
+                                    position?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        name: string;
+                        company?: string;
+                        phone?: string;
+                        mail_address?: string;
+                        tag?: string;
+                        remark?: string;
+                        position?: string;
+                    };
+                    path: { user_mailbox_id: string; mail_contact_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts/:mail_contact_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.message.attachment
+         */
+        userMailboxMessageAttachment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message.attachment&apiName=download_url&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.message.attachment&version=v1 document }
+             */
+            downloadUrl: async (
+                payload?: {
+                    params: { attachment_ids: Array<string> };
+                    path: { user_mailbox_id: string; message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                download_urls?: Array<{
+                                    attachment_id?: string;
+                                    download_url?: string;
+                                }>;
+                                failed_ids?: Array<string>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/attachments/download_url`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user_mailbox.message
          */
         userMailboxMessage: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.message&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    path: { user_mailbox_id: string; message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message?: {
+                                    subject?: string;
+                                    to?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    cc?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    bcc?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    head_from?: {
+                                        mail_address: string;
+                                        name?: string;
+                                    };
+                                    body_html?: string;
+                                    internal_date?: string;
+                                    message_state?: number;
+                                    smtp_message_id?: string;
+                                    message_id?: string;
+                                    body_plain_text?: string;
+                                    attachments?: Array<{
+                                        filename: string;
+                                        id?: string;
+                                        attachment_type?: number;
+                                    }>;
+                                    thread_id?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get_by_card&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_by_card&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 卡片ID获取邮件ID
+             */
+            getByCard: async (
+                payload?: {
+                    params: {
+                        card_id: string;
+                        owner_id: string;
+                        user_id_type?: "open_id" | "user_id" | "union_id";
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                owner_info: {
+                                    type: string;
+                                    owner_user_id?: string;
+                                    public_mailbox_id?: string;
+                                };
+                                message_ids: Array<string>;
+                                card_id: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/get_by_card`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        folder_id: string;
+                        only_unread?: boolean;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<string>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.message&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        folder_id: string;
+                        only_unread?: boolean;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<string>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=send&version=v1 click to debug }
              *
@@ -3073,6 +3978,260 @@ export default abstract class Client extends lingo {
                             path
                         ),
                         method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.rule
+         */
+        userMailboxRule: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.rule&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        condition: {
+                            match_type: number;
+                            items: Array<{
+                                type: number;
+                                operator?: number;
+                                input?: string;
+                            }>;
+                        };
+                        action: {
+                            items: Array<{ type: number; input?: string }>;
+                        };
+                        ignore_the_rest_of_rules: boolean;
+                        name: string;
+                        is_enable: boolean;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                rule?: {
+                                    id?: string;
+                                    condition: {
+                                        match_type: number;
+                                        items: Array<{
+                                            type: number;
+                                            operator?: number;
+                                            input?: string;
+                                        }>;
+                                    };
+                                    action: {
+                                        items: Array<{
+                                            type: number;
+                                            input?: string;
+                                        }>;
+                                    };
+                                    ignore_the_rest_of_rules: boolean;
+                                    name: string;
+                                    is_enable: boolean;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.rule&version=v1 document }
+             */
+            delete: async (
+                payload?: {
+                    path: { user_mailbox_id: string; rule_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/:rule_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.rule&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    condition: {
+                                        match_type: number;
+                                        items: Array<{
+                                            type: number;
+                                            operator?: number;
+                                            input?: string;
+                                        }>;
+                                    };
+                                    action: {
+                                        items: Array<{
+                                            type: number;
+                                            input?: string;
+                                        }>;
+                                    };
+                                    ignore_the_rest_of_rules: boolean;
+                                    name: string;
+                                    is_enable: boolean;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=reorder&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reorder&project=mail&resource=user_mailbox.rule&version=v1 document }
+             */
+            reorder: async (
+                payload?: {
+                    data: { rule_ids: Array<string> };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/reorder`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.rule&version=v1 document }
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        condition: {
+                            match_type: number;
+                            items: Array<{
+                                type: number;
+                                operator?: number;
+                                input?: string;
+                            }>;
+                        };
+                        action: {
+                            items: Array<{ type: number; input?: string }>;
+                        };
+                        ignore_the_rest_of_rules: boolean;
+                        name: string;
+                        is_enable: boolean;
+                    };
+                    path: { user_mailbox_id: string; rule_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/:rule_id`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -3456,8 +4615,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3478,9 +4637,8 @@ export default abstract class Client extends lingo {
                                                             | "CUSTOM_MEMBERS";
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3857,8 +5015,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3868,9 +5026,8 @@ export default abstract class Client extends lingo {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4299,8 +5456,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4321,9 +5478,8 @@ export default abstract class Client extends lingo {
                                                             | "OTHER_MEMBER";
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4759,8 +5915,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4778,9 +5934,8 @@ export default abstract class Client extends lingo {
                                                             | "PUBLIC_MAILBOX";
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5210,8 +6365,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5224,9 +6379,8 @@ export default abstract class Client extends lingo {
                                                         geo?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5337,6 +6491,42 @@ export default abstract class Client extends lingo {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=public_mailbox&apiName=remove_to_recycle_bin&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_to_recycle_bin&project=mail&resource=public_mailbox&version=v1 document }
+                 */
+                removeToRecycleBin: async (
+                    payload?: {
+                        data?: { to_mail_address?: string };
+                        path: { public_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/public_mailboxes/:public_mailbox_id/remove_to_recycle_bin`,
+                                path
+                            ),
+                            method: "DELETE",
                             data,
                             params,
                             headers,
@@ -5743,8 +6933,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5756,9 +6946,8 @@ export default abstract class Client extends lingo {
                                                         type?: "USER";
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6038,8 +7227,8 @@ export default abstract class Client extends lingo {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6048,9 +7237,8 @@ export default abstract class Client extends lingo {
                                                         email_alias?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6162,9 +7350,917 @@ export default abstract class Client extends lingo {
                 },
             },
             /**
+             * user_mailbox.event
+             */
+            userMailboxEvent: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscribe&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+                 */
+                subscribe: async (
+                    payload?: {
+                        data: { event_type: number };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/subscribe`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=mail&resource=user_mailbox.event&version=v1 document }
+                 */
+                subscription: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { event_types?: Array<number> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/subscription`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=unsubscribe&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+                 */
+                unsubscribe: async (
+                    payload?: {
+                        data: { event_type: number };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/event/unsubscribe`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.folder
+             */
+            userMailboxFolder: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: { name: string; parent_folder_id: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    folder?: {
+                                        id?: string;
+                                        name: string;
+                                        parent_folder_id: string;
+                                        folder_type?: number;
+                                        unread_message_count?: number;
+                                        unread_thread_count?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; folder_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { folder_type?: number };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name: string;
+                                        parent_folder_id: string;
+                                        folder_type?: number;
+                                        unread_message_count?: number;
+                                        unread_thread_count?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: { name?: string; parent_folder_id?: string };
+                        path: { user_mailbox_id: string; folder_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.mail_contact
+             */
+            userMailboxMailContact: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            company?: string;
+                            phone?: string;
+                            mail_address?: string;
+                            tag?: string;
+                            remark?: string;
+                            position?: string;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    mail_contact?: {
+                                        id?: string;
+                                        name: string;
+                                        company?: string;
+                                        phone?: string;
+                                        mail_address?: string;
+                                        tag?: string;
+                                        remark?: string;
+                                        avatar?: string;
+                                        position?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: {
+                            user_mailbox_id: string;
+                            mail_contact_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts/:mail_contact_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: { page_size: number; page_token?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name: string;
+                                                        company?: string;
+                                                        phone?: string;
+                                                        mail_address?: string;
+                                                        tag?: string;
+                                                        remark?: string;
+                                                        avatar?: string;
+                                                        position?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: { page_size: number; page_token?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name: string;
+                                        company?: string;
+                                        phone?: string;
+                                        mail_address?: string;
+                                        tag?: string;
+                                        remark?: string;
+                                        avatar?: string;
+                                        position?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            name: string;
+                            company?: string;
+                            phone?: string;
+                            mail_address?: string;
+                            tag?: string;
+                            remark?: string;
+                            position?: string;
+                        };
+                        path: {
+                            user_mailbox_id: string;
+                            mail_contact_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/mail_contacts/:mail_contact_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.message.attachment
+             */
+            userMailboxMessageAttachment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message.attachment&apiName=download_url&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.message.attachment&version=v1 document }
+                 */
+                downloadUrl: async (
+                    payload?: {
+                        params: { attachment_ids: Array<string> };
+                        path: { user_mailbox_id: string; message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    download_urls?: Array<{
+                                        attachment_id?: string;
+                                        download_url?: string;
+                                    }>;
+                                    failed_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/attachments/download_url`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_mailbox.message
              */
             userMailboxMessage: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.message&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message?: {
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        body_plain_text?: string;
+                                        attachments?: Array<{
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                        }>;
+                                        thread_id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get_by_card&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get_by_card&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 卡片ID获取邮件ID
+                 */
+                getByCard: async (
+                    payload?: {
+                        params: {
+                            card_id: string;
+                            owner_id: string;
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    owner_info: {
+                                        type: string;
+                                        owner_user_id?: string;
+                                        public_mailbox_id?: string;
+                                    };
+                                    message_ids: Array<string>;
+                                    card_id: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/get_by_card`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            folder_id: string;
+                            only_unread?: boolean;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.message&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            folder_id: string;
+                            only_unread?: boolean;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=send&version=v1 click to debug }
                  *
@@ -6210,6 +8306,269 @@ export default abstract class Client extends lingo {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.rule
+             */
+            userMailboxRule: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            condition: {
+                                match_type: number;
+                                items: Array<{
+                                    type: number;
+                                    operator?: number;
+                                    input?: string;
+                                }>;
+                            };
+                            action: {
+                                items: Array<{ type: number; input?: string }>;
+                            };
+                            ignore_the_rest_of_rules: boolean;
+                            name: string;
+                            is_enable: boolean;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    rule?: {
+                                        id?: string;
+                                        condition: {
+                                            match_type: number;
+                                            items: Array<{
+                                                type: number;
+                                                operator?: number;
+                                                input?: string;
+                                            }>;
+                                        };
+                                        action: {
+                                            items: Array<{
+                                                type: number;
+                                                input?: string;
+                                            }>;
+                                        };
+                                        ignore_the_rest_of_rules: boolean;
+                                        name: string;
+                                        is_enable: boolean;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; rule_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/:rule_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        condition: {
+                                            match_type: number;
+                                            items: Array<{
+                                                type: number;
+                                                operator?: number;
+                                                input?: string;
+                                            }>;
+                                        };
+                                        action: {
+                                            items: Array<{
+                                                type: number;
+                                                input?: string;
+                                            }>;
+                                        };
+                                        ignore_the_rest_of_rules: boolean;
+                                        name: string;
+                                        is_enable: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=reorder&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=reorder&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 */
+                reorder: async (
+                    payload?: {
+                        data: { rule_ids: Array<string> };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/reorder`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            condition: {
+                                match_type: number;
+                                items: Array<{
+                                    type: number;
+                                    operator?: number;
+                                    input?: string;
+                                }>;
+                            };
+                            action: {
+                                items: Array<{ type: number; input?: string }>;
+                            };
+                            ignore_the_rest_of_rules: boolean;
+                            name: string;
+                            is_enable: boolean;
+                        };
+                        path: { user_mailbox_id: string; rule_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/rules/:rule_id`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,

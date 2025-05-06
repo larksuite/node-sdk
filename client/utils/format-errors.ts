@@ -1,5 +1,4 @@
 import { AxiosError } from '@node-sdk/http';
-import get from 'lodash.get';
 import { pick } from '@node-sdk/utils/pick';
 
 export const formatErrors = (e: any) => {
@@ -19,7 +18,7 @@ export const formatErrors = (e: any) => {
         };
 
         const errors = [filteredErrorInfo];
-        const specificError = get(e, 'response.data');
+        const specificError = e?.response?.data;
         if (specificError) {
             errors.push({
                 ...specificError,

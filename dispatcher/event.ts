@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { CEventType, CAppTicket } from '@node-sdk/consts';
 import { Cache, Logger, LoggerLevel } from '@node-sdk/typings';
 import { internalCache } from '@node-sdk/utils';
@@ -82,7 +81,7 @@ export class EventDispatcher {
     }
 
     async invoke(data, params?: { needCheck?: boolean }) {
-        const needCheck = get(params, 'needCheck', true);
+        const needCheck = params?.needCheck || true;
 
         if (needCheck && !this.requestHandle?.checkIsEventValidated(data)) {
             this.logger.warn('verification failed event');

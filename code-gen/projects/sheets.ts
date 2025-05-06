@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -48,7 +47,11 @@ export default abstract class Client extends security_and_compliance {
              */
             create: async (
                 payload?: {
-                    data?: { title?: string; folder_token?: string };
+                    data?: {
+                        title?: string;
+                        folder_token?: string;
+                        without_mount?: boolean;
+                    };
                 },
                 options?: IRequestOptions
             ) => {
@@ -67,6 +70,7 @@ export default abstract class Client extends security_and_compliance {
                                     folder_token?: string;
                                     url?: string;
                                     spreadsheet_token?: string;
+                                    without_mount?: boolean;
                                 };
                             };
                         }
@@ -1510,7 +1514,11 @@ export default abstract class Client extends security_and_compliance {
                  */
                 create: async (
                     payload?: {
-                        data?: { title?: string; folder_token?: string };
+                        data?: {
+                            title?: string;
+                            folder_token?: string;
+                            without_mount?: boolean;
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1529,6 +1537,7 @@ export default abstract class Client extends security_and_compliance {
                                         folder_token?: string;
                                         url?: string;
                                         spreadsheet_token?: string;
+                                        without_mount?: boolean;
                                     };
                                 };
                             }

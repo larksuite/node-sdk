@@ -1,6 +1,5 @@
 import qs from 'querystring';
 import WebSocket from 'ws';
-import get from 'lodash.get';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { assert, formatDomain } from '@node-sdk/utils';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
@@ -121,7 +120,7 @@ export class WSClient {
 
       return true;
     } catch(e) {
-      this.logger.error('[ws]', get(e, 'message', 'system busy'));
+      this.logger.error('[ws]', (e as any)?.message || 'system busy');
       return false;
     }
   }

@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { Cache } from '@node-sdk/typings';
 
 export class DefaultCache implements Cache {
@@ -25,7 +24,7 @@ export class DefaultCache implements Cache {
     async get(key: string | Symbol, options?: {
         namespace?: string
     }) {
-        const cacheKey = this.getCacheKey(key, get(options, 'namespace'));
+        const cacheKey = this.getCacheKey(key, options?.namespace);
         const data = this.values.get(cacheKey);
 
         if (data) {
@@ -41,7 +40,7 @@ export class DefaultCache implements Cache {
     async set(key: string | Symbol, value: string, expiredTime?: number, options?: {
         namespace?: string
     }) {
-        const cacheKey = this.getCacheKey(key, get(options, 'namespace'));
+        const cacheKey = this.getCacheKey(key, options?.namespace);
         this.values.set(cacheKey, {
             value,
             expiredTime,

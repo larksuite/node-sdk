@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { CardActionHandler } from '@node-sdk/dispatcher/card';
 import { pickRequestData } from './pick-request-data';
@@ -26,7 +25,7 @@ export const adaptDefault =
 
         // 是否自动响应challange事件：
         // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
-        const autoChallenge = get(options, 'autoChallenge', false);
+        const autoChallenge = options?.autoChallenge || false;
         if (autoChallenge) {
             const { isChallenge, challenge } = generateChallenge(data, {
                 encryptKey: dispatcher.encryptKey,

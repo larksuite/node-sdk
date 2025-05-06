@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -513,7 +512,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 入职
+         * 投递
          */
         application: {
             /**
@@ -1191,6 +1190,7 @@ export default abstract class Client extends helpdesk {
                                                 id?: string;
                                                 name?: string;
                                                 size?: number;
+                                                common_attachment_id?: string;
                                             }>;
                                             customize_info_list?: Array<{
                                                 object_id?: string;
@@ -1535,6 +1535,7 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         job_offered?: string;
                                         job_grade_id?: string;
+                                        common_attachment_id_list?: Array<string>;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -2068,8 +2069,7 @@ export default abstract class Client extends helpdesk {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=get&version=v1 click to debug }
@@ -3528,8 +3528,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -3548,9 +3548,8 @@ export default abstract class Client extends helpdesk {
                                                     update_time?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -3708,8 +3707,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -3723,9 +3722,8 @@ export default abstract class Client extends helpdesk {
                                                     activity_status?: number;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -3946,8 +3944,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -3961,9 +3959,8 @@ export default abstract class Client extends helpdesk {
                                                     activity_status?: number;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4236,8 +4233,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4257,9 +4254,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4475,8 +4471,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4497,9 +4493,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4805,8 +4800,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4838,9 +4833,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -5358,8 +5352,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -5381,9 +5375,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -6390,8 +6383,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -6470,9 +6463,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -6919,8 +6911,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -7072,9 +7064,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -7345,8 +7336,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -7423,9 +7414,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -7695,8 +7685,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -7710,9 +7700,8 @@ export default abstract class Client extends helpdesk {
                                                     activity_status?: number;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -7862,8 +7851,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -7874,9 +7863,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -9904,8 +9892,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -9921,9 +9909,8 @@ export default abstract class Client extends helpdesk {
                                                     parent_id?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -11349,8 +11336,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -11365,9 +11352,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -11500,8 +11486,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -11544,9 +11530,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -12159,6 +12144,7 @@ export default abstract class Client extends helpdesk {
                             job_requirement_id?: string;
                             job_process_type_id?: number;
                             attachment_id_list?: Array<string>;
+                            common_attachment_id_list?: Array<string>;
                             attachment_description?: string;
                             operator_user_id: string;
                             position_id?: string;
@@ -12236,6 +12222,7 @@ export default abstract class Client extends helpdesk {
                                     job_requirement_id?: string;
                                     job_process_type_id?: number;
                                     attachment_id_list?: Array<string>;
+                                    common_attachment_id_list?: Array<string>;
                                     attachment_description?: string;
                                     operator_user_id: string;
                                     position_id?: string;
@@ -12434,6 +12421,7 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         job_offered?: string;
                                         job_grade_id?: string;
+                                        common_attachment_id_list?: Array<string>;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -12733,6 +12721,7 @@ export default abstract class Client extends helpdesk {
                             job_requirement_id?: string;
                             job_process_type_id?: number;
                             attachment_id_list?: Array<string>;
+                            common_attachment_id_list?: Array<string>;
                             attachment_description?: string;
                             operator_user_id: string;
                             position_id?: string;
@@ -12809,6 +12798,7 @@ export default abstract class Client extends helpdesk {
                                     job_requirement_id?: string;
                                     job_process_type_id?: number;
                                     attachment_id_list?: Array<string>;
+                                    common_attachment_id_list?: Array<string>;
                                     attachment_description?: string;
                                     operator_user_id: string;
                                     position_id?: string;
@@ -14130,8 +14120,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -14313,9 +14303,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -14628,8 +14617,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -14706,9 +14695,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -14903,8 +14891,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -14918,9 +14906,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -15183,8 +15170,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -15206,9 +15193,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -16894,8 +16880,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -16907,9 +16893,8 @@ export default abstract class Client extends helpdesk {
                                                     owner_id?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -17308,8 +17293,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -17331,9 +17316,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -17480,8 +17464,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -17501,9 +17485,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -17641,8 +17624,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -17663,9 +17646,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -17810,8 +17792,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -17849,9 +17831,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -18026,8 +18007,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -18060,9 +18041,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -18299,8 +18279,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -18314,9 +18294,8 @@ export default abstract class Client extends helpdesk {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -18402,22 +18381,7 @@ export default abstract class Client extends helpdesk {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                tripartite_agreement?: {
-                                    id?: string;
-                                    application_id?: string;
-                                    state?: number;
-                                    create_time?: string;
-                                    modify_time?: string;
-                                };
-                            };
-                        }
-                    >({
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
                             path
@@ -18505,8 +18469,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -18538,9 +18502,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -19465,8 +19428,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -19656,9 +19619,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -19998,8 +19960,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -20203,9 +20165,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -20549,8 +20510,8 @@ export default abstract class Client extends helpdesk {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -20566,9 +20527,8 @@ export default abstract class Client extends helpdesk {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -21191,7 +21151,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 入职
+             * 投递
              */
             application: {
                 /**
@@ -21876,6 +21836,7 @@ export default abstract class Client extends helpdesk {
                                                     id?: string;
                                                     name?: string;
                                                     size?: number;
+                                                    common_attachment_id?: string;
                                                 }>;
                                                 customize_info_list?: Array<{
                                                     object_id?: string;
@@ -22220,6 +22181,7 @@ export default abstract class Client extends helpdesk {
                                             position_id?: string;
                                             job_offered?: string;
                                             job_grade_id?: string;
+                                            common_attachment_id_list?: Array<string>;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -22766,8 +22728,7 @@ export default abstract class Client extends helpdesk {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=attachment&apiName=get&version=v1 click to debug }
@@ -24303,8 +24264,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24323,9 +24284,8 @@ export default abstract class Client extends helpdesk {
                                                         update_time?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -24485,8 +24445,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24500,9 +24460,8 @@ export default abstract class Client extends helpdesk {
                                                         activity_status?: number;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -24725,8 +24684,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -24740,9 +24699,8 @@ export default abstract class Client extends helpdesk {
                                                         activity_status?: number;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25017,8 +24975,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25038,9 +24996,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25258,8 +25215,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25280,9 +25237,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -25593,8 +25549,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -25626,9 +25582,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -26151,8 +26106,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -26174,9 +26129,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -27198,8 +27152,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -27278,9 +27232,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -27732,8 +27685,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -27885,9 +27838,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -28160,8 +28112,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28238,9 +28190,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -28515,8 +28466,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28530,9 +28481,8 @@ export default abstract class Client extends helpdesk {
                                                         activity_status?: number;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -28684,8 +28634,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -28696,9 +28646,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -30737,8 +30686,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -30754,9 +30703,8 @@ export default abstract class Client extends helpdesk {
                                                         parent_id?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -32203,8 +32151,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -32219,9 +32167,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -32359,8 +32306,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -32403,9 +32350,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -33027,6 +32973,7 @@ export default abstract class Client extends helpdesk {
                                 job_requirement_id?: string;
                                 job_process_type_id?: number;
                                 attachment_id_list?: Array<string>;
+                                common_attachment_id_list?: Array<string>;
                                 attachment_description?: string;
                                 operator_user_id: string;
                                 position_id?: string;
@@ -33104,6 +33051,7 @@ export default abstract class Client extends helpdesk {
                                         job_requirement_id?: string;
                                         job_process_type_id?: number;
                                         attachment_id_list?: Array<string>;
+                                        common_attachment_id_list?: Array<string>;
                                         attachment_description?: string;
                                         operator_user_id: string;
                                         position_id?: string;
@@ -33302,6 +33250,7 @@ export default abstract class Client extends helpdesk {
                                             position_id?: string;
                                             job_offered?: string;
                                             job_grade_id?: string;
+                                            common_attachment_id_list?: Array<string>;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -33606,6 +33555,7 @@ export default abstract class Client extends helpdesk {
                                 job_requirement_id?: string;
                                 job_process_type_id?: number;
                                 attachment_id_list?: Array<string>;
+                                common_attachment_id_list?: Array<string>;
                                 attachment_description?: string;
                                 operator_user_id: string;
                                 position_id?: string;
@@ -33682,6 +33632,7 @@ export default abstract class Client extends helpdesk {
                                         job_requirement_id?: string;
                                         job_process_type_id?: number;
                                         attachment_id_list?: Array<string>;
+                                        common_attachment_id_list?: Array<string>;
                                         attachment_description?: string;
                                         operator_user_id: string;
                                         position_id?: string;
@@ -35017,8 +34968,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35200,9 +35151,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -35517,8 +35467,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35595,9 +35545,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -35794,8 +35743,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -35809,9 +35758,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -36079,8 +36027,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -36102,9 +36050,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -37813,8 +37760,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -37826,9 +37773,8 @@ export default abstract class Client extends helpdesk {
                                                         owner_id?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -38235,8 +38181,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -38258,9 +38204,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -38409,8 +38354,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -38430,9 +38375,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -38575,8 +38519,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -38597,9 +38541,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -38749,8 +38692,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -38788,9 +38731,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -38967,8 +38909,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -39001,9 +38943,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -39249,8 +39190,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -39264,9 +39205,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -39354,19 +39294,7 @@ export default abstract class Client extends helpdesk {
                     return this.httpInstance
                         .request<
                             any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    tripartite_agreement?: {
-                                        id?: string;
-                                        application_id?: string;
-                                        state?: number;
-                                        create_time?: string;
-                                        modify_time?: string;
-                                    };
-                                };
-                            }
+                            { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/tripartite_agreements/:tripartite_agreement_id`,
@@ -39457,8 +39385,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -39490,9 +39418,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -40422,8 +40349,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -40613,9 +40540,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -40957,8 +40883,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -41162,9 +41088,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -41510,8 +41435,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -41527,9 +41452,8 @@ export default abstract class Client extends helpdesk {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -41872,8 +41796,8 @@ export default abstract class Client extends helpdesk {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -41973,9 +41897,8 @@ export default abstract class Client extends helpdesk {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 

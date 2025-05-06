@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { CUserAccessToken } from '@node-sdk/consts';
 import { mergeObject } from '@node-sdk/utils/merge-object';
 import type { Client } from './client';
@@ -18,7 +17,7 @@ export class UserAccessToken {
   }
 
   private getCacheKey(key: string, options: { namespace?: string }) {
-    const namespace = get(options, 'namespace', this.client.appId);
+    const namespace = options?.namespace || this.client.appId;
     return `${namespace}/${CUserAccessToken.toString()}/${key}`;
   }
 
@@ -56,13 +55,13 @@ export class UserAccessToken {
         expiredTime: this.calibrateTime(oidcAccessInfo.data.expires_in)
       }
     }
-    await this.update(key2Info, { namespace: get(options, 'namespace')});
+    await this.update(key2Info, { namespace: options?.namespace});
     return key2Info;
   }
 
   async update(key2Info: Record<string, ITokenInfo>, options?: { namespace?: string }) {
     for (const [key, info] of Object.entries(key2Info)) {
-      const cacheKey = this.getCacheKey(key, { namespace: get(options, 'namespace')});
+      const cacheKey = this.getCacheKey(key, { namespace: options?.namespace});
       const cacheValue = await this.client.cache.get(cacheKey) || {};
 
       const { code, token, refreshToken, expiredTime } = info;
@@ -73,7 +72,7 @@ export class UserAccessToken {
   }
 
   async get(key: string, options?: { namespace?: string }) {
-    const cacheKey = this.getCacheKey(key, { namespace: get(options, 'namespace')});
+    const cacheKey = this.getCacheKey(key, { namespace: options?.namespace});
     const cacheInfo = await this.client.cache.get(cacheKey);
 
     // cacheInfo是否存在

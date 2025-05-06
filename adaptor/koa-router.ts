@@ -1,4 +1,3 @@
-import get from 'lodash.get';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { CardActionHandler } from '@node-sdk/dispatcher/card';
 import { Logger } from '@node-sdk/typings';
@@ -25,7 +24,8 @@ export const adaptKoaRouter =
                 const incomingdata = await pickRequestData(req);
                 return incomingdata;
             }
-            get(options, 'logger', defaultLogger).error(
+            
+            (options?.logger || defaultLogger).error(
                 'unable to obtain request body, if parsed it in other middleware, please manually set in ctx.request.body'
             );
             return null;
@@ -40,7 +40,7 @@ export const adaptKoaRouter =
 
         // 是否自动响应challange事件：
         // https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case
-        const autoChallenge = get(options, 'autoChallenge', false);
+        const autoChallenge = options?.autoChallenge || false;
         if (autoChallenge) {
             const { isChallenge, challenge } = generateChallenge(data, {
                 encryptKey: dispatcher.encryptKey,

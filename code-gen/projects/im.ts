@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -693,8 +692,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -716,9 +715,8 @@ export default abstract class Client extends human_authentication {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -865,8 +863,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -888,9 +886,8 @@ export default abstract class Client extends human_authentication {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1351,8 +1348,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1366,9 +1363,8 @@ export default abstract class Client extends human_authentication {
                                                 has_more?: boolean;
                                                 member_total?: number;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2102,8 +2098,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2116,9 +2112,8 @@ export default abstract class Client extends human_authentication {
                                                     tenant_key?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2812,8 +2807,7 @@ export default abstract class Client extends human_authentication {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
@@ -2939,8 +2933,7 @@ export default abstract class Client extends human_authentication {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
@@ -3358,8 +3351,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -3393,9 +3386,8 @@ export default abstract class Client extends human_authentication {
                                                     upper_message_id?: string;
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4475,8 +4467,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4496,9 +4488,8 @@ export default abstract class Client extends human_authentication {
                                                 has_more: boolean;
                                                 page_token: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -4812,8 +4803,8 @@ export default abstract class Client extends human_authentication {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -4827,9 +4818,8 @@ export default abstract class Client extends human_authentication {
                                                 has_more?: boolean;
                                                 page_token?: string;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -5668,8 +5658,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5691,9 +5681,8 @@ export default abstract class Client extends human_authentication {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5842,8 +5831,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5865,9 +5854,8 @@ export default abstract class Client extends human_authentication {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6335,8 +6323,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6350,9 +6338,8 @@ export default abstract class Client extends human_authentication {
                                                     has_more?: boolean;
                                                     member_total?: number;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7093,8 +7080,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -7107,9 +7094,8 @@ export default abstract class Client extends human_authentication {
                                                         tenant_key?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7812,8 +7798,7 @@ export default abstract class Client extends human_authentication {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=file&apiName=get&version=v1 click to debug }
@@ -7939,8 +7924,7 @@ export default abstract class Client extends human_authentication {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=image&apiName=get&version=v1 click to debug }
@@ -8363,8 +8347,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -8400,9 +8384,8 @@ export default abstract class Client extends human_authentication {
                                                         upper_message_id?: string;
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9490,8 +9473,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9511,9 +9494,8 @@ export default abstract class Client extends human_authentication {
                                                     has_more: boolean;
                                                     page_token: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9832,8 +9814,8 @@ export default abstract class Client extends human_authentication {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9847,9 +9829,8 @@ export default abstract class Client extends human_authentication {
                                                     has_more?: boolean;
                                                     page_token?: string;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 

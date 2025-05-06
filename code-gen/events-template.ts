@@ -4040,6 +4040,30 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "mail.user_mailbox.event.message_received_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        mail_address?: string;
+        message_id?: string;
+        mailbox_type?: number;
+        subscriber?: {
+            user_ids?: Array<{
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            }>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "meeting_room.meeting_room.created_v1"?: (data: {
         event_id?: string;
         token?: string;

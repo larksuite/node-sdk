@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -451,8 +450,8 @@ export default abstract class Client extends sup_project {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -497,9 +496,8 @@ export default abstract class Client extends sup_project {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -911,8 +909,8 @@ export default abstract class Client extends sup_project {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -923,9 +921,8 @@ export default abstract class Client extends sup_project {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1217,8 +1214,8 @@ export default abstract class Client extends sup_project {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1233,9 +1230,8 @@ export default abstract class Client extends sup_project {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1526,8 +1522,8 @@ export default abstract class Client extends sup_project {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1538,9 +1534,8 @@ export default abstract class Client extends sup_project {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1760,8 +1755,8 @@ export default abstract class Client extends sup_project {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1772,9 +1767,8 @@ export default abstract class Client extends sup_project {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2275,8 +2269,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -2321,9 +2315,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -2749,8 +2742,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -2761,9 +2754,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3060,8 +3052,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3076,9 +3068,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3374,8 +3365,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3386,9 +3377,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3613,8 +3603,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3625,9 +3615,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3804,6 +3793,7 @@ export default abstract class Client extends sup_project {
                             resource_type?: string;
                             resource_id: string;
                             user_id_type?: string;
+                            updated_mesc?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -3862,8 +3852,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -3889,9 +3879,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -3920,6 +3909,7 @@ export default abstract class Client extends sup_project {
                             resource_type?: string;
                             resource_id: string;
                             user_id_type?: string;
+                            updated_mesc?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -4041,8 +4031,7 @@ export default abstract class Client extends sup_project {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
             },
             /**
@@ -4268,8 +4257,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4291,9 +4280,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4700,6 +4688,7 @@ export default abstract class Client extends sup_project {
                             user_id_type?: "open_id" | "user_id" | "union_id";
                             resource_type?: string;
                             resource_id?: string;
+                            update_msec?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -4758,8 +4747,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4818,9 +4807,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -4849,6 +4837,7 @@ export default abstract class Client extends sup_project {
                             user_id_type?: "open_id" | "user_id" | "union_id";
                             resource_type?: string;
                             resource_id?: string;
+                            update_msec?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5379,6 +5368,7 @@ export default abstract class Client extends sup_project {
                             resource_type: string;
                             resource_id?: string;
                             user_id_type?: string;
+                            update_msec?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5437,8 +5427,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5450,9 +5440,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5481,6 +5470,7 @@ export default abstract class Client extends sup_project {
                             resource_type: string;
                             resource_id?: string;
                             user_id_type?: string;
+                            update_msec?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5656,8 +5646,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5684,9 +5674,8 @@ export default abstract class Client extends sup_project {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6018,6 +6007,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -6223,6 +6216,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -6426,6 +6423,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -6562,6 +6563,9 @@ export default abstract class Client extends sup_project {
                                 text_value?: string;
                             }>;
                             docx_source?: { token: string; block_id: string };
+                            positive_reminders?: Array<{
+                                relative_fire_minute: number;
+                            }>;
                         };
                         params?: { user_id_type?: string };
                     },
@@ -6736,6 +6740,10 @@ export default abstract class Client extends sup_project {
                                         assignee_related?: Array<{
                                             id?: string;
                                             completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
                                         }>;
                                     };
                                 };
@@ -6974,6 +6982,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -7060,8 +7072,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -7227,13 +7239,16 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             completed_at?: string;
                                                         }>;
+                                                        positive_reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7436,6 +7451,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -7547,6 +7566,9 @@ export default abstract class Client extends sup_project {
                                     single_select_value?: string;
                                     multi_select_value?: Array<string>;
                                     text_value?: string;
+                                }>;
+                                positive_reminders?: Array<{
+                                    relative_fire_minute: number;
                                 }>;
                             };
                             update_fields: Array<string>;
@@ -7725,6 +7747,10 @@ export default abstract class Client extends sup_project {
                                         assignee_related?: Array<{
                                             id?: string;
                                             completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
                                         }>;
                                     };
                                 };
@@ -7981,6 +8007,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -8184,6 +8214,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -8386,6 +8420,10 @@ export default abstract class Client extends sup_project {
                                         assignee_related?: Array<{
                                             id?: string;
                                             completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
                                         }>;
                                     };
                                 };
@@ -8749,6 +8787,10 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             completed_at?: string;
                                         }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
                                     };
                                 };
                             }
@@ -8834,8 +8876,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9001,13 +9043,16 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             completed_at?: string;
                                                         }>;
+                                                        positive_reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9208,6 +9253,10 @@ export default abstract class Client extends sup_project {
                                         assignee_related?: Array<{
                                             id?: string;
                                             completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -9588,6 +9637,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     };
                                 };
                             }
@@ -9623,6 +9673,7 @@ export default abstract class Client extends sup_project {
                                 role?: string;
                                 name?: string;
                             }>;
+                            archive_tasklist?: boolean;
                         };
                         params?: { user_id_type?: string };
                     },
@@ -9662,6 +9713,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     };
                                 };
                             }
@@ -9763,6 +9815,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     };
                                 };
                             }
@@ -9847,8 +9900,8 @@ export default abstract class Client extends sup_project {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -9876,13 +9929,13 @@ export default abstract class Client extends sup_project {
                                                         url?: string;
                                                         created_at?: string;
                                                         updated_at?: string;
+                                                        archive_msec?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -9947,6 +10000,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -9985,6 +10039,7 @@ export default abstract class Client extends sup_project {
                                     role?: string;
                                     name?: string;
                                 };
+                                archive_tasklist?: boolean;
                             };
                             update_fields: Array<string>;
                             origin_owner_to_role?: "editor" | "viewer" | "none";
@@ -10028,6 +10083,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     };
                                 };
                             }
@@ -10102,6 +10158,7 @@ export default abstract class Client extends sup_project {
                                         url?: string;
                                         created_at?: string;
                                         updated_at?: string;
+                                        archive_msec?: string;
                                     };
                                 };
                             }

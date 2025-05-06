@@ -1,6 +1,5 @@
 import identity from "lodash.identity";
 import pickBy from "lodash.pickby";
-import get from "lodash.get";
 import fs from "fs";
 import { fillApiPath } from "@node-sdk/utils";
 import { Logger } from "@node-sdk/typings";
@@ -542,8 +541,8 @@ export default abstract class Client extends docx {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -591,9 +590,8 @@ export default abstract class Client extends docx {
                                                     };
                                                 }>;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -852,8 +850,8 @@ export default abstract class Client extends docx {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -886,9 +884,8 @@ export default abstract class Client extends docx {
                                                 page_token?: string;
                                                 has_more: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1030,7 +1027,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 上传
+         * 异步任务状态
          */
         file: {
             /**
@@ -1519,8 +1516,8 @@ export default abstract class Client extends docx {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -1541,9 +1538,8 @@ export default abstract class Client extends docx {
                                                 next_page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -1828,8 +1824,7 @@ export default abstract class Client extends docx {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
@@ -1922,8 +1917,7 @@ export default abstract class Client extends docx {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_prepare&version=v1 click to debug }
@@ -2436,8 +2430,8 @@ export default abstract class Client extends docx {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2458,9 +2452,8 @@ export default abstract class Client extends docx {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2616,8 +2609,8 @@ export default abstract class Client extends docx {
                                     next_page_token,
                                     ...rest
                                 } =
-                                    get<
-                                        {
+                                    (
+                                        res as {
                                             code?: number;
                                             msg?: string;
                                             data?: {
@@ -2630,9 +2623,8 @@ export default abstract class Client extends docx {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                             };
-                                        },
-                                        "data"
-                                    >(res, "data") || {};
+                                        }
+                                    )?.data || {};
 
                                 yield rest;
 
@@ -2818,7 +2810,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -3012,8 +3004,7 @@ export default abstract class Client extends docx {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
@@ -3106,8 +3097,7 @@ export default abstract class Client extends docx {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
-
-                return get(res, "data", null);
+                return res?.data || null;
             },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
@@ -4709,8 +4699,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -4758,9 +4748,8 @@ export default abstract class Client extends docx {
                                                         };
                                                     }>;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5051,8 +5040,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5085,9 +5074,8 @@ export default abstract class Client extends docx {
                                                     page_token?: string;
                                                     has_more: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -5242,7 +5230,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 上传
+             * 异步任务状态
              */
             file: {
                 /**
@@ -5736,8 +5724,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -5758,9 +5746,8 @@ export default abstract class Client extends docx {
                                                     next_page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6048,8 +6035,7 @@ export default abstract class Client extends docx {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_finish&version=v1 click to debug }
@@ -6145,8 +6131,7 @@ export default abstract class Client extends docx {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file&apiName=upload_prepare&version=v1 click to debug }
@@ -6670,8 +6655,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6697,9 +6682,8 @@ export default abstract class Client extends docx {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -6857,8 +6841,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -6871,9 +6855,8 @@ export default abstract class Client extends docx {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
@@ -7059,7 +7042,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 素材
+             * 分片上传
              */
             media: {
                 /**
@@ -7253,8 +7236,7 @@ export default abstract class Client extends docx {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_finish&version=v1 click to debug }
@@ -7350,8 +7332,7 @@ export default abstract class Client extends docx {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
-
-                    return get(res, "data", null);
+                    return res?.data || null;
                 },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=media&apiName=upload_prepare&version=v1 click to debug }
@@ -8498,8 +8479,8 @@ export default abstract class Client extends docx {
                                         next_page_token,
                                         ...rest
                                     } =
-                                        get<
-                                            {
+                                        (
+                                            res as {
                                                 code?: number;
                                                 msg?: string;
                                                 data?: {
@@ -8514,9 +8495,8 @@ export default abstract class Client extends docx {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                 };
-                                            },
-                                            "data"
-                                        >(res, "data") || {};
+                                            }
+                                        )?.data || {};
 
                                     yield rest;
 
