@@ -81,7 +81,7 @@ export class EventDispatcher {
     }
 
     async invoke(data, params?: { needCheck?: boolean }) {
-        const needCheck = params?.needCheck || true;
+        const needCheck = params?.needCheck === false ? false : true;
 
         if (needCheck && !this.requestHandle?.checkIsEventValidated(data)) {
             this.logger.warn('verification failed event');
