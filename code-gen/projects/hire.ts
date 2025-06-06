@@ -1668,6 +1668,12 @@ export default abstract class Client extends helpdesk {
                         termination_type: number;
                         termination_reason_list?: Array<string>;
                         termination_reason_note?: string;
+                        need_terminate_offer?: boolean;
+                        terminate_offer_operate_type?: number;
+                        cancel_offer_termination_type?: number;
+                        cancel_offer_termination_reason_list?: Array<string>;
+                        candidate_reject_offer_termination_reason_list?: Array<string>;
+                        need_withdraw_offer_approval?: boolean;
                     };
                     path: { application_id: string };
                 },
@@ -12661,6 +12667,7 @@ export default abstract class Client extends helpdesk {
                         expiration_date?: string;
                         termination_reason_id_list?: Array<string>;
                         termination_reason_note?: string;
+                        cancel_offer_termination_type?: number;
                     };
                     path?: { offer_id?: string };
                 },
@@ -22317,6 +22324,12 @@ export default abstract class Client extends helpdesk {
                             termination_type: number;
                             termination_reason_list?: Array<string>;
                             termination_reason_note?: string;
+                            need_terminate_offer?: boolean;
+                            terminate_offer_operate_type?: number;
+                            cancel_offer_termination_type?: number;
+                            cancel_offer_termination_reason_list?: Array<string>;
+                            candidate_reject_offer_termination_reason_list?: Array<string>;
+                            need_withdraw_offer_approval?: boolean;
                         };
                         path: { application_id: string };
                     },
@@ -33492,6 +33505,7 @@ export default abstract class Client extends helpdesk {
                             expiration_date?: string;
                             termination_reason_id_list?: Array<string>;
                             termination_reason_note?: string;
+                            cancel_offer_termination_type?: number;
                         };
                         path?: { offer_id?: string };
                     },

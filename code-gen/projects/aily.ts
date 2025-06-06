@@ -1039,6 +1039,497 @@ export default abstract class Client extends admin {
              * app.data_asset
              */
             appDataAsset: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=app.data_asset&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=aily&resource=app.data_asset&version=v1 document }
+                 *
+                 * 创建数据知识
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            connect_type: "import" | "direct";
+                            source_type:
+                                | "file"
+                                | "lark_wiki_space"
+                                | "lark_doc"
+                                | "lark_helpdesk";
+                            import_knowledge_setting?: {
+                                chunk_setting?: {
+                                    rule_type: "separator" | "intelligent";
+                                    separate_type?: "paragraph" | "title";
+                                    size?: number;
+                                    overlap?: number;
+                                };
+                                file?: {
+                                    title?: string;
+                                    token?: string;
+                                    content?: string;
+                                    mime_type?: string;
+                                    url?: string;
+                                };
+                                lark_doc?: {
+                                    type:
+                                        | "doc"
+                                        | "file"
+                                        | "wiki"
+                                        | "docx"
+                                        | "folder";
+                                    token: string;
+                                    with_sub_docs?: boolean;
+                                    url?: string;
+                                };
+                                lark_wiki_space?: {
+                                    space_id: string;
+                                    sub_docs?: Array<{
+                                        type: "wiki";
+                                        token: string;
+                                        url?: string;
+                                    }>;
+                                    url?: string;
+                                };
+                                lark_helpdesk?: { helpdesk_id: string };
+                            };
+                            description?: Record<string, string>;
+                        };
+                        params?: { tenant_type?: string };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data_asset?: {
+                                        data_asset_id?: string;
+                                        label?: Record<string, string>;
+                                        description?: Record<string, string>;
+                                        data_source_type?:
+                                            | "excel"
+                                            | "pdf"
+                                            | "pptx"
+                                            | "txt"
+                                            | "docx"
+                                            | "mysql"
+                                            | "postgresql"
+                                            | "larkbase"
+                                            | "salesforce"
+                                            | "fenxiangxiaoke"
+                                            | "qianchuan"
+                                            | "clickhouse"
+                                            | "databricks"
+                                            | "servicedesk"
+                                            | "larkbiz_wiki"
+                                            | "larkbiz_doc"
+                                            | "larkbiz_docs"
+                                            | "larkbiz_docx"
+                                            | "larkbiz_pdf"
+                                            | "larkbiz_word"
+                                            | "larkbiz_pptx"
+                                            | "larkbiz_sheets"
+                                            | "larkbiz_base"
+                                            | "larkbiz_personalfolder"
+                                            | "larkbiz_sharedfolder"
+                                            | "object";
+                                        connect_status?:
+                                            | "awaiting"
+                                            | "syncing"
+                                            | "successful"
+                                            | "continuously_syncing"
+                                            | "partially_successful"
+                                            | "failed";
+                                        tags?: Array<{
+                                            data_asset_tag_id?: string;
+                                            name?: string;
+                                        }>;
+                                        items?: Array<{
+                                            data_asset_item_id?: string;
+                                            api_name?: string;
+                                            label?: Record<string, string>;
+                                            description?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            resources?: Array<{
+                                                resource_id?: string;
+                                                resource_type?:
+                                                    | "dataset"
+                                                    | "vector";
+                                            }>;
+                                        }>;
+                                        connect_failed_reason?: string;
+                                        import_knowledge_setting?: {
+                                            chunk_setting?: {
+                                                rule_type:
+                                                    | "separator"
+                                                    | "intelligent";
+                                                separate_type?:
+                                                    | "paragraph"
+                                                    | "title";
+                                                size?: number;
+                                                overlap?: number;
+                                            };
+                                            file?: {
+                                                title?: string;
+                                                token?: string;
+                                                content?: string;
+                                                mime_type?: string;
+                                                url?: string;
+                                            };
+                                            lark_doc?: {
+                                                type:
+                                                    | "doc"
+                                                    | "file"
+                                                    | "wiki"
+                                                    | "docx"
+                                                    | "folder";
+                                                token: string;
+                                                with_sub_docs?: boolean;
+                                                url?: string;
+                                            };
+                                            lark_wiki_space?: {
+                                                space_id: string;
+                                                sub_docs?: Array<{
+                                                    type: "wiki";
+                                                    token: string;
+                                                    url?: string;
+                                                }>;
+                                                url?: string;
+                                            };
+                                            lark_helpdesk?: {
+                                                helpdesk_id: string;
+                                            };
+                                        };
+                                        connect_type?: "import" | "direct";
+                                        created_time?: string;
+                                        updated_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/apps/:app_id/data_assets`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=app.data_asset&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=aily&resource=app.data_asset&version=v1 document }
+                 *
+                 * 删除数据知识
+                 */
+                delete: async (
+                    payload?: {
+                        params?: { tenant_type?: string };
+                        path: { app_id: string; data_asset_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data_asset?: {
+                                        data_asset_id?: string;
+                                        label?: Record<string, string>;
+                                        description?: Record<string, string>;
+                                        data_source_type?:
+                                            | "excel"
+                                            | "pdf"
+                                            | "pptx"
+                                            | "txt"
+                                            | "docx"
+                                            | "mysql"
+                                            | "postgresql"
+                                            | "larkbase"
+                                            | "salesforce"
+                                            | "fenxiangxiaoke"
+                                            | "qianchuan"
+                                            | "clickhouse"
+                                            | "databricks"
+                                            | "servicedesk"
+                                            | "larkbiz_wiki"
+                                            | "larkbiz_doc"
+                                            | "larkbiz_docs"
+                                            | "larkbiz_docx"
+                                            | "larkbiz_pdf"
+                                            | "larkbiz_word"
+                                            | "larkbiz_pptx"
+                                            | "larkbiz_sheets"
+                                            | "larkbiz_base"
+                                            | "larkbiz_personalfolder"
+                                            | "larkbiz_sharedfolder"
+                                            | "object";
+                                        connect_status?:
+                                            | "awaiting"
+                                            | "syncing"
+                                            | "successful"
+                                            | "continuously_syncing"
+                                            | "partially_successful"
+                                            | "failed";
+                                        tags?: Array<{
+                                            data_asset_tag_id?: string;
+                                            name?: string;
+                                        }>;
+                                        items?: Array<{
+                                            data_asset_item_id?: string;
+                                            api_name?: string;
+                                            label?: Record<string, string>;
+                                            description?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            resources?: Array<{
+                                                resource_id?: string;
+                                                resource_type?:
+                                                    | "dataset"
+                                                    | "vector";
+                                            }>;
+                                        }>;
+                                        connect_failed_reason?: string;
+                                        import_knowledge_setting?: {
+                                            chunk_setting?: {
+                                                rule_type:
+                                                    | "separator"
+                                                    | "intelligent";
+                                                separate_type?:
+                                                    | "paragraph"
+                                                    | "title";
+                                                size?: number;
+                                                overlap?: number;
+                                            };
+                                            file?: {
+                                                title?: string;
+                                                token?: string;
+                                                content?: string;
+                                                mime_type?: string;
+                                                url?: string;
+                                            };
+                                            lark_doc?: {
+                                                type:
+                                                    | "doc"
+                                                    | "file"
+                                                    | "wiki"
+                                                    | "docx"
+                                                    | "folder";
+                                                token: string;
+                                                with_sub_docs?: boolean;
+                                                url?: string;
+                                            };
+                                            lark_wiki_space?: {
+                                                space_id: string;
+                                                sub_docs?: Array<{
+                                                    type: "wiki";
+                                                    token: string;
+                                                    url?: string;
+                                                }>;
+                                                url?: string;
+                                            };
+                                            lark_helpdesk?: {
+                                                helpdesk_id: string;
+                                            };
+                                        };
+                                        connect_type?: "import" | "direct";
+                                        created_time?: string;
+                                        updated_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/apps/:app_id/data_assets/:data_asset_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=app.data_asset&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=aily&resource=app.data_asset&version=v1 document }
+                 *
+                 * 获取数据知识
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            with_data_asset_item?: boolean;
+                            with_connect_status?: boolean;
+                            with_import_setting?: boolean;
+                            tenant_type?: string;
+                        };
+                        path: { app_id: string; data_asset_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data_asset?: {
+                                        data_asset_id?: string;
+                                        label?: Record<string, string>;
+                                        description?: Record<string, string>;
+                                        data_source_type?:
+                                            | "excel"
+                                            | "pdf"
+                                            | "pptx"
+                                            | "txt"
+                                            | "docx"
+                                            | "mysql"
+                                            | "postgresql"
+                                            | "larkbase"
+                                            | "salesforce"
+                                            | "fenxiangxiaoke"
+                                            | "qianchuan"
+                                            | "clickhouse"
+                                            | "databricks"
+                                            | "servicedesk"
+                                            | "larkbiz_wiki"
+                                            | "larkbiz_doc"
+                                            | "larkbiz_docs"
+                                            | "larkbiz_docx"
+                                            | "larkbiz_pdf"
+                                            | "larkbiz_word"
+                                            | "larkbiz_pptx"
+                                            | "larkbiz_sheets"
+                                            | "larkbiz_base"
+                                            | "larkbiz_personalfolder"
+                                            | "larkbiz_sharedfolder"
+                                            | "object";
+                                        connect_status?:
+                                            | "awaiting"
+                                            | "syncing"
+                                            | "successful"
+                                            | "continuously_syncing"
+                                            | "partially_successful"
+                                            | "failed";
+                                        tags?: Array<{
+                                            data_asset_tag_id?: string;
+                                            name?: string;
+                                        }>;
+                                        items?: Array<{
+                                            data_asset_item_id?: string;
+                                            api_name?: string;
+                                            label?: Record<string, string>;
+                                            description?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            resources?: Array<{
+                                                resource_id?: string;
+                                                resource_type?:
+                                                    | "dataset"
+                                                    | "vector";
+                                            }>;
+                                        }>;
+                                        connect_failed_reason?: string;
+                                        import_knowledge_setting?: {
+                                            chunk_setting?: {
+                                                rule_type:
+                                                    | "separator"
+                                                    | "intelligent";
+                                                separate_type?:
+                                                    | "paragraph"
+                                                    | "title";
+                                                size?: number;
+                                                overlap?: number;
+                                            };
+                                            file?: {
+                                                title?: string;
+                                                token?: string;
+                                                content?: string;
+                                                mime_type?: string;
+                                                url?: string;
+                                            };
+                                            lark_doc?: {
+                                                type:
+                                                    | "doc"
+                                                    | "file"
+                                                    | "wiki"
+                                                    | "docx"
+                                                    | "folder";
+                                                token: string;
+                                                with_sub_docs?: boolean;
+                                                url?: string;
+                                            };
+                                            lark_wiki_space?: {
+                                                space_id: string;
+                                                sub_docs?: Array<{
+                                                    type: "wiki";
+                                                    token: string;
+                                                    url?: string;
+                                                }>;
+                                                url?: string;
+                                            };
+                                            lark_helpdesk?: {
+                                                helpdesk_id: string;
+                                            };
+                                        };
+                                        connect_type?: "import" | "direct";
+                                        created_time?: string;
+                                        updated_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/apps/:app_id/data_assets/:data_asset_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 listWithIterator: async (
                     payload?: {
                         params?: {
@@ -1406,6 +1897,58 @@ export default abstract class Client extends admin {
                             this.logger.error(formatErrors(e));
                             throw e;
                         });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=app.data_asset&apiName=upload_file&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upload_file&project=aily&resource=app.data_asset&version=v1 document }
+                 *
+                 * 上传数据知识文件
+                 */
+                uploadFile: async (
+                    payload?: {
+                        data: { file: Buffer | fs.ReadStream };
+                        params?: { tenant_type?: string };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    file_info?: {
+                                        token: string;
+                                        mime_type: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/apps/:app_id/data_assets/upload_file`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
                 },
             },
             /**

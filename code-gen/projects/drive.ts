@@ -1027,7 +1027,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 异步任务状态
+         * 下载
          */
         file: {
             /**
@@ -5230,7 +5230,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 异步任务状态
+             * 下载
              */
             file: {
                 /**

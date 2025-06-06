@@ -2193,6 +2193,55 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.custom_org.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.custom_org.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.custom_org.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        org_id?: string;
+        field_changes?: Array<string>;
+        object_api_name?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.department.created_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2738,6 +2787,1751 @@ export interface IHandles extends IOtherEventHandles {
         properties?: number;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "directory.department.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_key?: string;
+                field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.department.deleted_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        department?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_key?: string;
+                field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.department.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        changed_properties?: Array<string>;
+        department_prev?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_key?: string;
+                field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+            }>;
+            org_dimension?: string;
+        };
+        department_curr?: {
+            department_id: string;
+            leaders?: Array<{ leader_type: number; leader_id: string }>;
+            parent_department_id?: string;
+            name?: {
+                default_value: string;
+                i18n_value?: Record<string, string>;
+                default_locale?: string;
+            };
+            enabled_status?: boolean;
+            order_weight?: string;
+            custom_field_values?: Array<{
+                field_key?: string;
+                field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                text_value?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                url_value?: {
+                    link_text: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url: string;
+                    pcurl: string;
+                };
+                enum_value?: { enum_ids: Array<string>; enum_type: "1" | "2" };
+                user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+            }>;
+            org_dimension?: string;
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.created_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.regular_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.resurrect_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.to_be_resigned_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        employee?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "directory.employee.updated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        changed_properties?: Array<string>;
+        employee_prev?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        employee_curr?: {
+            base_info?: {
+                employee_id: string;
+                name: {
+                    last_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    first_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    another_name?: string;
+                };
+                mobile?: string;
+                email?: string;
+                gender?: number;
+                departments?: Array<{
+                    department_id: string;
+                    org_dimension?: string;
+                }>;
+                employee_order_in_departments?: Array<{
+                    department_id?: string;
+                    order_weight_in_deparment?: string;
+                    order_weight_among_deparments?: string;
+                }>;
+                description?: string;
+                active_status?: number;
+                is_resigned?: boolean;
+                leader_id?: string;
+                dotted_line_leader_ids?: Array<string>;
+                custom_field_values?: Array<{
+                    field_key?: string;
+                    field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                    text_value?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    url_value?: {
+                        link_text: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        url: string;
+                        pcurl: string;
+                    };
+                    enum_value?: {
+                        enum_ids: Array<string>;
+                        enum_type: "1" | "2";
+                    };
+                    user_values?: Array<{ ids: Array<string>; user_type: "1" }>;
+                }>;
+                resign_time?: string;
+                avatar?: {
+                    avatar_72?: string;
+                    avatar_240?: string;
+                    avatar_640?: string;
+                    avatar_origin?: string;
+                };
+                background_image?: string;
+                virtual_org_infos?: Array<{
+                    id: string;
+                    departments?: Array<{
+                        department_id: string;
+                        department_count?: {
+                            recursive_members_count?: string;
+                            direct_members_count?: string;
+                            recursive_members_count_exclude_leaders?: string;
+                            recursive_departments_count?: string;
+                            direct_departments_count?: string;
+                        };
+                        has_child?: boolean;
+                        leaders?: Array<{
+                            leader_type: number;
+                            leader_id: string;
+                        }>;
+                        parent_department_id?: string;
+                        name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                        enabled_status?: boolean;
+                        order_weight?: string;
+                        custom_field_values?: Array<{
+                            field_key?: string;
+                            field_type?: "1" | "2" | "3" | "4" | "10" | "11";
+                            text_value?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                            url_value?: {
+                                link_text: {
+                                    default_value: string;
+                                    i18n_value?: Record<string, string>;
+                                    default_locale?: string;
+                                };
+                                url: string;
+                                pcurl: string;
+                            };
+                            enum_value?: {
+                                enum_ids: Array<string>;
+                                enum_type: "1" | "2";
+                            };
+                            user_values?: Array<{
+                                ids: Array<string>;
+                                user_type: "1";
+                            }>;
+                        }>;
+                        department_path_infos?: Array<{
+                            department_id?: string;
+                            department_name?: {
+                                default_value: string;
+                                i18n_value?: Record<string, string>;
+                                default_locale?: string;
+                            };
+                        }>;
+                        data_source?: number;
+                        org_dimension?: string;
+                    }>;
+                    department_path_base_infos?: Array<{
+                        department_id?: string;
+                        department_name?: {
+                            default_value: string;
+                            i18n_value?: Record<string, string>;
+                            default_locale?: string;
+                        };
+                    }>;
+                    employee_order_in_departments?: Array<{
+                        department_id?: string;
+                        order_weight_in_deparment?: string;
+                        order_weight_among_deparments?: string;
+                    }>;
+                    leaders?: Array<string>;
+                }>;
+                is_forbidden_delete_employee?: boolean;
+            };
+            work_info?: {
+                work_country_or_region?: string;
+                work_place?: { place_id: string };
+                work_station?: {
+                    default_value: string;
+                    i18n_value?: Record<string, string>;
+                    default_locale?: string;
+                };
+                job_number?: string;
+                extension_number?: string;
+                join_date?: string;
+                employment_type?: number;
+                staff_status?: number;
+                positions?: Array<{
+                    position_code: string;
+                    position_name: string;
+                    leader_id?: string;
+                    leader_position_code?: string;
+                    is_main_position: boolean;
+                    department_id: string;
+                }>;
+                job_title?: { job_title_id: string };
+                job_level?: {
+                    job_level_id: string;
+                    job_level_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    is_deleted?: boolean;
+                    order?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                job_family?: {
+                    job_family_id: string;
+                    job_family_name?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                    is_enabled?: boolean;
+                    parent_job_family_id?: string;
+                    description?: {
+                        default_value: string;
+                        i18n_value?: Record<string, string>;
+                        default_locale?: string;
+                    };
+                };
+                resign_date?: string;
+                resign_reason?: string;
+                resign_remark?: string;
+                resign_type?: string;
+            };
+        };
+        abnormal?: {
+            id?: string;
+            row_error?: number;
+            field_errors?: Record<string, number>;
+        };
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file/events/bitable_field_changed document }
      *
      * 多维表格字段变更
@@ -3010,6 +4804,7 @@ export interface IHandles extends IOtherEventHandles {
         }>;
         application_chat_list?: Array<string>;
         application_department_list?: Array<string>;
+        application_remark?: string;
         permission?: "view" | "edit" | "full_access";
         subscriber_ids?: Array<{
             union_id?: string;

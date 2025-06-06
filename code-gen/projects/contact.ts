@@ -4588,7 +4588,6 @@ export default abstract class Client extends compensation {
                                     mobile: string;
                                     mobile_visible?: boolean;
                                     gender?: number;
-                                    avatar_key?: string;
                                     avatar?: {
                                         avatar_72?: string;
                                         avatar_240?: string;
@@ -4901,7 +4900,6 @@ export default abstract class Client extends compensation {
                                     mobile: string;
                                     mobile_visible?: boolean;
                                     gender?: number;
-                                    avatar_key?: string;
                                     avatar?: {
                                         avatar_72?: string;
                                         avatar_240?: string;
@@ -5151,7 +5149,6 @@ export default abstract class Client extends compensation {
                                                     mobile: string;
                                                     mobile_visible?: boolean;
                                                     gender?: number;
-                                                    avatar_key?: string;
                                                     avatar?: {
                                                         avatar_72?: string;
                                                         avatar_240?: string;
@@ -5312,7 +5309,6 @@ export default abstract class Client extends compensation {
                                     mobile: string;
                                     mobile_visible?: boolean;
                                     gender?: number;
-                                    avatar_key?: string;
                                     avatar?: {
                                         avatar_72?: string;
                                         avatar_240?: string;
@@ -6049,7 +6045,6 @@ export default abstract class Client extends compensation {
                                     mobile: string;
                                     mobile_visible?: boolean;
                                     gender?: number;
-                                    avatar_key?: string;
                                     avatar?: {
                                         avatar_72?: string;
                                         avatar_240?: string;
@@ -6328,7 +6323,6 @@ export default abstract class Client extends compensation {
                                     mobile: string;
                                     mobile_visible?: boolean;
                                     gender?: number;
-                                    avatar_key?: string;
                                     avatar?: {
                                         avatar_72?: string;
                                         avatar_240?: string;
@@ -11323,7 +11317,6 @@ export default abstract class Client extends compensation {
                                         mobile: string;
                                         mobile_visible?: boolean;
                                         gender?: number;
-                                        avatar_key?: string;
                                         avatar?: {
                                             avatar_72?: string;
                                             avatar_240?: string;
@@ -11639,7 +11632,6 @@ export default abstract class Client extends compensation {
                                         mobile: string;
                                         mobile_visible?: boolean;
                                         gender?: number;
-                                        avatar_key?: string;
                                         avatar?: {
                                             avatar_72?: string;
                                             avatar_240?: string;
@@ -11897,7 +11889,6 @@ export default abstract class Client extends compensation {
                                                         mobile: string;
                                                         mobile_visible?: boolean;
                                                         gender?: number;
-                                                        avatar_key?: string;
                                                         avatar?: {
                                                             avatar_72?: string;
                                                             avatar_240?: string;
@@ -12058,7 +12049,6 @@ export default abstract class Client extends compensation {
                                         mobile: string;
                                         mobile_visible?: boolean;
                                         gender?: number;
-                                        avatar_key?: string;
                                         avatar?: {
                                             avatar_72?: string;
                                             avatar_240?: string;
@@ -12800,7 +12790,6 @@ export default abstract class Client extends compensation {
                                         mobile: string;
                                         mobile_visible?: boolean;
                                         gender?: number;
-                                        avatar_key?: string;
                                         avatar?: {
                                             avatar_72?: string;
                                             avatar_240?: string;
@@ -13085,7 +13074,6 @@ export default abstract class Client extends compensation {
                                         mobile: string;
                                         mobile_visible?: boolean;
                                         gender?: number;
-                                        avatar_key?: string;
                                         avatar?: {
                                             avatar_72?: string;
                                             avatar_240?: string;

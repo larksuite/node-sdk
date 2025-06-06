@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import baike from "./baike";
+import base from "./base";
 
 // auto gen
-export default abstract class Client extends baike {
+export default abstract class Client extends base {
     declare tokenManager;
 
     declare domain;
@@ -1373,6 +1373,29 @@ export default abstract class Client extends baike {
                                             | "Rating"
                                             | "DateTime";
                                     };
+                                    filter_info?: {
+                                        target_table?: string;
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreaterEqual"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                                condition_id?: string;
+                                                field_type?: number;
+                                            }>;
+                                        };
+                                    };
                                 };
                                 description?: {
                                     disable_sync?: boolean;
@@ -1555,6 +1578,27 @@ export default abstract class Client extends baike {
                                             | "Currency"
                                             | "Rating"
                                             | "DateTime";
+                                    };
+                                    filter_info?: {
+                                        target_table?: string;
+                                        filter_info?: {
+                                            conjunction: "and" | "or";
+                                            conditions: Array<{
+                                                field_id: string;
+                                                operator:
+                                                    | "is"
+                                                    | "isNot"
+                                                    | "contains"
+                                                    | "doesNotContain"
+                                                    | "isEmpty"
+                                                    | "isNotEmpty"
+                                                    | "isGreater"
+                                                    | "isGreaterEqual"
+                                                    | "isLess"
+                                                    | "isLessEqual";
+                                                value?: string;
+                                            }>;
+                                        };
                                     };
                                 };
                                 description?: {
@@ -1897,6 +1941,27 @@ export default abstract class Client extends baike {
                                     | "Rating"
                                     | "DateTime";
                             };
+                            filter_info?: {
+                                target_table?: string;
+                                filter_info?: {
+                                    conjunction: "and" | "or";
+                                    conditions: Array<{
+                                        field_id: string;
+                                        operator:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty"
+                                            | "isGreater"
+                                            | "isGreaterEqual"
+                                            | "isLess"
+                                            | "isLessEqual";
+                                        value?: string;
+                                    }>;
+                                };
+                            };
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
@@ -2001,6 +2066,29 @@ export default abstract class Client extends baike {
                                                 | "Currency"
                                                 | "Rating"
                                                 | "DateTime";
+                                        };
+                                        filter_info?: {
+                                            target_table?: string;
+                                            filter_info?: {
+                                                conjunction: "and" | "or";
+                                                conditions: Array<{
+                                                    field_id: string;
+                                                    operator:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty"
+                                                        | "isGreater"
+                                                        | "isGreaterEqual"
+                                                        | "isLess"
+                                                        | "isLessEqual";
+                                                    value?: string;
+                                                    condition_id?: string;
+                                                    field_type?: number;
+                                                }>;
+                                            };
                                         };
                                     };
                                     description?: {
@@ -2242,6 +2330,31 @@ export default abstract class Client extends baike {
                                                                 | "Rating"
                                                                 | "DateTime";
                                                         };
+                                                        filter_info?: {
+                                                            target_table?: string;
+                                                            filter_info?: {
+                                                                conjunction:
+                                                                    | "and"
+                                                                    | "or";
+                                                                conditions: Array<{
+                                                                    field_id: string;
+                                                                    operator:
+                                                                        | "is"
+                                                                        | "isNot"
+                                                                        | "contains"
+                                                                        | "doesNotContain"
+                                                                        | "isEmpty"
+                                                                        | "isNotEmpty"
+                                                                        | "isGreater"
+                                                                        | "isGreaterEqual"
+                                                                        | "isLess"
+                                                                        | "isLessEqual";
+                                                                    value?: string;
+                                                                    condition_id?: string;
+                                                                    field_type?: number;
+                                                                }>;
+                                                            };
+                                                        };
                                                     };
                                                     description?: string;
                                                     is_primary?: boolean;
@@ -2388,6 +2501,29 @@ export default abstract class Client extends baike {
                                                 | "Rating"
                                                 | "DateTime";
                                         };
+                                        filter_info?: {
+                                            target_table?: string;
+                                            filter_info?: {
+                                                conjunction: "and" | "or";
+                                                conditions: Array<{
+                                                    field_id: string;
+                                                    operator:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty"
+                                                        | "isGreater"
+                                                        | "isGreaterEqual"
+                                                        | "isLess"
+                                                        | "isLessEqual";
+                                                    value?: string;
+                                                    condition_id?: string;
+                                                    field_type?: number;
+                                                }>;
+                                            };
+                                        };
                                     };
                                     description?: string;
                                     is_primary?: boolean;
@@ -2508,6 +2644,27 @@ export default abstract class Client extends baike {
                                     | "Rating"
                                     | "DateTime";
                             };
+                            filter_info?: {
+                                target_table?: string;
+                                filter_info?: {
+                                    conjunction: "and" | "or";
+                                    conditions: Array<{
+                                        field_id: string;
+                                        operator:
+                                            | "is"
+                                            | "isNot"
+                                            | "contains"
+                                            | "doesNotContain"
+                                            | "isEmpty"
+                                            | "isNotEmpty"
+                                            | "isGreater"
+                                            | "isGreaterEqual"
+                                            | "isLess"
+                                            | "isLessEqual";
+                                        value?: string;
+                                    }>;
+                                };
+                            };
                         };
                         description?: { disable_sync?: boolean; text?: string };
                         ui_type?:
@@ -2615,6 +2772,29 @@ export default abstract class Client extends baike {
                                                 | "Currency"
                                                 | "Rating"
                                                 | "DateTime";
+                                        };
+                                        filter_info?: {
+                                            target_table?: string;
+                                            filter_info?: {
+                                                conjunction: "and" | "or";
+                                                conditions: Array<{
+                                                    field_id: string;
+                                                    operator:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty"
+                                                        | "isGreater"
+                                                        | "isGreaterEqual"
+                                                        | "isLess"
+                                                        | "isLessEqual";
+                                                    value?: string;
+                                                    condition_id?: string;
+                                                    field_type?: number;
+                                                }>;
+                                            };
                                         };
                                     };
                                     description?: {
@@ -6739,6 +6919,29 @@ export default abstract class Client extends baike {
                                                 | "Rating"
                                                 | "DateTime";
                                         };
+                                        filter_info?: {
+                                            target_table?: string;
+                                            filter_info?: {
+                                                conjunction: "and" | "or";
+                                                conditions: Array<{
+                                                    field_id: string;
+                                                    operator:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty"
+                                                        | "isGreater"
+                                                        | "isGreaterEqual"
+                                                        | "isLess"
+                                                        | "isLessEqual";
+                                                    value?: string;
+                                                    condition_id?: string;
+                                                    field_type?: number;
+                                                }>;
+                                            };
+                                        };
                                     };
                                     description?: {
                                         disable_sync?: boolean;
@@ -6926,6 +7129,27 @@ export default abstract class Client extends baike {
                                                 | "Currency"
                                                 | "Rating"
                                                 | "DateTime";
+                                        };
+                                        filter_info?: {
+                                            target_table?: string;
+                                            filter_info?: {
+                                                conjunction: "and" | "or";
+                                                conditions: Array<{
+                                                    field_id: string;
+                                                    operator:
+                                                        | "is"
+                                                        | "isNot"
+                                                        | "contains"
+                                                        | "doesNotContain"
+                                                        | "isEmpty"
+                                                        | "isNotEmpty"
+                                                        | "isGreater"
+                                                        | "isGreaterEqual"
+                                                        | "isLess"
+                                                        | "isLessEqual";
+                                                    value?: string;
+                                                }>;
+                                            };
                                         };
                                     };
                                     description?: {
@@ -7273,6 +7497,27 @@ export default abstract class Client extends baike {
                                         | "Rating"
                                         | "DateTime";
                                 };
+                                filter_info?: {
+                                    target_table?: string;
+                                    filter_info?: {
+                                        conjunction: "and" | "or";
+                                        conditions: Array<{
+                                            field_id: string;
+                                            operator:
+                                                | "is"
+                                                | "isNot"
+                                                | "contains"
+                                                | "doesNotContain"
+                                                | "isEmpty"
+                                                | "isNotEmpty"
+                                                | "isGreater"
+                                                | "isGreaterEqual"
+                                                | "isLess"
+                                                | "isLessEqual";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
                             };
                             description?: {
                                 disable_sync?: boolean;
@@ -7382,6 +7627,29 @@ export default abstract class Client extends baike {
                                                     | "Currency"
                                                     | "Rating"
                                                     | "DateTime";
+                                            };
+                                            filter_info?: {
+                                                target_table?: string;
+                                                filter_info?: {
+                                                    conjunction: "and" | "or";
+                                                    conditions: Array<{
+                                                        field_id: string;
+                                                        operator:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty"
+                                                            | "isGreater"
+                                                            | "isGreaterEqual"
+                                                            | "isLess"
+                                                            | "isLessEqual";
+                                                        value?: string;
+                                                        condition_id?: string;
+                                                        field_type?: number;
+                                                    }>;
+                                                };
                                             };
                                         };
                                         description?: {
@@ -7625,6 +7893,31 @@ export default abstract class Client extends baike {
                                                                     | "Rating"
                                                                     | "DateTime";
                                                             };
+                                                            filter_info?: {
+                                                                target_table?: string;
+                                                                filter_info?: {
+                                                                    conjunction:
+                                                                        | "and"
+                                                                        | "or";
+                                                                    conditions: Array<{
+                                                                        field_id: string;
+                                                                        operator:
+                                                                            | "is"
+                                                                            | "isNot"
+                                                                            | "contains"
+                                                                            | "doesNotContain"
+                                                                            | "isEmpty"
+                                                                            | "isNotEmpty"
+                                                                            | "isGreater"
+                                                                            | "isGreaterEqual"
+                                                                            | "isLess"
+                                                                            | "isLessEqual";
+                                                                        value?: string;
+                                                                        condition_id?: string;
+                                                                        field_type?: number;
+                                                                    }>;
+                                                                };
+                                                            };
                                                         };
                                                         description?: string;
                                                         is_primary?: boolean;
@@ -7773,6 +8066,29 @@ export default abstract class Client extends baike {
                                                     | "Rating"
                                                     | "DateTime";
                                             };
+                                            filter_info?: {
+                                                target_table?: string;
+                                                filter_info?: {
+                                                    conjunction: "and" | "or";
+                                                    conditions: Array<{
+                                                        field_id: string;
+                                                        operator:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty"
+                                                            | "isGreater"
+                                                            | "isGreaterEqual"
+                                                            | "isLess"
+                                                            | "isLessEqual";
+                                                        value?: string;
+                                                        condition_id?: string;
+                                                        field_type?: number;
+                                                    }>;
+                                                };
+                                            };
                                         };
                                         description?: string;
                                         is_primary?: boolean;
@@ -7893,6 +8209,27 @@ export default abstract class Client extends baike {
                                         | "Rating"
                                         | "DateTime";
                                 };
+                                filter_info?: {
+                                    target_table?: string;
+                                    filter_info?: {
+                                        conjunction: "and" | "or";
+                                        conditions: Array<{
+                                            field_id: string;
+                                            operator:
+                                                | "is"
+                                                | "isNot"
+                                                | "contains"
+                                                | "doesNotContain"
+                                                | "isEmpty"
+                                                | "isNotEmpty"
+                                                | "isGreater"
+                                                | "isGreaterEqual"
+                                                | "isLess"
+                                                | "isLessEqual";
+                                            value?: string;
+                                        }>;
+                                    };
+                                };
                             };
                             description?: {
                                 disable_sync?: boolean;
@@ -8005,6 +8342,29 @@ export default abstract class Client extends baike {
                                                     | "Currency"
                                                     | "Rating"
                                                     | "DateTime";
+                                            };
+                                            filter_info?: {
+                                                target_table?: string;
+                                                filter_info?: {
+                                                    conjunction: "and" | "or";
+                                                    conditions: Array<{
+                                                        field_id: string;
+                                                        operator:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty"
+                                                            | "isGreater"
+                                                            | "isGreaterEqual"
+                                                            | "isLess"
+                                                            | "isLessEqual";
+                                                        value?: string;
+                                                        condition_id?: string;
+                                                        field_type?: number;
+                                                    }>;
+                                                };
                                             };
                                         };
                                         description?: {

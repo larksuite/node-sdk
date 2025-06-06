@@ -226,5 +226,194 @@ export default abstract class Client extends mail {
                 },
             },
         },
+        v3: {
+            /**
+             * batch_country_region
+             */
+            batchCountryRegion: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=batch_country_region&apiName=get&version=v3 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mdm&resource=batch_country_region&version=v3 document }
+                 *
+                 * 查询国家 / 地区
+                 */
+                get: async (
+                    payload?: {
+                        data?: { common?: { tenant_id?: string } };
+                        params: {
+                            fields: Array<string>;
+                            ids: Array<string>;
+                            languages: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data?: Array<{
+                                        alpha_3_code?: string;
+                                        alpha_2_code?: string;
+                                        numeric_code?: string;
+                                        name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        mdm_code?: string;
+                                        full_name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        global_code?: string;
+                                        status?: string;
+                                        continents?: {
+                                            value: string;
+                                            multilingual_name?: Record<
+                                                string,
+                                                string
+                                            >;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mdm/v3/batch_country_region`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * country_region
+             */
+            countryRegion: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mdm&resource=country_region&apiName=list&version=v3 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mdm&resource=country_region&version=v3 document }
+                 *
+                 * 搜索国家 / 地区
+                 */
+                list: async (
+                    payload?: {
+                        data?: {
+                            filter?: {
+                                logic: string;
+                                expressions?: Array<{
+                                    field: string;
+                                    operator: string;
+                                    value: {
+                                        string_value?: string;
+                                        bool_value?: boolean;
+                                        int_value?: string;
+                                        string_list_value?: Array<string>;
+                                        int_list_value?: Array<string>;
+                                    };
+                                }>;
+                            };
+                            common?: { tenant_id?: string };
+                        };
+                        params: {
+                            languages: Array<string>;
+                            fields: Array<string>;
+                            limit?: number;
+                            offset?: number;
+                            return_count?: boolean;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    data?: Array<{
+                                        alpha_3_code?: string;
+                                        alpha_2_code?: string;
+                                        numeric_code?: string;
+                                        name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        mdm_code?: string;
+                                        full_name?: {
+                                            value?: string;
+                                            multilingual_value?: Record<
+                                                string,
+                                                string
+                                            >;
+                                            return_language?: string;
+                                        };
+                                        global_code?: string;
+                                        status?: string;
+                                        continents?: {
+                                            value: string;
+                                            multilingual_name?: Record<
+                                                string,
+                                                string
+                                            >;
+                                        };
+                                    }>;
+                                    total?: string;
+                                    next_page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mdm/v3/country_regions`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
     };
 }

@@ -717,6 +717,7 @@ export default abstract class Client extends passport {
                                                             value?: string;
                                                             id?: string;
                                                         }>;
+                                                        data_period_type?: number;
                                                     }>;
                                                 };
                                             }
@@ -790,6 +791,7 @@ export default abstract class Client extends passport {
                                             value?: string;
                                             id?: string;
                                         }>;
+                                        data_period_type?: number;
                                     }>;
                                 };
                             }
@@ -823,6 +825,7 @@ export default abstract class Client extends passport {
                             field_filters?: Array<{
                                 field_code: string;
                                 field_values?: Array<string>;
+                                operator?: number;
                             }>;
                         };
                         params: { page_size: number; page_token?: string };
@@ -931,6 +934,7 @@ export default abstract class Client extends passport {
                             field_filters?: Array<{
                                 field_code: string;
                                 field_values?: Array<string>;
+                                operator?: number;
                             }>;
                         };
                         params: { page_size: number; page_token?: string };

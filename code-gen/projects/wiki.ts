@@ -32,9 +32,6 @@ export default abstract class Client extends verification {
      * 云文档-知识库
      */
     wiki = {
-        /**
-         * 知识空间
-         */
         space: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space&apiName=create&version=v2 click to debug }
@@ -443,9 +440,6 @@ export default abstract class Client extends verification {
                     });
             },
         },
-        /**
-         * 空间成员
-         */
         spaceMember: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.member&apiName=create&version=v2 click to debug }
@@ -612,9 +606,6 @@ export default abstract class Client extends verification {
                     });
             },
         },
-        /**
-         * 节点
-         */
         spaceNode: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.node&apiName=copy&version=v2 click to debug }
@@ -1147,9 +1138,6 @@ export default abstract class Client extends verification {
                     });
             },
         },
-        /**
-         * 空间设置
-         */
         spaceSetting: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=space.setting&apiName=update&version=v2 click to debug }
@@ -1208,9 +1196,6 @@ export default abstract class Client extends verification {
                     });
             },
         },
-        /**
-         * 云文档
-         */
         task: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=task&apiName=get&version=v2 click to debug }
@@ -1290,6 +1275,178 @@ export default abstract class Client extends verification {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
+            },
+        },
+        v1: {
+            /**
+             * 知识库
+             */
+            node: {
+                searchWithIterator: async (
+                    payload?: {
+                        data: {
+                            query: string;
+                            space_id?: string;
+                            node_id?: string;
+                        };
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/wiki/v1/nodes/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        node_id: string;
+                                                        space_id: string;
+                                                        obj_type: number;
+                                                        title: string;
+                                                        url?: string;
+                                                        icon?: string;
+                                                        obj_token: string;
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        delete_time?: string;
+                                                        child_num: number;
+                                                        version: number;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=wiki&resource=node&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uEzN0YjLxcDN24SM3QjN/search_wiki document }
+                 */
+                search: async (
+                    payload?: {
+                        data: {
+                            query: string;
+                            space_id?: string;
+                            node_id?: string;
+                        };
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        node_id: string;
+                                        space_id: string;
+                                        obj_type: number;
+                                        title: string;
+                                        url?: string;
+                                        icon?: string;
+                                        obj_token: string;
+                                        create_time?: string;
+                                        update_time?: string;
+                                        delete_time?: string;
+                                        child_num: number;
+                                        version: number;
+                                    }>;
+                                    page_token?: string;
+                                    has_more: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/wiki/v1/nodes/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
         },
         v2: {

@@ -24218,6 +24218,39 @@ export default abstract class Client extends contract {
                                                     value: string;
                                                 };
                                             }>;
+                                            orgrole_infos?: Array<{
+                                                role_id: string;
+                                                origin_orgroles?: Array<{
+                                                    grantee_id: string;
+                                                    management_scopes?: Array<{
+                                                        org_id: string;
+                                                        org_type:
+                                                            | "department"
+                                                            | "location"
+                                                            | "custom_org_01"
+                                                            | "custom_org_02"
+                                                            | "custom_org_03"
+                                                            | "custom_org_04"
+                                                            | "custom_org_05";
+                                                        org_name?: string;
+                                                    }>;
+                                                }>;
+                                                target_orgroles?: Array<{
+                                                    grantee_id: string;
+                                                    management_scopes?: Array<{
+                                                        org_id: string;
+                                                        org_type:
+                                                            | "department"
+                                                            | "location"
+                                                            | "custom_org_01"
+                                                            | "custom_org_02"
+                                                            | "custom_org_03"
+                                                            | "custom_org_04"
+                                                            | "custom_org_05";
+                                                        org_name?: string;
+                                                    }>;
+                                                }>;
+                                            }>;
                                         };
                                     }>;
                                 };
@@ -27926,6 +27959,556 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * custom_org
+             */
+            customOrg: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=active&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=active&project=corehr&resource=custom_org&version=v2 document }
+                 *
+                 * 启/停用自定义组织
+                 */
+                active: async (
+                    payload?: {
+                        data: {
+                            org_id: string;
+                            object_api_name: string;
+                            active: boolean;
+                            effective_time: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/active`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=custom_org&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            object_api_name: string;
+                            names: Array<{ lang: string; value: string }>;
+                            code?: string;
+                            parent_id?: string;
+                            manager_ids?: Array<string>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            effective_time: string;
+                            org_roles?: Array<{
+                                api_name?: string;
+                                security_group_id?: string;
+                                employment_ids?: Array<string>;
+                            }>;
+                            match_rule_groups?: Array<{
+                                match_rules?: Array<{
+                                    left_value:
+                                        | "department"
+                                        | "department_hierarchy"
+                                        | "work_location"
+                                        | "work_location_hierarchy"
+                                        | "cost_center"
+                                        | "cost_center_hierarchy"
+                                        | "job"
+                                        | "job_level"
+                                        | "job_family"
+                                        | "job_family_hierarchy"
+                                        | "employee_type";
+                                    operator: "contains" | "notContains";
+                                    right_values?: Array<string>;
+                                }>;
+                            }>;
+                            custom_fields?: Array<{
+                                custom_api_name: string;
+                                value: string;
+                            }>;
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "open_id"
+                                | "union_id"
+                                | "user_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { org_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=delete_org&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete_org&project=corehr&resource=custom_org&version=v2 document }
+                 *
+                 * 删除自定义组织
+                 */
+                deleteOrg: async (
+                    payload?: {
+                        data: { org_id: string; object_api_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/delete_org`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=custom_org&version=v2 document }
+                 *
+                 * 更新自定义组织
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            object_api_name: string;
+                            names?: Array<{ lang: string; value: string }>;
+                            code?: string;
+                            parent_id?: string;
+                            manager_ids?: Array<string>;
+                            description?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                            effective_time: string;
+                            org_roles?: Array<{
+                                api_name?: string;
+                                security_group_id?: string;
+                                employment_ids?: Array<string>;
+                            }>;
+                            custom_fields?: Array<{
+                                custom_api_name: string;
+                                value: string;
+                            }>;
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                        path: { org_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/:org_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=corehr&resource=custom_org&version=v2 document }
+                 *
+                 * 查询自定义组织信息
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            object_api_name: string;
+                            org_fields?: Array<string>;
+                            org_role_fields?: Array<string>;
+                            org_ids?: Array<string>;
+                            code?: string;
+                            parent_id?: string;
+                            active?: boolean;
+                            need_match_rule?: boolean;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        object_api_name: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        code?: string;
+                                        parent_id?: string;
+                                        manager_ids?: Array<string>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        effective_time?: string;
+                                        org_roles?: Array<{
+                                            api_name: string;
+                                            security_group_id?: string;
+                                            employment_ids?: Array<string>;
+                                            inherit_employment_ids?: Array<string>;
+                                        }>;
+                                        match_rule_groups?: Array<{
+                                            match_rules?: Array<{
+                                                left_value:
+                                                    | "department"
+                                                    | "department_hierarchy"
+                                                    | "work_location"
+                                                    | "work_location_hierarchy"
+                                                    | "cost_center"
+                                                    | "cost_center_hierarchy"
+                                                    | "job"
+                                                    | "job_level"
+                                                    | "job_family"
+                                                    | "job_family_hierarchy"
+                                                    | "employee_type";
+                                                operator:
+                                                    | "contains"
+                                                    | "notContains";
+                                                right_values?: Array<string>;
+                                            }>;
+                                        }>;
+                                        active?: boolean;
+                                        org_id?: string;
+                                        custom_fields?: Array<{
+                                            custom_api_name: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            value: string;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryRecentChangeWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            object_api_name: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/custom_orgs/query_recent_change`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    custom_org_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    deleted_custom_org_ids?: Array<string>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=query_recent_change&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_recent_change&project=corehr&resource=custom_org&version=v2 document }
+                 */
+                queryRecentChange: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            object_api_name: string;
+                            start_date: string;
+                            end_date: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    custom_org_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    deleted_custom_org_ids?: Array<string>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/query_recent_change`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=custom_org&apiName=update_rule&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_rule&project=corehr&resource=custom_org&version=v2 document }
+                 *
+                 * 更新匹配规则
+                 */
+                updateRule: async (
+                    payload?: {
+                        data: {
+                            object_api_name: string;
+                            org_id: string;
+                            match_rule_groups?: Array<{
+                                match_rules?: Array<{
+                                    left_value:
+                                        | "department"
+                                        | "department_hierarchy"
+                                        | "work_location"
+                                        | "work_location_hierarchy"
+                                        | "cost_center"
+                                        | "cost_center_hierarchy"
+                                        | "job"
+                                        | "job_level"
+                                        | "job_family"
+                                        | "job_family_hierarchy"
+                                        | "employee_type";
+                                    operator: "contains" | "notContains";
+                                    right_values?: Array<string>;
+                                }>;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/custom_orgs/update_rule`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * default_cost_center
              */
             defaultCostCenter: {
@@ -29436,6 +30019,7 @@ export default abstract class Client extends contract {
                                                 value: string;
                                             }>;
                                             active: boolean;
+                                            created_by?: string;
                                         };
                                         job_id?: string;
                                         job?: {
@@ -31283,6 +31867,7 @@ export default abstract class Client extends contract {
                                                                 value: string;
                                                             }>;
                                                             active: boolean;
+                                                            created_by?: string;
                                                         };
                                                         job_id?: string;
                                                         job?: {
@@ -32607,6 +33192,7 @@ export default abstract class Client extends contract {
                                                 value: string;
                                             }>;
                                             active: boolean;
+                                            created_by?: string;
                                         };
                                         job_id?: string;
                                         job?: {
@@ -35047,6 +35633,10 @@ export default abstract class Client extends contract {
                                 target_social_security_city?: string;
                                 is_transfer_with_workforce?: boolean;
                                 target_pathway?: string;
+                                target_allocation_effective_time?: string;
+                                target_allocation_expiration_time?: string;
+                                target_default_cost_center?: string;
+                                target_is_default_cost_center_inherited?: boolean;
                             };
                             transfer_key?: string;
                             initiator_id?: string;
@@ -39953,6 +40543,7 @@ export default abstract class Client extends contract {
                                         new_rate?: number;
                                     }>;
                                 };
+                                talent_id?: string;
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -47527,6 +48118,7 @@ export default abstract class Client extends contract {
                             job_level_ids?: Array<string>;
                             job_ids?: Array<string>;
                             cost_center_ids?: Array<string>;
+                            include_missing_dimension_rows?: boolean;
                         };
                         params?: { page_token?: string; page_size?: number };
                     },
@@ -47607,6 +48199,7 @@ export default abstract class Client extends contract {
                                             date?: string;
                                             estimated_active_individuals?: string;
                                         }>;
+                                        is_missing_dimension?: boolean;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -47644,6 +48237,8 @@ export default abstract class Client extends contract {
                                 dimension_key?: string;
                                 dimension_ids?: Array<string>;
                             }>;
+                            include_missing_dimension_rows?: boolean;
+                            filter_all_zero_value_rows?: boolean;
                         };
                         params?: { page_token?: string; page_size?: number };
                     },
@@ -47691,6 +48286,8 @@ export default abstract class Client extends contract {
                                             individuals_to_be_added?: string;
                                             individuals_to_be_removed?: string;
                                         }>;
+                                        is_missing_dimension?: boolean;
+                                        is_all_zero_value?: boolean;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
