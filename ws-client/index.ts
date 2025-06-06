@@ -36,6 +36,8 @@ export class WSClient {
 
   private pingInterval?: NodeJS.Timeout;
 
+  private isConnecting: boolean = false;
+
   constructor(params: IConstructorParams) {
     const { 
       appId, 
@@ -145,6 +147,13 @@ export class WSClient {
   }
 
   private async reConnect(isStart: boolean = false) {
+    if (this.isConnecting) {
+      this.logger.debug('[ws]', 'repeat connection');
+      return;
+    }
+
+    this.isConnecting = true;
+
     const tryConnect = () => {
       return this.pullConnectConfig()
         .then(isSuccess => isSuccess ? this.connect() : Promise.resolve(false))
@@ -154,14 +163,21 @@ export class WSClient {
             return Promise.resolve(true);
           }
           return Promise.resolve(false);
+        }).finally(() => {
+          this.isConnecting = false;
         })
     }
 
     if (this.pingInterval) {
-      clearTimeout(this.pingInterval)
+      clearTimeout(this.pingInterval);
     }
 
+    const wsInstance = this.wsConfig.getWSInstance();
+
     if (isStart) {
+      if (wsInstance) {
+        wsInstance?.terminate();
+      }
       const isSuccess = await tryConnect();
       if (!isSuccess) {
         this.logger.error('[ws]', 'connect failed');
@@ -171,7 +187,6 @@ export class WSClient {
       return;
     }
 
-    const wsInstance = this.wsConfig.getWSInstance();
     const { autoReconnect, reconnectNonce, reconnectCount, reconnectInterval } = this.wsConfig.getWS();
     
     if (!autoReconnect) {
