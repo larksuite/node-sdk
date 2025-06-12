@@ -36,7 +36,14 @@ export class WSClient {
 
   private pingInterval?: NodeJS.Timeout;
 
+  private reconnectInterval?: NodeJS.Timeout;
+
   private isConnecting: boolean = false;
+
+  private reconnectInfo = {
+    lastConnectTime: 0,
+    nextConnectTime: 0,
+  }
 
   constructor(params: IConstructorParams) {
     const { 
@@ -129,7 +136,18 @@ export class WSClient {
 
   private connect() {
     const connectUrl = this.wsConfig.getWS('connectUrl');
-    const wsInstance = new WebSocket(connectUrl);
+
+    let wsInstance;
+
+    try {
+      wsInstance = new WebSocket(connectUrl);
+    } catch(e) {
+      this.logger.error('[ws]', 'new WebSocket error');
+    }
+
+    if (!wsInstance) {
+      return Promise.resolve(false);
+    }
 
     return new Promise((resolve) => {
       wsInstance.on('open', () => {
@@ -155,6 +173,7 @@ export class WSClient {
     this.isConnecting = true;
 
     const tryConnect = () => {
+      this.reconnectInfo.lastConnectTime = Date.now();
       return this.pullConnectConfig()
         .then(isSuccess => isSuccess ? this.connect() : Promise.resolve(false))
         .then(isSuccess => {
@@ -163,9 +182,7 @@ export class WSClient {
             return Promise.resolve(true);
           }
           return Promise.resolve(false);
-        }).finally(() => {
-          this.isConnecting = false;
-        })
+        });
     }
 
     if (this.pingInterval) {
@@ -178,7 +195,15 @@ export class WSClient {
       if (wsInstance) {
         wsInstance?.terminate();
       }
-      const isSuccess = await tryConnect();
+      if (this.reconnectInterval) {
+        clearTimeout(this.reconnectInterval);
+      }
+      let isSuccess = false;
+      try {
+        isSuccess = await tryConnect();
+      } finally {
+        this.isConnecting = false;
+      }
       if (!isSuccess) {
         this.logger.error('[ws]', 'connect failed');
         await this.reConnect();
@@ -201,27 +226,32 @@ export class WSClient {
     
     this.wsConfig.setWSInstance(null);
 
-    setTimeout(async () => {
+    const reconnectNonceTime = reconnectNonce ? reconnectNonce * Math.random() : 0
+    this.reconnectInterval = setTimeout(async () => {
       (async function loopReConnect(this: WSClient, count: number) {
         count++;
         const isSuccess = await tryConnect();
         // if reconnectCount < 0, the reconnect time is infinite
         if (isSuccess) {
           this.logger.debug('[ws]', 'reconnect success');
+          this.isConnecting = false;
           return;
         }
 
         this.logger.info('ws', `unable to connect to the server after trying ${count} times")`);
 
         if (reconnectCount >= 0 && count >= reconnectCount) {
+          this.isConnecting = false;
           return;
         }
 
-        setTimeout(() => {
+        this.reconnectInterval = setTimeout(() => {
           loopReConnect.bind(this)(count);
         }, reconnectInterval)
+        this.reconnectInfo.nextConnectTime = Date.now() + reconnectInterval;
       }).bind(this)(0)
-    }, reconnectNonce ? reconnectNonce * Math.random() : 0);
+    }, reconnectNonceTime);
+    this.reconnectInfo.nextConnectTime = Date.now() + reconnectNonceTime;
   }
 
   private pingLoop() {
@@ -364,6 +394,10 @@ export class WSClient {
         }
       });
     }
+  }
+
+  getReconnectInfo() {
+    return this.reconnectInfo;
   }
 
   async start(params: { eventDispatcher: EventDispatcher }) {
