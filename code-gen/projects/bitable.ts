@@ -29,7 +29,7 @@ export default abstract class Client extends base {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 云文档-多维表格
+     * 云文档-电子表格
      */
     bitable = {
         /**

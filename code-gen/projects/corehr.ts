@@ -34908,6 +34908,625 @@ export default abstract class Client extends contract {
                 },
             },
             /**
+             * employees.international_assignment
+             */
+            employeesInternationalAssignment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=employees.international_assignment&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=employees.international_assignment&version=v2 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            work_location_id: string;
+                            service_company?: string;
+                            work_shift?: string;
+                            weekly_working_hours_v2?: number;
+                            working_hours_type_id?: string;
+                            employee_type_id?: string;
+                            department_id?: string;
+                            job_id?: string;
+                            job_family_id?: string;
+                            job_level_id?: string;
+                            job_grade_id?: string;
+                            compensation_type?: string;
+                            direct_manager_id?: string;
+                            dotted_line_manager_id?: string;
+                            work_calendar_id?: string;
+                            position_id?: string;
+                            employment_id: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            international_assignment_reason?: string;
+                            description?: string;
+                            international_assignment_expected_end_date?: string;
+                            international_assignment_type: string;
+                            effective_time: string;
+                            expiration_time?: string;
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    international_assignment?: {
+                                        work_location_id?: string;
+                                        service_company?: string;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        working_hours_type_id?: string;
+                                        employee_type_id?: string;
+                                        weekly_working_hours_v2?: number;
+                                        department_id?: string;
+                                        job_id?: string;
+                                        job_family_id?: string;
+                                        job_level_id?: string;
+                                        job_grade_id?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        direct_manager_id?: string;
+                                        dotted_line_manager_id?: string;
+                                        work_calendar_id?: string;
+                                        position_id?: string;
+                                        employment_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        international_assignment_reason?: string;
+                                        description?: string;
+                                        international_assignment_expected_end_date?: string;
+                                        international_assignment_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        international_assignment_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/employees/international_assignments`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=employees.international_assignment&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=employees.international_assignment&version=v2 document }
+                 */
+                delete: async (
+                    payload?: {
+                        path: { international_assignment_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/employees/international_assignments/:international_assignment_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                            page_size?: number;
+                            page_token?: string;
+                            employment_ids?: Array<string>;
+                            international_assignment_ids?: Array<string>;
+                            effective_time?: string;
+                            expiration_time?: string;
+                            employment_status_list?: Array<string>;
+                            work_location_id_list?: Array<string>;
+                            department_id_list?: Array<string>;
+                            direct_manager_id_list?: Array<string>;
+                            dotted_line_manager_id_list?: Array<string>;
+                            position_id_list?: Array<string>;
+                            job_id_list?: Array<string>;
+                            job_family_id_list?: Array<string>;
+                            job_level_id_list?: Array<string>;
+                            job_grade_id_list?: Array<string>;
+                            working_hours_type_id_list?: Array<string>;
+                            service_company_list?: Array<string>;
+                            weekly_working_hours_v2?: number;
+                            work_shift_list?: Array<string>;
+                            compensation_type_list?: Array<string>;
+                            international_assignment_expected_end_date?: string;
+                            international_assignment_status_list?: Array<string>;
+                            international_assignment_type_list?: Array<string>;
+                            work_calendar_id_list?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/corehr/v2/employees/international_assignments`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        work_location_id?: string;
+                                                        service_company?: string;
+                                                        work_shift?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        working_hours_type_id?: string;
+                                                        employee_type_id?: string;
+                                                        weekly_working_hours_v2?: number;
+                                                        department_id?: string;
+                                                        job_id?: string;
+                                                        job_family_id?: string;
+                                                        job_level_id?: string;
+                                                        job_grade_id?: string;
+                                                        compensation_type?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        direct_manager_id?: string;
+                                                        dotted_line_manager_id?: string;
+                                                        work_calendar_id?: string;
+                                                        position_id?: string;
+                                                        employment_id?: string;
+                                                        custom_fields?: Array<{
+                                                            field_name: string;
+                                                            value: string;
+                                                        }>;
+                                                        international_assignment_reason?: string;
+                                                        description?: string;
+                                                        international_assignment_expected_end_date?: string;
+                                                        international_assignment_status?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        international_assignment_type?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
+                                                        effective_time?: string;
+                                                        expiration_time?: string;
+                                                        id?: string;
+                                                    }>;
+                                                    no_authority_ids?: Array<string>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=employees.international_assignment&apiName=list&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=corehr&resource=employees.international_assignment&version=v2 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                            page_size?: number;
+                            page_token?: string;
+                            employment_ids?: Array<string>;
+                            international_assignment_ids?: Array<string>;
+                            effective_time?: string;
+                            expiration_time?: string;
+                            employment_status_list?: Array<string>;
+                            work_location_id_list?: Array<string>;
+                            department_id_list?: Array<string>;
+                            direct_manager_id_list?: Array<string>;
+                            dotted_line_manager_id_list?: Array<string>;
+                            position_id_list?: Array<string>;
+                            job_id_list?: Array<string>;
+                            job_family_id_list?: Array<string>;
+                            job_level_id_list?: Array<string>;
+                            job_grade_id_list?: Array<string>;
+                            working_hours_type_id_list?: Array<string>;
+                            service_company_list?: Array<string>;
+                            weekly_working_hours_v2?: number;
+                            work_shift_list?: Array<string>;
+                            compensation_type_list?: Array<string>;
+                            international_assignment_expected_end_date?: string;
+                            international_assignment_status_list?: Array<string>;
+                            international_assignment_type_list?: Array<string>;
+                            work_calendar_id_list?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        work_location_id?: string;
+                                        service_company?: string;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        working_hours_type_id?: string;
+                                        employee_type_id?: string;
+                                        weekly_working_hours_v2?: number;
+                                        department_id?: string;
+                                        job_id?: string;
+                                        job_family_id?: string;
+                                        job_level_id?: string;
+                                        job_grade_id?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        direct_manager_id?: string;
+                                        dotted_line_manager_id?: string;
+                                        work_calendar_id?: string;
+                                        position_id?: string;
+                                        employment_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        international_assignment_reason?: string;
+                                        description?: string;
+                                        international_assignment_expected_end_date?: string;
+                                        international_assignment_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        international_assignment_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        id?: string;
+                                    }>;
+                                    no_authority_ids?: Array<string>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/employees/international_assignments`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=employees.international_assignment&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=employees.international_assignment&version=v2 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            work_location_id?: string;
+                            service_company?: string;
+                            work_shift?: string;
+                            weekly_working_hours_v2?: number;
+                            working_hours_type_id?: string;
+                            employee_type_id?: string;
+                            department_id?: string;
+                            job_id?: string;
+                            job_family_id?: string;
+                            job_level_id?: string;
+                            job_grade_id?: string;
+                            compensation_type?: string;
+                            direct_manager_id?: string;
+                            dotted_line_manager_id?: string;
+                            work_calendar_id?: string;
+                            position_id?: string;
+                            custom_fields?: Array<{
+                                field_name: string;
+                                value: string;
+                            }>;
+                            international_assignment_reason?: string;
+                            description?: string;
+                            international_assignment_expected_end_date?: string;
+                            international_assignment_type?: string;
+                            effective_time?: string;
+                            expiration_time?: string;
+                        };
+                        params?: {
+                            client_token?: string;
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                        };
+                        path: { international_assignment_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    international_assignment?: {
+                                        work_location_id?: string;
+                                        service_company?: string;
+                                        work_shift?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        working_hours_type_id?: string;
+                                        employee_type_id?: string;
+                                        weekly_working_hours_v2?: number;
+                                        department_id?: string;
+                                        job_id?: string;
+                                        job_family_id?: string;
+                                        job_level_id?: string;
+                                        job_grade_id?: string;
+                                        compensation_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        direct_manager_id?: string;
+                                        dotted_line_manager_id?: string;
+                                        work_calendar_id?: string;
+                                        position_id?: string;
+                                        employment_id?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        international_assignment_reason?: string;
+                                        description?: string;
+                                        international_assignment_expected_end_date?: string;
+                                        international_assignment_status?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        international_assignment_type?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
+                                        effective_time?: string;
+                                        expiration_time?: string;
+                                        id?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/employees/international_assignments/:international_assignment_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * employees.job_data
              */
             employeesJobData: {
@@ -42188,6 +42807,7 @@ export default abstract class Client extends contract {
                                                         onboarding_info?: {
                                                             offer_id?: string;
                                                             offer_hr_id?: string;
+                                                            offer_hr_id_v2?: string;
                                                             entry_mode?: string;
                                                             onboarding_date?: string;
                                                             ats_application_id?: string;
@@ -43425,6 +44045,7 @@ export default abstract class Client extends contract {
                                         onboarding_info?: {
                                             offer_id?: string;
                                             offer_hr_id?: string;
+                                            offer_hr_id_v2?: string;
                                             entry_mode?: string;
                                             onboarding_date?: string;
                                             ats_application_id?: string;
@@ -44768,6 +45389,7 @@ export default abstract class Client extends contract {
                                                         onboarding_info?: {
                                                             offer_id?: string;
                                                             offer_hr_id?: string;
+                                                            offer_hr_id_v2?: string;
                                                             entry_mode?: string;
                                                             onboarding_date?: string;
                                                             ats_application_id?: string;
@@ -46026,6 +46648,7 @@ export default abstract class Client extends contract {
                                         onboarding_info?: {
                                             offer_id?: string;
                                             offer_hr_id?: string;
+                                            offer_hr_id_v2?: string;
                                             entry_mode?: string;
                                             onboarding_date?: string;
                                             ats_application_id?: string;

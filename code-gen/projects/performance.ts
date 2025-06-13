@@ -1565,6 +1565,94 @@ export default abstract class Client extends people_bytedance {
                                                                 };
                                                             };
                                                         }>;
+                                                        user_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        underling_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    review_depend_projects?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        roles?: Array<{
+                                                            reviewer_role?: {
+                                                                role_id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            reviewee_role?: {
+                                                                role_id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        user_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        underling_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                    }>;
+                                                    participated_projects?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        roles?: Array<{
+                                                            reviewer_role?: {
+                                                                role_id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            reviewee_role?: {
+                                                                role_id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                        }>;
+                                                        user_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
+                                                        underling_roles?: Array<{
+                                                            role_id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                        }>;
                                                     }>;
                                                 };
                                                 record_id?: string;
@@ -1703,6 +1791,7 @@ export default abstract class Client extends people_bytedance {
                                                                     en_us?: string;
                                                                 };
                                                                 parent_field_id?: string;
+                                                                kpi_template_id?: string;
                                                             }>;
                                                         }>;
                                                         review_template_id?: string;
@@ -1793,6 +1882,7 @@ export default abstract class Client extends people_bytedance {
                                                     en_us?: string;
                                                 };
                                                 parent_field_id?: string;
+                                                kpi_template_id?: string;
                                             }>;
                                         }>;
                                         review_template_id?: string;

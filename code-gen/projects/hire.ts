@@ -573,6 +573,7 @@ export default abstract class Client extends helpdesk {
                         user_id?: string;
                         resume_source_id?: string;
                         application_preferred_city_code_list?: Array<string>;
+                        delivery_type?: number;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -12626,7 +12627,7 @@ export default abstract class Client extends helpdesk {
                                         job_id?: string;
                                         job_name?: string;
                                     };
-                                    create_time?: string;
+                                    create_time?: number;
                                     offer_status?: number;
                                     offer_type?: number;
                                     employee_type?: {
@@ -12908,6 +12909,7 @@ export default abstract class Client extends helpdesk {
                                                 need_approve?: boolean;
                                                 is_sensitive?: boolean;
                                                 object_type?: number;
+                                                object_type_v2?: number;
                                                 config?: {
                                                     options?: Array<{
                                                         id?: string;
@@ -21222,6 +21224,7 @@ export default abstract class Client extends helpdesk {
                             user_id?: string;
                             resume_source_id?: string;
                             application_preferred_city_code_list?: Array<string>;
+                            delivery_type?: number;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -33464,7 +33467,7 @@ export default abstract class Client extends helpdesk {
                                             job_id?: string;
                                             job_name?: string;
                                         };
-                                        create_time?: string;
+                                        create_time?: number;
                                         offer_status?: number;
                                         offer_type?: number;
                                         employee_type?: {
@@ -33752,6 +33755,7 @@ export default abstract class Client extends helpdesk {
                                                     need_approve?: boolean;
                                                     is_sensitive?: boolean;
                                                     object_type?: number;
+                                                    object_type_v2?: number;
                                                     config?: {
                                                         options?: Array<{
                                                             id?: string;

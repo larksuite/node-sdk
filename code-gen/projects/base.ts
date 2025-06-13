@@ -62,7 +62,7 @@ export default abstract class Client extends baike {
                                             | "doesNotContain"
                                             | "isEmpty"
                                             | "isNotEmpty";
-                                        values?: Array<string>;
+                                        value?: Array<string>;
                                     }>;
                                     conjunction?: "and" | "or";
                                     other_perm?: number;
@@ -77,7 +77,7 @@ export default abstract class Client extends baike {
                                             | "doesNotContain"
                                             | "isEmpty"
                                             | "isNotEmpty";
-                                        values?: Array<string>;
+                                        value?: Array<string>;
                                     }>;
                                     conjunction?: "and" | "or";
                                 };
@@ -127,7 +127,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
@@ -144,7 +144,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
@@ -269,7 +269,7 @@ export default abstract class Client extends baike {
                                                                         | "doesNotContain"
                                                                         | "isEmpty"
                                                                         | "isNotEmpty";
-                                                                    values?: Array<string>;
+                                                                    value?: Array<string>;
                                                                     field_type?: number;
                                                                 }>;
                                                                 conjunction?:
@@ -288,7 +288,7 @@ export default abstract class Client extends baike {
                                                                         | "doesNotContain"
                                                                         | "isEmpty"
                                                                         | "isNotEmpty";
-                                                                    values?: Array<string>;
+                                                                    value?: Array<string>;
                                                                     field_type?: number;
                                                                 }>;
                                                                 conjunction?:
@@ -387,7 +387,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
@@ -404,7 +404,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
@@ -475,7 +475,7 @@ export default abstract class Client extends baike {
                                             | "doesNotContain"
                                             | "isEmpty"
                                             | "isNotEmpty";
-                                        values?: Array<string>;
+                                        value?: Array<string>;
                                     }>;
                                     conjunction?: "and" | "or";
                                     other_perm?: number;
@@ -490,7 +490,7 @@ export default abstract class Client extends baike {
                                             | "doesNotContain"
                                             | "isEmpty"
                                             | "isNotEmpty";
-                                        values?: Array<string>;
+                                        value?: Array<string>;
                                     }>;
                                     conjunction?: "and" | "or";
                                 };
@@ -540,7 +540,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
@@ -557,7 +557,7 @@ export default abstract class Client extends baike {
                                                         | "doesNotContain"
                                                         | "isEmpty"
                                                         | "isNotEmpty";
-                                                    values?: Array<string>;
+                                                    value?: Array<string>;
                                                     field_type?: number;
                                                 }>;
                                                 conjunction?: "and" | "or";
