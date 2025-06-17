@@ -79,7 +79,7 @@ export class WSClient {
       appId,
       appSecret
     } = this.wsConfig.getClient();
-    
+
     try {
       const {
         code,
@@ -98,7 +98,8 @@ export class WSClient {
         // consumed by gateway
         headers: {
           "locale": "zh",
-        }
+        },
+        timeout: 15000,
       });
 
       if (code !== ErrorCode.ok) {

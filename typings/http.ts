@@ -25,4 +25,5 @@ export interface HttpRequestOptions<D> {
 	data?: D;
 	responseType?: ResponseType;
 	paramsSerializer?: (params: Record<string, any>) => string;
+	timeout?: number;
 }
