@@ -21,6 +21,7 @@ interface IConstructorParams {
   loggerLevel?: LoggerLevel;
   httpInstance?: HttpInstance;
   autoReconnect?: boolean;
+  agent?: any;
 }
 
 export class WSClient {
@@ -46,10 +47,11 @@ export class WSClient {
   }
 
   constructor(params: IConstructorParams) {
-    const { 
-      appId, 
-      appSecret, 
-      domain = Domain.Feishu, 
+    const {
+      appId,
+      appSecret,
+      agent,
+      domain = Domain.Feishu,
       httpInstance = defaultHttpInstance,
       loggerLevel = LoggerLevel.info,
       logger = defaultLogger,
@@ -57,10 +59,11 @@ export class WSClient {
     } = params;
 
     this.logger = new LoggerProxy(loggerLevel, logger);
-    
+
     assert(!appId, () => this.logger.error('appId is needed'));
     assert(!appSecret, () => this.logger.error('appSecret is needed'));
-    
+
+    this.agent = agent;
     this.dataCache = new DataCache({logger: this.logger});
     this.httpInstance = httpInstance;
     this.wsConfig.updateClient({
@@ -72,10 +75,10 @@ export class WSClient {
     this.wsConfig.updateWs({
       autoReconnect
     })
-  }  
+  }
 
   private async pullConnectConfig() {
-    const { 
+    const {
       appId,
       appSecret
     } = this.wsConfig.getClient();
@@ -116,7 +119,7 @@ export class WSClient {
 
       this.wsConfig.updateWs({
         connectUrl: URL,
-        
+
         deviceId: device_id as string,
         serviceId: service_id as string,
 
@@ -141,7 +144,8 @@ export class WSClient {
     let wsInstance;
 
     try {
-      wsInstance = new WebSocket(connectUrl);
+      const { agent } = this;
+      wsInstance = new WebSocket(connectUrl, { agent });
     } catch(e) {
       this.logger.error('[ws]', 'new WebSocket error');
     }
@@ -214,17 +218,17 @@ export class WSClient {
     }
 
     const { autoReconnect, reconnectNonce, reconnectCount, reconnectInterval } = this.wsConfig.getWS();
-    
+
     if (!autoReconnect) {
       return;
     }
 
     this.logger.info('[ws]', 'reconnect');
-    
+
     if (wsInstance) {
       wsInstance?.terminate();
     }
-    
+
     this.wsConfig.setWSInstance(null);
 
     const reconnectNonceTime = reconnectNonce ? reconnectNonce * Math.random() : 0
@@ -256,7 +260,7 @@ export class WSClient {
   }
 
   private pingLoop() {
-    const { 
+    const {
       serviceId,
       pingInterval
     } = this.wsConfig.getWS();
@@ -310,7 +314,7 @@ export class WSClient {
   private async handleControlData(data: pbbp2.Frame) {
     const type = data.headers.find(item => item.key === HeaderKey.type)?.value;
     const payload = data.payload;
-    
+
     if (type === MessageType.ping) {
       return;
     }

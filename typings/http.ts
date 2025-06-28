@@ -1,5 +1,5 @@
 export interface HttpInstance {
-  request<T = any, R = T, D = any>(opts: HttpRequestOptions<D>): Promise<R>;
+	request<T = any, R = T, D = any>(opts: HttpRequestOptions<D>): Promise<R>;
 	get<T = any, R = T, D = any>(url: string, opts?: HttpRequestOptions<D>): Promise<R>;
 	delete<T = any, R = T, D = any>(url: string, opts?: HttpRequestOptions<D>): Promise<R>;
 	head<T = any, R = T, D = any>(url: string, opts?: HttpRequestOptions<D>): Promise<R>;
