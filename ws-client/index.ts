@@ -141,7 +141,8 @@ export class WSClient {
     let wsInstance;
 
     try {
-      wsInstance = new WebSocket(connectUrl);
+      const { httpsAgent: agent } = this.httpInstance.defaults;
+      wsInstance = new WebSocket(connectUrl, { agent });
     } catch(e) {
       this.logger.error('[ws]', 'new WebSocket error');
     }
