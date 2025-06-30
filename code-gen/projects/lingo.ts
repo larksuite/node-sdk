@@ -1753,6 +1753,7 @@ export default abstract class Client extends im {
                             responseType: "stream",
                             paramsSerializer: (params) =>
                                 stringify(params, { arrayFormat: "repeat" }),
+                            $return_headers: true,
                         })
                         .catch((e) => {
                             this.logger.error(formatErrors(e));
@@ -1762,7 +1763,7 @@ export default abstract class Client extends im {
                     const checkIsReadable = () => {
                         const consumedError =
                             "The stream has already been consumed";
-                        if (!res.readable) {
+                        if (!res.data.readable) {
                             this.logger.error(consumedError);
                             throw new Error(consumedError);
                         }
@@ -1780,13 +1781,14 @@ export default abstract class Client extends im {
                                 writableStream.on("error", (e) => {
                                     reject(e);
                                 });
-                                res.pipe(writableStream);
+                                res.data.pipe(writableStream);
                             });
                         },
                         getReadableStream: () => {
                             checkIsReadable();
-                            return res as Readable;
+                            return res.data as Readable;
                         },
+                        headers: res.headers,
                     };
                 },
                 /**

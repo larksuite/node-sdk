@@ -13,7 +13,15 @@ defaultHttpInstance.interceptors.request.use(
     { synchronous: true }
 );
 
-defaultHttpInstance.interceptors.response.use((resp) => resp.data);
+defaultHttpInstance.interceptors.response.use((resp) => {
+    if (resp.config['$return_headers']) {
+        return {
+            data: resp.data,
+            headers: resp.headers
+        }
+    }
+    return resp.data;
+});
 
 export { AxiosRequestConfig, AxiosError } from 'axios';
 

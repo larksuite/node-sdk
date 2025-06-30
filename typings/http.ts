@@ -26,4 +26,5 @@ export interface HttpRequestOptions<D> {
 	responseType?: ResponseType;
 	paramsSerializer?: (params: Record<string, any>) => string;
 	timeout?: number;
+	$return_headers?: boolean;
 }
