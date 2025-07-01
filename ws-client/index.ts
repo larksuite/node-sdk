@@ -46,6 +46,8 @@ export class WSClient {
     nextConnectTime: 0,
   }
 
+  private agent?: any;
+
   constructor(params: IConstructorParams) {
     const {
       appId,
