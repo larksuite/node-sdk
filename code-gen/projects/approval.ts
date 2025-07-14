@@ -126,7 +126,23 @@ export default abstract class Client extends application {
                         };
                         icon?: number;
                         i18n_resources: Array<{
-                            locale: "zh-CN" | "en-US" | "ja-JP";
+                            locale:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -184,7 +200,23 @@ export default abstract class Client extends application {
             get: async (
                 payload?: {
                     params?: {
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
                         with_admin_id?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
@@ -380,7 +412,23 @@ export default abstract class Client extends application {
                             viewer_department_id?: string;
                         }>;
                         i18n_resources?: Array<{
-                            locale: "zh-CN" | "en-US" | "ja-JP";
+                            locale:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -478,7 +526,23 @@ export default abstract class Client extends application {
                                     viewer_department_id?: string;
                                 }>;
                                 i18n_resources?: Array<{
-                                    locale: "zh-CN" | "en-US" | "ja-JP";
+                                    locale:
+                                        | "zh-CN"
+                                        | "en-US"
+                                        | "ja-JP"
+                                        | "zh-HK"
+                                        | "zh-TW"
+                                        | "de-DE"
+                                        | "es-ES"
+                                        | "fr-FR"
+                                        | "id-ID"
+                                        | "it-IT"
+                                        | "ko-KR"
+                                        | "pt-BR"
+                                        | "th-TH"
+                                        | "vi-VN"
+                                        | "ms-MY"
+                                        | "ru-RU";
                                     texts: Array<{
                                         key: string;
                                         value: string;
@@ -662,7 +726,23 @@ export default abstract class Client extends application {
                                 | "TRUSTEESHIP";
                         }>;
                         i18n_resources: Array<{
-                            locale: "zh-CN" | "en-US" | "ja-JP";
+                            locale:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -793,7 +873,23 @@ export default abstract class Client extends application {
                                             | "TRUSTEESHIP";
                                     }>;
                                     i18n_resources: Array<{
-                                        locale: "zh-CN" | "en-US" | "ja-JP";
+                                        locale:
+                                            | "zh-CN"
+                                            | "en-US"
+                                            | "ja-JP"
+                                            | "zh-HK"
+                                            | "zh-TW"
+                                            | "de-DE"
+                                            | "es-ES"
+                                            | "fr-FR"
+                                            | "id-ID"
+                                            | "it-IT"
+                                            | "ko-KR"
+                                            | "pt-BR"
+                                            | "th-TH"
+                                            | "vi-VN"
+                                            | "ms-MY"
+                                            | "ru-RU";
                                         texts: Array<{
                                             key: string;
                                             value: string;
@@ -1043,7 +1139,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批实例
          */
         instance: {
             /**
@@ -1214,7 +1310,23 @@ export default abstract class Client extends application {
                         cancel_bot_notification?: string;
                         forbid_revoke?: boolean;
                         i18n_resources?: Array<{
-                            locale: "zh-CN" | "en-US" | "ja-JP";
+                            locale:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             texts: Array<{ key: string; value: string }>;
                             is_default: boolean;
                         }>;
@@ -1269,7 +1381,23 @@ export default abstract class Client extends application {
             get: async (
                 payload?: {
                     params?: {
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
                         user_id?: string;
                         user_id_type?: "user_id" | "open_id" | "union_id";
                     };
@@ -1624,7 +1752,24 @@ export default abstract class Client extends application {
                             | "ALL";
                         instance_start_time_from?: string;
                         instance_start_time_to?: string;
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
+                        with_revoked_instance?: boolean;
                     };
                     params?: {
                         page_size?: number;
@@ -1775,7 +1920,24 @@ export default abstract class Client extends application {
                             | "ALL";
                         instance_start_time_from?: string;
                         instance_start_time_to?: string;
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
+                        with_revoked_instance?: boolean;
                     };
                     params?: {
                         page_size?: number;
@@ -1872,7 +2034,24 @@ export default abstract class Client extends application {
                         read_status?: "READ" | "UNREAD" | "ALL";
                         cc_create_time_from?: string;
                         cc_create_time_to?: string;
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
+                        with_revoked_instance?: boolean;
                     };
                     params?: {
                         page_size?: number;
@@ -2753,9 +2932,26 @@ export default abstract class Client extends application {
                             | "ALL";
                         task_start_time_from?: string;
                         task_start_time_to?: string;
-                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
                         task_status_list?: Array<string>;
                         order?: number;
+                        with_revoked_instance?: boolean;
                     };
                     params?: {
                         page_size?: number;
@@ -2996,7 +3192,23 @@ export default abstract class Client extends application {
                             };
                             icon?: number;
                             i18n_resources: Array<{
-                                locale: "zh-CN" | "en-US" | "ja-JP";
+                                locale:
+                                    | "zh-CN"
+                                    | "en-US"
+                                    | "ja-JP"
+                                    | "zh-HK"
+                                    | "zh-TW"
+                                    | "de-DE"
+                                    | "es-ES"
+                                    | "fr-FR"
+                                    | "id-ID"
+                                    | "it-IT"
+                                    | "ko-KR"
+                                    | "pt-BR"
+                                    | "th-TH"
+                                    | "vi-VN"
+                                    | "ms-MY"
+                                    | "ru-RU";
                                 texts: Array<{ key: string; value: string }>;
                                 is_default: boolean;
                             }>;
@@ -3054,7 +3266,23 @@ export default abstract class Client extends application {
                 get: async (
                     payload?: {
                         params?: {
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             with_admin_id?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
@@ -3256,7 +3484,23 @@ export default abstract class Client extends application {
                                 viewer_department_id?: string;
                             }>;
                             i18n_resources?: Array<{
-                                locale: "zh-CN" | "en-US" | "ja-JP";
+                                locale:
+                                    | "zh-CN"
+                                    | "en-US"
+                                    | "ja-JP"
+                                    | "zh-HK"
+                                    | "zh-TW"
+                                    | "de-DE"
+                                    | "es-ES"
+                                    | "fr-FR"
+                                    | "id-ID"
+                                    | "it-IT"
+                                    | "ko-KR"
+                                    | "pt-BR"
+                                    | "th-TH"
+                                    | "vi-VN"
+                                    | "ms-MY"
+                                    | "ru-RU";
                                 texts: Array<{ key: string; value: string }>;
                                 is_default: boolean;
                             }>;
@@ -3354,7 +3598,23 @@ export default abstract class Client extends application {
                                         viewer_department_id?: string;
                                     }>;
                                     i18n_resources?: Array<{
-                                        locale: "zh-CN" | "en-US" | "ja-JP";
+                                        locale:
+                                            | "zh-CN"
+                                            | "en-US"
+                                            | "ja-JP"
+                                            | "zh-HK"
+                                            | "zh-TW"
+                                            | "de-DE"
+                                            | "es-ES"
+                                            | "fr-FR"
+                                            | "id-ID"
+                                            | "it-IT"
+                                            | "ko-KR"
+                                            | "pt-BR"
+                                            | "th-TH"
+                                            | "vi-VN"
+                                            | "ms-MY"
+                                            | "ru-RU";
                                         texts: Array<{
                                             key: string;
                                             value: string;
@@ -3544,7 +3804,23 @@ export default abstract class Client extends application {
                                     | "TRUSTEESHIP";
                             }>;
                             i18n_resources: Array<{
-                                locale: "zh-CN" | "en-US" | "ja-JP";
+                                locale:
+                                    | "zh-CN"
+                                    | "en-US"
+                                    | "ja-JP"
+                                    | "zh-HK"
+                                    | "zh-TW"
+                                    | "de-DE"
+                                    | "es-ES"
+                                    | "fr-FR"
+                                    | "id-ID"
+                                    | "it-IT"
+                                    | "ko-KR"
+                                    | "pt-BR"
+                                    | "th-TH"
+                                    | "vi-VN"
+                                    | "ms-MY"
+                                    | "ru-RU";
                                 texts: Array<{ key: string; value: string }>;
                                 is_default: boolean;
                             }>;
@@ -3675,7 +3951,23 @@ export default abstract class Client extends application {
                                                 | "TRUSTEESHIP";
                                         }>;
                                         i18n_resources: Array<{
-                                            locale: "zh-CN" | "en-US" | "ja-JP";
+                                            locale:
+                                                | "zh-CN"
+                                                | "en-US"
+                                                | "ja-JP"
+                                                | "zh-HK"
+                                                | "zh-TW"
+                                                | "de-DE"
+                                                | "es-ES"
+                                                | "fr-FR"
+                                                | "id-ID"
+                                                | "it-IT"
+                                                | "ko-KR"
+                                                | "pt-BR"
+                                                | "th-TH"
+                                                | "vi-VN"
+                                                | "ms-MY"
+                                                | "ru-RU";
                                             texts: Array<{
                                                 key: string;
                                                 value: string;
@@ -3927,7 +4219,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批实例
              */
             instance: {
                 /**
@@ -4107,7 +4399,23 @@ export default abstract class Client extends application {
                             cancel_bot_notification?: string;
                             forbid_revoke?: boolean;
                             i18n_resources?: Array<{
-                                locale: "zh-CN" | "en-US" | "ja-JP";
+                                locale:
+                                    | "zh-CN"
+                                    | "en-US"
+                                    | "ja-JP"
+                                    | "zh-HK"
+                                    | "zh-TW"
+                                    | "de-DE"
+                                    | "es-ES"
+                                    | "fr-FR"
+                                    | "id-ID"
+                                    | "it-IT"
+                                    | "ko-KR"
+                                    | "pt-BR"
+                                    | "th-TH"
+                                    | "vi-VN"
+                                    | "ms-MY"
+                                    | "ru-RU";
                                 texts: Array<{ key: string; value: string }>;
                                 is_default: boolean;
                             }>;
@@ -4162,7 +4470,23 @@ export default abstract class Client extends application {
                 get: async (
                     payload?: {
                         params?: {
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             user_id?: string;
                             user_id_type?: "user_id" | "open_id" | "union_id";
                         };
@@ -4519,7 +4843,24 @@ export default abstract class Client extends application {
                                 | "ALL";
                             instance_start_time_from?: string;
                             instance_start_time_to?: string;
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
+                            with_revoked_instance?: boolean;
                         };
                         params?: {
                             page_size?: number;
@@ -4672,7 +5013,24 @@ export default abstract class Client extends application {
                                 | "ALL";
                             instance_start_time_from?: string;
                             instance_start_time_to?: string;
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
+                            with_revoked_instance?: boolean;
                         };
                         params?: {
                             page_size?: number;
@@ -4771,7 +5129,24 @@ export default abstract class Client extends application {
                             read_status?: "READ" | "UNREAD" | "ALL";
                             cc_create_time_from?: string;
                             cc_create_time_to?: string;
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
+                            with_revoked_instance?: boolean;
                         };
                         params?: {
                             page_size?: number;
@@ -5673,9 +6048,26 @@ export default abstract class Client extends application {
                                 | "ALL";
                             task_start_time_from?: string;
                             task_start_time_to?: string;
-                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
                             task_status_list?: Array<string>;
                             order?: number;
+                            with_revoked_instance?: boolean;
                         };
                         params?: {
                             page_size?: number;

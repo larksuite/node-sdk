@@ -1410,7 +1410,7 @@ export default abstract class Client extends apaas {
             },
         },
         /**
-         * 应用管理
+         * 应用
          */
         application: {
             /**
@@ -4154,7 +4154,7 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 应用管理
+             * 应用
              */
             application: {
                 /**

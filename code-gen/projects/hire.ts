@@ -12909,7 +12909,33 @@ export default abstract class Client extends helpdesk {
                                                 need_approve?: boolean;
                                                 is_sensitive?: boolean;
                                                 object_type?: number;
-                                                object_type_v2?: number;
+                                                object_type_v2?:
+                                                    | "text"
+                                                    | "long_text"
+                                                    | "select"
+                                                    | "multi_select"
+                                                    | "date_select"
+                                                    | "month_select"
+                                                    | "year_select"
+                                                    | "number"
+                                                    | "amount"
+                                                    | "formula"
+                                                    | "boolean"
+                                                    | "file"
+                                                    | "personnel_select"
+                                                    | "personnel_multi_select"
+                                                    | "city_single_select"
+                                                    | "corehr_text"
+                                                    | "corehr_long_text"
+                                                    | "corehr_select"
+                                                    | "corehr_multi_select"
+                                                    | "corehr_date_select"
+                                                    | "corehr_number"
+                                                    | "corehr_boolean"
+                                                    | "corehr_attachment"
+                                                    | "corehr_personnel_select"
+                                                    | "corehr_personnel_multi_select"
+                                                    | "default";
                                                 config?: {
                                                     options?: Array<{
                                                         id?: string;
@@ -33755,7 +33781,33 @@ export default abstract class Client extends helpdesk {
                                                     need_approve?: boolean;
                                                     is_sensitive?: boolean;
                                                     object_type?: number;
-                                                    object_type_v2?: number;
+                                                    object_type_v2?:
+                                                        | "text"
+                                                        | "long_text"
+                                                        | "select"
+                                                        | "multi_select"
+                                                        | "date_select"
+                                                        | "month_select"
+                                                        | "year_select"
+                                                        | "number"
+                                                        | "amount"
+                                                        | "formula"
+                                                        | "boolean"
+                                                        | "file"
+                                                        | "personnel_select"
+                                                        | "personnel_multi_select"
+                                                        | "city_single_select"
+                                                        | "corehr_text"
+                                                        | "corehr_long_text"
+                                                        | "corehr_select"
+                                                        | "corehr_multi_select"
+                                                        | "corehr_date_select"
+                                                        | "corehr_number"
+                                                        | "corehr_boolean"
+                                                        | "corehr_attachment"
+                                                        | "corehr_personnel_select"
+                                                        | "corehr_personnel_multi_select"
+                                                        | "default";
                                                     config?: {
                                                         options?: Array<{
                                                             id?: string;

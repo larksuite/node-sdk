@@ -36989,11 +36989,14 @@ export default abstract class Client extends contract {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=job_family&version=v2 document }
                  *
-                 * 通过序列 ID 批量获取序列信息
+                 * 批量获取序列信息
                  */
                 batchGet: async (
                     payload?: {
-                        data: { job_family_ids: Array<string> };
+                        data?: {
+                            job_family_ids?: Array<string>;
+                            job_family_codes?: Array<string>;
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -37548,11 +37551,14 @@ export default abstract class Client extends contract {
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=job_level&version=v2 document }
                  *
-                 * 通过职级 ID 批量获取职级信息
+                 * 批量获取职级信息
                  */
                 batchGet: async (
                     payload?: {
-                        data: { job_level_ids: Array<string> };
+                        data?: {
+                            job_level_ids?: Array<string>;
+                            job_level_codes?: Array<string>;
+                        };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -41062,6 +41068,7 @@ export default abstract class Client extends contract {
                             };
                             offer_info: {
                                 offer_id?: string;
+                                offer?: string;
                                 offer_hr_id?: string;
                                 department_id?: string;
                                 direct_leader_id?: string;
@@ -41167,6 +41174,8 @@ export default abstract class Client extends contract {
                                     }>;
                                 };
                                 talent_id?: string;
+                                reuse_feishu_account?: string;
+                                reused_feishu_account_id?: string;
                             };
                             education_info?: Array<{
                                 school_name?: string;
@@ -41192,6 +41201,7 @@ export default abstract class Client extends contract {
                                 }>;
                             }>;
                             ats_application_id?: string;
+                            application?: string;
                             out_biz_id?: string;
                         };
                     },
@@ -41622,6 +41632,8 @@ export default abstract class Client extends contract {
                                         new_rate?: number;
                                     }>;
                                 };
+                                reuse_feishu_account?: string;
+                                reused_feishu_account_id?: string;
                             };
                             standard_update_fields?: Array<string>;
                             custom_update_fields?: Array<string>;
@@ -42807,6 +42819,8 @@ export default abstract class Client extends contract {
                                                                     new_rate?: number;
                                                                 }>;
                                                             };
+                                                            reuse_feishu_account?: string;
+                                                            reused_feishu_account_id?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -44045,6 +44059,8 @@ export default abstract class Client extends contract {
                                                     new_rate?: number;
                                                 }>;
                                             };
+                                            reuse_feishu_account?: string;
+                                            reused_feishu_account_id?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
@@ -45389,6 +45405,8 @@ export default abstract class Client extends contract {
                                                                     new_rate?: number;
                                                                 }>;
                                                             };
+                                                            reuse_feishu_account?: string;
+                                                            reused_feishu_account_id?: string;
                                                         };
                                                         onboarding_info?: {
                                                             offer_id?: string;
@@ -46648,6 +46666,8 @@ export default abstract class Client extends contract {
                                                     new_rate?: number;
                                                 }>;
                                             };
+                                            reuse_feishu_account?: string;
+                                            reused_feishu_account_id?: string;
                                         };
                                         onboarding_info?: {
                                             offer_id?: string;
