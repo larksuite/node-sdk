@@ -613,6 +613,10 @@ export default abstract class Client extends approval {
                                 work_day_no_punch_as_lack?: boolean;
                                 work_hours_demand?: boolean;
                                 work_hours?: number;
+                                free_clock_setting?: {
+                                    clock_mode?: number;
+                                    clock_internal_hhmm?: number;
+                                };
                             };
                             calendar_id: number;
                             need_punch_special_days?: Array<{
@@ -795,6 +799,10 @@ export default abstract class Client extends approval {
                                         work_day_no_punch_as_lack?: boolean;
                                         work_hours_demand?: boolean;
                                         work_hours?: number;
+                                        free_clock_setting?: {
+                                            clock_mode?: number;
+                                            clock_internal_hhmm?: number;
+                                        };
                                     };
                                     calendar_id: number;
                                     need_punch_special_days?: Array<{
@@ -1044,6 +1052,10 @@ export default abstract class Client extends approval {
                                     work_day_no_punch_as_lack?: boolean;
                                     work_hours_demand?: boolean;
                                     work_hours?: number;
+                                    free_clock_setting?: {
+                                        clock_mode?: number;
+                                        clock_internal_hhmm?: number;
+                                    };
                                 };
                                 calendar_id: number;
                                 need_punch_special_days?: Array<{
@@ -4446,6 +4458,10 @@ export default abstract class Client extends approval {
                                     work_day_no_punch_as_lack?: boolean;
                                     work_hours_demand?: boolean;
                                     work_hours?: number;
+                                    free_clock_setting?: {
+                                        clock_mode?: number;
+                                        clock_internal_hhmm?: number;
+                                    };
                                 };
                                 calendar_id: number;
                                 need_punch_special_days?: Array<{
@@ -4628,6 +4644,10 @@ export default abstract class Client extends approval {
                                             work_day_no_punch_as_lack?: boolean;
                                             work_hours_demand?: boolean;
                                             work_hours?: number;
+                                            free_clock_setting?: {
+                                                clock_mode?: number;
+                                                clock_internal_hhmm?: number;
+                                            };
                                         };
                                         calendar_id: number;
                                         need_punch_special_days?: Array<{
@@ -4880,6 +4900,10 @@ export default abstract class Client extends approval {
                                         work_day_no_punch_as_lack?: boolean;
                                         work_hours_demand?: boolean;
                                         work_hours?: number;
+                                        free_clock_setting?: {
+                                            clock_mode?: number;
+                                            clock_internal_hhmm?: number;
+                                        };
                                     };
                                     calendar_id: number;
                                     need_punch_special_days?: Array<{

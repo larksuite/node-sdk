@@ -68,7 +68,10 @@ export default abstract class Client extends verification {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: "team" | "person";
+                                    space_type?:
+                                        | "team"
+                                        | "person"
+                                        | "my_library";
                                     visibility?: "public" | "private";
                                     open_sharing?: "open" | "closed";
                                 };
@@ -141,7 +144,10 @@ export default abstract class Client extends verification {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: "team" | "person";
+                                    space_type?:
+                                        | "team"
+                                        | "person"
+                                        | "my_library";
                                     visibility?: "public" | "private";
                                     open_sharing?: "open" | "closed";
                                 };
@@ -248,27 +254,7 @@ export default abstract class Client extends verification {
             },
             listWithIterator: async (
                 payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        lang?:
-                            | "zh"
-                            | "id"
-                            | "de"
-                            | "en"
-                            | "es"
-                            | "fr"
-                            | "it"
-                            | "pt"
-                            | "vi"
-                            | "ru"
-                            | "hi"
-                            | "th"
-                            | "ko"
-                            | "ja"
-                            | "zh-HK"
-                            | "zh-TW";
-                    };
+                    params?: { page_size?: number; page_token?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -335,7 +321,8 @@ export default abstract class Client extends verification {
                                                     space_id?: string;
                                                     space_type?:
                                                         | "team"
-                                                        | "person";
+                                                        | "person"
+                                                        | "my_library";
                                                     visibility?:
                                                         | "public"
                                                         | "private";
@@ -376,27 +363,7 @@ export default abstract class Client extends verification {
              */
             list: async (
                 payload?: {
-                    params?: {
-                        page_size?: number;
-                        page_token?: string;
-                        lang?:
-                            | "zh"
-                            | "id"
-                            | "de"
-                            | "en"
-                            | "es"
-                            | "fr"
-                            | "it"
-                            | "pt"
-                            | "vi"
-                            | "ru"
-                            | "hi"
-                            | "th"
-                            | "ko"
-                            | "ja"
-                            | "zh-HK"
-                            | "zh-TW";
-                    };
+                    params?: { page_size?: number; page_token?: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -414,7 +381,10 @@ export default abstract class Client extends verification {
                                     name?: string;
                                     description?: string;
                                     space_id?: string;
-                                    space_type?: "team" | "person";
+                                    space_type?:
+                                        | "team"
+                                        | "person"
+                                        | "my_library";
                                     visibility?: "public" | "private";
                                     open_sharing?: "open" | "closed";
                                 }>;
@@ -1489,7 +1459,10 @@ export default abstract class Client extends verification {
                                         name?: string;
                                         description?: string;
                                         space_id?: string;
-                                        space_type?: "team" | "person";
+                                        space_type?:
+                                            | "team"
+                                            | "person"
+                                            | "my_library";
                                         visibility?: "public" | "private";
                                         open_sharing?: "open" | "closed";
                                     };
@@ -1562,7 +1535,10 @@ export default abstract class Client extends verification {
                                         name?: string;
                                         description?: string;
                                         space_id?: string;
-                                        space_type?: "team" | "person";
+                                        space_type?:
+                                            | "team"
+                                            | "person"
+                                            | "my_library";
                                         visibility?: "public" | "private";
                                         open_sharing?: "open" | "closed";
                                     };
@@ -1669,27 +1645,7 @@ export default abstract class Client extends verification {
                 },
                 listWithIterator: async (
                     payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            lang?:
-                                | "zh"
-                                | "id"
-                                | "de"
-                                | "en"
-                                | "es"
-                                | "fr"
-                                | "it"
-                                | "pt"
-                                | "vi"
-                                | "ru"
-                                | "hi"
-                                | "th"
-                                | "ko"
-                                | "ja"
-                                | "zh-HK"
-                                | "zh-TW";
-                        };
+                        params?: { page_size?: number; page_token?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1758,7 +1714,8 @@ export default abstract class Client extends verification {
                                                         space_id?: string;
                                                         space_type?:
                                                             | "team"
-                                                            | "person";
+                                                            | "person"
+                                                            | "my_library";
                                                         visibility?:
                                                             | "public"
                                                             | "private";
@@ -1799,27 +1756,7 @@ export default abstract class Client extends verification {
                  */
                 list: async (
                     payload?: {
-                        params?: {
-                            page_size?: number;
-                            page_token?: string;
-                            lang?:
-                                | "zh"
-                                | "id"
-                                | "de"
-                                | "en"
-                                | "es"
-                                | "fr"
-                                | "it"
-                                | "pt"
-                                | "vi"
-                                | "ru"
-                                | "hi"
-                                | "th"
-                                | "ko"
-                                | "ja"
-                                | "zh-HK"
-                                | "zh-TW";
-                        };
+                        params?: { page_size?: number; page_token?: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -1837,7 +1774,10 @@ export default abstract class Client extends verification {
                                         name?: string;
                                         description?: string;
                                         space_id?: string;
-                                        space_type?: "team" | "person";
+                                        space_type?:
+                                            | "team"
+                                            | "person"
+                                            | "my_library";
                                         visibility?: "public" | "private";
                                         open_sharing?: "open" | "closed";
                                     }>;

@@ -501,6 +501,7 @@ export default abstract class Client extends moments {
                         };
                         source_url_pc?: string;
                         source_url_mobile?: string;
+                        progress_rate?: { percent?: number; status?: number };
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -577,6 +578,10 @@ export default abstract class Client extends moments {
                                             }>;
                                         };
                                     }>;
+                                };
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
                                 };
                             };
                         }
@@ -721,6 +726,10 @@ export default abstract class Client extends moments {
                                         };
                                     }>;
                                 };
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
+                                };
                             };
                         }
                     >({
@@ -810,6 +819,7 @@ export default abstract class Client extends moments {
                                 };
                             }>;
                         };
+                        progress_rate?: { percent?: number; status?: number };
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -887,6 +897,10 @@ export default abstract class Client extends moments {
                                             }>;
                                         };
                                     }>;
+                                };
+                                progress_rate?: {
+                                    percent?: number;
+                                    status?: number;
                                 };
                             };
                         }
@@ -1587,6 +1601,10 @@ export default abstract class Client extends moments {
                             };
                             source_url_pc?: string;
                             source_url_mobile?: string;
+                            progress_rate?: {
+                                percent?: number;
+                                status?: number;
+                            };
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -1667,6 +1685,10 @@ export default abstract class Client extends moments {
                                                 }>;
                                             };
                                         }>;
+                                    };
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
                                     };
                                 };
                             }
@@ -1818,6 +1840,10 @@ export default abstract class Client extends moments {
                                             };
                                         }>;
                                     };
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
+                                    };
                                 };
                             }
                         >({
@@ -1907,6 +1933,10 @@ export default abstract class Client extends moments {
                                     };
                                 }>;
                             };
+                            progress_rate?: {
+                                percent?: number;
+                                status?: number;
+                            };
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -1988,6 +2018,10 @@ export default abstract class Client extends moments {
                                                 }>;
                                             };
                                         }>;
+                                    };
+                                    progress_rate?: {
+                                        percent?: number;
+                                        status?: number;
                                     };
                                 };
                             }

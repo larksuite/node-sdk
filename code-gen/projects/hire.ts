@@ -10966,10 +10966,10 @@ export default abstract class Client extends helpdesk {
              */
             update: async (
                 payload?: {
-                    data: {
-                        name: string;
-                        display_progress: number;
-                        head_count: number;
+                    data?: {
+                        name?: string;
+                        display_progress?: number;
+                        head_count?: number;
                         recruitment_type_id?: string;
                         employee_type_id?: string;
                         max_level_id?: string;
@@ -31803,10 +31803,10 @@ export default abstract class Client extends helpdesk {
                  */
                 update: async (
                     payload?: {
-                        data: {
-                            name: string;
-                            display_progress: number;
-                            head_count: number;
+                        data?: {
+                            name?: string;
+                            display_progress?: number;
+                            head_count?: number;
                             recruitment_type_id?: string;
                             employee_type_id?: string;
                             max_level_id?: string;

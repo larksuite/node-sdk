@@ -1203,6 +1203,8 @@ export default abstract class Client extends unified_kms_log {
                         meeting_type?: number;
                         page_size?: number;
                         page_token?: string;
+                        include_external_meetings?: boolean;
+                        include_webinar?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -1290,6 +1292,11 @@ export default abstract class Client extends unified_kms_log {
                                                         room_name?: string;
                                                     }>;
                                                     has_related_document?: boolean;
+                                                    ai_note?: boolean;
+                                                    is_external?: boolean;
+                                                    meeting_subtype?: number;
+                                                    meeting_instance_id?: string;
+                                                    number_of_webinar_viewers?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1328,6 +1335,8 @@ export default abstract class Client extends unified_kms_log {
                         meeting_type?: number;
                         page_size?: number;
                         page_token?: string;
+                        include_external_meetings?: boolean;
+                        include_webinar?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -1368,6 +1377,11 @@ export default abstract class Client extends unified_kms_log {
                                         room_name?: string;
                                     }>;
                                     has_related_document?: boolean;
+                                    ai_note?: boolean;
+                                    is_external?: boolean;
+                                    meeting_subtype?: number;
+                                    meeting_instance_id?: string;
+                                    number_of_webinar_viewers?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1406,6 +1420,7 @@ export default abstract class Client extends unified_kms_log {
                         room_id?: string;
                         page_size?: number;
                         page_token?: string;
+                        webinar_user_role?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -1495,6 +1510,8 @@ export default abstract class Client extends unified_kms_log {
                                                     time_in_meeting?: string;
                                                     leave_reason?: string;
                                                     accept_status?: number;
+                                                    is_external?: boolean;
+                                                    webinar_user_role?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1532,6 +1549,7 @@ export default abstract class Client extends unified_kms_log {
                         room_id?: string;
                         page_size?: number;
                         page_token?: string;
+                        webinar_user_role?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                 },
@@ -1574,6 +1592,8 @@ export default abstract class Client extends unified_kms_log {
                                     time_in_meeting?: string;
                                     leave_reason?: string;
                                     accept_status?: number;
+                                    is_external?: boolean;
+                                    webinar_user_role?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -5798,6 +5818,8 @@ export default abstract class Client extends unified_kms_log {
                             meeting_type?: number;
                             page_size?: number;
                             page_token?: string;
+                            include_external_meetings?: boolean;
+                            include_webinar?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
@@ -5887,6 +5909,11 @@ export default abstract class Client extends unified_kms_log {
                                                             room_name?: string;
                                                         }>;
                                                         has_related_document?: boolean;
+                                                        ai_note?: boolean;
+                                                        is_external?: boolean;
+                                                        meeting_subtype?: number;
+                                                        meeting_instance_id?: string;
+                                                        number_of_webinar_viewers?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5925,6 +5952,8 @@ export default abstract class Client extends unified_kms_log {
                             meeting_type?: number;
                             page_size?: number;
                             page_token?: string;
+                            include_external_meetings?: boolean;
+                            include_webinar?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
@@ -5965,6 +5994,11 @@ export default abstract class Client extends unified_kms_log {
                                             room_name?: string;
                                         }>;
                                         has_related_document?: boolean;
+                                        ai_note?: boolean;
+                                        is_external?: boolean;
+                                        meeting_subtype?: number;
+                                        meeting_instance_id?: string;
+                                        number_of_webinar_viewers?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -6003,6 +6037,7 @@ export default abstract class Client extends unified_kms_log {
                             room_id?: string;
                             page_size?: number;
                             page_token?: string;
+                            webinar_user_role?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
@@ -6094,6 +6129,8 @@ export default abstract class Client extends unified_kms_log {
                                                         time_in_meeting?: string;
                                                         leave_reason?: string;
                                                         accept_status?: number;
+                                                        is_external?: boolean;
+                                                        webinar_user_role?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -6131,6 +6168,7 @@ export default abstract class Client extends unified_kms_log {
                             room_id?: string;
                             page_size?: number;
                             page_token?: string;
+                            webinar_user_role?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
@@ -6173,6 +6211,8 @@ export default abstract class Client extends unified_kms_log {
                                         time_in_meeting?: string;
                                         leave_reason?: string;
                                         accept_status?: number;
+                                        is_external?: boolean;
+                                        webinar_user_role?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;

@@ -34,6 +34,244 @@ export default abstract class Client extends aily {
     apaas = {
         v1: {
             /**
+             * app
+             */
+            app: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: string; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/apaas/v1/apps`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        name?: Array<{
+                                                            language_code?: string;
+                                                            text?: string;
+                                                        }>;
+                                                        namespace?: string;
+                                                        created_at?: number;
+                                                        creator?: number;
+                                                        owner?: number;
+                                                        status?:
+                                                            | "pending_launch"
+                                                            | "enabled"
+                                                            | "disabled"
+                                                            | "stopped"
+                                                            | "unspecified";
+                                                        app_roles_info?: {
+                                                            admins?: Array<number>;
+                                                            developers?: Array<number>;
+                                                            test_users?: Array<number>;
+                                                            data_admins?: Array<number>;
+                                                        };
+                                                        icon?: string;
+                                                        description?: Array<{
+                                                            language_code?: string;
+                                                            text?: string;
+                                                        }>;
+                                                        type?:
+                                                            | "custom"
+                                                            | "client_isv_saas"
+                                                            | "client_isv_project";
+                                                        enable_status?:
+                                                            | "enabled"
+                                                            | "disabled";
+                                                        release_status?:
+                                                            | "released"
+                                                            | "unreleased";
+                                                        service_status?:
+                                                            | "available"
+                                                            | "unavailable";
+                                                        service_unavailable_reason?:
+                                                            | "from_isv"
+                                                            | "entitlement_expire";
+                                                        feature_set?:
+                                                            | "paid"
+                                                            | "free";
+                                                        charge_mode?:
+                                                            | "per_user_per_app"
+                                                            | "per_user"
+                                                            | "independent"
+                                                            | "free";
+                                                        isv_tenant?: {
+                                                            id?: string;
+                                                            name?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=app&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=apaas&resource=app&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: string; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        name?: Array<{
+                                            language_code?: string;
+                                            text?: string;
+                                        }>;
+                                        namespace?: string;
+                                        created_at?: number;
+                                        creator?: number;
+                                        owner?: number;
+                                        status?:
+                                            | "pending_launch"
+                                            | "enabled"
+                                            | "disabled"
+                                            | "stopped"
+                                            | "unspecified";
+                                        app_roles_info?: {
+                                            admins?: Array<number>;
+                                            developers?: Array<number>;
+                                            test_users?: Array<number>;
+                                            data_admins?: Array<number>;
+                                        };
+                                        icon?: string;
+                                        description?: Array<{
+                                            language_code?: string;
+                                            text?: string;
+                                        }>;
+                                        type?:
+                                            | "custom"
+                                            | "client_isv_saas"
+                                            | "client_isv_project";
+                                        enable_status?: "enabled" | "disabled";
+                                        release_status?:
+                                            | "released"
+                                            | "unreleased";
+                                        service_status?:
+                                            | "available"
+                                            | "unavailable";
+                                        service_unavailable_reason?:
+                                            | "from_isv"
+                                            | "entitlement_expire";
+                                        feature_set?: "paid" | "free";
+                                        charge_mode?:
+                                            | "per_user_per_app"
+                                            | "per_user"
+                                            | "independent"
+                                            | "free";
+                                        isv_tenant?: {
+                                            id?: string;
+                                            name?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/apps`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * application.audit_log
              */
             applicationAuditLog: {

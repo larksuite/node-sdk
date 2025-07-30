@@ -192,6 +192,240 @@ export default abstract class Client extends passport {
                 },
             },
             /**
+             * cost_allocation_detail
+             */
+            costAllocationDetail: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            cost_allocation_plan_id: string;
+                            pay_period: string;
+                            report_type: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/payroll/v1/cost_allocation_details`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    cost_allocation_report_datas?: Array<{
+                                                        data_summary_dimensions?: Array<{
+                                                            dimension_level?: number;
+                                                            dimension_type?: number;
+                                                            dimension_value_id?: string;
+                                                            enum_dimension?: {
+                                                                enum_value_id?: string;
+                                                                enum_key?: string;
+                                                            };
+                                                            dimension_value_lookup_info?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                                code?: string;
+                                                            };
+                                                            dimension_names?: Array<{
+                                                                locale?: string;
+                                                                value?: string;
+                                                                id?: string;
+                                                            }>;
+                                                            dimension_titles?: Array<{
+                                                                locale?: string;
+                                                                value?: string;
+                                                                id?: string;
+                                                            }>;
+                                                        }>;
+                                                        compensation_cost_item?: {
+                                                            number_of_individuals_for_payment?: number;
+                                                            compensation_costs?: Array<{
+                                                                compensation_cost_value?: string;
+                                                                i18n_names?: Array<{
+                                                                    locale?: string;
+                                                                    value?: string;
+                                                                    id?: string;
+                                                                }>;
+                                                            }>;
+                                                        };
+                                                        employment_id?: string;
+                                                    }>;
+                                                    cost_allocation_report_names?: Array<{
+                                                        locale?: string;
+                                                        value?: string;
+                                                        id?: string;
+                                                    }>;
+                                                    pay_period?: string;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=payroll&resource=cost_allocation_detail&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=payroll&resource=cost_allocation_detail&version=v1 document }
+                 *
+                 * 获取成本分摊报表明细数据
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            cost_allocation_plan_id: string;
+                            pay_period: string;
+                            report_type: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    cost_allocation_report_datas?: Array<{
+                                        data_summary_dimensions?: Array<{
+                                            dimension_level?: number;
+                                            dimension_type?: number;
+                                            dimension_value_id?: string;
+                                            enum_dimension?: {
+                                                enum_value_id?: string;
+                                                enum_key?: string;
+                                            };
+                                            dimension_value_lookup_info?: {
+                                                type?: string;
+                                                id?: string;
+                                                code?: string;
+                                            };
+                                            dimension_names?: Array<{
+                                                locale?: string;
+                                                value?: string;
+                                                id?: string;
+                                            }>;
+                                            dimension_titles?: Array<{
+                                                locale?: string;
+                                                value?: string;
+                                                id?: string;
+                                            }>;
+                                        }>;
+                                        compensation_cost_item?: {
+                                            number_of_individuals_for_payment?: number;
+                                            compensation_costs?: Array<{
+                                                compensation_cost_value?: string;
+                                                i18n_names?: Array<{
+                                                    locale?: string;
+                                                    value?: string;
+                                                    id?: string;
+                                                }>;
+                                            }>;
+                                        };
+                                        employment_id?: string;
+                                    }>;
+                                    cost_allocation_report_names?: Array<{
+                                        locale?: string;
+                                        value?: string;
+                                        id?: string;
+                                    }>;
+                                    pay_period?: string;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/payroll/v1/cost_allocation_details`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * cost_allocation_plan
              */
             costAllocationPlan: {

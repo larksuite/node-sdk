@@ -29,7 +29,7 @@ export default abstract class Client extends docx {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 云文档-文档
+     * 云文档-文件管理
      */
     drive = {
         /**
@@ -1029,7 +1029,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 事件
+         * 文件夹
          */
         file: {
             /**
@@ -2814,7 +2814,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 分片上传
+         * 素材
          */
         media: {
             /**
@@ -5238,7 +5238,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 事件
+             * 文件夹
              */
             file: {
                 /**
@@ -7052,7 +7052,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 分片上传
+             * 素材
              */
             media: {
                 /**

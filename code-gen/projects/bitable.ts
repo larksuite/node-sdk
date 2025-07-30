@@ -4328,7 +4328,7 @@ export default abstract class Client extends base {
                         field_names?: Array<string>;
                         sort?: Array<{ field_name?: string; desc?: boolean }>;
                         filter?: {
-                            conjunction?: "and" | "or";
+                            conjunction: "and" | "or";
                             conditions?: Array<{
                                 field_name: string;
                                 operator:
@@ -4533,7 +4533,7 @@ export default abstract class Client extends base {
                         field_names?: Array<string>;
                         sort?: Array<{ field_name?: string; desc?: boolean }>;
                         filter?: {
-                            conjunction?: "and" | "or";
+                            conjunction: "and" | "or";
                             conditions?: Array<{
                                 field_name: string;
                                 operator:
@@ -9908,7 +9908,7 @@ export default abstract class Client extends base {
                                 desc?: boolean;
                             }>;
                             filter?: {
-                                conjunction?: "and" | "or";
+                                conjunction: "and" | "or";
                                 conditions?: Array<{
                                     field_name: string;
                                     operator:
@@ -10118,7 +10118,7 @@ export default abstract class Client extends base {
                                 desc?: boolean;
                             }>;
                             filter?: {
-                                conjunction?: "and" | "or";
+                                conjunction: "and" | "or";
                                 conditions?: Array<{
                                     field_name: string;
                                     operator:
