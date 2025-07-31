@@ -492,10 +492,68 @@ router.post('/webhook/event', lark.adaptKoaRouter(eventDispatcher));
 server.use(router.routes());
 server.listen(3000);
 ```
-#### 自定义适配器
-如果要适配其它库编写的服务，目前需要自己来封装相应的适配器。将接收到的事件数据传递给实例化的`eventDispatcher`的invoke方法进行事件的处理即可：
+#### 和NextJS结合
 
 ```typescript
+// pages/api/webhook.ts
+import * as lark from '@larksuiteoapi/node-sdk';
+
+const client = new lark.Client({
+    appId: 'xxxxxxxxxxxxxxxxxxxxxxx',
+    appSecret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    appType: lark.AppType.SelfBuild
+});
+
+const eventDispatcher = new lark.EventDispatcher({
+    verificationToken: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    encryptKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+}).register({
+    'im.message.receive_v1': async (data) => {
+        const chatId = data.message.chat_id;
+
+        const res = await client.im.message.create({
+            params: {
+                receive_id_type: 'chat_id',
+            },
+            data: {
+                receive_id: chatId,
+                content: JSON.stringify({text: 'hello world'}),
+                msg_type: 'text'
+            },
+        });
+        return res;
+    }
+});
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    await lark.adaptNextjs(eventDispatcher, {
+        autoChallenge: true,
+    })(req, res);   
+};
+```
+
+#### 自定义适配器
+
+如果要适配其它库编写的服务，可以参考下述方式来调用已经封装的自定义适配器
+
+```typescript
+// 以 NextJS 为例
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    const result = await lark.adaptCustom(eventDispatcher, {
+        autoChallenge: true,
+    })(req.headers, req.body);
+    res.end(result);
+};
+```
+
+如果调用失败或者错误，请断点检查 `req.headers` 和 `req.body` 格式是否和下图中一致
+![](doc/request-body.png)
+
+
+如果需要自行封装，可参考下述逻辑，将接收到的事件数据传递给实例化的 `eventDispatcher` 的 invoke 方法进行事件的处理即可：
+
+```typescript
+// 注意这是伪代码
 const data = server.getData();
 const result = await dispatcher.invoke(data);
 server.sendResult(result);
