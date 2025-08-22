@@ -1784,7 +1784,8 @@ export default abstract class Client extends board {
                                 | "third_party"
                                 | "no_meeting"
                                 | "lark_live"
-                                | "unknown";
+                                | "unknown"
+                                | "third_party_meeting";
                             icon_type?: "vc" | "live" | "default";
                             description?: string;
                             meeting_url?: string;
@@ -1801,6 +1802,16 @@ export default abstract class Client extends board {
                                 auto_record?: boolean;
                                 open_lobby?: boolean;
                                 allow_attendees_start?: boolean;
+                            };
+                            third_party_meeting_settings?: {
+                                meeting_type?: string;
+                                meeting_id?: string;
+                                meeting_no?: string;
+                                password?: string;
+                                meeting_descriptions?: Array<{
+                                    lang?: string;
+                                    description?: string;
+                                }>;
                             };
                         };
                         visibility?: "default" | "public" | "private";
@@ -1887,7 +1898,8 @@ export default abstract class Client extends board {
                                             | "third_party"
                                             | "no_meeting"
                                             | "lark_live"
-                                            | "unknown";
+                                            | "unknown"
+                                            | "third_party_meeting";
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
@@ -1907,6 +1919,16 @@ export default abstract class Client extends board {
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
                                             allow_attendees_start?: boolean;
+                                        };
+                                        third_party_meeting_settings?: {
+                                            meeting_type?: string;
+                                            meeting_id?: string;
+                                            meeting_no?: string;
+                                            password?: string;
+                                            meeting_descriptions?: Array<{
+                                                lang?: string;
+                                                description?: string;
+                                            }>;
                                         };
                                     };
                                     visibility?:
@@ -2086,7 +2108,8 @@ export default abstract class Client extends board {
                                             | "third_party"
                                             | "no_meeting"
                                             | "lark_live"
-                                            | "unknown";
+                                            | "unknown"
+                                            | "third_party_meeting";
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
@@ -2106,6 +2129,16 @@ export default abstract class Client extends board {
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
                                             allow_attendees_start?: boolean;
+                                        };
+                                        third_party_meeting_settings?: {
+                                            meeting_type?: string;
+                                            meeting_id?: string;
+                                            meeting_no?: string;
+                                            password?: string;
+                                            meeting_descriptions?: Array<{
+                                                lang?: string;
+                                                description?: string;
+                                            }>;
                                         };
                                     };
                                     visibility?:
@@ -2280,7 +2313,8 @@ export default abstract class Client extends board {
                                             | "third_party"
                                             | "no_meeting"
                                             | "lark_live"
-                                            | "unknown";
+                                            | "unknown"
+                                            | "third_party_meeting";
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
@@ -2511,7 +2545,8 @@ export default abstract class Client extends board {
                                             | "third_party"
                                             | "no_meeting"
                                             | "lark_live"
-                                            | "unknown";
+                                            | "unknown"
+                                            | "third_party_meeting";
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
@@ -2619,7 +2654,8 @@ export default abstract class Client extends board {
                                 | "third_party"
                                 | "no_meeting"
                                 | "lark_live"
-                                | "unknown";
+                                | "unknown"
+                                | "third_party_meeting";
                             icon_type?: "vc" | "live" | "default";
                             description?: string;
                             meeting_url?: string;
@@ -2636,6 +2672,16 @@ export default abstract class Client extends board {
                                 auto_record?: boolean;
                                 open_lobby?: boolean;
                                 allow_attendees_start?: boolean;
+                            };
+                            third_party_meeting_settings?: {
+                                meeting_type?: string;
+                                meeting_id?: string;
+                                meeting_no?: string;
+                                password?: string;
+                                meeting_descriptions?: Array<{
+                                    lang?: string;
+                                    description?: string;
+                                }>;
                             };
                         };
                         visibility?: "default" | "public" | "private";
@@ -2724,7 +2770,8 @@ export default abstract class Client extends board {
                                             | "third_party"
                                             | "no_meeting"
                                             | "lark_live"
-                                            | "unknown";
+                                            | "unknown"
+                                            | "third_party_meeting";
                                         icon_type?: "vc" | "live" | "default";
                                         description?: string;
                                         meeting_url?: string;
@@ -2744,6 +2791,16 @@ export default abstract class Client extends board {
                                             auto_record?: boolean;
                                             open_lobby?: boolean;
                                             allow_attendees_start?: boolean;
+                                        };
+                                        third_party_meeting_settings?: {
+                                            meeting_type?: string;
+                                            meeting_id?: string;
+                                            meeting_no?: string;
+                                            password?: string;
+                                            meeting_descriptions?: Array<{
+                                                lang?: string;
+                                                description?: string;
+                                            }>;
                                         };
                                     };
                                     visibility?:
@@ -5532,7 +5589,8 @@ export default abstract class Client extends board {
                                     | "third_party"
                                     | "no_meeting"
                                     | "lark_live"
-                                    | "unknown";
+                                    | "unknown"
+                                    | "third_party_meeting";
                                 icon_type?: "vc" | "live" | "default";
                                 description?: string;
                                 meeting_url?: string;
@@ -5552,6 +5610,16 @@ export default abstract class Client extends board {
                                     auto_record?: boolean;
                                     open_lobby?: boolean;
                                     allow_attendees_start?: boolean;
+                                };
+                                third_party_meeting_settings?: {
+                                    meeting_type?: string;
+                                    meeting_id?: string;
+                                    meeting_no?: string;
+                                    password?: string;
+                                    meeting_descriptions?: Array<{
+                                        lang?: string;
+                                        description?: string;
+                                    }>;
                                 };
                             };
                             visibility?: "default" | "public" | "private";
@@ -5638,7 +5706,8 @@ export default abstract class Client extends board {
                                                 | "third_party"
                                                 | "no_meeting"
                                                 | "lark_live"
-                                                | "unknown";
+                                                | "unknown"
+                                                | "third_party_meeting";
                                             icon_type?:
                                                 | "vc"
                                                 | "live"
@@ -5661,6 +5730,16 @@ export default abstract class Client extends board {
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;
                                                 allow_attendees_start?: boolean;
+                                            };
+                                            third_party_meeting_settings?: {
+                                                meeting_type?: string;
+                                                meeting_id?: string;
+                                                meeting_no?: string;
+                                                password?: string;
+                                                meeting_descriptions?: Array<{
+                                                    lang?: string;
+                                                    description?: string;
+                                                }>;
                                             };
                                         };
                                         visibility?:
@@ -5843,7 +5922,8 @@ export default abstract class Client extends board {
                                                 | "third_party"
                                                 | "no_meeting"
                                                 | "lark_live"
-                                                | "unknown";
+                                                | "unknown"
+                                                | "third_party_meeting";
                                             icon_type?:
                                                 | "vc"
                                                 | "live"
@@ -5866,6 +5946,16 @@ export default abstract class Client extends board {
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;
                                                 allow_attendees_start?: boolean;
+                                            };
+                                            third_party_meeting_settings?: {
+                                                meeting_type?: string;
+                                                meeting_id?: string;
+                                                meeting_no?: string;
+                                                password?: string;
+                                                meeting_descriptions?: Array<{
+                                                    lang?: string;
+                                                    description?: string;
+                                                }>;
                                             };
                                         };
                                         visibility?:
@@ -6040,7 +6130,8 @@ export default abstract class Client extends board {
                                                 | "third_party"
                                                 | "no_meeting"
                                                 | "lark_live"
-                                                | "unknown";
+                                                | "unknown"
+                                                | "third_party_meeting";
                                             icon_type?:
                                                 | "vc"
                                                 | "live"
@@ -6274,7 +6365,8 @@ export default abstract class Client extends board {
                                                 | "third_party"
                                                 | "no_meeting"
                                                 | "lark_live"
-                                                | "unknown";
+                                                | "unknown"
+                                                | "third_party_meeting";
                                             icon_type?:
                                                 | "vc"
                                                 | "live"
@@ -6385,7 +6477,8 @@ export default abstract class Client extends board {
                                     | "third_party"
                                     | "no_meeting"
                                     | "lark_live"
-                                    | "unknown";
+                                    | "unknown"
+                                    | "third_party_meeting";
                                 icon_type?: "vc" | "live" | "default";
                                 description?: string;
                                 meeting_url?: string;
@@ -6405,6 +6498,16 @@ export default abstract class Client extends board {
                                     auto_record?: boolean;
                                     open_lobby?: boolean;
                                     allow_attendees_start?: boolean;
+                                };
+                                third_party_meeting_settings?: {
+                                    meeting_type?: string;
+                                    meeting_id?: string;
+                                    meeting_no?: string;
+                                    password?: string;
+                                    meeting_descriptions?: Array<{
+                                        lang?: string;
+                                        description?: string;
+                                    }>;
                                 };
                             };
                             visibility?: "default" | "public" | "private";
@@ -6493,7 +6596,8 @@ export default abstract class Client extends board {
                                                 | "third_party"
                                                 | "no_meeting"
                                                 | "lark_live"
-                                                | "unknown";
+                                                | "unknown"
+                                                | "third_party_meeting";
                                             icon_type?:
                                                 | "vc"
                                                 | "live"
@@ -6516,6 +6620,16 @@ export default abstract class Client extends board {
                                                 auto_record?: boolean;
                                                 open_lobby?: boolean;
                                                 allow_attendees_start?: boolean;
+                                            };
+                                            third_party_meeting_settings?: {
+                                                meeting_type?: string;
+                                                meeting_id?: string;
+                                                meeting_no?: string;
+                                                password?: string;
+                                                meeting_descriptions?: Array<{
+                                                    lang?: string;
+                                                    description?: string;
+                                                }>;
                                             };
                                         };
                                         visibility?:

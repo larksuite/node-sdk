@@ -512,7 +512,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 投递
+         * 入职
          */
         application: {
             /**
@@ -1537,6 +1537,7 @@ export default abstract class Client extends helpdesk {
                                         job_offered?: string;
                                         job_grade_id?: string;
                                         common_attachment_id_list?: Array<string>;
+                                        pathway_id?: string;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -6464,6 +6465,14 @@ export default abstract class Client extends helpdesk {
                                                                     en_us?: string;
                                                                 };
                                                             }>;
+                                                            related_dimension_config?: {
+                                                                type?: number;
+                                                                related_dimension_settings?: Array<{
+                                                                    dimension_id?: string;
+                                                                    related_operator_type?: number;
+                                                                    dimension_option_ids?: Array<string>;
+                                                                }>;
+                                                            };
                                                         }>;
                                                     }>;
                                                 }>;
@@ -6578,6 +6587,14 @@ export default abstract class Client extends helpdesk {
                                                     en_us?: string;
                                                 };
                                             }>;
+                                            related_dimension_config?: {
+                                                type?: number;
+                                                related_dimension_settings?: Array<{
+                                                    dimension_id?: string;
+                                                    related_operator_type?: number;
+                                                    dimension_option_ids?: Array<string>;
+                                                }>;
+                                            };
                                         }>;
                                     }>;
                                 }>;
@@ -10506,6 +10523,11 @@ export default abstract class Client extends helpdesk {
                                     position_id?: string;
                                     completion_time?: string;
                                     approval_status?: number;
+                                    count_data?: {
+                                        offer_count?: number;
+                                        pre_hire_count?: number;
+                                        complete_count?: number;
+                                    };
                                 };
                             };
                         }
@@ -10742,6 +10764,11 @@ export default abstract class Client extends helpdesk {
                                     position_id?: string;
                                     completion_time?: string;
                                     approval_status?: number;
+                                    count_data?: {
+                                        offer_count?: number;
+                                        pre_hire_count?: number;
+                                        complete_count?: number;
+                                    };
                                 }>;
                             };
                         }
@@ -10935,6 +10962,11 @@ export default abstract class Client extends helpdesk {
                                     position_id?: string;
                                     completion_time?: string;
                                     approval_status?: number;
+                                    count_data?: {
+                                        offer_count?: number;
+                                        pre_hire_count?: number;
+                                        complete_count?: number;
+                                    };
                                 }>;
                             };
                         }
@@ -12157,6 +12189,7 @@ export default abstract class Client extends helpdesk {
                             position_id?: string;
                             job_offered?: string;
                             job_grade_id?: string;
+                            pathway_id?: string;
                         };
                         salary_info?: {
                             currency: string;
@@ -12235,6 +12268,7 @@ export default abstract class Client extends helpdesk {
                                     position_id?: string;
                                     job_offered?: string;
                                     job_grade_id?: string;
+                                    pathway_id?: string;
                                 };
                                 salary_info?: {
                                     currency: string;
@@ -12429,6 +12463,7 @@ export default abstract class Client extends helpdesk {
                                         job_offered?: string;
                                         job_grade_id?: string;
                                         common_attachment_id_list?: Array<string>;
+                                        pathway_id?: string;
                                     };
                                     salary_plan?: {
                                         currency?: string;
@@ -12735,6 +12770,7 @@ export default abstract class Client extends helpdesk {
                             position_id?: string;
                             job_offered?: string;
                             job_grade_id?: string;
+                            pathway_id?: string;
                         };
                         salary_info?: {
                             currency: string;
@@ -12812,6 +12848,7 @@ export default abstract class Client extends helpdesk {
                                     position_id?: string;
                                     job_offered?: string;
                                     job_grade_id?: string;
+                                    pathway_id?: string;
                                 };
                                 salary_info?: {
                                     currency: string;
@@ -13044,6 +13081,75 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
+         * Offer 审批流配置（灰度租户可见）
+         */
+        offerApprovalTemplate: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_approval_template&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_approval_template/list document }
+             *
+             * 获取 Offer 审批流配置列表
+             *
+             * 获取 Offer 审批流配置列表
+             */
+            list: async (
+                payload?: {
+                    params?: {
+                        page_token?: string;
+                        page_size?: number;
+                        department_id_type?:
+                            | "open_department_id"
+                            | "department_id"
+                            | "people_admin_department_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    id?: string;
+                                    name?: { zh_cn?: string; en_us?: string };
+                                    create_time?: string;
+                                    remark?: string;
+                                    department_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        en_name?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/offer_approval_templates`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * offer_custom_field
          */
         offerCustomField: {
@@ -13139,6 +13245,276 @@ export default abstract class Client extends helpdesk {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/hire/v1/offer_schemas/:offer_schema_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * portal_apply_schema
+         */
+        portalApplySchema: {
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/portal_apply_schemas`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    name?: string;
+                                                    scenarios?: Array<number>;
+                                                    objects?: Array<{
+                                                        id?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        setting?: {
+                                                            object_type?: number;
+                                                            config?: {
+                                                                options?: Array<{
+                                                                    key?: string;
+                                                                    name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    description?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
+                                                                    active_status?: number;
+                                                                }>;
+                                                            };
+                                                        };
+                                                        is_customized?: boolean;
+                                                        is_required?: boolean;
+                                                        is_visible?: boolean;
+                                                        active_status?: number;
+                                                        children_list?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            setting?: {
+                                                                object_type?: number;
+                                                                config?: {
+                                                                    options?: Array<{
+                                                                        key?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        description?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        active_status?: number;
+                                                                    }>;
+                                                                };
+                                                            };
+                                                            parent_id?: string;
+                                                            is_customized?: boolean;
+                                                            is_required?: boolean;
+                                                            is_visible?: boolean;
+                                                            active_status?: number;
+                                                        }>;
+                                                    }>;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=portal_apply_schema&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=portal_apply_schema&version=v1 document }
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    scenarios?: Array<number>;
+                                    objects?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        setting?: {
+                                            object_type?: number;
+                                            config?: {
+                                                options?: Array<{
+                                                    key?: string;
+                                                    name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    description?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
+                                                    active_status?: number;
+                                                }>;
+                                            };
+                                        };
+                                        is_customized?: boolean;
+                                        is_required?: boolean;
+                                        is_visible?: boolean;
+                                        active_status?: number;
+                                        children_list?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            parent_id?: string;
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            is_visible?: boolean;
+                                            active_status?: number;
+                                        }>;
+                                    }>;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/portal_apply_schemas`,
                             path
                         ),
                         method: "GET",
@@ -21186,7 +21562,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 投递
+             * 入职
              */
             application: {
                 /**
@@ -22218,6 +22594,7 @@ export default abstract class Client extends helpdesk {
                                             job_offered?: string;
                                             job_grade_id?: string;
                                             common_attachment_id_list?: Array<string>;
+                                            pathway_id?: string;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -27268,6 +27645,14 @@ export default abstract class Client extends helpdesk {
                                                                         en_us?: string;
                                                                     };
                                                                 }>;
+                                                                related_dimension_config?: {
+                                                                    type?: number;
+                                                                    related_dimension_settings?: Array<{
+                                                                        dimension_id?: string;
+                                                                        related_operator_type?: number;
+                                                                        dimension_option_ids?: Array<string>;
+                                                                    }>;
+                                                                };
                                                             }>;
                                                         }>;
                                                     }>;
@@ -27385,6 +27770,14 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                 }>;
+                                                related_dimension_config?: {
+                                                    type?: number;
+                                                    related_dimension_settings?: Array<{
+                                                        dimension_id?: string;
+                                                        related_operator_type?: number;
+                                                        dimension_option_ids?: Array<string>;
+                                                    }>;
+                                                };
                                             }>;
                                         }>;
                                     }>;
@@ -31340,6 +31733,11 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         completion_time?: string;
                                         approval_status?: number;
+                                        count_data?: {
+                                            offer_count?: number;
+                                            pre_hire_count?: number;
+                                            complete_count?: number;
+                                        };
                                     };
                                 };
                             }
@@ -31579,6 +31977,11 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         completion_time?: string;
                                         approval_status?: number;
+                                        count_data?: {
+                                            offer_count?: number;
+                                            pre_hire_count?: number;
+                                            complete_count?: number;
+                                        };
                                     }>;
                                 };
                             }
@@ -31772,6 +32175,11 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         completion_time?: string;
                                         approval_status?: number;
+                                        count_data?: {
+                                            offer_count?: number;
+                                            pre_hire_count?: number;
+                                            complete_count?: number;
+                                        };
                                     }>;
                                 };
                             }
@@ -33021,6 +33429,7 @@ export default abstract class Client extends helpdesk {
                                 position_id?: string;
                                 job_offered?: string;
                                 job_grade_id?: string;
+                                pathway_id?: string;
                             };
                             salary_info?: {
                                 currency: string;
@@ -33099,6 +33508,7 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         job_offered?: string;
                                         job_grade_id?: string;
+                                        pathway_id?: string;
                                     };
                                     salary_info?: {
                                         currency: string;
@@ -33293,6 +33703,7 @@ export default abstract class Client extends helpdesk {
                                             job_offered?: string;
                                             job_grade_id?: string;
                                             common_attachment_id_list?: Array<string>;
+                                            pathway_id?: string;
                                         };
                                         salary_plan?: {
                                             currency?: string;
@@ -33604,6 +34015,7 @@ export default abstract class Client extends helpdesk {
                                 position_id?: string;
                                 job_offered?: string;
                                 job_grade_id?: string;
+                                pathway_id?: string;
                             };
                             salary_info?: {
                                 currency: string;
@@ -33681,6 +34093,7 @@ export default abstract class Client extends helpdesk {
                                         position_id?: string;
                                         job_offered?: string;
                                         job_grade_id?: string;
+                                        pathway_id?: string;
                                     };
                                     salary_info?: {
                                         currency: string;
@@ -33919,6 +34332,78 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
+             * Offer 审批流配置（灰度租户可见）
+             */
+            offerApprovalTemplate: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=offer_approval_template&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/ukTMukTMukTM/uMzM1YjLzMTN24yMzUjN/hire-v1/offer_approval_template/list document }
+                 *
+                 * 获取 Offer 审批流配置列表
+                 *
+                 * 获取 Offer 审批流配置列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            page_token?: string;
+                            page_size?: number;
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_admin_department_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        create_time?: string;
+                                        remark?: string;
+                                        department_list?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                            en_name?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/offer_approval_templates`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * offer_custom_field
              */
             offerCustomField: {
@@ -34020,6 +34505,278 @@ export default abstract class Client extends helpdesk {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/hire/v1/offer_schemas/:offer_schema_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * portal_apply_schema
+             */
+            portalApplySchema: {
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/hire/v1/portal_apply_schemas`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        name?: string;
+                                                        scenarios?: Array<number>;
+                                                        objects?: Array<{
+                                                            id?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            setting?: {
+                                                                object_type?: number;
+                                                                config?: {
+                                                                    options?: Array<{
+                                                                        key?: string;
+                                                                        name?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        description?: {
+                                                                            zh_cn?: string;
+                                                                            en_us?: string;
+                                                                        };
+                                                                        active_status?: number;
+                                                                    }>;
+                                                                };
+                                                            };
+                                                            is_customized?: boolean;
+                                                            is_required?: boolean;
+                                                            is_visible?: boolean;
+                                                            active_status?: number;
+                                                            children_list?: Array<{
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                description?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                                setting?: {
+                                                                    object_type?: number;
+                                                                    config?: {
+                                                                        options?: Array<{
+                                                                            key?: string;
+                                                                            name?: {
+                                                                                zh_cn?: string;
+                                                                                en_us?: string;
+                                                                            };
+                                                                            description?: {
+                                                                                zh_cn?: string;
+                                                                                en_us?: string;
+                                                                            };
+                                                                            active_status?: number;
+                                                                        }>;
+                                                                    };
+                                                                };
+                                                                parent_id?: string;
+                                                                is_customized?: boolean;
+                                                                is_required?: boolean;
+                                                                is_visible?: boolean;
+                                                                active_status?: number;
+                                                            }>;
+                                                        }>;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=portal_apply_schema&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=hire&resource=portal_apply_schema&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        scenarios?: Array<number>;
+                                        objects?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            setting?: {
+                                                object_type?: number;
+                                                config?: {
+                                                    options?: Array<{
+                                                        key?: string;
+                                                        name?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        description?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        active_status?: number;
+                                                    }>;
+                                                };
+                                            };
+                                            is_customized?: boolean;
+                                            is_required?: boolean;
+                                            is_visible?: boolean;
+                                            active_status?: number;
+                                            children_list?: Array<{
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                description?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                setting?: {
+                                                    object_type?: number;
+                                                    config?: {
+                                                        options?: Array<{
+                                                            key?: string;
+                                                            name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            description?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            active_status?: number;
+                                                        }>;
+                                                    };
+                                                };
+                                                parent_id?: string;
+                                                is_customized?: boolean;
+                                                is_required?: boolean;
+                                                is_visible?: boolean;
+                                                active_status?: number;
+                                            }>;
+                                        }>;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/portal_apply_schemas`,
                                 path
                             ),
                             method: "GET",

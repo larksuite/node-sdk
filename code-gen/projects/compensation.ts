@@ -800,6 +800,735 @@ export default abstract class Client extends comment_sdk {
                 },
             },
             /**
+             * lump_sum_payment
+             */
+            lumpSumPayment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_create&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 */
+                batchCreate: async (
+                    payload?: {
+                        data?: {
+                            records?: Array<{
+                                unique_id: string;
+                                user_id: string;
+                                total_amount: string;
+                                binding_period: number;
+                                currency_id: string;
+                                issuance_frequency: number;
+                                item_id: string;
+                                reference_period_start_date?: string;
+                                reference_period_end_date?: string;
+                                details: Array<{
+                                    issuance_amount: string;
+                                    issuance_status:
+                                        | "to_be_issued"
+                                        | "not_issued";
+                                    issuance_way:
+                                        | "with_salary"
+                                        | "with_cash"
+                                        | "with_year_end_bonus";
+                                    issuance_time: string;
+                                    belong_time: string;
+                                    issuance_country_region_id?: string;
+                                    issuance_pay_group_id?: string;
+                                }>;
+                                remark?: string;
+                            }>;
+                        };
+                        params: {
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    operate_results?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        code?: number;
+                                        message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_create`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_remove&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_remove&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 */
+                batchRemove: async (
+                    payload?: {
+                        data?: { record_ids?: Array<string>; reason?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    operate_results?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        code?: number;
+                                        message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_remove`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_update&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 */
+                batchUpdate: async (
+                    payload?: {
+                        data?: {
+                            records?: Array<{
+                                id?: string;
+                                total_amount: string;
+                                binding_period?: number;
+                                currency_id: string;
+                                issuance_frequency: number;
+                                remark?: string;
+                                reference_period_start_date?: string;
+                                reference_period_end_date?: string;
+                                details: Array<{
+                                    id?: string;
+                                    issuance_amount?: string;
+                                    issuance_status?:
+                                        | "to_be_issued"
+                                        | "not_issued";
+                                    issuance_way?:
+                                        | "with_salary"
+                                        | "with_cash"
+                                        | "with_year_end_bonus";
+                                    issuance_time?: string;
+                                    belong_time?: string;
+                                    issuance_country_region_id?: string;
+                                    issuance_pay_group_id?: string;
+                                }>;
+                            }>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    operate_results?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        code?: number;
+                                        message?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/batch_update`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryWithIterator: async (
+                    payload?: {
+                        data?: {
+                            ids?: Array<string>;
+                            unique_ids?: Array<string>;
+                            user_ids?: Array<string>;
+                            item_ids?: Array<string>;
+                            create_time_gte?: string;
+                            create_time_lte?: string;
+                            modify_time_gte?: string;
+                            modify_time_lte?: string;
+                            company_ids?: Array<string>;
+                            service_company_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            job_family_ids?: Array<string>;
+                            job_level_ids?: Array<string>;
+                            work_location_ids?: Array<string>;
+                            employee_type_ids?: Array<string>;
+                            onboard_date_gte?: string;
+                            onboard_date_lte?: string;
+                            offboard_date_gte?: string;
+                            offboard_date_lte?: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    records?: Array<{
+                                                        id?: string;
+                                                        unique_id?: string;
+                                                        user_id?: string;
+                                                        total_amount?: string;
+                                                        binding_period?: number;
+                                                        currency_id?: string;
+                                                        issuance_frequency?: number;
+                                                        item_id?: string;
+                                                        remark?: string;
+                                                        issuance_detail_text?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                        };
+                                                        apply_source?: number;
+                                                        return_amount_before_tax?: string;
+                                                        return_amount_after_tax?: string;
+                                                        binding_period_offboarding_type?:
+                                                            | "yes"
+                                                            | "no"
+                                                            | "default";
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                        reference_period_start_date?: string;
+                                                        reference_period_end_date?: string;
+                                                        details?: Array<{
+                                                            id?: string;
+                                                            record_id?: string;
+                                                            user_id?: string;
+                                                            issuance_amount?: string;
+                                                            issuance_status?:
+                                                                | "to_be_issued"
+                                                                | "not_issued";
+                                                            issuance_way?:
+                                                                | "with_salary"
+                                                                | "with_cash"
+                                                                | "with_year_end_bonus";
+                                                            issuance_time?: string;
+                                                            currency_id?: string;
+                                                            belong_time?: string;
+                                                            create_time?: string;
+                                                            modify_time?: string;
+                                                            issuance_country_region_id?: string;
+                                                            issuance_pay_group_id?: string;
+                                                        }>;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data?: {
+                            ids?: Array<string>;
+                            unique_ids?: Array<string>;
+                            user_ids?: Array<string>;
+                            item_ids?: Array<string>;
+                            create_time_gte?: string;
+                            create_time_lte?: string;
+                            modify_time_gte?: string;
+                            modify_time_lte?: string;
+                            company_ids?: Array<string>;
+                            service_company_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            job_family_ids?: Array<string>;
+                            job_level_ids?: Array<string>;
+                            work_location_ids?: Array<string>;
+                            employee_type_ids?: Array<string>;
+                            onboard_date_gte?: string;
+                            onboard_date_lte?: string;
+                            offboard_date_gte?: string;
+                            offboard_date_lte?: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    records?: Array<{
+                                        id?: string;
+                                        unique_id?: string;
+                                        user_id?: string;
+                                        total_amount?: string;
+                                        binding_period?: number;
+                                        currency_id?: string;
+                                        issuance_frequency?: number;
+                                        item_id?: string;
+                                        remark?: string;
+                                        issuance_detail_text?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        apply_source?: number;
+                                        return_amount_before_tax?: string;
+                                        return_amount_after_tax?: string;
+                                        binding_period_offboarding_type?:
+                                            | "yes"
+                                            | "no"
+                                            | "default";
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        reference_period_start_date?: string;
+                                        reference_period_end_date?: string;
+                                        details?: Array<{
+                                            id?: string;
+                                            record_id?: string;
+                                            user_id?: string;
+                                            issuance_amount?: string;
+                                            issuance_status?:
+                                                | "to_be_issued"
+                                                | "not_issued";
+                                            issuance_way?:
+                                                | "with_salary"
+                                                | "with_cash"
+                                                | "with_year_end_bonus";
+                                            issuance_time?: string;
+                                            currency_id?: string;
+                                            belong_time?: string;
+                                            create_time?: string;
+                                            modify_time?: string;
+                                            issuance_country_region_id?: string;
+                                            issuance_pay_group_id?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                queryDetailWithIterator: async (
+                    payload?: {
+                        data?: {
+                            ids?: Array<string>;
+                            record_ids?: Array<string>;
+                            record_unique_ids?: Array<string>;
+                            issuance_ways?: Array<
+                                | "with_salary"
+                                | "with_cash"
+                                | "with_physical_distribution"
+                                | "with_year_end_bonus"
+                            >;
+                            issuance_statuses?: Array<
+                                "to_be_issued" | "not_issued"
+                            >;
+                            user_ids?: Array<string>;
+                            item_ids?: Array<string>;
+                            issuance_date_gte?: string;
+                            issuance_date_lte?: string;
+                            create_time_gte?: string;
+                            create_time_lte?: string;
+                            modify_time_gte?: string;
+                            modify_time_lte?: string;
+                            company_ids?: Array<string>;
+                            service_company_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            job_family_ids?: Array<string>;
+                            job_level_ids?: Array<string>;
+                            work_location_ids?: Array<string>;
+                            employee_type_ids?: Array<string>;
+                            onboard_date_gte?: string;
+                            onboard_date_lte?: string;
+                            offboard_date_gte?: string;
+                            offboard_date_lte?: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query_detail`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    records?: Array<{
+                                                        id?: string;
+                                                        record_id?: string;
+                                                        user_id?: string;
+                                                        issuance_amount?: string;
+                                                        issuance_status?:
+                                                            | "to_be_issued"
+                                                            | "not_issued";
+                                                        issuance_way?:
+                                                            | "with_salary"
+                                                            | "with_cash"
+                                                            | "with_year_end_bonus";
+                                                        issuance_time?: string;
+                                                        currency_id?: string;
+                                                        belong_time?: string;
+                                                        create_time?: string;
+                                                        modify_time?: string;
+                                                        issuance_country_region_id?: string;
+                                                        issuance_pay_group_id?: string;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=compensation&resource=lump_sum_payment&apiName=query_detail&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_detail&project=compensation&resource=lump_sum_payment&version=v1 document }
+                 */
+                queryDetail: async (
+                    payload?: {
+                        data?: {
+                            ids?: Array<string>;
+                            record_ids?: Array<string>;
+                            record_unique_ids?: Array<string>;
+                            issuance_ways?: Array<
+                                | "with_salary"
+                                | "with_cash"
+                                | "with_physical_distribution"
+                                | "with_year_end_bonus"
+                            >;
+                            issuance_statuses?: Array<
+                                "to_be_issued" | "not_issued"
+                            >;
+                            user_ids?: Array<string>;
+                            item_ids?: Array<string>;
+                            issuance_date_gte?: string;
+                            issuance_date_lte?: string;
+                            create_time_gte?: string;
+                            create_time_lte?: string;
+                            modify_time_gte?: string;
+                            modify_time_lte?: string;
+                            company_ids?: Array<string>;
+                            service_company_ids?: Array<string>;
+                            department_ids?: Array<string>;
+                            job_family_ids?: Array<string>;
+                            job_level_ids?: Array<string>;
+                            work_location_ids?: Array<string>;
+                            employee_type_ids?: Array<string>;
+                            onboard_date_gte?: string;
+                            onboard_date_lte?: string;
+                            offboard_date_gte?: string;
+                            offboard_date_lte?: string;
+                        };
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            user_id_type:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    records?: Array<{
+                                        id?: string;
+                                        record_id?: string;
+                                        user_id?: string;
+                                        issuance_amount?: string;
+                                        issuance_status?:
+                                            | "to_be_issued"
+                                            | "not_issued";
+                                        issuance_way?:
+                                            | "with_salary"
+                                            | "with_cash"
+                                            | "with_year_end_bonus";
+                                        issuance_time?: string;
+                                        currency_id?: string;
+                                        belong_time?: string;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        issuance_country_region_id?: string;
+                                        issuance_pay_group_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/compensation/v1/lump_sum_payment/query_detail`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * plan
              */
             plan: {

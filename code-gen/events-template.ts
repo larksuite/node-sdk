@@ -2625,6 +2625,52 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.pathway.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        pathway_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.pathway.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        pathway_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.pathway.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        pathway_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.pre_hire.onboarding_task_changed_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2708,6 +2754,7 @@ export interface IHandles extends IOtherEventHandles {
         flow_definition_id?: string;
         node_definition_id?: string;
         node_id?: string;
+        node_id_str?: string;
     }) => Promise<any> | any;
     /**
          

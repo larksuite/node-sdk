@@ -29205,6 +29205,10 @@ export default abstract class Client extends contract {
                                                             field?: string;
                                                             before?: string;
                                                             after?: string;
+                                                            ext?: {
+                                                                id?: string;
+                                                                usage?: string;
+                                                            };
                                                         }>;
                                                         operator?: string;
                                                         operation_type?: number;
@@ -29274,6 +29278,10 @@ export default abstract class Client extends contract {
                                             field?: string;
                                             before?: string;
                                             after?: string;
+                                            ext?: {
+                                                id?: string;
+                                                usage?: string;
+                                            };
                                         }>;
                                         operator?: string;
                                         operation_type?: number;
@@ -31154,6 +31162,13 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         archive_cpst_plan_id?: string;
+                                        individuals_with_headcount_or_not?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                 };
                             }
@@ -33003,6 +33018,13 @@ export default abstract class Client extends contract {
                                                             }>;
                                                         };
                                                         archive_cpst_plan_id?: string;
+                                                        individuals_with_headcount_or_not?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -34328,6 +34350,13 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         archive_cpst_plan_id?: string;
+                                        individuals_with_headcount_or_not?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -35906,6 +35935,90 @@ export default abstract class Client extends contract {
              */
             job: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job&apiName=batch_get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=job&version=v2 document }
+                 *
+                 * 批量获取职务信息
+                 */
+                batchGet: async (
+                    payload?: {
+                        data?: {
+                            job_ids?: Array<string>;
+                            job_codes?: Array<string>;
+                            fields?: Array<string>;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        code?: string;
+                                        name: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        description?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        active: boolean;
+                                        job_title?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        pathway_id?: string;
+                                        job_family_id_list?: Array<string>;
+                                        job_level_id_list?: Array<string>;
+                                        working_hours_type_id?: string;
+                                        effective_time: string;
+                                        expiration_time?: string;
+                                        custom_fields?: Array<{
+                                            field_name: string;
+                                            value: string;
+                                        }>;
+                                        created_by?: string;
+                                        created_time?: string;
+                                        updated_by?: string;
+                                        updated_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/jobs/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job&apiName=get&version=v2 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=corehr&resource=job&version=v2 document }
@@ -36039,6 +36152,79 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job&apiName=query_multi_timeline&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_multi_timeline&project=corehr&resource=job&version=v2 document }
+                 *
+                 * 查询生效时间在指定时间范围的职务
+                 */
+                queryMultiTimeline: async (
+                    payload?: {
+                        data: {
+                            job_ids: Array<string>;
+                            start_date?: string;
+                            end_date?: string;
+                            fields?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        job_version_data?: Array<{
+                                            job_id?: string;
+                                            job_version_id?: string;
+                                            job_names?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            effective_date?: string;
+                                            expiration_date?: string;
+                                            active?: boolean;
+                                            descriptions?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            code?: string;
+                                            job_titles?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            job_family_ids?: Array<string>;
+                                            job_level_ids?: Array<string>;
+                                            pathway_id?: string;
+                                            working_hours_type_id?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/jobs/query_multi_timeline`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -37042,6 +37228,74 @@ export default abstract class Client extends contract {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/corehr/v2/job_families/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=job_family&apiName=query_multi_timeline&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query_multi_timeline&project=corehr&resource=job_family&version=v2 document }
+                 *
+                 * 查询生效时间在指定时间范围的序列
+                 */
+                queryMultiTimeline: async (
+                    payload?: {
+                        data: {
+                            job_family_ids: Array<string>;
+                            start_date?: string;
+                            end_date?: string;
+                            fields?: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        job_family_version_data?: Array<{
+                                            job_family_id?: string;
+                                            job_family_version_id?: string;
+                                            job_family_names?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            effective_date?: string;
+                                            expiration_date?: string;
+                                            active?: boolean;
+                                            descriptions?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                            selectable?: boolean;
+                                            parent_job_family_id?: string;
+                                            pathway_ids?: Array<string>;
+                                            code?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/job_families/query_multi_timeline`,
                                 path
                             ),
                             method: "POST",
@@ -38478,6 +38732,235 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * pathway
+             */
+            pathway: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pathway&apiName=active&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=active&project=corehr&resource=pathway&version=v2 document }
+                 *
+                 * 启/停用通道
+                 */
+                active: async (
+                    payload?: {
+                        data: { pathway_id: string; active: boolean };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pathways/active`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pathway&apiName=batch_get&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=corehr&resource=pathway&version=v2 document }
+                 *
+                 * 通过通道 ID 批量获取通道信息
+                 */
+                batchGet: async (
+                    payload?: {
+                        data: { pathway_ids: Array<string> };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        pathway_id?: string;
+                                        code?: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        descriptions?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        active?: boolean;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pathways/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pathway&apiName=create&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=corehr&resource=pathway&version=v2 document }
+                 *
+                 * 创建通道
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            code?: string;
+                            names: Array<{ lang: string; value: string }>;
+                            descriptions?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                        };
+                        params?: { client_token?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { pathway_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pathways`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pathway&apiName=delete&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=corehr&resource=pathway&version=v2 document }
+                 *
+                 * 删除通道
+                 */
+                delete: async (
+                    payload?: {
+                        path: { pathway_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pathways/:pathway_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=pathway&apiName=patch&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=corehr&resource=pathway&version=v2 document }
+                 *
+                 * 更新通道信息
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            code?: string;
+                            names?: Array<{ lang: string; value: string }>;
+                            descriptions?: Array<{
+                                lang: string;
+                                value: string;
+                            }>;
+                        };
+                        params?: { client_token?: string };
+                        path: { pathway_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/pathways/:pathway_id`,
+                                path
+                            ),
+                            method: "PATCH",
                             data,
                             params,
                             headers,
@@ -40752,6 +41235,112 @@ export default abstract class Client extends contract {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * position
+             */
+            position: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=corehr&resource=position&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=corehr&resource=position&version=v2 document }
+                 *
+                 * 查询岗位信息
+                 */
+                query: async (
+                    payload?: {
+                        data?: {
+                            department_ids?: Array<string>;
+                            effective_time?: string;
+                            active?: boolean;
+                            fields?: Array<string>;
+                            position_ids?: Array<string>;
+                            position_codes?: Array<string>;
+                        };
+                        params: {
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id"
+                                | "people_corehr_department_id";
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_corehr_id";
+                            page_size: number;
+                            page_token?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        position_id?: string;
+                                        code?: string;
+                                        names?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        descriptions?: Array<{
+                                            lang: string;
+                                            value: string;
+                                        }>;
+                                        active: boolean;
+                                        job_family_id_list?: Array<string>;
+                                        cost_center_id?: string;
+                                        job_id?: string;
+                                        job_level_id_list?: Array<string>;
+                                        employee_type_id_list?: Array<string>;
+                                        job_grade_id_list?: Array<string>;
+                                        work_location_id_list?: Array<string>;
+                                        working_hours_type_id?: string;
+                                        department_id: string;
+                                        direct_leader_id?: string;
+                                        dotted_line_leader_id?: string;
+                                        is_key_position?: boolean;
+                                        effective_time: string;
+                                        expiration_time: string;
+                                        custom_fields?: Array<{
+                                            custom_api_name: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            type?: number;
+                                            value: string;
+                                        }>;
+                                        created_by?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/corehr/v2/positions/query`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -47894,7 +48483,7 @@ export default abstract class Client extends contract {
                                             file_value?: {
                                                 open_file_id?: string;
                                                 file_name?: string;
-                                                length?: string;
+                                                length?: number;
                                                 mime_type?: string;
                                             };
                                         };
@@ -47927,7 +48516,7 @@ export default abstract class Client extends contract {
                                                 file_value?: {
                                                     open_file_id?: string;
                                                     file_name?: string;
-                                                    length?: string;
+                                                    length?: number;
                                                     mime_type?: string;
                                                 };
                                             };
