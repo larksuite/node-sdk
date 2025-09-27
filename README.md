@@ -491,15 +491,22 @@ const eventDispatcher = new lark.EventDispatcher({
 router.post('/webhook/event', lark.adaptKoaRouter(eventDispatcher));
 server.use(router.routes());
 server.listen(3000);
-````
+```
+
 #### Custom adapter
-If you want to adapt to services written by other libraries, you currently need to encapsulate the corresponding adapter yourself. Pass the received event data to the invoke method of the instantiated `eventDispatcher` for event processing:
+
+If you want to adapt to services written by other libraries, you currently need to encapsulate the corresponding adapter yourself. Pass the received event data and request headers to the invoke method of the instantiated `eventDispatcher` for event processing:
 
 ```typescript
 const data = server.getData();
-const result = await dispatcher.invoke(data);
+const headers = server.getHeaders();
+const assigned = Object.assign(
+  Object.create({ headers }),
+  data,
+);
+const result = await dispatcher.invoke(assigned);
 server.sendResult(result);
-````
+```
 
 #### Challenge check
 When configuring the event request address, The Open Platform will push a POST request in `application/json` format to the request address. The POST request is used to verify the validity of the configured request address, and the request body will carry a `challenge` field , **The application needs to return the received challenge value to the Open Platform within 1 second**. See: [ Document](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/request-url-configuration-case)
