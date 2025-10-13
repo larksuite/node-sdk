@@ -492,12 +492,19 @@ router.post('/webhook/event', lark.adaptKoaRouter(eventDispatcher));
 server.use(router.routes());
 server.listen(3000);
 ```
+
 #### 自定义适配器
-如果要适配其它库编写的服务，目前需要自己来封装相应的适配器。将接收到的事件数据传递给实例化的`eventDispatcher`的invoke方法进行事件的处理即可：
+
+如果要适配其它库编写的服务，目前需要自己来封装相应的适配器。将接收到的事件数据和请求头传递给实例化的 `eventDispatcher` 的 invoke 方法进行事件的处理即可：
 
 ```typescript
 const data = server.getData();
-const result = await dispatcher.invoke(data);
+const headers = server.getHeaders();
+const assigned = Object.assign(
+  Object.create({ headers }),
+  data,
+);
+const result = await dispatcher.invoke(assigned);
 server.sendResult(result);
 ```
 
