@@ -130,6 +130,8 @@ export class Client extends RequestTemplate {
             ] = `Bearer ${helpDeskCredential}`;
         }
 
+        const payloadData = { ...(payload?.data || {}), ...targetOptions.data };
+ 
         return {
             params: { ...(payload?.params || {}), ...targetOptions.params },
             headers: {
@@ -137,7 +139,8 @@ export class Client extends RequestTemplate {
                 ...(payload?.headers || {}),
                 ...targetOptions.headers,
             },
-            data: { ...(payload?.data || {}), ...targetOptions.data },
+            // @ts-ignore
+            data: Object.keys(payloadData).length === 0 ? undefined : payloadData,
             path: {
                 ...(payload?.path || {}),
                 ...targetOptions.path,
