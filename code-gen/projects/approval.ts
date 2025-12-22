@@ -219,6 +219,8 @@ export default abstract class Client extends application {
                             | "ru-RU";
                         with_admin_id?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        with_option?: boolean;
+                        user_id?: string;
                     };
                     path: { approval_code: string };
                 },
@@ -383,7 +385,7 @@ export default abstract class Client extends application {
                     data: {
                         approval_name: string;
                         approval_code: string;
-                        group_code: string;
+                        group_code?: string;
                         group_name?: string;
                         description?: string;
                         external: {
@@ -916,6 +918,23 @@ export default abstract class Client extends application {
                                     };
                                     resource_region?: string;
                                 };
+                                process_record?: {
+                                    instance?: {
+                                        insert_num?: number;
+                                        update_num?: number;
+                                        delete_num?: number;
+                                    };
+                                    task?: {
+                                        insert_num?: number;
+                                        update_num?: number;
+                                        delete_num?: number;
+                                    };
+                                    cc?: {
+                                        insert_num?: number;
+                                        update_num?: number;
+                                        delete_num?: number;
+                                    };
+                                };
                             };
                         }
                     >({
@@ -1139,7 +1158,7 @@ export default abstract class Client extends application {
             },
         },
         /**
-         * 审批查询
+         * 原生审批实例
          */
         instance: {
             /**
@@ -1337,6 +1356,7 @@ export default abstract class Client extends application {
                             node_id?: string;
                         }>;
                         byte_extra?: string;
+                        with_link?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -1350,7 +1370,10 @@ export default abstract class Client extends application {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { instance_code: string };
+                            data?: {
+                                instance_code: string;
+                                instance_link: string;
+                            };
                         }
                     >({
                         url: fillApiPath(
@@ -1514,149 +1537,6 @@ export default abstract class Client extends application {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id`,
-                            path
-                        ),
-                        method: "GET",
-                        data,
-                        params,
-                        headers,
-                        paramsSerializer: (params) =>
-                            stringify(params, { arrayFormat: "repeat" }),
-                    })
-                    .catch((e) => {
-                        this.logger.error(formatErrors(e));
-                        throw e;
-                    });
-            },
-            listWithIterator: async (
-                payload?: {
-                    params: {
-                        page_size?: number;
-                        page_token?: string;
-                        approval_code: string;
-                        start_time: string;
-                        end_time: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                const sendRequest = async (innerPayload: {
-                    headers: any;
-                    params: any;
-                    data: any;
-                }) => {
-                    const res = await this.httpInstance
-                        .request<any, any>({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/approval/v4/instances`,
-                                path
-                            ),
-                            method: "GET",
-                            headers: pickBy(innerPayload.headers, identity),
-                            params: pickBy(innerPayload.params, identity),
-                            data,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                        });
-                    return res;
-                };
-
-                const Iterable = {
-                    async *[Symbol.asyncIterator]() {
-                        let hasMore = true;
-                        let pageToken;
-
-                        while (hasMore) {
-                            try {
-                                const res = await sendRequest({
-                                    headers,
-                                    params: {
-                                        ...params,
-                                        page_token: pageToken,
-                                    },
-                                    data,
-                                });
-
-                                const {
-                                    // @ts-ignore
-                                    has_more,
-                                    // @ts-ignore
-                                    page_token,
-                                    // @ts-ignore
-                                    next_page_token,
-                                    ...rest
-                                } =
-                                    (
-                                        res as {
-                                            code?: number;
-                                            msg?: string;
-                                            data?: {
-                                                instance_code_list: Array<string>;
-                                                page_token: string;
-                                                has_more: boolean;
-                                            };
-                                        }
-                                    )?.data || {};
-
-                                yield rest;
-
-                                hasMore = Boolean(has_more);
-                                pageToken = page_token || next_page_token;
-                            } catch (e) {
-                                yield null;
-                                break;
-                            }
-                        }
-                    },
-                };
-
-                return Iterable;
-            },
-            /**
-             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=list&version=v4 click to debug }
-             *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/list document }
-             *
-             * 批量获取审批实例ID
-             *
-             * 根据 approval_code 批量获取审批实例的 instance_code，用于拉取租户下某个审批定义的全部审批实例。默认以审批创建时间先后顺序排列
-             */
-            list: async (
-                payload?: {
-                    params: {
-                        page_size?: number;
-                        page_token?: string;
-                        approval_code: string;
-                        start_time: string;
-                        end_time: string;
-                    };
-                },
-                options?: IRequestOptions
-            ) => {
-                const { headers, params, data, path } =
-                    await this.formatPayload(payload, options);
-
-                return this.httpInstance
-                    .request<
-                        any,
-                        {
-                            code?: number;
-                            msg?: string;
-                            data?: {
-                                instance_code_list: Array<string>;
-                                page_token: string;
-                                has_more: boolean;
-                            };
-                        }
-                    >({
-                        url: fillApiPath(
-                            `${this.domain}/open-apis/approval/v4/instances`,
                             path
                         ),
                         method: "GET",
@@ -3285,6 +3165,8 @@ export default abstract class Client extends application {
                                 | "ru-RU";
                             with_admin_id?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            with_option?: boolean;
+                            user_id?: string;
                         };
                         path: { approval_code: string };
                     },
@@ -3455,7 +3337,7 @@ export default abstract class Client extends application {
                         data: {
                             approval_name: string;
                             approval_code: string;
-                            group_code: string;
+                            group_code?: string;
                             group_name?: string;
                             description?: string;
                             external: {
@@ -3994,6 +3876,23 @@ export default abstract class Client extends application {
                                         };
                                         resource_region?: string;
                                     };
+                                    process_record?: {
+                                        instance?: {
+                                            insert_num?: number;
+                                            update_num?: number;
+                                            delete_num?: number;
+                                        };
+                                        task?: {
+                                            insert_num?: number;
+                                            update_num?: number;
+                                            delete_num?: number;
+                                        };
+                                        cc?: {
+                                            insert_num?: number;
+                                            update_num?: number;
+                                            delete_num?: number;
+                                        };
+                                    };
                                 };
                             }
                         >({
@@ -4219,7 +4118,7 @@ export default abstract class Client extends application {
                 },
             },
             /**
-             * 审批查询
+             * 原生审批实例
              */
             instance: {
                 /**
@@ -4426,6 +4325,7 @@ export default abstract class Client extends application {
                                 node_id?: string;
                             }>;
                             byte_extra?: string;
+                            with_link?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -4439,7 +4339,10 @@ export default abstract class Client extends application {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { instance_code: string };
+                                data?: {
+                                    instance_code: string;
+                                    instance_link: string;
+                                };
                             }
                         >({
                             url: fillApiPath(
@@ -4603,151 +4506,6 @@ export default abstract class Client extends application {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances/:instance_id`,
-                                path
-                            ),
-                            method: "GET",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                listWithIterator: async (
-                    payload?: {
-                        params: {
-                            page_size?: number;
-                            page_token?: string;
-                            approval_code: string;
-                            start_time: string;
-                            end_time: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    const sendRequest = async (innerPayload: {
-                        headers: any;
-                        params: any;
-                        data: any;
-                    }) => {
-                        const res = await this.httpInstance
-                            .request<any, any>({
-                                url: fillApiPath(
-                                    `${this.domain}/open-apis/approval/v4/instances`,
-                                    path
-                                ),
-                                method: "GET",
-                                headers: pickBy(innerPayload.headers, identity),
-                                params: pickBy(innerPayload.params, identity),
-                                data,
-                                paramsSerializer: (params) =>
-                                    stringify(params, {
-                                        arrayFormat: "repeat",
-                                    }),
-                            })
-                            .catch((e) => {
-                                this.logger.error(formatErrors(e));
-                            });
-                        return res;
-                    };
-
-                    const Iterable = {
-                        async *[Symbol.asyncIterator]() {
-                            let hasMore = true;
-                            let pageToken;
-
-                            while (hasMore) {
-                                try {
-                                    const res = await sendRequest({
-                                        headers,
-                                        params: {
-                                            ...params,
-                                            page_token: pageToken,
-                                        },
-                                        data,
-                                    });
-
-                                    const {
-                                        // @ts-ignore
-                                        has_more,
-                                        // @ts-ignore
-                                        page_token,
-                                        // @ts-ignore
-                                        next_page_token,
-                                        ...rest
-                                    } =
-                                        (
-                                            res as {
-                                                code?: number;
-                                                msg?: string;
-                                                data?: {
-                                                    instance_code_list: Array<string>;
-                                                    page_token: string;
-                                                    has_more: boolean;
-                                                };
-                                            }
-                                        )?.data || {};
-
-                                    yield rest;
-
-                                    hasMore = Boolean(has_more);
-                                    pageToken = page_token || next_page_token;
-                                } catch (e) {
-                                    yield null;
-                                    break;
-                                }
-                            }
-                        },
-                    };
-
-                    return Iterable;
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=list&version=v4 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/list document }
-                 *
-                 * 批量获取审批实例ID
-                 *
-                 * 根据 approval_code 批量获取审批实例的 instance_code，用于拉取租户下某个审批定义的全部审批实例。默认以审批创建时间先后顺序排列
-                 */
-                list: async (
-                    payload?: {
-                        params: {
-                            page_size?: number;
-                            page_token?: string;
-                            approval_code: string;
-                            start_time: string;
-                            end_time: string;
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    instance_code_list: Array<string>;
-                                    page_token: string;
-                                    has_more: boolean;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/approval/v4/instances`,
                                 path
                             ),
                             method: "GET",

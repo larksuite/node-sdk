@@ -66,6 +66,22 @@ export default abstract class Client extends baike {
                                     }>;
                                     conjunction?: "and" | "or";
                                     other_perm?: number;
+                                    condition_groups?: Array<{
+                                        condition_type?: number;
+                                        conditions?: Array<{
+                                            field_name: string;
+                                            operator?:
+                                                | "is"
+                                                | "isNot"
+                                                | "contains"
+                                                | "doesNotContain"
+                                                | "isEmpty"
+                                                | "isNotEmpty";
+                                            value?: Array<string>;
+                                        }>;
+                                        conjunction?: "and" | "or";
+                                    }>;
+                                    display_rec_rule_version?: number;
                                 };
                                 other_rec_rule?: {
                                     conditions?: Array<{
@@ -133,6 +149,23 @@ export default abstract class Client extends baike {
                                                 conjunction?: "and" | "or";
                                                 perm?: number;
                                                 other_perm?: number;
+                                                condition_groups?: Array<{
+                                                    condition_type?: number;
+                                                    conditions?: Array<{
+                                                        field_name: string;
+                                                        operator?:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty";
+                                                        value?: Array<string>;
+                                                        field_type?: number;
+                                                    }>;
+                                                    conjunction?: "and" | "or";
+                                                }>;
+                                                display_rec_rule_version?: number;
                                             };
                                             other_rec_rule?: {
                                                 conditions?: Array<{
@@ -277,6 +310,25 @@ export default abstract class Client extends baike {
                                                                     | "or";
                                                                 perm?: number;
                                                                 other_perm?: number;
+                                                                condition_groups?: Array<{
+                                                                    condition_type?: number;
+                                                                    conditions?: Array<{
+                                                                        field_name: string;
+                                                                        operator?:
+                                                                            | "is"
+                                                                            | "isNot"
+                                                                            | "contains"
+                                                                            | "doesNotContain"
+                                                                            | "isEmpty"
+                                                                            | "isNotEmpty";
+                                                                        value?: Array<string>;
+                                                                        field_type?: number;
+                                                                    }>;
+                                                                    conjunction?:
+                                                                        | "and"
+                                                                        | "or";
+                                                                }>;
+                                                                display_rec_rule_version?: number;
                                                             };
                                                             other_rec_rule?: {
                                                                 conditions?: Array<{
@@ -393,6 +445,23 @@ export default abstract class Client extends baike {
                                                 conjunction?: "and" | "or";
                                                 perm?: number;
                                                 other_perm?: number;
+                                                condition_groups?: Array<{
+                                                    condition_type?: number;
+                                                    conditions?: Array<{
+                                                        field_name: string;
+                                                        operator?:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty";
+                                                        value?: Array<string>;
+                                                        field_type?: number;
+                                                    }>;
+                                                    conjunction?: "and" | "or";
+                                                }>;
+                                                display_rec_rule_version?: number;
                                             };
                                             other_rec_rule?: {
                                                 conditions?: Array<{
@@ -479,6 +548,22 @@ export default abstract class Client extends baike {
                                     }>;
                                     conjunction?: "and" | "or";
                                     other_perm?: number;
+                                    condition_groups?: Array<{
+                                        condition_type?: number;
+                                        conditions?: Array<{
+                                            field_name: string;
+                                            operator?:
+                                                | "is"
+                                                | "isNot"
+                                                | "contains"
+                                                | "doesNotContain"
+                                                | "isEmpty"
+                                                | "isNotEmpty";
+                                            value?: Array<string>;
+                                        }>;
+                                        conjunction?: "and" | "or";
+                                    }>;
+                                    display_rec_rule_version?: number;
                                 };
                                 other_rec_rule?: {
                                     conditions?: Array<{
@@ -546,6 +631,23 @@ export default abstract class Client extends baike {
                                                 conjunction?: "and" | "or";
                                                 perm?: number;
                                                 other_perm?: number;
+                                                condition_groups?: Array<{
+                                                    condition_type?: number;
+                                                    conditions?: Array<{
+                                                        field_name: string;
+                                                        operator?:
+                                                            | "is"
+                                                            | "isNot"
+                                                            | "contains"
+                                                            | "doesNotContain"
+                                                            | "isEmpty"
+                                                            | "isNotEmpty";
+                                                        value?: Array<string>;
+                                                        field_type?: number;
+                                                    }>;
+                                                    conjunction?: "and" | "or";
+                                                }>;
+                                                display_rec_rule_version?: number;
                                             };
                                             other_rec_rule?: {
                                                 conditions?: Array<{

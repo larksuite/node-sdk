@@ -2288,6 +2288,13 @@ export default abstract class Client extends approval {
                                 default_locale: "ch" | "en" | "ja";
                                 reason: string;
                                 idempotent_id?: string;
+                                leave_detail_range_objs?: Array<{
+                                    day?: number;
+                                    time_ranges?: Array<{
+                                        start_time_stamp?: number;
+                                        end_time_stamp?: number;
+                                    }>;
+                                }>;
                             }>;
                             overtime_works?: Array<{
                                 duration: number;
@@ -2387,6 +2394,13 @@ export default abstract class Client extends approval {
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
                                         idempotent_id?: string;
+                                        leave_detail_range_objs?: Array<{
+                                            day?: number;
+                                            time_ranges?: Array<{
+                                                start_time_stamp?: number;
+                                                end_time_stamp?: number;
+                                            }>;
+                                        }>;
                                     }>;
                                     overtime_works?: Array<{
                                         approval_id?: string;
@@ -2531,6 +2545,13 @@ export default abstract class Client extends approval {
                                         approve_pass_time?: string;
                                         approve_apply_time?: string;
                                         idempotent_id?: string;
+                                        leave_detail_range_objs?: Array<{
+                                            day?: number;
+                                            time_ranges?: Array<{
+                                                start_time_stamp?: number;
+                                                end_time_stamp?: number;
+                                            }>;
+                                        }>;
                                     }>;
                                     overtime_works?: Array<{
                                         approval_id?: string;
@@ -6145,6 +6166,13 @@ export default abstract class Client extends approval {
                                     default_locale: "ch" | "en" | "ja";
                                     reason: string;
                                     idempotent_id?: string;
+                                    leave_detail_range_objs?: Array<{
+                                        day?: number;
+                                        time_ranges?: Array<{
+                                            start_time_stamp?: number;
+                                            end_time_stamp?: number;
+                                        }>;
+                                    }>;
                                 }>;
                                 overtime_works?: Array<{
                                     duration: number;
@@ -6244,6 +6272,13 @@ export default abstract class Client extends approval {
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
                                             idempotent_id?: string;
+                                            leave_detail_range_objs?: Array<{
+                                                day?: number;
+                                                time_ranges?: Array<{
+                                                    start_time_stamp?: number;
+                                                    end_time_stamp?: number;
+                                                }>;
+                                            }>;
                                         }>;
                                         overtime_works?: Array<{
                                             approval_id?: string;
@@ -6388,6 +6423,13 @@ export default abstract class Client extends approval {
                                             approve_pass_time?: string;
                                             approve_apply_time?: string;
                                             idempotent_id?: string;
+                                            leave_detail_range_objs?: Array<{
+                                                day?: number;
+                                                time_ranges?: Array<{
+                                                    start_time_stamp?: number;
+                                                    end_time_stamp?: number;
+                                                }>;
+                                            }>;
                                         }>;
                                         overtime_works?: Array<{
                                             approval_id?: string;

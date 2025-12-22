@@ -652,6 +652,75 @@ export default abstract class Client extends board {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=mget&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=calendar&resource=calendar&version=v4 document }
+             */
+            mget: async (
+                payload?: {
+                    data: { calendar_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                calendars?: Array<{
+                                    calendar_id: string;
+                                    summary?: string;
+                                    description?: string;
+                                    permissions?:
+                                        | "private"
+                                        | "show_only_free_busy"
+                                        | "public";
+                                    color?: number;
+                                    type?:
+                                        | "unknown"
+                                        | "primary"
+                                        | "shared"
+                                        | "google"
+                                        | "resource"
+                                        | "exchange";
+                                    summary_alias?: string;
+                                    is_deleted?: boolean;
+                                    is_third_party?: boolean;
+                                    role?:
+                                        | "unknown"
+                                        | "free_busy_reader"
+                                        | "reader"
+                                        | "writer"
+                                        | "owner";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/mget`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=patch&version=v4 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/patch document }
@@ -794,6 +863,78 @@ export default abstract class Client extends board {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/calendar/v4/calendars/primary`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=primarys&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=primarys&project=calendar&resource=calendar&version=v4 document }
+             */
+            primarys: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                calendars?: Array<{
+                                    calendar?: {
+                                        calendar_id: string;
+                                        summary?: string;
+                                        description?: string;
+                                        permissions?:
+                                            | "private"
+                                            | "show_only_free_busy"
+                                            | "public";
+                                        color?: number;
+                                        type?:
+                                            | "unknown"
+                                            | "primary"
+                                            | "shared"
+                                            | "google"
+                                            | "resource"
+                                            | "exchange";
+                                        summary_alias?: string;
+                                        is_deleted?: boolean;
+                                        is_third_party?: boolean;
+                                        role?:
+                                            | "unknown"
+                                            | "free_busy_reader"
+                                            | "reader"
+                                            | "writer"
+                                            | "owner";
+                                    };
+                                    user_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/calendars/primarys`,
                             path
                         ),
                         method: "POST",
@@ -1858,6 +1999,7 @@ export default abstract class Client extends board {
                             };
                             need_notify_attendees?: boolean;
                         };
+                        source?: string;
                     };
                     params?: {
                         idempotency_key?: string;
@@ -1995,6 +2137,7 @@ export default abstract class Client extends board {
                                         };
                                         need_notify_attendees?: boolean;
                                     };
+                                    source?: string;
                                 };
                             };
                         }
@@ -2240,6 +2383,7 @@ export default abstract class Client extends board {
                                         };
                                         need_notify_attendees?: boolean;
                                     };
+                                    source?: string;
                                 };
                             };
                         }
@@ -2601,6 +2745,7 @@ export default abstract class Client extends board {
                                         file_size?: string;
                                         name?: string;
                                     }>;
+                                    source?: string;
                                 }>;
                             };
                         }
@@ -2731,6 +2876,7 @@ export default abstract class Client extends board {
                             };
                             need_notify_attendees?: boolean;
                         };
+                        source?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -2867,6 +3013,7 @@ export default abstract class Client extends board {
                                         };
                                         need_notify_attendees?: boolean;
                                     };
+                                    source?: string;
                                 };
                             };
                         }
@@ -3061,6 +3208,7 @@ export default abstract class Client extends board {
                                                         is_deleted?: boolean;
                                                         name?: string;
                                                     }>;
+                                                    source?: string;
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -3182,6 +3330,7 @@ export default abstract class Client extends board {
                                         is_deleted?: boolean;
                                         name?: string;
                                     }>;
+                                    source?: string;
                                 }>;
                                 page_token?: string;
                             };
@@ -3573,6 +3722,62 @@ export default abstract class Client extends board {
          * freebusy
          */
         freebusy: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=freebusy&apiName=batch&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch&project=calendar&resource=freebusy&version=v4 document }
+             */
+            batch: async (
+                payload?: {
+                    data: {
+                        time_min: string;
+                        time_max: string;
+                        user_ids: Array<string>;
+                        include_external_calendar?: boolean;
+                        only_busy?: boolean;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                freebusy_lists?: Array<{
+                                    freebusy_items?: Array<{
+                                        start_time: string;
+                                        end_time: string;
+                                    }>;
+                                    user_id?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/calendar/v4/freebusy/batch`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=freebusy&apiName=list&version=v4 click to debug }
              *
@@ -4425,6 +4630,75 @@ export default abstract class Client extends board {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=mget&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=calendar&resource=calendar&version=v4 document }
+                 */
+                mget: async (
+                    payload?: {
+                        data: { calendar_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    calendars?: Array<{
+                                        calendar_id: string;
+                                        summary?: string;
+                                        description?: string;
+                                        permissions?:
+                                            | "private"
+                                            | "show_only_free_busy"
+                                            | "public";
+                                        color?: number;
+                                        type?:
+                                            | "unknown"
+                                            | "primary"
+                                            | "shared"
+                                            | "google"
+                                            | "resource"
+                                            | "exchange";
+                                        summary_alias?: string;
+                                        is_deleted?: boolean;
+                                        is_third_party?: boolean;
+                                        role?:
+                                            | "unknown"
+                                            | "free_busy_reader"
+                                            | "reader"
+                                            | "writer"
+                                            | "owner";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/mget`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=patch&version=v4 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar/patch document }
@@ -4567,6 +4841,78 @@ export default abstract class Client extends board {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/calendar/v4/calendars/primary`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=calendar&apiName=primarys&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=primarys&project=calendar&resource=calendar&version=v4 document }
+                 */
+                primarys: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    calendars?: Array<{
+                                        calendar?: {
+                                            calendar_id: string;
+                                            summary?: string;
+                                            description?: string;
+                                            permissions?:
+                                                | "private"
+                                                | "show_only_free_busy"
+                                                | "public";
+                                            color?: number;
+                                            type?:
+                                                | "unknown"
+                                                | "primary"
+                                                | "shared"
+                                                | "google"
+                                                | "resource"
+                                                | "exchange";
+                                            summary_alias?: string;
+                                            is_deleted?: boolean;
+                                            is_third_party?: boolean;
+                                            role?:
+                                                | "unknown"
+                                                | "free_busy_reader"
+                                                | "reader"
+                                                | "writer"
+                                                | "owner";
+                                        };
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/calendars/primarys`,
                                 path
                             ),
                             method: "POST",
@@ -5666,6 +6012,7 @@ export default abstract class Client extends board {
                                 };
                                 need_notify_attendees?: boolean;
                             };
+                            source?: string;
                         };
                         params?: {
                             idempotency_key?: string;
@@ -5806,6 +6153,7 @@ export default abstract class Client extends board {
                                             };
                                             need_notify_attendees?: boolean;
                                         };
+                                        source?: string;
                                     };
                                 };
                             }
@@ -6057,6 +6405,7 @@ export default abstract class Client extends board {
                                             };
                                             need_notify_attendees?: boolean;
                                         };
+                                        source?: string;
                                     };
                                 };
                             }
@@ -6424,6 +6773,7 @@ export default abstract class Client extends board {
                                             file_size?: string;
                                             name?: string;
                                         }>;
+                                        source?: string;
                                     }>;
                                 };
                             }
@@ -6557,6 +6907,7 @@ export default abstract class Client extends board {
                                 };
                                 need_notify_attendees?: boolean;
                             };
+                            source?: string;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -6696,6 +7047,7 @@ export default abstract class Client extends board {
                                             };
                                             need_notify_attendees?: boolean;
                                         };
+                                        source?: string;
                                     };
                                 };
                             }
@@ -6897,6 +7249,7 @@ export default abstract class Client extends board {
                                                             is_deleted?: boolean;
                                                             name?: string;
                                                         }>;
+                                                        source?: string;
                                                     }>;
                                                     page_token?: string;
                                                 };
@@ -7018,6 +7371,7 @@ export default abstract class Client extends board {
                                             is_deleted?: boolean;
                                             name?: string;
                                         }>;
+                                        source?: string;
                                     }>;
                                     page_token?: string;
                                 };
@@ -7421,6 +7775,62 @@ export default abstract class Client extends board {
              * freebusy
              */
             freebusy: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=freebusy&apiName=batch&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch&project=calendar&resource=freebusy&version=v4 document }
+                 */
+                batch: async (
+                    payload?: {
+                        data: {
+                            time_min: string;
+                            time_max: string;
+                            user_ids: Array<string>;
+                            include_external_calendar?: boolean;
+                            only_busy?: boolean;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    freebusy_lists?: Array<{
+                                        freebusy_items?: Array<{
+                                            start_time: string;
+                                            end_time: string;
+                                        }>;
+                                        user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/calendar/v4/freebusy/batch`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=calendar&resource=freebusy&apiName=list&version=v4 click to debug }
                  *

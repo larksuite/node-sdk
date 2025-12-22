@@ -512,7 +512,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 入职
+         * 投递
          */
         application: {
             /**
@@ -1772,6 +1772,7 @@ export default abstract class Client extends helpdesk {
                                     level?: string;
                                     employee_type?: string;
                                     job_requirement_id?: string;
+                                    external_employment_id?: string;
                                 };
                             };
                         }
@@ -2175,6 +2176,150 @@ export default abstract class Client extends helpdesk {
          * 背调 （灰度租户可见）
          */
         backgroundCheckOrder: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=hire&resource=background_check_order&version=v1 document }
+             */
+            batchQuery: async (
+                payload?: {
+                    data?: {
+                        background_check_order_id_list?: Array<string>;
+                        update_start_time?: string;
+                        update_end_time?: string;
+                        begin_start_time?: string;
+                        begin_end_time?: string;
+                        application_id?: string;
+                        order_status?: "2" | "3" | "4" | "5" | "6" | "8" | "9";
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                items?: Array<{
+                                    order_id?: string;
+                                    application_id?: string;
+                                    order_status?: number;
+                                    account_third_type?: number;
+                                    package?: string;
+                                    name?: string;
+                                    feedback_info_list?: Array<{
+                                        id?: string;
+                                        attachment_url?: string;
+                                        report_preview_url?: string;
+                                        result?: string;
+                                        report_type?: number;
+                                        create_time?: string;
+                                        report_name?: string;
+                                    }>;
+                                    process_info_list?: Array<{
+                                        process?: string;
+                                        update_time?: string;
+                                        en_process?: string;
+                                    }>;
+                                    upload_time?: string;
+                                    candidate_info?: {
+                                        name?: string;
+                                        mobile?: string;
+                                        email?: string;
+                                        first_name?: string;
+                                        last_name?: string;
+                                    };
+                                    creator_info?: { user_id?: string };
+                                    contactor_info?: {
+                                        name?: string;
+                                        mobile?: string;
+                                        email?: string;
+                                        first_name?: string;
+                                        last_name?: string;
+                                    };
+                                    begin_time?: string;
+                                    end_time?: string;
+                                    conclusion?: string;
+                                    provider_info?: {
+                                        provider_id?: string;
+                                        provider_name?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                    };
+                                    custom_field_list?: Array<{
+                                        type:
+                                            | "text"
+                                            | "textarea"
+                                            | "number"
+                                            | "boolean"
+                                            | "select"
+                                            | "multiselect"
+                                            | "date"
+                                            | "file"
+                                            | "resume";
+                                        key: string;
+                                        name: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        is_required: boolean;
+                                        description?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        options?: Array<{
+                                            key: string;
+                                            name: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        }>;
+                                    }>;
+                                    custom_data_list?: Array<{
+                                        key?: string;
+                                        value?: string;
+                                    }>;
+                                    ext_item_info_list?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                    }>;
+                                    update_time?: string;
+                                    geo?: "cn" | "sg" | "us" | "jp";
+                                    location_code?: string;
+                                    remark?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/hire/v1/background_check_orders/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=list&version=v1 click to debug }
              *
@@ -3022,6 +3167,7 @@ export default abstract class Client extends helpdesk {
                             name: string;
                             result: string;
                         }>;
+                        status?: number;
                     };
                     path: { exam_id: string };
                 },
@@ -3278,6 +3424,7 @@ export default abstract class Client extends helpdesk {
                                     level?: string;
                                     employee_type?: string;
                                     job_requirement_id?: string;
+                                    external_employment_id?: string;
                                 };
                             };
                         }
@@ -3356,6 +3503,7 @@ export default abstract class Client extends helpdesk {
                                     level?: string;
                                     employee_type?: string;
                                     job_requirement_id?: string;
+                                    external_employment_id?: string;
                                 };
                             };
                         }
@@ -3442,6 +3590,7 @@ export default abstract class Client extends helpdesk {
                                     level?: string;
                                     employee_type?: string;
                                     job_requirement_id?: string;
+                                    external_employment_id?: string;
                                 };
                             };
                         }
@@ -21562,7 +21711,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 入职
+             * 投递
              */
             application: {
                 /**
@@ -22835,6 +22984,7 @@ export default abstract class Client extends helpdesk {
                                         level?: string;
                                         employee_type?: string;
                                         job_requirement_id?: string;
+                                        external_employment_id?: string;
                                     };
                                 };
                             }
@@ -23249,6 +23399,157 @@ export default abstract class Client extends helpdesk {
              * 背调 （灰度租户可见）
              */
             backgroundCheckOrder: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=hire&resource=background_check_order&version=v1 document }
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data?: {
+                            background_check_order_id_list?: Array<string>;
+                            update_start_time?: string;
+                            update_end_time?: string;
+                            begin_start_time?: string;
+                            begin_end_time?: string;
+                            application_id?: string;
+                            order_status?:
+                                | "2"
+                                | "3"
+                                | "4"
+                                | "5"
+                                | "6"
+                                | "8"
+                                | "9";
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    items?: Array<{
+                                        order_id?: string;
+                                        application_id?: string;
+                                        order_status?: number;
+                                        account_third_type?: number;
+                                        package?: string;
+                                        name?: string;
+                                        feedback_info_list?: Array<{
+                                            id?: string;
+                                            attachment_url?: string;
+                                            report_preview_url?: string;
+                                            result?: string;
+                                            report_type?: number;
+                                            create_time?: string;
+                                            report_name?: string;
+                                        }>;
+                                        process_info_list?: Array<{
+                                            process?: string;
+                                            update_time?: string;
+                                            en_process?: string;
+                                        }>;
+                                        upload_time?: string;
+                                        candidate_info?: {
+                                            name?: string;
+                                            mobile?: string;
+                                            email?: string;
+                                            first_name?: string;
+                                            last_name?: string;
+                                        };
+                                        creator_info?: { user_id?: string };
+                                        contactor_info?: {
+                                            name?: string;
+                                            mobile?: string;
+                                            email?: string;
+                                            first_name?: string;
+                                            last_name?: string;
+                                        };
+                                        begin_time?: string;
+                                        end_time?: string;
+                                        conclusion?: string;
+                                        provider_info?: {
+                                            provider_id?: string;
+                                            provider_name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        custom_field_list?: Array<{
+                                            type:
+                                                | "text"
+                                                | "textarea"
+                                                | "number"
+                                                | "boolean"
+                                                | "select"
+                                                | "multiselect"
+                                                | "date"
+                                                | "file"
+                                                | "resume";
+                                            key: string;
+                                            name: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            is_required: boolean;
+                                            description?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            options?: Array<{
+                                                key: string;
+                                                name: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            }>;
+                                        }>;
+                                        custom_data_list?: Array<{
+                                            key?: string;
+                                            value?: string;
+                                        }>;
+                                        ext_item_info_list?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                        }>;
+                                        update_time?: string;
+                                        geo?: "cn" | "sg" | "us" | "jp";
+                                        location_code?: string;
+                                        remark?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/hire/v1/background_check_orders/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=hire&resource=background_check_order&apiName=list&version=v1 click to debug }
                  *
@@ -24147,6 +24448,7 @@ export default abstract class Client extends helpdesk {
                                 name: string;
                                 result: string;
                             }>;
+                            status?: number;
                         };
                         path: { exam_id: string };
                     },
@@ -24421,6 +24723,7 @@ export default abstract class Client extends helpdesk {
                                         level?: string;
                                         employee_type?: string;
                                         job_requirement_id?: string;
+                                        external_employment_id?: string;
                                     };
                                 };
                             }
@@ -24499,6 +24802,7 @@ export default abstract class Client extends helpdesk {
                                         level?: string;
                                         employee_type?: string;
                                         job_requirement_id?: string;
+                                        external_employment_id?: string;
                                     };
                                 };
                             }
@@ -24587,6 +24891,7 @@ export default abstract class Client extends helpdesk {
                                         level?: string;
                                         employee_type?: string;
                                         job_requirement_id?: string;
+                                        external_employment_id?: string;
                                     };
                                 };
                             }

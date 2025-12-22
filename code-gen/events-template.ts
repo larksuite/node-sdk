@@ -630,6 +630,25 @@ export interface IHandles extends IOtherEventHandles {
         }>;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "compensation.archive.changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        operate_type: "add" | "modify" | "delete";
+        employment_id: string;
+        effective_date: string;
+        before_tid?: string;
+        after_tid?: string;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/contact-v3/custom_attr_event/events/updated document }
      *
      * 成员字段变更
@@ -1549,6 +1568,25 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.common_data.id.user_mapping_changed_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        change_type?: string;
+        id_transform_type?: number;
+        corehr_id?: string;
+        people_admin_id?: string;
+        feishu_id?: { union_id?: string; user_id?: string; open_id?: string };
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.common_data.meta_data.updated_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -2325,7 +2363,9 @@ export interface IHandles extends IOtherEventHandles {
         process_id?: string;
         effective_date?: string;
         status?: number;
+        original_status?: number;
         transfer_key?: string;
+        details_of_job_status_change?: Array<string>;
     }) => Promise<any> | any;
     /**
          
@@ -2671,6 +2711,52 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "corehr.position.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.position.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.position.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        position_id?: string;
+        field_changes?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "corehr.pre_hire.onboarding_task_changed_v2"?: (data: {
         event_id?: string;
         token?: string;
@@ -2832,6 +2918,40 @@ export interface IHandles extends IOtherEventHandles {
         biz_type?: string;
         flow_definition_id?: string;
         properties?: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.process_comment_info.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: number;
+        app_id?: string;
+        process_id?: string;
+        comment_id?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "corehr.signature_file.status_updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        signature_file_id?: string;
+        before_status?: string;
+        after_status?: string;
+        biz_process_id?: string;
     }) => Promise<any> | any;
     /**
          
@@ -5091,14 +5211,14 @@ export interface IHandles extends IOtherEventHandles {
         text: string;
         ticket?: {
             ticket_id: string;
-            comments?: {
+            comments?: Array<{
                 content?: string;
                 created_at?: number;
                 id?: number;
                 user_avatar_url?: string;
                 user_name?: string;
                 user_id?: number;
-            };
+            }>;
             ticket_type?: number;
             status?: number;
             dissatisfaction_reason?: {
@@ -6185,6 +6305,117 @@ export interface IHandles extends IOtherEventHandles {
             activity_id?: string;
             open_time?: string;
         }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "security_and_compliance.device_apply_record.device_apply_event_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        device_apply_record_id: string;
+        device_record?: {
+            device_record_id: string;
+            version: string;
+            current_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            device_name?: string;
+            model?: string;
+            device_system: number;
+            serial_number?: string;
+            disk_serial_number?: string;
+            uuid?: string;
+            mac_address?: string;
+            android_id?: string;
+            idfv?: string;
+            aaid?: string;
+            device_ownership: number;
+            device_status: number;
+            certification_level: number;
+            device_terminal_type: number;
+        };
+        apply_time: string;
+        apply_status: number;
+        operator?: { union_id?: string; user_id?: string; open_id?: string };
+        apply_device_ownership: number;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "security_and_compliance.device_record.device_change_event_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        device_record_id?: string;
+        version?: string;
+        change_type?: number;
+        before?: {
+            device_record_id: string;
+            version: string;
+            current_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            device_name?: string;
+            model?: string;
+            device_system: number;
+            serial_number?: string;
+            disk_serial_number?: string;
+            uuid?: string;
+            mac_address?: string;
+            android_id?: string;
+            idfv?: string;
+            aaid?: string;
+            device_ownership: number;
+            device_status: number;
+            certification_level: number;
+            device_terminal_type: number;
+            is_managed?: boolean;
+            mdm_device_id?: string;
+            mdm_provider_name?: string;
+        };
+        after?: {
+            device_record_id: string;
+            version: string;
+            current_user_id?: {
+                union_id?: string;
+                user_id?: string;
+                open_id?: string;
+            };
+            device_name?: string;
+            model?: string;
+            device_system: number;
+            serial_number?: string;
+            disk_serial_number?: string;
+            uuid?: string;
+            mac_address?: string;
+            android_id?: string;
+            idfv?: string;
+            aaid?: string;
+            device_ownership: number;
+            device_status: number;
+            certification_level: number;
+            device_terminal_type: number;
+            is_managed?: boolean;
+            mdm_device_id?: string;
+            mdm_provider_name?: string;
+        };
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/task-v1/task-comment/events/updated document }

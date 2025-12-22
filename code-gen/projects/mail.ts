@@ -3730,6 +3730,8 @@ export default abstract class Client extends lingo {
                                         filename: string;
                                         id?: string;
                                         attachment_type?: number;
+                                        is_inline?: boolean;
+                                        cid?: string;
                                     }>;
                                     thread_id?: string;
                                 };
@@ -3953,16 +3955,21 @@ export default abstract class Client extends lingo {
             send: async (
                 payload?: {
                     data?: {
-                        raw?: string;
                         subject?: string;
                         to?: Array<{ mail_address: string; name?: string }>;
+                        raw?: string;
                         cc?: Array<{ mail_address: string; name?: string }>;
                         bcc?: Array<{ mail_address: string; name?: string }>;
-                        head_from?: { mail_address?: string; name?: string };
                         body_html?: string;
                         body_plain_text?: string;
-                        attachments?: Array<{ body: string; filename: string }>;
-                        thread_id?: string;
+                        attachments?: Array<{
+                            body: string;
+                            filename: string;
+                            is_inline?: boolean;
+                            cid?: string;
+                        }>;
+                        dedupe_key?: string;
+                        head_from?: { name?: string };
                     };
                     path: { user_mailbox_id: string };
                 },
@@ -3972,7 +3979,14 @@ export default abstract class Client extends lingo {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { message_id?: string; thread_id?: string };
+                        }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,
                             path
@@ -8044,6 +8058,8 @@ export default abstract class Client extends lingo {
                                             filename: string;
                                             id?: string;
                                             attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
                                         }>;
                                         thread_id?: string;
                                     };
@@ -8269,25 +8285,24 @@ export default abstract class Client extends lingo {
                 send: async (
                     payload?: {
                         data?: {
-                            raw?: string;
                             subject?: string;
                             to?: Array<{ mail_address: string; name?: string }>;
+                            raw?: string;
                             cc?: Array<{ mail_address: string; name?: string }>;
                             bcc?: Array<{
                                 mail_address: string;
                                 name?: string;
                             }>;
-                            head_from?: {
-                                mail_address?: string;
-                                name?: string;
-                            };
                             body_html?: string;
                             body_plain_text?: string;
                             attachments?: Array<{
                                 body: string;
                                 filename: string;
+                                is_inline?: boolean;
+                                cid?: string;
                             }>;
-                            thread_id?: string;
+                            dedupe_key?: string;
+                            head_from?: { name?: string };
                         };
                         path: { user_mailbox_id: string };
                     },
@@ -8299,7 +8314,14 @@ export default abstract class Client extends lingo {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    thread_id?: string;
+                                };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/send`,

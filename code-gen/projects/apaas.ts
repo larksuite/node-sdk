@@ -2507,6 +2507,333 @@ export default abstract class Client extends aily {
                         });
                 },
             },
+            /**
+             * workspace
+             */
+            workspace: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace&apiName=sql_commands&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=sql_commands&project=apaas&resource=workspace&version=v1 document }
+                 *
+                 * 执行 SQL
+                 */
+                sqlCommands: async (
+                    payload?: {
+                        data: { sql: string };
+                        path: { workspace_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { result: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/sql_commands`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * workspace.table
+             */
+            workspaceTable: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.table&apiName=records_batch_update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=records_batch_update&project=apaas&resource=workspace.table&version=v1 document }
+                 *
+                 * 批量更新数据表中的记录
+                 */
+                recordsBatchUpdate: async (
+                    payload?: {
+                        data: { records: string };
+                        path: { workspace_id: string; table_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { record_ids: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records_batch_update`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.table&apiName=records_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=records_delete&project=apaas&resource=workspace.table&version=v1 document }
+                 *
+                 * 删除数据表中的记录
+                 */
+                recordsDelete: async (
+                    payload?: {
+                        params: { filter: string };
+                        path: { workspace_id: string; table_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.table&apiName=records_get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=records_get&project=apaas&resource=workspace.table&version=v1 document }
+                 *
+                 * 查询数据表数据记录
+                 */
+                recordsGet: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            select?: string;
+                            filter?: string;
+                            order?: string;
+                        };
+                        path: { workspace_id: string; table_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more: boolean;
+                                    page_token: string;
+                                    total: number;
+                                    items: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.table&apiName=records_patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=records_patch&project=apaas&resource=workspace.table&version=v1 document }
+                 *
+                 * 按条件更新数据表中的记录
+                 */
+                recordsPatch: async (
+                    payload?: {
+                        data: { record: string };
+                        params: { filter: string };
+                        path: { workspace_id: string; table_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { record_ids: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.table&apiName=records_post&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=records_post&project=apaas&resource=workspace.table&version=v1 document }
+                 *
+                 * 向数据表中添加或更新记录
+                 */
+                recordsPost: async (
+                    payload?: {
+                        data: { records: string };
+                        params?: { columns?: string };
+                        path: { workspace_id: string; table_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { record_ids: Array<string> };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/tables/:table_name/records`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * workspace.view
+             */
+            workspaceView: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=workspace.view&apiName=views_get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=views_get&project=apaas&resource=workspace.view&version=v1 document }
+                 */
+                viewsGet: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            select?: string;
+                            filter?: string;
+                            order?: string;
+                        };
+                        path: { workspace_id: string; view_name: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more: boolean;
+                                    page_token: string;
+                                    total: number;
+                                    items: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/workspaces/:workspace_id/views/:view_name/records`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
         },
     };
 }

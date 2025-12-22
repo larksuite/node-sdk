@@ -1767,6 +1767,7 @@ export default abstract class Client extends people_bytedance {
                                                             };
                                                             stage_type?: string;
                                                             review_stage_role?: string;
+                                                            review_stage_data_write_mode?: string;
                                                         }>;
                                                         units?: Array<{
                                                             unit_id: string;
@@ -1858,6 +1859,7 @@ export default abstract class Client extends people_bytedance {
                                             };
                                             stage_type?: string;
                                             review_stage_role?: string;
+                                            review_stage_data_write_mode?: string;
                                         }>;
                                         units?: Array<{
                                             unit_id: string;

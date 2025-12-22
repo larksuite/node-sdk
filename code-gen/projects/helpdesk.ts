@@ -515,6 +515,7 @@ export default abstract class Client extends feelgood {
                                         avatar_url?: string;
                                         name?: string;
                                     }>;
+                                    agent_skill_id?: string;
                                 };
                             };
                         }
@@ -560,6 +561,7 @@ export default abstract class Client extends feelgood {
                                     name?: string;
                                     agent_ids?: Array<string>;
                                     is_default?: boolean;
+                                    agent_skill_id?: string;
                                 }>;
                             };
                         }
@@ -601,6 +603,7 @@ export default abstract class Client extends feelgood {
                                 operand?: string;
                             }>;
                             agent_ids?: Array<string>;
+                            agent_skill_id?: string;
                         };
                     };
                     path: { agent_skill_id: string };
@@ -3885,6 +3888,7 @@ export default abstract class Client extends feelgood {
                                             avatar_url?: string;
                                             name?: string;
                                         }>;
+                                        agent_skill_id?: string;
                                     };
                                 };
                             }
@@ -3930,6 +3934,7 @@ export default abstract class Client extends feelgood {
                                         name?: string;
                                         agent_ids?: Array<string>;
                                         is_default?: boolean;
+                                        agent_skill_id?: string;
                                     }>;
                                 };
                             }
@@ -3971,6 +3976,7 @@ export default abstract class Client extends feelgood {
                                     operand?: string;
                                 }>;
                                 agent_ids?: Array<string>;
+                                agent_skill_id?: string;
                             };
                         };
                         path: { agent_skill_id: string };

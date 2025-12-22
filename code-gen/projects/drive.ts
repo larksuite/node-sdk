@@ -1029,7 +1029,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 文件
+         * 事件
          */
         file: {
             /**
@@ -2970,7 +2970,8 @@ export default abstract class Client extends docx {
                             | "ccm_import_open"
                             | "calendar"
                             | "base_global"
-                            | "lark_ai_media_analysis";
+                            | "lark_ai_media_analysis"
+                            | "whiteboard";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -3136,7 +3137,8 @@ export default abstract class Client extends docx {
                             | "ccm_import_open"
                             | "calendar"
                             | "base_global"
-                            | "lark_ai_media_analysis";
+                            | "lark_ai_media_analysis"
+                            | "whiteboard";
                         size: number;
                         parent_node?: string;
                         extra?: string;
@@ -5238,7 +5240,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 文件
+             * 事件
              */
             file: {
                 /**
@@ -7208,7 +7210,8 @@ export default abstract class Client extends docx {
                                 | "ccm_import_open"
                                 | "calendar"
                                 | "base_global"
-                                | "lark_ai_media_analysis";
+                                | "lark_ai_media_analysis"
+                                | "whiteboard";
                             parent_node: string;
                             size: number;
                             checksum?: string;
@@ -7377,7 +7380,8 @@ export default abstract class Client extends docx {
                                 | "ccm_import_open"
                                 | "calendar"
                                 | "base_global"
-                                | "lark_ai_media_analysis";
+                                | "lark_ai_media_analysis"
+                                | "whiteboard";
                             size: number;
                             parent_node?: string;
                             extra?: string;
