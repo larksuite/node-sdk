@@ -1,4 +1,4 @@
-import { AxiosError } from '@node-sdk/http';
+import { AxiosError } from 'axios';
 import { pick } from '@node-sdk/utils/pick';
 
 export const formatErrors = (e: any) => {

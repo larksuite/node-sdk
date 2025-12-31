@@ -23,6 +23,5 @@ defaultHttpInstance.interceptors.response.use((resp) => {
     return resp.data;
 });
 
-export { AxiosRequestConfig, AxiosError } from 'axios';
 
 export default defaultHttpInstance;
