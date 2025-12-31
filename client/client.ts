@@ -1,4 +1,4 @@
-import defaultHttpInstance, { AxiosRequestConfig } from '@node-sdk/http';
+import defaultHttpInstance from '@node-sdk/http';
 import { Cache, AppType, Domain, LoggerLevel, Logger } from '@node-sdk/typings';
 import {
     CTenantKey,
@@ -17,7 +17,8 @@ import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { IRequestOptions, IClientParams, IPayload } from './types';
 import { TokenManager } from './token-manager';
-import { HttpInstance } from '@node-sdk/typings/http';
+import { type HttpRequestOptions,
+HttpInstance } from '@node-sdk/typings/http';
 import { UserAccessToken } from './user-access-token';
 
 export class Client extends RequestTemplate {
@@ -148,8 +149,8 @@ export class Client extends RequestTemplate {
         };
     }
 
-    async request<T = any>(
-        payload: AxiosRequestConfig,
+    async request<T = any, R = T, D = any>(
+        payload: HttpRequestOptions<D>,
         options?: IRequestOptions
     ) {
         const { data, params, headers, url, ...rest } = payload;
@@ -164,7 +165,7 @@ export class Client extends RequestTemplate {
 
         this.logger.trace(`send request [${payload.method}]: ${payload.url}`);
         const res = await this.httpInstance
-            .request<T, T>({
+            .request<T, R, D>({
                 ...rest,
                 ...{
                     url: /^http/.test(url!)
