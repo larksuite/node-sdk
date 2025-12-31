@@ -29,7 +29,7 @@
   "homepage": "https://github.com/larksuite/node-sdk",
   "url": "https://github.com/larksuite/node-sdk/issues",
   "dependencies": {
-    "axios": "0.27.2",
+    "axios": "^0.30.2",
     "lodash.identity": "^3.0.0",
     "lodash.merge": "^4.6.2",
     "lodash.pickby": "^4.6.0",
