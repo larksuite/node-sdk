@@ -7,14 +7,14 @@ import {
 import { HttpInstance } from '@node-sdk/typings/http';
 
 // 和axios保持一致
-export interface IRequestOptions {
+export interface IRequestOptions<D = any> {
     lark?: {
         [CTenantKey]?: string;
         [CWithHelpdeskAuthorization]?: boolean;
         [CWithUserAccessToken]?: string;
     };
     params?: Record<string, string>;
-    data?: Record<string, string>;
+    data?: D;
     headers?: Record<string, string>;
     path?: Record<string, string>;
 }
@@ -33,9 +33,9 @@ export interface IClientParams {
     httpInstance?: HttpInstance;
 }
 
-export interface IPayload {
+export interface IPayload<D = any> {
     params?: Record<string, any>;
-    data?: Record<string, any>;
+    data?: D;
     headers?: Record<string, any>;
     path?: Record<string, any>;
 }
