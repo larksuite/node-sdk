@@ -24,7 +24,7 @@
             "@node-sdk/*": ["*"]
         }
     },
-    "exclude": ["__tests__", "node_modules"],
+    "exclude": ["__tests__", "node_modules", "types", "es", "lib"],
     "ts-node": {
         "transpileOnly": true
     },
