@@ -129,8 +129,6 @@ export class Client extends RequestTemplate {
                 'X-Lark-Helpdesk-Authorization'
             ] = `Bearer ${helpDeskCredential}`;
         }
-
-        const payloadData = { ...(payload?.data || {}), ...targetOptions.data };
  
         return {
             params: { ...(payload?.params || {}), ...targetOptions.params },
@@ -139,8 +137,7 @@ export class Client extends RequestTemplate {
                 ...(payload?.headers || {}),
                 ...targetOptions.headers,
             },
-            // @ts-ignore
-            data: Object.keys(payloadData).length === 0 ? undefined : payloadData,
+            data: { ...(payload?.data || {}), ...targetOptions.data },
             path: {
                 ...(payload?.path || {}),
                 ...targetOptions.path,
@@ -162,6 +159,11 @@ export class Client extends RequestTemplate {
             options
         );
 
+        // fix: #153
+        const targetData = (
+            payload.method?.toLowerCase() === 'get' && Object.keys(formatPayload.data).length === 0 
+        ) ? undefined : formatPayload.data;
+
         this.logger.trace(`send request [${payload.method}]: ${payload.url}`);
         const res = await this.httpInstance
             .request<T, T>({
@@ -171,7 +173,7 @@ export class Client extends RequestTemplate {
                         ? url
                         : `${this.domain}/${formatUrl(url)}`,
                     headers: formatPayload.headers,
-                    data: formatPayload.data,
+                    data: targetData,
                     params: formatPayload.params,
                 },
             })
