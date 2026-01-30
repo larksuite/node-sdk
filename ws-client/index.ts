@@ -407,6 +407,35 @@ export class WSClient {
     return this.reconnectInfo;
   }
 
+  /**
+   * close connection
+   * @param params close params
+   * @param params.force whether force close (use terminate instead of close)
+   */
+  close(params: { force?: boolean } = {}) {
+    const { force = false } = params;
+    if (this.pingInterval) {
+      clearTimeout(this.pingInterval);
+      this.pingInterval = undefined;
+    }
+    if (this.reconnectInterval) {
+      clearTimeout(this.reconnectInterval);
+      this.reconnectInterval = undefined;
+    }
+    this.isConnecting = false;
+    const wsInstance = this.wsConfig.getWSInstance();
+    if (wsInstance) {
+      wsInstance.removeAllListeners();
+      if (force) {
+        wsInstance.terminate();
+      } else {
+        wsInstance.close();
+      }
+      this.wsConfig.setWSInstance(null);
+    }
+    this.logger.info('[ws]', `ws client closed manually${force ? ' (force)' : ''}`);
+  }
+
   async start(params: { eventDispatcher: EventDispatcher }) {
     this.logger.info(
       '[ws]',
