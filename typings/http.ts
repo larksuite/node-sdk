@@ -1,3 +1,4 @@
+import { CustomParamsSerializer, ParamsSerializerOptions } from 'axios';
 export interface HttpInstance {
 	request<T = any, R = T, D = any>(opts: HttpRequestOptions<D>): Promise<R>;
 	get<T = any, R = T, D = any>(url: string, opts?: HttpRequestOptions<D>): Promise<R>;
@@ -10,12 +11,13 @@ export interface HttpInstance {
 }
 
 export type ResponseType =
-  | 'arraybuffer'
-  | 'blob'
-  | 'document'
-  | 'json'
-  | 'text'
-  | 'stream';
+	| 'arraybuffer'
+	| 'blob'
+	| 'document'
+	| 'json'
+	| 'text'
+	| 'stream'
+	| 'formdata';
 
 export interface HttpRequestOptions<D> {
 	url?: string;
@@ -24,7 +26,7 @@ export interface HttpRequestOptions<D> {
 	params?: Record<string, any>;
 	data?: D;
 	responseType?: ResponseType;
-	paramsSerializer?: (params: Record<string, any>) => string;
+	paramsSerializer?: CustomParamsSerializer | ParamsSerializerOptions;
 	timeout?: number;
 	$return_headers?: boolean;
 }

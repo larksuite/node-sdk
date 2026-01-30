@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/node-sdk",
-  "version": "1.56.1",
+  "version": "1.57.0",
   "description": "larksuite open sdk for nodejs",
   "keywords": [
     "feishu",
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/larksuite/node-sdk",
   "url": "https://github.com/larksuite/node-sdk/issues",
   "dependencies": {
-    "axios": "0.27.2",
+    "axios": "~1.13.3",
     "lodash.identity": "^3.0.0",
     "lodash.merge": "^4.6.2",
     "lodash.pickby": "^4.6.0",
