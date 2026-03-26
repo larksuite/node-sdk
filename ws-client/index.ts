@@ -39,6 +39,8 @@ export class WSClient {
 
   private reconnectInterval?: NodeJS.Timeout;
 
+  private reconnectGeneration: number = 0;
+
   private isConnecting: boolean = false;
 
   private reconnectInfo = {
@@ -172,12 +174,15 @@ export class WSClient {
   }
 
   private async reConnect(isStart: boolean = false) {
-    if (this.isConnecting) {
+    if (this.isConnecting && !isStart) {
       this.logger.debug('[ws]', 'repeat connection');
       return;
     }
 
     this.isConnecting = true;
+
+    // Invalidate any in-flight reconnect loops from previous sessions
+    const currentGeneration = ++this.reconnectGeneration;
 
     const tryConnect = () => {
       this.reconnectInfo.lastConnectTime = Date.now();
@@ -196,14 +201,15 @@ export class WSClient {
       clearTimeout(this.pingInterval);
     }
 
+    if (this.reconnectInterval) {
+      clearTimeout(this.reconnectInterval);
+    }
+
     const wsInstance = this.wsConfig.getWSInstance();
 
     if (isStart) {
       if (wsInstance) {
         wsInstance?.terminate();
-      }
-      if (this.reconnectInterval) {
-        clearTimeout(this.reconnectInterval);
       }
       let isSuccess = false;
       try {
@@ -236,8 +242,19 @@ export class WSClient {
     const reconnectNonceTime = reconnectNonce ? reconnectNonce * Math.random() : 0
     this.reconnectInterval = setTimeout(async () => {
       (async function loopReConnect(this: WSClient, count: number) {
+        // Stale loop — a newer reConnect session has started
+        if (currentGeneration !== this.reconnectGeneration) {
+          return;
+        }
+
         count++;
         const isSuccess = await tryConnect();
+
+        // Re-check after async operation in case a new session started
+        if (currentGeneration !== this.reconnectGeneration) {
+          return;
+        }
+
         // if reconnectCount < 0, the reconnect time is infinite
         if (isSuccess) {
           this.logger.debug('[ws]', 'reconnect success');
@@ -414,6 +431,8 @@ export class WSClient {
    */
   close(params: { force?: boolean } = {}) {
     const { force = false } = params;
+    // Invalidate any in-flight reconnect loops
+    this.reconnectGeneration++;
     if (this.pingInterval) {
       clearTimeout(this.pingInterval);
       this.pingInterval = undefined;
