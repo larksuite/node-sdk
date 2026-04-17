@@ -149,9 +149,10 @@ export async function registerApp(options: RegisterAppOptions): Promise<Register
 
     const beginRes = await begin(baseUrl);
 
-    const fromParam = source ? `${SDK_NAME}/${source}` : SDK_NAME;
     const qrCodeUrl = new URL(beginRes.verification_uri_complete);
-    qrCodeUrl.searchParams.set('from', fromParam);
+    qrCodeUrl.searchParams.set('from', 'sdk');
+    qrCodeUrl.searchParams.set('source', source ? `${SDK_NAME}/${source}` : SDK_NAME);
+    qrCodeUrl.searchParams.set('tp', 'sdk');
     onQRCodeReady({
         url: qrCodeUrl.toString(),
         expireIn: beginRes.expire_in ?? 600,
