@@ -5,3 +5,4 @@ export * from './format-domain';
 export * from './fill-api-path';
 export * from './assert';
 export * from './format-url';
+export * from './user-agent';

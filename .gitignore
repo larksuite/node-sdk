@@ -12,3 +12,6 @@ local-tests
 **/es
 **/lib
 **/types
+
+# jest coverage reports
+coverage

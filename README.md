@@ -81,7 +81,7 @@ const res = await client.im.message.create({
 ````
 > tips: 
 > * If you want to debug an API, you can click the link in the comment to enter the API debugging platform for debugging:
-> ![](doc/debugger-tip.png)
+> ![](docs/assets/debugger-tip.png)
 > * How to obtain the semantic call interface：[Click here](https://github.com/larksuite/node-sdk/issues/42)
 
 #### Create Client
@@ -246,7 +246,7 @@ client.im.message.create({
   }
 })
 ```
-![](doc/msg-card.png)
+![](docs/assets/msg-card.png)
 There will be a problem: **If the content of the message card is relatively rich, the generated template json is relatively large, and there will be more content that needs to be filled with data, and manual maintenance is more cumbersome**. To solve this problem, The Open-Platform provides the ability of [Template Message](https://open.feishu.cn/document/tools-and-resources/message-card-builder#3e1f2c7c).When sending a message card, you only need to provide the template id and the data content of the template. The sdk encapsulates this ability in terms of calling, and the interface that supports message cards will synchronously add a ByCard calling method, only need to pass `template_id` and `template_variable`. The above call can be rewritten as:
 ```typescript
 client.im.message.createByCard({
@@ -281,7 +281,7 @@ client.im.message.create({
   }
 })
 ```
-![](doc/msg-card.png)
+![](docs/assets/msg-card.png)
 
 #### Configure request options
 If you want to modify the parameters of the request during the API call, such as carrying some headers, custom tenantToken, etc., you can use the second parameter of the request method to modify:
@@ -386,7 +386,7 @@ server.listen(3000);
 | cache | Cache | Cache | No | - |
 
 > Note: Some events are v1.0 version and are no longer maintained. The SDK retains support for them. It is strongly recommended to use new versions of events that are consistent with their functions. Move the mouse to the corresponding event subscription function to see the relevant documents:
-![](doc/deprecated.png)
+![](docs/assets/deprecated.png)
 
 #### Combined with express
 The SDK provides an adapter for experss to convert eventDispatcher into express middleware, which can be seamlessly combined with services written using express (*The use of bodyParser in the example is not necessary, but the community mostly uses it to format body data*):
@@ -586,6 +586,28 @@ wsClient.start({
 });
 ```
 
+
+### Channel module
+
+`Channel` is a high-level module built on top of `WSClient` / `Client` that bundles transport, message normalization, safety policy, outbound sending, streaming replies, media upload, and card interactions into a single abstraction. It is the recommended entry point for conversational bots (AI chat, streaming replies, interactive card buttons, etc.).
+
+```typescript
+import { createLarkChannel } from '@larksuiteoapi/node-sdk';
+
+const channel = createLarkChannel({ appId, appSecret });
+
+channel.on('message', async (msg) => {
+    await channel.send(
+        msg.chatId,
+        { markdown: `received: ${msg.content}` },
+        { replyTo: msg.messageId },
+    );
+});
+
+await channel.connect();
+```
+
+Full reference (event subscription, sending, streaming, low-level helpers, error handling, configuration, etc.) — see [docs/channel.md](./docs/channel.md).
 
 ### [Message Card](https://open.feishu.cn/document/ukTMukTMukTM/uczM3QjL3MzN04yNzcDN)
 

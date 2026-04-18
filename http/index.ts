@@ -1,11 +1,17 @@
 import axios, { AxiosInstance } from 'axios';
+import { buildUserAgent } from '@node-sdk/utils/user-agent';
 
 const defaultHttpInstance: AxiosInstance = axios.create();
 
+// Fallback UA for callers that bypass Client/WSClient and hit
+// `defaultHttpInstance` directly. Client.formatPayload overrides this with
+// a source-enriched UA when a `source` option is configured.
+const FALLBACK_UA = buildUserAgent();
+
 defaultHttpInstance.interceptors.request.use(
     (req) => {
-        if (req.headers) {
-            req.headers['User-Agent'] = 'oapi-node-sdk/1.0.0';
+        if (req.headers && !req.headers['User-Agent']) {
+            req.headers['User-Agent'] = FALLBACK_UA;
         }
         return req;
     },
