@@ -627,6 +627,68 @@ server.listen(3000);
 | logger | - | Logger | No | - |
 | cache | Cache | Cache | No | - |
 
+### App Registration
+The SDK provides a `registerApp` method for one-click app creation based on the OAuth 2.0 Device Authorization Grant (RFC 8628) protocol. It returns a verification URL that users can open in Feishu/Lark to authorize and automatically register an app, obtaining credentials without manually creating one on the developer console.
+
+```typescript
+import * as lark from '@larksuiteoapi/node-sdk';
+
+try {
+    const result = await lark.registerApp({
+        onQRCodeReady(info) {
+            console.log(`Scan the QR code: ${info.url}`);
+            console.log(`Link expires in ${info.expireIn} seconds`);
+        },
+        onStatusChange(info) {
+            // Handle status changes: 'polling' | 'slow_down' | 'domain_switched'
+        },
+    });
+
+    console.log('App ID:', result.client_id);
+    console.log('App Secret:', result.client_secret);
+
+    // Use the credentials to initialize a Client
+    const client = new lark.Client({
+        appId: result.client_id,
+        appSecret: result.client_secret,
+    });
+} catch (e) {
+    // e.code: 'access_denied' | 'expired_token' | 'abort' | ...
+    // e.description: error description
+    console.error(e.code, e.description);
+}
+```
+
+#### `registerApp` parameters
+
+| Parameter | Description | Type | Required | Default |
+| ---- | ---- | ---- | ---- | ---- |
+| domain | Custom accounts domain (host only) | string | No | `accounts.feishu.cn` |
+| larkDomain | Custom Lark accounts domain (host only), used when tenant brand is detected as Lark | string | No | `accounts.larksuite.com` |
+| source | Source identifier, appended to the QR code URL `from` parameter as `node-sdk/{source}` | string | No | - |
+| signal | `AbortSignal` to cancel the polling | AbortSignal | No | - |
+| onQRCodeReady | Callback when the verification URL is ready. Receives `{ url, expireIn }`. You can render the URL as a QR code for users to scan, or display it as a link | function | Yes | - |
+| onStatusChange | Callback on polling status changes. Receives `{ status, interval? }`. Status values: `polling`, `slow_down`, `domain_switched` | function | No | - |
+
+#### Return value
+
+| Field | Type | Description |
+| ---- | ---- | ---- |
+| client_id | string | App ID |
+| client_secret | string | App Secret |
+| user_info | object (optional) | Scanning user info |
+| user_info.open_id | string (optional) | User's open_id |
+| user_info.tenant_brand | string (optional) | `"feishu"` or `"lark"` |
+
+#### Error handling
+The thrown error object contains `code` and `description` fields:
+
+| code | Description |
+| ---- | ---- |
+| `access_denied` | User denied the authorization |
+| `expired_token` | QR code expired or polling timed out |
+| `abort` | Cancelled via AbortSignal |
+
 ### Tool method
 #### AESCipher
 Decrypt. If [Encrypted Push](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/encrypt-key-encryption-configuration-case) is configured, the open platform will push encrypted data, At this time, the data needs to be decrypted, and this method can be called for convenient decryption. (In general, the decryption logic is built into the SDK, and no manual processing is required).

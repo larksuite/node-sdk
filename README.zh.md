@@ -627,6 +627,68 @@ server.listen(3000);
 | logger  | - | Logger | 否 | - |
 | cache  | 缓存器 | Cache | 否 | - |
 
+### 一键创建应用
+SDK提供了`registerApp`方法，基于 OAuth 2.0 Device Authorization Grant（RFC 8628）协议实现一键创建应用。该方法会返回一个验证链接，用户在飞书/Lark中打开该链接完成授权后，即可自动注册应用并获取凭据，无需手动到开发者后台创建。
+
+```typescript
+import * as lark from '@larksuiteoapi/node-sdk';
+
+try {
+    const result = await lark.registerApp({
+        onQRCodeReady(info) {
+            console.log(`请扫码: ${info.url}`);
+            console.log(`链接将在 ${info.expireIn} 秒后过期`);
+        },
+        onStatusChange(info) {
+            // 处理状态变化：'polling' | 'slow_down' | 'domain_switched'
+        },
+    });
+
+    console.log('App ID:', result.client_id);
+    console.log('App Secret:', result.client_secret);
+
+    // 用获取到的凭据初始化 Client
+    const client = new lark.Client({
+        appId: result.client_id,
+        appSecret: result.client_secret,
+    });
+} catch (e) {
+    // e.code: 'access_denied' | 'expired_token' | 'abort' | ...
+    // e.description: 错误描述
+    console.error(e.code, e.description);
+}
+```
+
+#### `registerApp`参数
+
+| 参数 | 描述 | 类型 | 必须 | 默认 |
+| ---- | ---- | ---- | ---- | ---- |
+| domain | 自定义认证域名（仅 host 部分） | string | 否 | `accounts.feishu.cn` |
+| larkDomain | 自定义 Lark 认证域名（仅 host 部分），检测到 Lark 租户时自动切换 | string | 否 | `accounts.larksuite.com` |
+| source | 来源标识，拼入二维码 URL 的 `from` 参数，格式为 `node-sdk/{source}` | string | 否 | - |
+| signal | 用于取消轮询的 `AbortSignal` | AbortSignal | 否 | - |
+| onQRCodeReady | 验证链接就绪时的回调，参数为 `{ url, expireIn }`。可将 URL 渲染为二维码供用户扫码，或直接作为链接展示 | function | 是 | - |
+| onStatusChange | 轮询状态变化时的回调，参数为 `{ status, interval? }`。status 取值：`polling`、`slow_down`、`domain_switched` | function | 否 | - |
+
+#### 返回值
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| client_id | string | App ID |
+| client_secret | string | App Secret |
+| user_info | object（可选） | 扫码用户信息 |
+| user_info.open_id | string（可选） | 扫码用户的 open_id |
+| user_info.tenant_brand | string（可选） | `"feishu"` 或 `"lark"` |
+
+#### 错误处理
+抛出的错误对象包含 `code` 和 `description` 字段：
+
+| code | 描述 |
+| ---- | ---- |
+| `access_denied` | 用户拒绝了授权 |
+| `expired_token` | 二维码过期或轮询超时 |
+| `abort` | 通过 AbortSignal 取消 |
+
 ### 工具方法
 #### AESCipher
 解密。如果配置了[加密推送](https://open.feishu.cn/document/ukTMukTMukTM/uYDNxYjL2QTM24iN0EjN/event-subscription-configure-/encrypt-key-encryption-configuration-case)，开放平台会推送加密的数据，这时候需要对数据进行解密处理，调用此方法可以便捷的进行解密。（一般情况下，SDK中内置了解密逻辑，不需要手动进行处理）。
