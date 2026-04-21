@@ -155,14 +155,14 @@ export async function registerApp(options: RegisterAppOptions): Promise<Register
     qrCodeUrl.searchParams.set('tp', 'sdk');
     onQRCodeReady({
         url: qrCodeUrl.toString(),
-        expireIn: beginRes.expire_in ?? 600,
+        expireIn: beginRes.expires_in ?? 600,
     });
 
     return startPolling({
         baseUrl,
         deviceCode: beginRes.device_code,
         interval: (beginRes.interval ?? 5) * 1000,
-        expireIn: (beginRes.expire_in ?? 600) * 1000,
+        expireIn: (beginRes.expires_in ?? 600) * 1000,
         larkBaseUrl: `https://${options.larkDomain ?? DEFAULT_LARK_DOMAIN}`,
         signal,
         onStatusChange,

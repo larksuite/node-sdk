@@ -34,7 +34,7 @@ export interface BeginResponse {
     verification_uri: string;
     user_code: string;
     interval: number;
-    expire_in: number;
+    expires_in: number;
 }
 
 export interface PollResponse {
