@@ -31,6 +31,8 @@ export interface IClientParams {
     helpDeskId?: string;
     helpDeskToken?: string;
     httpInstance?: HttpInstance;
+    /** Caller tag appended to User-Agent as `source/<name>`. */
+    source?: string;
 }
 
 export interface IPayload {

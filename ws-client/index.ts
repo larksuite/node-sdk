@@ -1,7 +1,7 @@
 import qs from 'querystring';
 import WebSocket from 'ws';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
-import { assert, formatDomain } from '@node-sdk/utils';
+import { assert, formatDomain, buildUserAgent } from '@node-sdk/utils';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { Domain, Logger, LoggerLevel } from '@node-sdk/typings';
@@ -22,6 +22,20 @@ interface IConstructorParams {
   httpInstance?: HttpInstance;
   autoReconnect?: boolean;
   agent?: any;
+  /** Caller tag appended to User-Agent as `source/<name>`. */
+  source?: string;
+  /** Fires once when the first WebSocket handshake succeeds. */
+  onReady?: () => void;
+  /**
+   * Fires when the initial connect fails and the client either cannot retry
+   * (autoReconnect=false) or exhausts `reconnectCount` retries. The callback
+   * receives an Error describing the final failure.
+   */
+  onError?: (err: Error) => void;
+  /** Fires when the client enters the reconnect loop (i.e., after a disconnect). */
+  onReconnecting?: () => void;
+  /** Fires after the reconnect loop successfully re-establishes the connection. */
+  onReconnected?: () => void;
 }
 
 export class WSClient {
@@ -50,6 +64,18 @@ export class WSClient {
 
   private agent?: any;
 
+  /** User-supplied state-transition callbacks. All optional. */
+  private onReady?: () => void;
+  private onError?: (err: Error) => void;
+  private onReconnecting?: () => void;
+  private onReconnected?: () => void;
+
+  private readonly userAgent: string;
+
+  /** True if the WS has ever connected successfully in this client's
+   *  lifetime — used to distinguish first-connect from reconnect. */
+  private hasEverConnected = false;
+
   constructor(params: IConstructorParams) {
     const {
       appId,
@@ -59,8 +85,15 @@ export class WSClient {
       httpInstance = defaultHttpInstance,
       loggerLevel = LoggerLevel.info,
       logger = defaultLogger,
-      autoReconnect = true
+      autoReconnect = true,
+      source,
+      onReady,
+      onError,
+      onReconnecting,
+      onReconnected,
     } = params;
+
+    this.userAgent = buildUserAgent(source);
 
     this.logger = new LoggerProxy(loggerLevel, logger);
 
@@ -79,6 +112,28 @@ export class WSClient {
     this.wsConfig.updateWs({
       autoReconnect
     })
+
+    this.onReady = onReady;
+    this.onError = onError;
+    this.onReconnecting = onReconnecting;
+    this.onReconnected = onReconnected;
+  }
+
+  /**
+   * Invoke a user-supplied callback safely: no-op if undefined, swallow any
+   * exception to avoid breaking the WS state machine.
+   */
+  private safeInvoke<A extends unknown[]>(
+    label: string,
+    fn: ((...args: A) => void) | undefined,
+    ...args: A
+  ): void {
+    if (!fn) return;
+    try {
+      fn(...args);
+    } catch (e) {
+      this.logger.error(`[ws] ${label} callback threw`, e);
+    }
   }
 
   private async pullConnectConfig() {
@@ -105,6 +160,7 @@ export class WSClient {
         // consumed by gateway
         headers: {
           "locale": "zh",
+          "User-Agent": this.userAgent,
         },
         timeout: 15000,
       });
@@ -217,7 +273,10 @@ export class WSClient {
       } finally {
         this.isConnecting = false;
       }
-      if (!isSuccess) {
+      if (isSuccess) {
+        this.hasEverConnected = true;
+        this.safeInvoke('onReady', this.onReady);
+      } else {
         this.logger.error('[ws]', 'connect failed');
         await this.reConnect();
       }
@@ -228,10 +287,20 @@ export class WSClient {
     const { autoReconnect, reconnectNonce, reconnectCount, reconnectInterval } = this.wsConfig.getWS();
 
     if (!autoReconnect) {
+      if (!this.hasEverConnected) {
+        this.safeInvoke(
+          'onError',
+          this.onError,
+          new Error('WebSocket connect failed and autoReconnect is disabled'),
+        );
+      }
       return;
     }
 
     this.logger.info('[ws]', 'reconnect');
+    if (this.hasEverConnected) {
+      this.safeInvoke('onReconnecting', this.onReconnecting);
+    }
 
     if (wsInstance) {
       wsInstance?.terminate();
@@ -258,6 +327,12 @@ export class WSClient {
         // if reconnectCount < 0, the reconnect time is infinite
         if (isSuccess) {
           this.logger.debug('[ws]', 'reconnect success');
+          if (this.hasEverConnected) {
+            this.safeInvoke('onReconnected', this.onReconnected);
+          } else {
+            this.hasEverConnected = true;
+            this.safeInvoke('onReady', this.onReady);
+          }
           this.isConnecting = false;
           return;
         }
@@ -266,6 +341,11 @@ export class WSClient {
 
         if (reconnectCount >= 0 && count >= reconnectCount) {
           this.isConnecting = false;
+          this.safeInvoke(
+            'onError',
+            this.onError,
+            new Error(`WebSocket reconnect exhausted after ${count} attempts`),
+          );
           return;
         }
 

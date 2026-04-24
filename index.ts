@@ -19,3 +19,4 @@ export * as messageCard from './utils/message-card';
 export { WSClient } from './ws-client';
 export { Aily } from './scene/aily/client';
 export { registerApp } from './scene/registration';
+export * from './channel';

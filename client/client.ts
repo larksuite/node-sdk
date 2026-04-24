@@ -11,6 +11,7 @@ import {
     formatDomain,
     assert,
     formatUrl,
+    buildUserAgent,
 } from '@node-sdk/utils';
 import RequestTemplate from '@node-sdk/code-gen/client-template';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
@@ -45,6 +46,8 @@ export class Client extends RequestTemplate {
 
     userAccessToken: UserAccessToken;
 
+    private readonly userAgent: string;
+
     constructor(params: IClientParams) {
         super();
 
@@ -56,6 +59,7 @@ export class Client extends RequestTemplate {
         this.appId = params.appId;
         this.appSecret = params.appSecret;
         this.disableTokenCache = params.disableTokenCache;
+        this.userAgent = buildUserAgent(params.source);
 
         assert(!this.appId, () => this.logger.error('appId is needed'));
         assert(!this.appSecret, () => this.logger.error('appSecret is needed'));
@@ -133,7 +137,7 @@ export class Client extends RequestTemplate {
         return {
             params: { ...(payload?.params || {}), ...targetOptions.params },
             headers: {
-                'User-Agent': 'oapi-node-sdk/1.0.0',
+                'User-Agent': this.userAgent,
                 ...(payload?.headers || {}),
                 ...targetOptions.headers,
             },
