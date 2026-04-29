@@ -59,4 +59,29 @@ describe('buildUserAgent', () => {
         const ua = buildUserAgent('机器人');
         expect(ua).toContain('source/___');
     });
+
+    test('extraTags are appended as bare product tokens after source', () => {
+        const ua = buildUserAgent('cursor-bot', { extraTags: ['channel'] });
+        expect(ua).toMatch(/^oapi-node-sdk\/\d+\.\d+\.\d+ source\/cursor-bot channel$/);
+    });
+
+    test('extraTags are appended even without source', () => {
+        const ua = buildUserAgent(undefined, { extraTags: ['channel'] });
+        expect(ua).toMatch(/^oapi-node-sdk\/\d+\.\d+\.\d+ channel$/);
+    });
+
+    test('multiple extraTags are appended in order', () => {
+        const ua = buildUserAgent('x', { extraTags: ['channel', 'beta'] });
+        expect(ua).toContain('source/x channel beta');
+    });
+
+    test('extraTags are sanitized (non-token chars replaced)', () => {
+        const ua = buildUserAgent(undefined, { extraTags: ['has space'] });
+        expect(ua).toContain('has_space');
+    });
+
+    test('empty extraTags are dropped (matches sanitize-then-append rule)', () => {
+        const ua = buildUserAgent('x', { extraTags: [''] });
+        expect(ua).toMatch(/^oapi-node-sdk\/\d+\.\d+\.\d+ source\/x$/);
+    });
 });

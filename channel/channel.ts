@@ -72,6 +72,7 @@ export class LarkChannel {
             logger: opts.logger,
             loggerLevel: opts.loggerLevel,
             source: opts.source,
+            extraUaTags: ['channel'],
         });
 
         this.dispatcher = new EventDispatcher({
@@ -152,6 +153,7 @@ export class LarkChannel {
                 httpInstance: this.opts.httpInstance,
                 autoReconnect: true,
                 source: this.opts.source,
+                extraUaTags: ['channel'],
                 onReady: () => {
                     if (settled) return;
                     settled = true;

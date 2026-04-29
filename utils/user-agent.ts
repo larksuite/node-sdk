@@ -45,16 +45,20 @@ export function sanitizeSource(raw: string): string {
     return raw.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 64);
 }
 
-/**
- * Build the User-Agent value. When `source` is provided it appends a
- * `source/<sanitized>` product token, e.g.
- *     oapi-node-sdk/1.62.0 source/cursor-bot
- * Falsy or all-invalid-char `source` values produce the base UA without
- * the extra token.
- */
-export function buildUserAgent(source?: string): string {
-    const base = `oapi-node-sdk/${getSdkVersion()}`;
-    if (!source) return base;
-    const clean = sanitizeSource(source);
-    return clean ? `${base} source/${clean}` : base;
+export function buildUserAgent(
+    source?: string,
+    opts?: { extraTags?: string[] }
+): string {
+    let ua = `oapi-node-sdk/${getSdkVersion()}`;
+    if (source) {
+        const clean = sanitizeSource(source);
+        if (clean) ua += ` source/${clean}`;
+    }
+    if (opts?.extraTags) {
+        for (const t of opts.extraTags) {
+            const clean = sanitizeSource(t);
+            if (clean) ua += ` ${clean}`;
+        }
+    }
+    return ua;
 }

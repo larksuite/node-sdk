@@ -33,6 +33,8 @@ export interface IClientParams {
     httpInstance?: HttpInstance;
     /** Caller tag appended to User-Agent as `source/<name>`. */
     source?: string;
+    /** @internal Extra bare tokens appended to User-Agent, set by sub-modules. */
+    extraUaTags?: string[];
 }
 
 export interface IPayload {

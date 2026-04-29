@@ -24,6 +24,8 @@ interface IConstructorParams {
   agent?: any;
   /** Caller tag appended to User-Agent as `source/<name>`. */
   source?: string;
+  /** @internal Extra bare tokens appended to User-Agent, set by sub-modules. */
+  extraUaTags?: string[];
   /** Fires once when the first WebSocket handshake succeeds. */
   onReady?: () => void;
   /**
@@ -87,13 +89,14 @@ export class WSClient {
       logger = defaultLogger,
       autoReconnect = true,
       source,
+      extraUaTags,
       onReady,
       onError,
       onReconnecting,
       onReconnected,
     } = params;
 
-    this.userAgent = buildUserAgent(source);
+    this.userAgent = buildUserAgent(source, { extraTags: extraUaTags });
 
     this.logger = new LoggerProxy(loggerLevel, logger);
 
