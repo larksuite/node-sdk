@@ -55,6 +55,26 @@ describe('normalizeCardAction', () => {
         });
         expect(r!.action.tag).toBe('unknown');
     });
+
+    test('includeRaw: false / unset → no raw on result', () => {
+        const ev = {
+            context: { open_message_id: 'om_1', open_chat_id: 'oc_1' },
+            operator: { open_id: 'ou_alice' },
+            action: { tag: 'button' },
+        };
+        expect(normalizeCardAction(ev)!.raw).toBeUndefined();
+        expect(normalizeCardAction(ev, { includeRaw: false })!.raw).toBeUndefined();
+    });
+
+    test('includeRaw: true → raw event attached', () => {
+        const ev = {
+            context: { open_message_id: 'om_1', open_chat_id: 'oc_1' },
+            operator: { open_id: 'ou_alice' },
+            action: { tag: 'button', value: { x: 1 } },
+        };
+        const r = normalizeCardAction(ev, { includeRaw: true });
+        expect(r!.raw).toBe(ev);
+    });
 });
 
 describe('normalizeReaction', () => {
@@ -103,6 +123,25 @@ describe('normalizeReaction', () => {
                 'added'
             )
         ).toBeNull();
+    });
+
+    test('includeRaw: true → raw event attached', () => {
+        const ev = {
+            message_id: 'om_1',
+            reaction_type: { emoji_type: 'OK' },
+            user_id: { open_id: 'ou_a' },
+        };
+        const r = normalizeReaction(ev, 'added', { includeRaw: true });
+        expect(r!.raw).toBe(ev);
+    });
+
+    test('includeRaw: unset → no raw on result', () => {
+        const ev = {
+            message_id: 'om_1',
+            reaction_type: { emoji_type: 'OK' },
+            user_id: { open_id: 'ou_a' },
+        };
+        expect(normalizeReaction(ev, 'added')!.raw).toBeUndefined();
     });
 });
 

@@ -14,7 +14,8 @@ export interface RawReactionEvent {
 
 export function normalizeReaction(
     event: RawReactionEvent,
-    action: 'added' | 'removed'
+    action: 'added' | 'removed',
+    opts?: { includeRaw?: boolean }
 ): ReactionEvent | null {
     const messageId = event.message_id;
     const emojiType = event.reaction_type?.emoji_type;
@@ -34,5 +35,6 @@ export function normalizeReaction(
         emojiType,
         action,
         actionTime: actionTime != null && Number.isFinite(actionTime) ? actionTime : undefined,
+        raw: opts?.includeRaw ? event : undefined,
     };
 }

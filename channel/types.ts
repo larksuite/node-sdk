@@ -149,6 +149,7 @@ export interface CardActionEvent {
         name?: string;
         option?: string;
     };
+    raw?: unknown;
 }
 
 export interface ReactionEvent {
@@ -157,6 +158,7 @@ export interface ReactionEvent {
     emojiType: string;
     action: 'added' | 'removed';
     actionTime?: number;
+    raw?: unknown;
 }
 
 export interface BotAddedEvent {
@@ -238,6 +240,16 @@ export interface LarkChannelOptions {
     /** Caller tag appended to User-Agent as `source/<name>`. */
     source?: string;
 
+    /**
+     * Attach the raw Feishu event body on every normalized event
+     * (`message`, `cardAction`, `reaction`, `botAdded`, `comment`) as
+     * `evt.raw`. Useful when a handler needs fields that the normalizer
+     * dropped (e.g. `tenant_key`, `host`, `event_id`, vendor-specific
+     * extensions). Off by default — payloads are smaller and stricter.
+     */
+    includeRawEvent?: boolean;
+
+    /** @deprecated Use `includeRawEvent` instead. Retained for backward compatibility. */
     includeRawInMessage?: boolean;
 }
 

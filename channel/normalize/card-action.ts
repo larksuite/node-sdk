@@ -29,7 +29,10 @@ export interface RawCardActionEvent {
     };
 }
 
-export function normalizeCardAction(event: RawCardActionEvent): CardActionEvent | null {
+export function normalizeCardAction(
+    event: RawCardActionEvent,
+    opts?: { includeRaw?: boolean }
+): CardActionEvent | null {
     const messageId = event.context?.open_message_id ?? event.open_message_id;
     const chatId = event.context?.open_chat_id ?? event.open_chat_id;
     const operatorOpenId = event.operator?.open_id;
@@ -50,5 +53,6 @@ export function normalizeCardAction(event: RawCardActionEvent): CardActionEvent 
             name: event.action?.name,
             option: event.action?.option,
         },
+        raw: opts?.includeRaw ? event : undefined,
     };
 }

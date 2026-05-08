@@ -422,10 +422,14 @@ export class LarkChannel {
             }
         };
 
+        // Unified raw-event flag: prefer the new `includeRawEvent` option,
+        // fall back to the legacy `includeRawInMessage` for back-compat.
+        const includeRaw = this.opts.includeRawEvent ?? this.opts.includeRawInMessage ?? false;
+
         const normalizeOpts = {
             botIdentity: this.botIdentity!,
             stripBotMentions: true,
-            includeRaw: this.opts.includeRawInMessage,
+            includeRaw,
             fetchSubMessages,
         };
 
@@ -446,7 +450,7 @@ export class LarkChannel {
             // collapsed by the dedup cache. A genuine Feishu re-delivery
             // of the same click still hashes to the same key.
             'card.action.trigger': async (raw: unknown) => {
-                const evt = normalizeCardAction(raw as never);
+                const evt = normalizeCardAction(raw as never, { includeRaw });
                 if (!evt) return;
                 const actionId = cardActionId(evt.action);
                 await this.safety.pushAction(
@@ -461,13 +465,13 @@ export class LarkChannel {
 
             // Reactions — dedup only
             'im.message.reaction.created_v1': async (raw: unknown) => {
-                const evt = normalizeReaction(raw as never, 'added');
+                const evt = normalizeReaction(raw as never, 'added', { includeRaw });
                 if (!evt) return;
                 const key = reactionKey(evt);
                 await this.safety.pushLight(key, () => this.handlers.reaction?.(evt));
             },
             'im.message.reaction.deleted_v1': async (raw: unknown) => {
-                const evt = normalizeReaction(raw as never, 'removed');
+                const evt = normalizeReaction(raw as never, 'removed', { includeRaw });
                 if (!evt) return;
                 const key = reactionKey(evt);
                 await this.safety.pushLight(key, () => this.handlers.reaction?.(evt));
@@ -475,9 +479,7 @@ export class LarkChannel {
 
             // Bot added — direct fire, no safety
             'im.chat.member.bot.added_v1': (raw: unknown) => {
-                const evt = normalizeBotAdded(raw as never, {
-                    includeRaw: this.opts.includeRawInMessage,
-                });
+                const evt = normalizeBotAdded(raw as never, { includeRaw });
                 if (!evt) return;
                 try {
                     this.handlers.botAdded?.(evt);
@@ -486,9 +488,7 @@ export class LarkChannel {
 
             // Drive comments — dedup + lock + queue (by fileToken)
             'drive.notice.comment_add_v1': async (raw: unknown) => {
-                const evt = normalizeComment(raw as never, {
-                    includeRaw: this.opts.includeRawInMessage,
-                });
+                const evt = normalizeComment(raw as never, { includeRaw });
                 if (!evt) return;
                 await this.safety.pushAction(
                     `comment:${evt.fileToken}:${evt.commentId}`,
