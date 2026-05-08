@@ -270,3 +270,178 @@ describe('WSClient reconnect timer leak (#177)', () => {
     expect(httpMock.pendingRequests.length).toBe(0);
   }, 10000);
 });
+
+// ---------------------------------------------------------------------------
+// Retryable vs fatal classification (only code 1000040343 is retryable)
+// ---------------------------------------------------------------------------
+
+describe('retryable vs fatal classification', () => {
+    function makeFailResp(code: number, msg = 'failed') {
+        return { code, data: { URL: '', ClientConfig: {} }, msg };
+    }
+
+    function createControlledHttp() {
+        const pendingRequests: Array<ReturnType<typeof createDeferred<any>>> = [];
+        const request = jest.fn().mockImplementation(() => {
+            const d = createDeferred<any>();
+            pendingRequests.push(d);
+            return d.promise;
+        });
+        const resolveNext = (resp: any) => {
+            const d = pendingRequests.shift();
+            if (!d) throw new Error('No pending request');
+            d.resolve(resp);
+        };
+        const rejectNext = (err: any) => {
+            const d = pendingRequests.shift();
+            if (!d) throw new Error('No pending request');
+            d.reject(err);
+        };
+        return { request, pendingRequests, resolveNext, rejectNext };
+    }
+
+    function createClient(http: ReturnType<typeof createControlledHttp>, onError = jest.fn()) {
+        const client = new WSClient({
+            appId: 'test-app-id',
+            appSecret: 'test-app-secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+            onError,
+        });
+        return { client, onError };
+    }
+
+    test('first-connect: non-1000040343 code is fatal — onError fires once, no retry', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        expect(http.pendingRequests.length).toBe(1);
+
+        http.resolveNext(makeFailResp(403, 'forbidden'));
+        await flushPromises();
+        await delay(30);
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('code=403');
+        expect(http.pendingRequests.length).toBe(0);
+    }, 10000);
+
+    test('first-connect: code 1 (system_busy) is fatal under new rule', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        http.resolveNext(makeFailResp(1, 'system busy'));
+        await flushPromises();
+        await delay(30);
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('code=1');
+        expect(http.pendingRequests.length).toBe(0);
+    }, 10000);
+
+    test('first-connect: code 1000040343 is retryable — enters retry loop', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+        const priv = client as any;
+        // Bound the retry loop so the test exits.
+        priv.wsConfig.updateWs({ reconnectCount: 2, reconnectInterval: 5, reconnectNonce: 0 });
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+
+        // 1st attempt (from isStart): retryable failure.
+        http.resolveNext(makeFailResp(1000040343, 'internal'));
+        await flushPromises();
+        await delay(15);
+
+        // The retry loop should have produced another request.
+        expect(http.pendingRequests.length).toBeGreaterThanOrEqual(1);
+        // onError should NOT have fired yet (we're still retrying).
+        expect(onError).not.toHaveBeenCalled();
+
+        // Drain until exhaust.
+        while (http.pendingRequests.length > 0) {
+            http.resolveNext(makeFailResp(1000040343, 'internal'));
+            await flushPromises();
+            await delay(15);
+        }
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('exhausted');
+    }, 10000);
+
+    test('first-connect: HTTP exception (catch branch) is retryable', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+        const priv = client as any;
+        priv.wsConfig.updateWs({ reconnectCount: 2, reconnectInterval: 5, reconnectNonce: 0 });
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+
+        // 1st attempt rejects with a network error.
+        http.rejectNext(new Error('ETIMEDOUT'));
+        await flushPromises();
+        await delay(15);
+
+        expect(http.pendingRequests.length).toBeGreaterThanOrEqual(1);
+        expect(onError).not.toHaveBeenCalled();
+
+        while (http.pendingRequests.length > 0) {
+            http.rejectNext(new Error('ETIMEDOUT'));
+            await flushPromises();
+            await delay(15);
+        }
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('exhausted');
+    }, 10000);
+
+    test('reconnect-loop fatal resets hasEverConnected to false', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+        const priv = client as any;
+        priv.eventDispatcher = new EventDispatcher({} as any);
+        // Simulate prior successful connect.
+        priv.hasEverConnected = true;
+        priv.wsConfig.updateWs({
+            reconnectCount: 3,
+            reconnectInterval: 5,
+            reconnectNonce: 0,
+        });
+
+        priv.reConnect(false);
+        await flushPromises();
+        await delay(15);
+
+        expect(http.pendingRequests.length).toBe(1);
+        http.resolveNext(makeFailResp(403, 'forbidden'));
+        await flushPromises();
+        await delay(20);
+
+        expect(priv.hasEverConnected).toBe(false);
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('code=403');
+    }, 10000);
+
+    test('first-connect fatal also resets hasEverConnected to false', async () => {
+        const http = createControlledHttp();
+        const { client, onError } = createClient(http);
+        const priv = client as any;
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        http.resolveNext(makeFailResp(514, 'auth failed'));
+        await flushPromises();
+        await delay(15);
+
+        expect(priv.hasEverConnected).toBe(false);
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect((onError.mock.calls[0][0] as Error).message).toContain('code=514');
+    }, 10000);
+});

@@ -5,40 +5,14 @@ import { assert, formatDomain, buildUserAgent } from '@node-sdk/utils';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { Domain, Logger, LoggerLevel } from '@node-sdk/typings';
-import { HttpInstance } from '@node-sdk/typings/http';
 import defaultHttpInstance from '@node-sdk/http';
+import { HttpInstance } from '@node-sdk/typings/http';
 import * as protoBuf from './proto-buf';
 import { WSConfig } from './ws-config';
 import { DataCache } from './data-cache';
 import { ErrorCode, FrameType, HeaderKey, HttpStatusCode, MessageType } from './enum';
 import { pbbp2 } from './proto-buf/pbbp2';
-
-interface IConstructorParams {
-  appId: string;
-  appSecret: string;
-  domain?: string | Domain;
-  logger?: Logger;
-  loggerLevel?: LoggerLevel;
-  httpInstance?: HttpInstance;
-  autoReconnect?: boolean;
-  agent?: any;
-  /** Caller tag appended to User-Agent as `source/<name>`. */
-  source?: string;
-  /** @internal Extra bare tokens appended to User-Agent, set by sub-modules. */
-  extraUaTags?: string[];
-  /** Fires once when the first WebSocket handshake succeeds. */
-  onReady?: () => void;
-  /**
-   * Fires when the initial connect fails and the client either cannot retry
-   * (autoReconnect=false) or exhausts `reconnectCount` retries. The callback
-   * receives an Error describing the final failure.
-   */
-  onError?: (err: Error) => void;
-  /** Fires when the client enters the reconnect loop (i.e., after a disconnect). */
-  onReconnecting?: () => void;
-  /** Fires after the reconnect loop successfully re-establishes the connection. */
-  onReconnected?: () => void;
-}
+import { IConstructorParams, ConnectResult } from './types';
 
 export class WSClient {
   private wsConfig = new WSConfig();
@@ -139,7 +113,7 @@ export class WSClient {
     }
   }
 
-  private async pullConnectConfig() {
+  private async pullConnectConfig(): Promise<ConnectResult> {
     const {
       appId,
       appSecret
@@ -169,10 +143,16 @@ export class WSClient {
       });
 
       if (code !== ErrorCode.ok) {
-        this.logger.error('[ws]', `code: ${code}, ${code === ErrorCode.system_busy ? msg : 'system busy'}`);
-        if (code === ErrorCode.system_busy || code === ErrorCode.internal_error) {
-          return false;
+        const reason = code === ErrorCode.system_busy ? 'system busy' : msg;
+        this.logger.error('[ws]', `code: ${code}, ${reason}`);
+        if (code === ErrorCode.internal_error) {
+          return { ok: false, retryable: true };
         }
+        return {
+          ok: false,
+          retryable: false,
+          error: `pullConnectConfig failed: code=${code}, msg=${reason}`,
+        };
       }
 
       const {
@@ -194,10 +174,10 @@ export class WSClient {
 
       this.logger.debug('[ws]', `get connect config success, ws url: ${URL}`);
 
-      return true;
+      return { ok: true };
     } catch(e) {
       this.logger.error('[ws]', (e as any)?.message || 'system busy');
-      return false;
+      return { ok: false, retryable: true };
     }
   }
 
@@ -243,17 +223,14 @@ export class WSClient {
     // Invalidate any in-flight reconnect loops from previous sessions
     const currentGeneration = ++this.reconnectGeneration;
 
-    const tryConnect = () => {
+    const tryConnect = async (): Promise<ConnectResult> => {
       this.reconnectInfo.lastConnectTime = Date.now();
-      return this.pullConnectConfig()
-        .then(isSuccess => isSuccess ? this.connect() : Promise.resolve(false))
-        .then(isSuccess => {
-          if (isSuccess) {
-            this.communicate();
-            return Promise.resolve(true);
-          }
-          return Promise.resolve(false);
-        });
+      const pullResult = await this.pullConnectConfig();
+      if (!pullResult.ok) return pullResult;
+      const connected = await this.connect();
+      if (!connected) return { ok: false, retryable: true };
+      this.communicate();
+      return { ok: true };
     }
 
     if (this.pingInterval) {
@@ -270,15 +247,22 @@ export class WSClient {
       if (wsInstance) {
         wsInstance?.terminate();
       }
-      let isSuccess = false;
+      let result: ConnectResult = { ok: false, retryable: true };
       try {
-        isSuccess = await tryConnect();
+        result = await tryConnect();
       } finally {
         this.isConnecting = false;
       }
-      if (isSuccess) {
+      if (result.ok) {
         this.hasEverConnected = true;
         this.safeInvoke('onReady', this.onReady);
+      } else if (!result.retryable) {
+        // Non-recoverable error from pullConnectConfig — bail out without retry.
+        // Reset hasEverConnected so a subsequent start() is treated as a fresh
+        // session (onReady fires, not onReconnected).
+        this.hasEverConnected = false;
+        this.safeInvoke('onError', this.onError, new Error(result.error));
+        return;
       } else {
         this.logger.error('[ws]', 'connect failed');
         await this.reConnect();
@@ -320,7 +304,7 @@ export class WSClient {
         }
 
         count++;
-        const isSuccess = await tryConnect();
+        const result = await tryConnect();
 
         // Re-check after async operation in case a new session started
         if (currentGeneration !== this.reconnectGeneration) {
@@ -328,7 +312,7 @@ export class WSClient {
         }
 
         // if reconnectCount < 0, the reconnect time is infinite
-        if (isSuccess) {
+        if (result.ok) {
           this.logger.debug('[ws]', 'reconnect success');
           if (this.hasEverConnected) {
             this.safeInvoke('onReconnected', this.onReconnected);
@@ -337,6 +321,16 @@ export class WSClient {
             this.safeInvoke('onReady', this.onReady);
           }
           this.isConnecting = false;
+          return;
+        }
+
+        if (!result.retryable) {
+          // Non-recoverable error — abort the loop, do not schedule another attempt.
+          // Reset hasEverConnected so a subsequent start() is treated as a fresh
+          // session (onReady fires, not onReconnected).
+          this.isConnecting = false;
+          this.hasEverConnected = false;
+          this.safeInvoke('onError', this.onError, new Error(result.error));
           return;
         }
 
