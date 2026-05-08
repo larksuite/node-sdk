@@ -533,24 +533,30 @@ export class WSClient {
   }
 
   async start(params: { eventDispatcher: EventDispatcher }) {
-    this.logger.info(
-      '[ws]',
-      `receive events or callbacks through persistent connection only available in self-build & Feishu app, Configured in:
-        Developer Console(开发者后台) 
-          ->
-        Events and Callbacks(事件与回调)
-          -> 
-        Mode of event/callback subscription(订阅方式)
-          -> 
-        Receive events/callbacks through persistent connection(使用 长连接 接收事件/回调)`
-    );
+    const { appId } = this.wsConfig.getClient();
+    if (!/^cli_[0-9a-fA-F]{16}$/.test(appId)) {
+      this.logger.error('[ws]', `invalid appId: ${appId}`);
+      return;
+    }
 
     const { eventDispatcher } = params;
-
     if (!eventDispatcher) {
       this.logger.warn('[ws]', 'client need to start with a eventDispatcher');
       return;
     }
+
+    this.logger.info(
+      '[ws]',
+      `receive events or callbacks through persistent connection only available in self-build & Feishu app, Configured in:
+        Developer Console(开发者后台)
+          ->
+        Events and Callbacks(事件与回调)
+          ->
+        Mode of event/callback subscription(订阅方式)
+          ->
+        Receive events/callbacks through persistent connection(使用 长连接 接收事件/回调)`
+    );
+
     this.eventDispatcher = eventDispatcher;
     this.reConnect(true);
   }

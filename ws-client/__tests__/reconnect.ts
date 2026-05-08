@@ -116,7 +116,7 @@ function createMockHttpInstance() {
 describe('WSClient reconnect timer leak (#177)', () => {
   function createClient(httpMock: ReturnType<typeof createMockHttpInstance>) {
     return new WSClient({
-      appId: 'test-app-id',
+      appId: 'cli_0000000000000001',
       appSecret: 'test-app-secret',
       loggerLevel: 4,
       httpInstance: httpMock as any,
@@ -302,7 +302,7 @@ describe('retryable vs fatal classification', () => {
 
     function createClient(http: ReturnType<typeof createControlledHttp>, onError = jest.fn()) {
         const client = new WSClient({
-            appId: 'test-app-id',
+            appId: 'cli_0000000000000001',
             appSecret: 'test-app-secret',
             loggerLevel: 4,
             httpInstance: http as any,
@@ -427,6 +427,44 @@ describe('retryable vs fatal classification', () => {
         expect(priv.hasEverConnected).toBe(false);
         expect(onError).toHaveBeenCalledTimes(1);
         expect((onError.mock.calls[0][0] as Error).message).toContain('code=403');
+    }, 10000);
+
+    test('start() with invalid appId logs error and does not connect', async () => {
+        const cases = [
+            'test-app-id',                  // legacy fixture format
+            'cli_short',                    // too short
+            'cli_00000000000000000',        // too long (17 hex chars)
+            'cli_g000000000000001',         // non-hex char
+            'CLI_0000000000000001',         // wrong prefix case
+            '',                             // empty
+        ];
+        for (const appId of cases) {
+            const http = createControlledHttp();
+            const client = new WSClient({
+                appId,
+                appSecret: 'secret',
+                loggerLevel: 4,
+                httpInstance: http as any,
+                autoReconnect: true,
+            });
+            await client.start({ eventDispatcher: new EventDispatcher({} as any) });
+            await flushPromises();
+            expect(http.pendingRequests.length).toBe(0);
+        }
+    }, 10000);
+
+    test('start() accepts uppercase hex appId (loose validation)', async () => {
+        const http = createControlledHttp();
+        const client = new WSClient({
+            appId: 'cli_ABCDEF0123456789',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+        });
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        expect(http.pendingRequests.length).toBe(1);
     }, 10000);
 
     test('first-connect fatal also resets hasEverConnected to false', async () => {
