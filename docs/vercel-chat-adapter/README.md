@@ -42,7 +42,7 @@ bot.onDirectMessage(async (thread, message) => {
 await bot.initialize();
 ```
 
-`bot.initialize()` opens the Lark WebSocket connection and keeps it alive until `bot.disconnect()` is called. The process stays alive as long as the WS is open, so no separate server is needed in a long-running environment.
+`bot.initialize()` opens the Lark WebSocket connection and keeps it alive until `bot.shutdown()` is called. The process stays alive as long as the WS is open, so no separate server is needed in a long-running environment.
 
 ## Creating a Lark app
 
