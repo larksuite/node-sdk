@@ -32,6 +32,7 @@ export {
     StreamInput,
     WebhookOptions,
 } from './types';
+export type { WSConfigOverrides, WSConnectionState, WSConnectionStatus } from '@node-sdk/ws-client';
 export {
     normalize,
     NormalizeOptions,

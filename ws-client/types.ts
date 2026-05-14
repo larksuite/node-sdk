@@ -1,6 +1,23 @@
 import { Domain, Logger, LoggerLevel } from '@node-sdk/typings';
 import { HttpInstance } from '@node-sdk/typings/http';
 
+/**
+ * Client-only WebSocket settings the Feishu server does not push. Server-
+ * controlled values (ping interval, reconnect interval / count / nonce) keep
+ * coming from `pullConnectConfig` and pong frames — those are not exposed
+ * here.
+ */
+export interface WSConfigOverrides {
+  /**
+   * Seconds. Liveness watchdog: if no inbound message arrives within this
+   * window after the last ping (or any prior server message), the
+   * connection is considered dead and a reconnect is triggered. Unset =
+   * disabled, preserving the original behavior of waiting for socket-level
+   * errors.
+   */
+  pingTimeout?: number;
+}
+
 export interface IConstructorParams {
   appId: string;
   appSecret: string;
@@ -26,6 +43,39 @@ export interface IConstructorParams {
   onReconnecting?: () => void;
   /** Fires after the reconnect loop successfully re-establishes the connection. */
   onReconnected?: () => void;
+  /**
+   * Milliseconds. Maximum time to wait for a WebSocket handshake (`open` /
+   * `error` event) before aborting the attempt and letting the retry loop
+   * try again. Unset = no client-side timeout; the handshake can hang
+   * indefinitely on stuck DNS / proxy / NAT paths.
+   */
+  handshakeTimeoutMs?: number;
+  /** Client-only WebSocket settings. See {@link WSConfigOverrides}. */
+  wsConfig?: WSConfigOverrides;
+}
+
+/**
+ * Current WebSocket lifecycle state, derived from internal flags.
+ * Returned by {@link WSClient.getConnectionStatus}.
+ */
+export type WSConnectionState =
+  | 'idle'
+  | 'connecting'
+  | 'connected'
+  | 'reconnecting'
+  | 'failed';
+
+export interface WSConnectionStatus {
+  state: WSConnectionState;
+  /** ms timestamp of the most recent tryConnect attempt, if any. */
+  lastConnectTime?: number;
+  /** ms timestamp of the next scheduled reconnect attempt, if pending. */
+  nextConnectTime?: number;
+  /**
+   * Consecutive reconnect attempts in the current loop. Resets to 0 on a
+   * successful connect.
+   */
+  reconnectAttempts: number;
 }
 
 /**

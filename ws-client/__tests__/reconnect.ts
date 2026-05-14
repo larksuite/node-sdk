@@ -483,3 +483,244 @@ describe('retryable vs fatal classification', () => {
         expect((onError.mock.calls[0][0] as Error).message).toContain('code=514');
     }, 10000);
 });
+
+// ---------------------------------------------------------------------------
+// F1: pingTimeout liveness watchdog
+// ---------------------------------------------------------------------------
+
+describe('pingTimeout liveness watchdog', () => {
+    function createClientWithPingTimeout(pingTimeoutSec: number | undefined) {
+        const http = createMockHttpInstance();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+            wsConfig: pingTimeoutSec === undefined ? undefined : { pingTimeout: pingTimeoutSec },
+        });
+        return { http, client };
+    }
+
+    test('disabled by default — no watchdog, no auto-terminate', async () => {
+        const { client } = createClientWithPingTimeout(undefined);
+        const priv = client as any;
+
+        // Simulate connected: arm via the internal method directly.
+        priv.armLiveness();
+        expect(priv.livenessTimer).toBeUndefined();
+    });
+
+    test('armLiveness schedules a timer when pingTimeout > 0', async () => {
+        const { client } = createClientWithPingTimeout(1);
+        const priv = client as any;
+        priv.armLiveness();
+        expect(priv.livenessTimer).toBeDefined();
+        priv.clearLiveness();
+    });
+
+    test('inbound message clears (not re-arms) the watchdog', async () => {
+        // Re-arming on inbound would terminate idle-but-healthy connections
+        // (ping every 30s + 3s watchdog → fires 3s after pong even though
+        // the link is fine). Cancelling on inbound is correct: the next
+        // ping will arm again.
+        const { client } = createClientWithPingTimeout(1);
+        const priv = client as any;
+        priv.armLiveness();
+        expect(priv.livenessTimer).toBeDefined();
+        priv.clearLiveness();
+        expect(priv.livenessTimer).toBeUndefined();
+    });
+
+    test('timer firing calls terminate() on the wsInstance', async () => {
+        const { client } = createClientWithPingTimeout(0.05); // 50ms
+        const priv = client as any;
+        const terminate = jest.fn();
+        priv.wsConfig.setWSInstance({ terminate } as any);
+
+        priv.armLiveness();
+        await delay(80);
+
+        expect(terminate).toHaveBeenCalledTimes(1);
+    }, 5000);
+
+    test('idle connection after pong does NOT trigger watchdog (regression)', async () => {
+        // Sequence: ping → arm (50ms watchdog) → pong inbound → clear → idle.
+        // With the previous (buggy) "re-arm on inbound" semantics, the
+        // watchdog would fire 50ms after pong, terminating a healthy
+        // connection. With the fix, it stays cleared until the next ping.
+        const { client } = createClientWithPingTimeout(0.05); // 50ms window
+        const priv = client as any;
+        const terminate = jest.fn();
+        priv.wsConfig.setWSInstance({ terminate } as any);
+
+        priv.armLiveness();          // simulate "ping sent"
+        await delay(20);
+        priv.clearLiveness();        // simulate "pong received"
+        await delay(80);             // wait past the original 50ms window
+
+        expect(terminate).not.toHaveBeenCalled();
+    }, 5000);
+});
+
+// ---------------------------------------------------------------------------
+// F2: handshakeTimeoutMs inside WSClient.connect
+// ---------------------------------------------------------------------------
+
+describe('handshakeTimeoutMs', () => {
+    test('hung handshake → terminate called, connect resolves false, retry kicks in', async () => {
+        const http = createMockHttpInstance();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+            handshakeTimeoutMs: 50,
+        });
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        http.resolveNext(true); // pullConnectConfig succeeds
+        await flushPromises();
+        // Mock WebSocket never emits 'open'/'error'. Without timeout this
+        // would hang. With 50ms timeout, connect() should resolve false
+        // and trigger a retry which queues a second pullConfig request.
+        await delay(120);
+        await flushPromises();
+
+        expect(http.request).toHaveBeenCalledTimes(2);
+    }, 10000);
+
+    test('unset handshakeTimeoutMs preserves original "no timeout" behavior', async () => {
+        const http = createMockHttpInstance();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+        });
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        http.resolveNext(true);
+        await flushPromises();
+        await delay(80);
+
+        // Without timeout, connect() stays pending → no second request.
+        expect(http.request).toHaveBeenCalledTimes(1);
+    }, 10000);
+});
+
+// ---------------------------------------------------------------------------
+// F3: getConnectionStatus()
+// ---------------------------------------------------------------------------
+
+describe('getConnectionStatus', () => {
+    function makeClient() {
+        const http = createMockHttpInstance();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+        });
+        return { http, client };
+    }
+
+    test('idle before start()', () => {
+        const { client } = makeClient();
+        const s = client.getConnectionStatus();
+        expect(s.state).toBe('idle');
+        expect(s.reconnectAttempts).toBe(0);
+        expect(s.lastConnectTime).toBeUndefined();
+    });
+
+    test('connecting after start() before pullConfig resolves', async () => {
+        const { http, client } = makeClient();
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        expect(http.pendingRequests.length).toBe(1);
+        const s = client.getConnectionStatus();
+        expect(s.state).toBe('connecting');
+    }, 10000);
+
+    test('failed after fatal pullConnectConfig error', async () => {
+        const http = createMockHttpInstance();
+        const onError = jest.fn();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+            onError,
+        });
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+        // 403 is fatal under current classification
+        http.resolveNext(false); // makeFailResponse() returns code 99999 — also fatal
+        await flushPromises();
+        await delay(20);
+
+        expect(onError).toHaveBeenCalledTimes(1);
+        const s = client.getConnectionStatus();
+        expect(s.state).toBe('failed');
+    }, 10000);
+
+    test('reconnectAttempts counter increments in loopReConnect', async () => {
+        const http = createMockHttpInstance();
+        const client = new WSClient({
+            appId: 'cli_0000000000000001',
+            appSecret: 'secret',
+            loggerLevel: 4,
+            httpInstance: http as any,
+            autoReconnect: true,
+        });
+        const priv = client as any;
+        priv.eventDispatcher = new EventDispatcher({} as any);
+        priv.wsConfig.updateWs({
+            autoReconnect: true,
+            reconnectNonce: 0,
+            reconnectInterval: 10,
+            reconnectCount: 5,
+        });
+
+        priv.reConnect(false);
+        await flushPromises();
+        await delay(20);
+        await flushPromises();
+        expect(http.pendingRequests.length).toBe(1);
+
+        // 1st retry attempt — count incremented before tryConnect resolves.
+        // Resolve as code 1000040343 (retryable) so it loops once more.
+        const d = http.pendingRequests.shift();
+        d?.resolve({
+            code: 1000040343,
+            data: { URL: '', ClientConfig: {} },
+            msg: 'internal',
+        });
+        await flushPromises();
+        await delay(20);
+
+        const s = client.getConnectionStatus();
+        expect(s.reconnectAttempts).toBeGreaterThanOrEqual(1);
+    }, 10000);
+
+    test('start() clears stale terminalError', async () => {
+        const { client } = makeClient();
+        const priv = client as any;
+        priv.terminalError = true;
+        priv.currentReconnectAttempts = 7;
+
+        client.start({ eventDispatcher: new EventDispatcher({} as any) });
+        await flushPromises();
+
+        const s = client.getConnectionStatus();
+        expect(s.state).toBe('connecting');
+        expect(s.reconnectAttempts).toBe(0);
+    }, 10000);
+});

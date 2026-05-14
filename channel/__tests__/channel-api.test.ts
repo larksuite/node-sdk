@@ -286,6 +286,119 @@ describe('card.action dedup key includes button identity', () => {
     });
 });
 
+describe('comment dedup key includes replyId', () => {
+    // Regression: previously the dedup key was
+    //   comment:${fileToken}:${commentId}
+    // so any reply within an existing comment thread (same commentId,
+    // different replyId) silently collided with the top-level comment
+    // and got dropped. The fix folds replyId into the key.
+
+    function buildRawComment(opts: {
+        fileToken?: string;
+        commentId: string;
+        replyId?: string;
+    }): unknown {
+        return {
+            file_token: opts.fileToken ?? 'doccn_x',
+            file_type: 'doc',
+            comment_id: opts.commentId,
+            reply_id: opts.replyId,
+            is_mentioned: true,
+            create_time: String(Date.now()),
+            notice_meta: {
+                from_user_id: { open_id: 'ou_alice' },
+            },
+        };
+    }
+
+    async function dispatchRaw(ch: any, raw: unknown) {
+        await ch.dispatcher.handles.get('drive.notice.comment_add_v1')(raw);
+    }
+
+    test('top-level comment fires the handler', async () => {
+        const ch = createChannel();
+        (ch as any).registerDispatcherHandlers();
+
+        const fired: Array<string | undefined> = [];
+        ch.on('comment', (evt) => { fired.push(evt.replyId); });
+
+        await dispatchRaw(ch, buildRawComment({
+            commentId: 'cmt_top_a',
+            // Use a unique fileToken/commentId so a previous test in this
+            // module can't collide via the module-level internalCache.
+        }));
+
+        expect(fired).toEqual([undefined]);
+    });
+
+    test('multiple replies in the same comment thread all fire the handler', async () => {
+        const ch = createChannel();
+        (ch as any).registerDispatcherHandlers();
+
+        const fired: Array<string | undefined> = [];
+        ch.on('comment', (evt) => { fired.push(evt.replyId); });
+
+        // Use a fresh commentId so this case doesn't inherit dedup state.
+        await dispatchRaw(ch, buildRawComment({
+            fileToken: 'doc_thread',
+            commentId: 'cmt_thread_a',
+            replyId: 'rpl_1',
+        }));
+        await dispatchRaw(ch, buildRawComment({
+            fileToken: 'doc_thread',
+            commentId: 'cmt_thread_a',
+            replyId: 'rpl_2',
+        }));
+        await dispatchRaw(ch, buildRawComment({
+            fileToken: 'doc_thread',
+            commentId: 'cmt_thread_a',
+            replyId: 'rpl_3',
+        }));
+
+        expect(fired).toEqual(['rpl_1', 'rpl_2', 'rpl_3']);
+    });
+
+    test('genuine duplicate (same commentId + replyId) is still deduped once', async () => {
+        const ch = createChannel();
+        (ch as any).registerDispatcherHandlers();
+
+        let calls = 0;
+        ch.on('comment', () => { calls++; });
+
+        const raw = buildRawComment({
+            fileToken: 'doc_dup',
+            commentId: 'cmt_dup_a',
+            replyId: 'rpl_x',
+        });
+        // Simulate Feishu re-delivery: same exact payload twice.
+        await dispatchRaw(ch, raw);
+        await dispatchRaw(ch, raw);
+
+        expect(calls).toBe(1);
+    });
+
+    test('top-level and a reply on the same comment do not collide', async () => {
+        const ch = createChannel();
+        (ch as any).registerDispatcherHandlers();
+
+        const fired: Array<string | undefined> = [];
+        ch.on('comment', (evt) => { fired.push(evt.replyId); });
+
+        await dispatchRaw(ch, buildRawComment({
+            fileToken: 'doc_mix',
+            commentId: 'cmt_mix_a',
+            // top-level
+        }));
+        await dispatchRaw(ch, buildRawComment({
+            fileToken: 'doc_mix',
+            commentId: 'cmt_mix_a',
+            replyId: 'rpl_1',
+        }));
+
+        expect(fired).toEqual([undefined, 'rpl_1']);
+    });
+});
+
 describe('share_chat / share_user / sticker outbound', () => {
     function stubSender(ch: ReturnType<typeof createChannel>) {
         const create = jest.fn().mockResolvedValue({ data: { message_id: 'om_ok' } });
@@ -322,5 +435,50 @@ describe('share_chat / share_user / sticker outbound', () => {
         const call = create.mock.calls[0][0];
         expect(call.data.msg_type).toBe('sticker');
         expect(JSON.parse(call.data.content)).toEqual({ file_key: 'sticker_abc' });
+    });
+});
+
+describe('getChatMode', () => {
+    function stubChatGet(ch: ReturnType<typeof createChannel>, response: unknown) {
+        const get = jest.fn().mockResolvedValue(response);
+        (ch.rawClient.im.v1.chat as any).get = get;
+        return get;
+    }
+
+    test('chat_mode="p2p" → "p2p"', async () => {
+        const ch = createChannel();
+        stubChatGet(ch, { data: { chat_mode: 'p2p' } });
+        expect(await ch.getChatMode('oc_x')).toBe('p2p');
+    });
+
+    test('chat_mode="group" → "group"', async () => {
+        const ch = createChannel();
+        stubChatGet(ch, { data: { chat_mode: 'group' } });
+        expect(await ch.getChatMode('oc_x')).toBe('group');
+    });
+
+    test('chat_mode="topic" → "topic"', async () => {
+        const ch = createChannel();
+        stubChatGet(ch, { data: { chat_mode: 'topic' } });
+        expect(await ch.getChatMode('oc_x')).toBe('topic');
+    });
+
+    test('missing chat_mode falls back to "group"', async () => {
+        const ch = createChannel();
+        stubChatGet(ch, { data: {} });
+        expect(await ch.getChatMode('oc_x')).toBe('group');
+    });
+
+    test('unknown chat_mode value falls back to "group"', async () => {
+        const ch = createChannel();
+        stubChatGet(ch, { data: { chat_mode: 'something_new' } });
+        expect(await ch.getChatMode('oc_x')).toBe('group');
+    });
+
+    test('chat.get API error propagates to caller', async () => {
+        const ch = createChannel();
+        const apiErr = new Error('permission_denied');
+        (ch.rawClient.im.v1.chat as any).get = jest.fn().mockRejectedValue(apiErr);
+        await expect(ch.getChatMode('oc_x')).rejects.toBe(apiErr);
     });
 });

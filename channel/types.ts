@@ -1,5 +1,6 @@
 import { Cache, Domain, Logger, LoggerLevel } from '@node-sdk/typings';
 import { HttpInstance } from '@node-sdk/typings/http';
+import type { WSConfigOverrides } from '@node-sdk/ws-client';
 
 // ─────────────────────────────────────────────────────────────
 // Normalized inbound message — the core output of the channel
@@ -241,6 +242,29 @@ export interface LarkChannelOptions {
     source?: string;
 
     /**
+     * Client-only WebSocket settings (currently `pingTimeout`). Forwarded
+     * to the underlying WSClient. Server-pushed values like ping cadence,
+     * reconnect interval / count are not exposed here — they stay
+     * server-authoritative.
+     */
+    wsConfig?: WSConfigOverrides;
+
+    /**
+     * Maximum time (ms) to wait for the WebSocket handshake (`open` /
+     * `error`) before aborting the attempt and letting the retry loop try
+     * again. When unset, no timeout is enforced — the handshake can hang
+     * indefinitely on stuck DNS / proxy / NAT paths.
+     */
+    handshakeTimeoutMs?: number;
+
+    /**
+     * Optional Node http(s) agent forwarded to the underlying WSClient for
+     * the WebSocket transport. Useful for routing the WS through an HTTP(S)
+     * proxy or for customizing TLS / keepalive.
+     */
+    agent?: any;
+
+    /**
      * Attach the raw Feishu event body on every normalized event
      * (`message`, `cardAction`, `reaction`, `botAdded`, `comment`) as
      * `evt.raw`. Useful when a handler needs fields that the normalizer
@@ -298,6 +322,18 @@ export interface OutboundConfig {
     streamThrottleMs?: number;
     streamThrottleChars?: number;
     streamInitialText?: string;
+    /**
+     * Maximum character count of a single streaming card's markdown element
+     * before the controller rolls over to a new card. Feishu enforces a
+     * per-element size limit on `cardkit.cardElement.content` updates; once
+     * cumulative AI output approaches that limit, further updates are
+     * rejected with `code: 230099 / ErrCode: 11310 "element exceeds the
+     * limit"`. The controller pre-emptively splits and creates a follow-up
+     * card so generation can continue without interruption.
+     *
+     * Default: 30000.
+     */
+    streamMaxElementChars?: number;
     ssrfGuard?: boolean | { allowlist?: string[] };
     /**
      * Restrict local file paths accepted by media `source` to the listed

@@ -1,5 +1,5 @@
 import { Client } from '@node-sdk/client/client';
-import { WSClient } from '@node-sdk/ws-client';
+import { WSClient, WSConnectionStatus } from '@node-sdk/ws-client';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
@@ -154,6 +154,9 @@ export class LarkChannel {
                 autoReconnect: true,
                 source: this.opts.source,
                 extraUaTags: ['channel'],
+                agent: this.opts.agent,
+                wsConfig: this.opts.wsConfig,
+                handshakeTimeoutMs: this.opts.handshakeTimeoutMs,
                 onReady: () => {
                     if (settled) return;
                     settled = true;
@@ -183,6 +186,16 @@ export class LarkChannel {
         try { await this.safety.dispose(); } catch { /* best effort */ }
         this.connected = false;
         this.connectPromise = undefined;
+    }
+
+    /**
+     * Snapshot of the WebSocket lifecycle (state, last/next connect times,
+     * current reconnect attempts). Returns `undefined` when the channel
+     * hasn't initialized a WSClient yet (e.g., before `connect()` is called
+     * or under the webhook transport).
+     */
+    getConnectionStatus(): WSConnectionStatus | undefined {
+        return this.rawWsClient?.getConnectionStatus();
     }
 
     // ─── event subscription ────────────────────────────────
@@ -352,6 +365,32 @@ export class LarkChannel {
         };
     }
 
+    /**
+     * Fetch the chat's mode via `im.v1.chat.get`. Returns one of:
+     *   - 'p2p'   — 单聊
+     *   - 'group' — 普通群
+     *   - 'topic' — 话题群
+     *
+     * Unknown / missing values fall back to 'group' for consistency with
+     * {@link getChatInfo}. The underlying API call is not cached — chat
+     * mode rarely changes within a chat's lifetime, so callers that read
+     * this on every inbound message should keep their own cache keyed by
+     * `chatId`.
+     *
+     * Throws on API failure (network, permission, invalid chatId) so the
+     * caller can decide how to handle it; silently defaulting would hide
+     * real problems.
+     */
+    async getChatMode(chatId: string): Promise<'p2p' | 'group' | 'topic'> {
+        const r = await this.rawClient.im.v1.chat.get({
+            path: { chat_id: chatId },
+        });
+        const mode = (r as { data?: { chat_mode?: string } }).data?.chat_mode;
+        if (mode === 'p2p') return 'p2p';
+        if (mode === 'topic') return 'topic';
+        return 'group';
+    }
+
     // ─── runtime config ────────────────────────────────────
 
     updatePolicy(partial: Partial<PolicyConfig>): void {
@@ -486,12 +525,15 @@ export class LarkChannel {
                 } catch (e) { this.emitError(e); }
             },
 
-            // Drive comments — dedup + lock + queue (by fileToken)
+            // Drive comments — dedup + lock + queue (by fileToken).
+            // The dedup key folds in replyId so thread replies on the same
+            // top-level comment don't collide with each other (or with the
+            // top-level comment itself).
             'drive.notice.comment_add_v1': async (raw: unknown) => {
                 const evt = normalizeComment(raw as never, { includeRaw });
                 if (!evt) return;
                 await this.safety.pushAction(
-                    `comment:${evt.fileToken}:${evt.commentId}`,
+                    `comment:${evt.fileToken}:${evt.commentId}:${evt.replyId ?? ''}`,
                     evt.fileToken,
                     async () => {
                         const h = this.handlers.comment;

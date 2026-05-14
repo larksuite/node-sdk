@@ -12,7 +12,9 @@ import { WSConfig } from './ws-config';
 import { DataCache } from './data-cache';
 import { ErrorCode, FrameType, HeaderKey, HttpStatusCode, MessageType } from './enum';
 import { pbbp2 } from './proto-buf/pbbp2';
-import { IConstructorParams, ConnectResult } from './types';
+import { IConstructorParams, ConnectResult, WSConnectionStatus, WSConnectionState } from './types';
+
+export type { WSConfigOverrides, WSConnectionStatus, WSConnectionState } from './types';
 
 export class WSClient {
   private wsConfig = new WSConfig();
@@ -52,6 +54,28 @@ export class WSClient {
    *  lifetime — used to distinguish first-connect from reconnect. */
   private hasEverConnected = false;
 
+  /** Seconds. Liveness watchdog window; 0 / undefined = disabled. */
+  private readonly pingTimeoutSec: number;
+
+  /** Milliseconds. WS handshake timer cap; 0 / undefined = disabled. */
+  private readonly handshakeTimeoutMs?: number;
+
+  /** Liveness watchdog handle. */
+  private livenessTimer?: NodeJS.Timeout;
+
+  /**
+   * Set true when the client gives up (fatal pull error or exhausted retries)
+   * and fires `onError`. Cleared on the next `start()`. Used to surface
+   * `state: 'failed'` in {@link getConnectionStatus}.
+   */
+  private terminalError = false;
+
+  /**
+   * Consecutive reconnect attempts in the current loop. Incremented in
+   * loopReConnect, reset to 0 on a successful connect.
+   */
+  private currentReconnectAttempts = 0;
+
   constructor(params: IConstructorParams) {
     const {
       appId,
@@ -68,6 +92,8 @@ export class WSClient {
       onError,
       onReconnecting,
       onReconnected,
+      handshakeTimeoutMs,
+      wsConfig: userWsConfig,
     } = params;
 
     this.userAgent = buildUserAgent(source, { extraTags: extraUaTags });
@@ -94,6 +120,43 @@ export class WSClient {
     this.onError = onError;
     this.onReconnecting = onReconnecting;
     this.onReconnected = onReconnected;
+
+    this.handshakeTimeoutMs = handshakeTimeoutMs;
+    this.pingTimeoutSec = userWsConfig?.pingTimeout ?? 0;
+  }
+
+  /**
+   * Start the pong watchdog after sending a ping. If no inbound frame
+   * arrives within `pingTimeout` seconds, the server is presumed dead and
+   * the socket is terminated to let the existing 'close' handler run the
+   * standard reconnect flow.
+   *
+   * No-op when `pingTimeout` is unset (preserves original behavior).
+   *
+   * Pair with {@link clearLiveness}, which is called on every inbound
+   * frame to cancel the watchdog (proof of life). We do NOT re-arm on
+   * inbound: re-arming would terminate idle but healthy connections
+   * (e.g. ping every 30s, watchdog 3s → fires 3s after pong while the
+   * connection is fine).
+   */
+  private armLiveness(): void {
+    if (!this.pingTimeoutSec) return;
+    if (this.livenessTimer) clearTimeout(this.livenessTimer);
+    this.livenessTimer = setTimeout(() => {
+      this.livenessTimer = undefined;
+      this.logger.warn(
+        '[ws]',
+        `no pong/inbound within ${this.pingTimeoutSec}s of last ping, terminating to trigger reconnect`,
+      );
+      try { this.wsConfig.getWSInstance()?.terminate(); } catch { /* best effort */ }
+    }, this.pingTimeoutSec * 1000);
+  }
+
+  private clearLiveness(): void {
+    if (this.livenessTimer) {
+      clearTimeout(this.livenessTimer);
+      this.livenessTimer = undefined;
+    }
   }
 
   /**
@@ -197,19 +260,39 @@ export class WSClient {
       return Promise.resolve(false);
     }
 
-    return new Promise((resolve) => {
+    return new Promise<boolean>((resolve) => {
+      let settled = false;
+      let timer: NodeJS.Timeout | undefined;
+      const settleOnce = (ok: boolean) => {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        resolve(ok);
+      };
+
+      // Optional handshake watchdog: if neither 'open' nor 'error' fires
+      // within the configured window (stuck DNS / proxy / NAT path), abort
+      // the attempt and let tryConnect treat it as a retryable failure.
+      if (this.handshakeTimeoutMs && this.handshakeTimeoutMs > 0) {
+        timer = setTimeout(() => {
+          this.logger.error('[ws]', `handshake timeout after ${this.handshakeTimeoutMs}ms`);
+          wsInstance!.removeAllListeners();
+          try { wsInstance!.terminate(); } catch { /* best effort */ }
+          settleOnce(false);
+        }, this.handshakeTimeoutMs);
+      }
+
       wsInstance.on('open', () => {
         this.logger.debug('[ws]', 'ws connect success');
         this.wsConfig.setWSInstance(wsInstance);
         this.pingLoop();
-        resolve(true);
+        settleOnce(true);
       });
       wsInstance.on('error', () => {
-        this.logger.error('[ws]', 'ws connect failed')
-        resolve(false);
+        this.logger.error('[ws]', 'ws connect failed');
+        settleOnce(false);
       });
     });
-
   }
 
   private async reConnect(isStart: boolean = false) {
@@ -261,6 +344,7 @@ export class WSClient {
         // Reset hasEverConnected so a subsequent start() is treated as a fresh
         // session (onReady fires, not onReconnected).
         this.hasEverConnected = false;
+        this.terminalError = true;
         this.safeInvoke('onError', this.onError, new Error(result.error));
         return;
       } else {
@@ -275,6 +359,7 @@ export class WSClient {
 
     if (!autoReconnect) {
       if (!this.hasEverConnected) {
+        this.terminalError = true;
         this.safeInvoke(
           'onError',
           this.onError,
@@ -304,6 +389,7 @@ export class WSClient {
         }
 
         count++;
+        this.currentReconnectAttempts = count;
         const result = await tryConnect();
 
         // Re-check after async operation in case a new session started
@@ -314,6 +400,7 @@ export class WSClient {
         // if reconnectCount < 0, the reconnect time is infinite
         if (result.ok) {
           this.logger.debug('[ws]', 'reconnect success');
+          this.currentReconnectAttempts = 0;
           if (this.hasEverConnected) {
             this.safeInvoke('onReconnected', this.onReconnected);
           } else {
@@ -330,6 +417,7 @@ export class WSClient {
           // session (onReady fires, not onReconnected).
           this.isConnecting = false;
           this.hasEverConnected = false;
+          this.terminalError = true;
           this.safeInvoke('onError', this.onError, new Error(result.error));
           return;
         }
@@ -338,6 +426,7 @@ export class WSClient {
 
         if (reconnectCount >= 0 && count >= reconnectCount) {
           this.isConnecting = false;
+          this.terminalError = true;
           this.safeInvoke(
             'onError',
             this.onError,
@@ -374,6 +463,7 @@ export class WSClient {
         LogID: 0
       };
       this.sendMessage(frame);
+      this.armLiveness();
       this.logger.trace('[ws]', 'ping success');
     }
 
@@ -384,6 +474,9 @@ export class WSClient {
     const wsInstance = this.wsConfig.getWSInstance();
 
     wsInstance?.on('message', async (buffer: Uint8Array) => {
+      // Any inbound frame proves the connection is alive — cancel the pong
+      // watchdog (but don't re-arm; it'll be armed again on the next ping).
+      this.clearLiveness();
       const data = protoBuf.decode(buffer);
       const { method } = data;
 
@@ -402,6 +495,7 @@ export class WSClient {
 
     wsInstance?.on('close', () => {
       this.logger.debug('[ws]', 'client closed');
+      this.clearLiveness();
       this.reConnect();
     });
 
@@ -502,6 +596,28 @@ export class WSClient {
   }
 
   /**
+   * Snapshot of the current WebSocket lifecycle, derived from internal
+   * flags so callers don't have to subscribe to every transition event.
+   * Cheap to call; no side effects.
+   */
+  getConnectionStatus(): WSConnectionStatus {
+    return {
+      state: this.computeState(),
+      lastConnectTime: this.reconnectInfo.lastConnectTime || undefined,
+      nextConnectTime: this.reconnectInfo.nextConnectTime || undefined,
+      reconnectAttempts: this.currentReconnectAttempts,
+    };
+  }
+
+  private computeState(): WSConnectionState {
+    if (this.terminalError) return 'failed';
+    if (this.isConnecting && !this.hasEverConnected) return 'connecting';
+    if (this.isConnecting && this.hasEverConnected) return 'reconnecting';
+    if (this.wsConfig.getWSInstance()?.readyState === WebSocket.OPEN) return 'connected';
+    return 'idle';
+  }
+
+  /**
    * close connection
    * @param params close params
    * @param params.force whether force close (use terminate instead of close)
@@ -518,7 +634,9 @@ export class WSClient {
       clearTimeout(this.reconnectInterval);
       this.reconnectInterval = undefined;
     }
+    this.clearLiveness();
     this.isConnecting = false;
+    this.currentReconnectAttempts = 0;
     const wsInstance = this.wsConfig.getWSInstance();
     if (wsInstance) {
       wsInstance.removeAllListeners();
@@ -544,6 +662,11 @@ export class WSClient {
       this.logger.warn('[ws]', 'client need to start with a eventDispatcher');
       return;
     }
+
+    // Clear any terminal-error state left over from a previous session so
+    // getConnectionStatus() reflects the fresh start.
+    this.terminalError = false;
+    this.currentReconnectAttempts = 0;
 
     this.logger.info(
       '[ws]',
