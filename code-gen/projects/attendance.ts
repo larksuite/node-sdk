@@ -2847,6 +2847,7 @@ export default abstract class Client extends approval {
                                 | "Todo";
                             external_id?: string;
                             idempotent_id?: string;
+                            create_time?: string;
                         }>;
                     };
                     params: { employee_type: "employee_id" | "employee_no" };
@@ -2892,6 +2893,7 @@ export default abstract class Client extends approval {
                                         | "Todo";
                                     external_id?: string;
                                     idempotent_id?: string;
+                                    create_time?: string;
                                 }>;
                             };
                         }
@@ -3010,6 +3012,7 @@ export default abstract class Client extends approval {
                                     | "Todo";
                                 external_id?: string;
                                 idempotent_id?: string;
+                                create_time?: string;
                             };
                         }
                     >({
@@ -3093,6 +3096,7 @@ export default abstract class Client extends approval {
                                         | "Todo";
                                     external_id?: string;
                                     idempotent_id?: string;
+                                    create_time?: string;
                                 }>;
                             };
                         }
@@ -3601,6 +3605,7 @@ export default abstract class Client extends approval {
                                                 | "Todo";
                                             external_id?: string;
                                             idempotent_id?: string;
+                                            create_time?: string;
                                         };
                                         check_out_record_id: string;
                                         check_out_record?: {
@@ -3632,6 +3637,7 @@ export default abstract class Client extends approval {
                                                 | "Todo";
                                             external_id?: string;
                                             idempotent_id?: string;
+                                            create_time?: string;
                                         };
                                         check_in_result:
                                             | "NoNeedCheck"
@@ -6731,6 +6737,7 @@ export default abstract class Client extends approval {
                                     | "Todo";
                                 external_id?: string;
                                 idempotent_id?: string;
+                                create_time?: string;
                             }>;
                         };
                         params: {
@@ -6778,6 +6785,7 @@ export default abstract class Client extends approval {
                                             | "Todo";
                                         external_id?: string;
                                         idempotent_id?: string;
+                                        create_time?: string;
                                     }>;
                                 };
                             }
@@ -6898,6 +6906,7 @@ export default abstract class Client extends approval {
                                         | "Todo";
                                     external_id?: string;
                                     idempotent_id?: string;
+                                    create_time?: string;
                                 };
                             }
                         >({
@@ -6981,6 +6990,7 @@ export default abstract class Client extends approval {
                                             | "Todo";
                                         external_id?: string;
                                         idempotent_id?: string;
+                                        create_time?: string;
                                     }>;
                                 };
                             }
@@ -7501,6 +7511,7 @@ export default abstract class Client extends approval {
                                                     | "Todo";
                                                 external_id?: string;
                                                 idempotent_id?: string;
+                                                create_time?: string;
                                             };
                                             check_out_record_id: string;
                                             check_out_record?: {
@@ -7532,6 +7543,7 @@ export default abstract class Client extends approval {
                                                     | "Todo";
                                                 external_id?: string;
                                                 idempotent_id?: string;
+                                                create_time?: string;
                                             };
                                             check_in_result:
                                                 | "NoNeedCheck"

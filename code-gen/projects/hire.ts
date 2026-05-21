@@ -618,7 +618,9 @@ export default abstract class Client extends helpdesk {
                 payload?: {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
-                        options?: Array<"get_latest_application_on_chain">;
+                        options?: Array<
+                            "get_latest_application_on_chain" | "with_job"
+                        >;
                     };
                     path: { application_id: string };
                 },
@@ -688,6 +690,37 @@ export default abstract class Client extends helpdesk {
                                         };
                                     }>;
                                     creator_id?: string;
+                                    job_info?: {
+                                        id?: string;
+                                        name?: string;
+                                        code?: string;
+                                        description?: string;
+                                        requirement?: string;
+                                        recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            active_status?: number;
+                                        };
+                                        department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        process_type?: number;
+                                        process_id?: string;
+                                        city_list?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    };
                                 };
                             };
                         }
@@ -832,6 +865,32 @@ export default abstract class Client extends helpdesk {
                                         id?: string;
                                         name?: string;
                                         code?: string;
+                                        description?: string;
+                                        requirement?: string;
+                                        recruitment_type?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            active_status?: number;
+                                        };
+                                        department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        process_type?: number;
+                                        process_id?: string;
+                                        city_list?: {
+                                            code?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
                                     };
                                     talent?: {
                                         id?: string;
@@ -905,6 +964,10 @@ export default abstract class Client extends helpdesk {
                                                                 en_us?: string;
                                                             };
                                                             score_val?: number;
+                                                            alias_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
                                                         };
                                                         dimension_options?: Array<{
                                                             id?: string;
@@ -913,6 +976,10 @@ export default abstract class Client extends helpdesk {
                                                                 en_us?: string;
                                                             };
                                                             score_val?: number;
+                                                            alias_name?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
                                                         }>;
                                                         dimension_score?: number;
                                                         recommended_job_level?: {
@@ -947,6 +1014,11 @@ export default abstract class Client extends helpdesk {
                                                                     en_us?: string;
                                                                 };
                                                             }>;
+                                                        }>;
+                                                        ability_assessments?: Array<{
+                                                            id?: string;
+                                                            ability_id?: string;
+                                                            content?: string;
                                                         }>;
                                                     }>;
                                                 }>;
@@ -3798,10 +3870,10 @@ export default abstract class Client extends helpdesk {
         evaluationTask: {
             listWithIterator: async (
                 payload?: {
-                    params: {
+                    params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id: string;
+                        user_id?: string;
                         activity_status?: number;
                         user_id_type?:
                             | "user_id"
@@ -3907,10 +3979,10 @@ export default abstract class Client extends helpdesk {
              */
             list: async (
                 payload?: {
-                    params: {
+                    params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id: string;
+                        user_id?: string;
                         activity_status?: number;
                         user_id_type?:
                             | "user_id"
@@ -6601,6 +6673,10 @@ export default abstract class Client extends helpdesk {
                                                                     en_us?: string;
                                                                 };
                                                                 score_val?: number;
+                                                                alias_name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
                                                             }>;
                                                             display_not_evident?: boolean;
                                                             ability_list?: Array<{
@@ -6622,6 +6698,11 @@ export default abstract class Client extends helpdesk {
                                                                     dimension_option_ids?: Array<string>;
                                                                 }>;
                                                             };
+                                                            dimension_ability_args?: Array<{
+                                                                ability_id?: string;
+                                                                place_holder?: string;
+                                                                en_place_holder?: string;
+                                                            }>;
                                                         }>;
                                                     }>;
                                                 }>;
@@ -6723,6 +6804,10 @@ export default abstract class Client extends helpdesk {
                                                     en_us?: string;
                                                 };
                                                 score_val?: number;
+                                                alias_name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
                                             }>;
                                             display_not_evident?: boolean;
                                             ability_list?: Array<{
@@ -6744,6 +6829,11 @@ export default abstract class Client extends helpdesk {
                                                     dimension_option_ids?: Array<string>;
                                                 }>;
                                             };
+                                            dimension_ability_args?: Array<{
+                                                ability_id?: string;
+                                                place_holder?: string;
+                                                en_place_holder?: string;
+                                            }>;
                                         }>;
                                     }>;
                                 }>;
@@ -7792,10 +7882,10 @@ export default abstract class Client extends helpdesk {
         interviewTask: {
             listWithIterator: async (
                 payload?: {
-                    params: {
+                    params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id: string;
+                        user_id?: string;
                         activity_status?: number;
                         user_id_type?:
                             | "user_id"
@@ -7901,10 +7991,10 @@ export default abstract class Client extends helpdesk {
              */
             list: async (
                 payload?: {
-                    params: {
+                    params?: {
                         page_size?: number;
                         page_token?: string;
-                        user_id: string;
+                        user_id?: string;
                         activity_status?: number;
                         user_id_type?:
                             | "user_id"
@@ -9433,6 +9523,15 @@ export default abstract class Client extends helpdesk {
                                         };
                                         order?: number;
                                     }>;
+                                    stage_count_list?: Array<{
+                                        count?: number;
+                                        stage?: {
+                                            id?: string;
+                                            zh_name?: string;
+                                            en_name?: string;
+                                            type?: number;
+                                        };
+                                    }>;
                                 };
                             };
                         }
@@ -9479,6 +9578,9 @@ export default abstract class Client extends helpdesk {
                         job_family_id_type?:
                             | "people_admin_job_category_id"
                             | "job_family_id";
+                        recruiter_id_list?: Array<string>;
+                        hiring_manager_id_list?: Array<string>;
+                        assistant_id_list?: Array<string>;
                     };
                 },
                 options?: IRequestOptions
@@ -16389,6 +16491,7 @@ export default abstract class Client extends helpdesk {
                                 value?: string;
                             }>;
                         }>;
+                        only_parse_resume_update_talent?: boolean;
                     };
                     params?: {
                         user_id_type?:
@@ -21824,7 +21927,9 @@ export default abstract class Client extends helpdesk {
                     payload?: {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
-                            options?: Array<"get_latest_application_on_chain">;
+                            options?: Array<
+                                "get_latest_application_on_chain" | "with_job"
+                            >;
                         };
                         path: { application_id: string };
                     },
@@ -21894,6 +21999,37 @@ export default abstract class Client extends helpdesk {
                                             };
                                         }>;
                                         creator_id?: string;
+                                        job_info?: {
+                                            id?: string;
+                                            name?: string;
+                                            code?: string;
+                                            description?: string;
+                                            requirement?: string;
+                                            recruitment_type?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                active_status?: number;
+                                            };
+                                            department?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            process_type?: number;
+                                            process_id?: string;
+                                            city_list?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                        };
                                     };
                                 };
                             }
@@ -22038,6 +22174,32 @@ export default abstract class Client extends helpdesk {
                                             id?: string;
                                             name?: string;
                                             code?: string;
+                                            description?: string;
+                                            requirement?: string;
+                                            recruitment_type?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                                active_status?: number;
+                                            };
+                                            department?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            process_type?: number;
+                                            process_id?: string;
+                                            city_list?: {
+                                                code?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
                                         };
                                         talent?: {
                                             id?: string;
@@ -22111,6 +22273,10 @@ export default abstract class Client extends helpdesk {
                                                                     en_us?: string;
                                                                 };
                                                                 score_val?: number;
+                                                                alias_name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
                                                             };
                                                             dimension_options?: Array<{
                                                                 id?: string;
@@ -22119,6 +22285,10 @@ export default abstract class Client extends helpdesk {
                                                                     en_us?: string;
                                                                 };
                                                                 score_val?: number;
+                                                                alias_name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
                                                             }>;
                                                             dimension_score?: number;
                                                             recommended_job_level?: {
@@ -22153,6 +22323,11 @@ export default abstract class Client extends helpdesk {
                                                                         en_us?: string;
                                                                     };
                                                                 }>;
+                                                            }>;
+                                                            ability_assessments?: Array<{
+                                                                id?: string;
+                                                                ability_id?: string;
+                                                                content?: string;
                                                             }>;
                                                         }>;
                                                     }>;
@@ -25101,10 +25276,10 @@ export default abstract class Client extends helpdesk {
             evaluationTask: {
                 listWithIterator: async (
                     payload?: {
-                        params: {
+                        params?: {
                             page_size?: number;
                             page_token?: string;
-                            user_id: string;
+                            user_id?: string;
                             activity_status?: number;
                             user_id_type?:
                                 | "user_id"
@@ -25212,10 +25387,10 @@ export default abstract class Client extends helpdesk {
                  */
                 list: async (
                     payload?: {
-                        params: {
+                        params?: {
                             page_size?: number;
                             page_token?: string;
-                            user_id: string;
+                            user_id?: string;
                             activity_status?: number;
                             user_id_type?:
                                 | "user_id"
@@ -27937,6 +28112,10 @@ export default abstract class Client extends helpdesk {
                                                                         en_us?: string;
                                                                     };
                                                                     score_val?: number;
+                                                                    alias_name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
                                                                 }>;
                                                                 display_not_evident?: boolean;
                                                                 ability_list?: Array<{
@@ -27958,6 +28137,11 @@ export default abstract class Client extends helpdesk {
                                                                         dimension_option_ids?: Array<string>;
                                                                     }>;
                                                                 };
+                                                                dimension_ability_args?: Array<{
+                                                                    ability_id?: string;
+                                                                    place_holder?: string;
+                                                                    en_place_holder?: string;
+                                                                }>;
                                                             }>;
                                                         }>;
                                                     }>;
@@ -28062,6 +28246,10 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                     score_val?: number;
+                                                    alias_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
                                                 }>;
                                                 display_not_evident?: boolean;
                                                 ability_list?: Array<{
@@ -28083,6 +28271,11 @@ export default abstract class Client extends helpdesk {
                                                         dimension_option_ids?: Array<string>;
                                                     }>;
                                                 };
+                                                dimension_ability_args?: Array<{
+                                                    ability_id?: string;
+                                                    place_holder?: string;
+                                                    en_place_holder?: string;
+                                                }>;
                                             }>;
                                         }>;
                                     }>;
@@ -29138,10 +29331,10 @@ export default abstract class Client extends helpdesk {
             interviewTask: {
                 listWithIterator: async (
                     payload?: {
-                        params: {
+                        params?: {
                             page_size?: number;
                             page_token?: string;
-                            user_id: string;
+                            user_id?: string;
                             activity_status?: number;
                             user_id_type?:
                                 | "user_id"
@@ -29249,10 +29442,10 @@ export default abstract class Client extends helpdesk {
                  */
                 list: async (
                     payload?: {
-                        params: {
+                        params?: {
                             page_size?: number;
                             page_token?: string;
-                            user_id: string;
+                            user_id?: string;
                             activity_status?: number;
                             user_id_type?:
                                 | "user_id"
@@ -30786,6 +30979,15 @@ export default abstract class Client extends helpdesk {
                                             };
                                             order?: number;
                                         }>;
+                                        stage_count_list?: Array<{
+                                            count?: number;
+                                            stage?: {
+                                                id?: string;
+                                                zh_name?: string;
+                                                en_name?: string;
+                                                type?: number;
+                                            };
+                                        }>;
                                     };
                                 };
                             }
@@ -30832,6 +31034,9 @@ export default abstract class Client extends helpdesk {
                             job_family_id_type?:
                                 | "people_admin_job_category_id"
                                 | "job_family_id";
+                            recruiter_id_list?: Array<string>;
+                            hiring_manager_id_list?: Array<string>;
+                            assistant_id_list?: Array<string>;
                         };
                     },
                     options?: IRequestOptions
@@ -37827,6 +38032,7 @@ export default abstract class Client extends helpdesk {
                                     value?: string;
                                 }>;
                             }>;
+                            only_parse_resume_update_talent?: boolean;
                         };
                         params?: {
                             user_id_type?:
@@ -42799,6 +43005,10 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                     score_val?: number;
+                                                    alias_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
                                                 };
                                                 dimension_options?: Array<{
                                                     id?: string;
@@ -42807,6 +43017,10 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                     score_val?: number;
+                                                    alias_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
                                                 }>;
                                                 dimension_score?: number;
                                                 recommended_job_level?: {
@@ -42840,6 +43054,11 @@ export default abstract class Client extends helpdesk {
                                                             en_us?: string;
                                                         };
                                                     }>;
+                                                }>;
+                                                ability_assessments?: Array<{
+                                                    id?: string;
+                                                    ability_id?: string;
+                                                    content?: string;
                                                 }>;
                                             }>;
                                         }>;
@@ -42981,6 +43200,10 @@ export default abstract class Client extends helpdesk {
                                                                         en_us?: string;
                                                                     };
                                                                     score_val?: number;
+                                                                    alias_name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
                                                                 };
                                                                 dimension_options?: Array<{
                                                                     id?: string;
@@ -42989,6 +43212,10 @@ export default abstract class Client extends helpdesk {
                                                                         en_us?: string;
                                                                     };
                                                                     score_val?: number;
+                                                                    alias_name?: {
+                                                                        zh_cn?: string;
+                                                                        en_us?: string;
+                                                                    };
                                                                 }>;
                                                                 dimension_score?: number;
                                                                 recommended_job_level?: {
@@ -43022,6 +43249,11 @@ export default abstract class Client extends helpdesk {
                                                                             en_us?: string;
                                                                         };
                                                                     }>;
+                                                                }>;
+                                                                ability_assessments?: Array<{
+                                                                    id?: string;
+                                                                    ability_id?: string;
+                                                                    content?: string;
                                                                 }>;
                                                             }>;
                                                         }>;
@@ -43120,6 +43352,10 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                     score_val?: number;
+                                                    alias_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
                                                 };
                                                 dimension_options?: Array<{
                                                     id?: string;
@@ -43128,6 +43364,10 @@ export default abstract class Client extends helpdesk {
                                                         en_us?: string;
                                                     };
                                                     score_val?: number;
+                                                    alias_name?: {
+                                                        zh_cn?: string;
+                                                        en_us?: string;
+                                                    };
                                                 }>;
                                                 dimension_score?: number;
                                                 recommended_job_level?: {
@@ -43161,6 +43401,11 @@ export default abstract class Client extends helpdesk {
                                                             en_us?: string;
                                                         };
                                                     }>;
+                                                }>;
+                                                ability_assessments?: Array<{
+                                                    id?: string;
+                                                    ability_id?: string;
+                                                    content?: string;
                                                 }>;
                                             }>;
                                         }>;

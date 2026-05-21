@@ -2057,6 +2057,87 @@ export default abstract class Client extends people_bytedance {
                         });
                 },
             },
+            /**
+             * user_info
+             */
+            userInfo: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=user_info&apiName=query&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=performance&resource=user_info&version=v2 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: { semester_id: string; user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            department_id_type?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    semester_id?: string;
+                                    user_infos?: Array<{
+                                        user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        direct_leader_user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        department?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_family?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        job_level?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v2/user_info/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
         },
     };
 }

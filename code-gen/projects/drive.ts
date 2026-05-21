@@ -48,7 +48,12 @@ export default abstract class Client extends docx {
             create: async (
                 payload?: {
                     data: {
-                        file_extension: "docx" | "pdf" | "xlsx" | "csv";
+                        file_extension:
+                            | "docx"
+                            | "pdf"
+                            | "xlsx"
+                            | "csv"
+                            | "base";
                         token: string;
                         type: "doc" | "sheet" | "bitable" | "docx";
                         sub_id?: string;
@@ -184,7 +189,8 @@ export default abstract class Client extends docx {
                                         | "docx"
                                         | "pdf"
                                         | "xlsx"
-                                        | "csv";
+                                        | "csv"
+                                        | "base";
                                     type: "doc" | "sheet" | "bitable" | "docx";
                                     file_name?: string;
                                     file_token?: string;
@@ -227,9 +233,18 @@ export default abstract class Client extends docx {
              */
             batchQuery: async (
                 payload?: {
-                    data: { comment_ids: Array<string> };
+                    data: {
+                        comment_ids: Array<string>;
+                        need_reaction?: boolean;
+                    };
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path?: { file_token?: string };
@@ -280,6 +295,11 @@ export default abstract class Client extends docx {
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
+                                            reactions?: Array<{
+                                                reaction_key: string;
+                                                count: number;
+                                                ahead_users?: Array<string>;
+                                            }>;
                                         }>;
                                     };
                                 }>;
@@ -327,6 +347,11 @@ export default abstract class Client extends docx {
                                         person?: { user_id: string };
                                     }>;
                                 };
+                                reactions?: Array<{
+                                    reaction_key: string;
+                                    count: number;
+                                    ahead_users?: Array<string>;
+                                }>;
                             }>;
                         };
                     };
@@ -377,6 +402,11 @@ export default abstract class Client extends docx {
                                         create_time?: number;
                                         update_time?: number;
                                         extra?: { image_list?: Array<string> };
+                                        reactions?: Array<{
+                                            reaction_key: string;
+                                            count: number;
+                                            ahead_users?: Array<string>;
+                                        }>;
                                     }>;
                                 };
                             };
@@ -410,8 +440,15 @@ export default abstract class Client extends docx {
             get: async (
                 payload?: {
                     params: {
-                        file_type: "doc" | "sheet" | "file" | "docx";
+                        file_type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "docx"
+                            | "slides"
+                            | "bitable";
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        need_reaction?: boolean;
                     };
                     path: { file_token: string; comment_id: string };
                 },
@@ -456,6 +493,11 @@ export default abstract class Client extends docx {
                                         create_time?: number;
                                         update_time?: number;
                                         extra?: { image_list?: Array<string> };
+                                        reactions?: Array<{
+                                            reaction_key: string;
+                                            count: number;
+                                            ahead_users?: Array<string>;
+                                        }>;
                                     }>;
                                 };
                             };
@@ -480,12 +522,19 @@ export default abstract class Client extends docx {
             listWithIterator: async (
                 payload?: {
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                         is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
                         page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        need_reaction?: boolean;
                     };
                     path: { file_token: string };
                 },
@@ -588,6 +637,11 @@ export default abstract class Client extends docx {
                                                             extra?: {
                                                                 image_list?: Array<string>;
                                                             };
+                                                            reactions?: Array<{
+                                                                reaction_key: string;
+                                                                count: number;
+                                                                ahead_users?: Array<string>;
+                                                            }>;
                                                         }>;
                                                     };
                                                 }>;
@@ -621,12 +675,19 @@ export default abstract class Client extends docx {
             list: async (
                 payload?: {
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                         is_whole?: boolean;
                         is_solved?: boolean;
                         page_token?: string;
                         page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        need_reaction?: boolean;
                     };
                     path: { file_token: string };
                 },
@@ -678,6 +739,11 @@ export default abstract class Client extends docx {
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
+                                            reactions?: Array<{
+                                                reaction_key: string;
+                                                count: number;
+                                                ahead_users?: Array<string>;
+                                            }>;
                                         }>;
                                     };
                                 }>;
@@ -713,7 +779,13 @@ export default abstract class Client extends docx {
                 payload?: {
                     data: { is_solved: boolean };
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                     };
                     path: { file_token: string; comment_id: string };
                 },
@@ -723,7 +795,10 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id`,
                             path
@@ -746,6 +821,87 @@ export default abstract class Client extends docx {
          */
         fileCommentReply: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        content: {
+                            elements: Array<{
+                                type: "text_run" | "docs_link" | "person";
+                                text_run?: { text: string };
+                                docs_link?: { url: string };
+                                person?: { user_id: string };
+                            }>;
+                        };
+                    };
+                    params: {
+                        file_type:
+                            | "doc"
+                            | "sheet"
+                            | "file"
+                            | "docx"
+                            | "slides"
+                            | "bitable";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { file_token: string; comment_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                content?: {
+                                    elements: Array<{
+                                        type:
+                                            | "text_run"
+                                            | "docs_link"
+                                            | "person";
+                                        text_run?: { text: string };
+                                        docs_link?: { url: string };
+                                        person?: { user_id: string };
+                                    }>;
+                                };
+                                reply_id?: string;
+                                user_id?: string;
+                                create_time?: number;
+                                update_time?: number;
+                                extra?: { image_list?: Array<string> };
+                                reactions?: Array<{
+                                    reaction_key: string;
+                                    count: number;
+                                    ahead_users?: Array<string>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/delete document }
@@ -757,7 +913,13 @@ export default abstract class Client extends docx {
             delete: async (
                 payload?: {
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                     };
                     path: {
                         file_token: string;
@@ -771,7 +933,10 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
                             path
@@ -793,7 +958,14 @@ export default abstract class Client extends docx {
                     params: {
                         page_size?: number;
                         page_token?: string;
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
+                        need_reaction?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string; comment_id: string };
@@ -882,6 +1054,11 @@ export default abstract class Client extends docx {
                                                     extra?: {
                                                         image_list?: Array<string>;
                                                     };
+                                                    reactions?: Array<{
+                                                        reaction_key: string;
+                                                        count: number;
+                                                        ahead_users?: Array<string>;
+                                                    }>;
                                                 }>;
                                                 page_token?: string;
                                                 has_more: boolean;
@@ -917,7 +1094,14 @@ export default abstract class Client extends docx {
                     params: {
                         page_size?: number;
                         page_token?: string;
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
+                        need_reaction?: boolean;
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: { file_token: string; comment_id: string };
@@ -951,6 +1135,11 @@ export default abstract class Client extends docx {
                                     create_time?: number;
                                     update_time?: number;
                                     extra?: { image_list?: Array<string> };
+                                    reactions?: Array<{
+                                        reaction_key: string;
+                                        count: number;
+                                        ahead_users?: Array<string>;
+                                    }>;
                                 }>;
                                 page_token?: string;
                                 has_more: boolean;
@@ -995,7 +1184,13 @@ export default abstract class Client extends docx {
                         };
                     };
                     params: {
-                        file_type: "doc" | "docx" | "sheet" | "file" | "slides";
+                        file_type:
+                            | "doc"
+                            | "docx"
+                            | "sheet"
+                            | "file"
+                            | "slides"
+                            | "bitable";
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
                     path: {
@@ -1010,7 +1205,10 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
                             path
@@ -1029,7 +1227,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 事件
+         * 分片上传
          */
         file: {
             /**
@@ -1312,7 +1510,10 @@ export default abstract class Client extends docx {
                     await this.formatPayload(payload, options);
 
                 return this.httpInstance
-                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/drive/v1/files/:file_token/delete_subscribe`,
                             path
@@ -1342,6 +1543,7 @@ export default abstract class Client extends docx {
              */
             download: async (
                 payload?: {
+                    params?: { version?: string };
                     path?: { file_token?: string };
                 },
                 options?: IRequestOptions
@@ -1789,11 +1991,12 @@ export default abstract class Client extends docx {
                 payload?: {
                     data: {
                         file_name: string;
-                        parent_type: "explorer";
+                        parent_type: "explorer" | "wiki";
                         parent_node: string;
                         size: number;
                         checksum?: string;
                         file: Buffer | fs.ReadStream;
+                        file_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -1856,7 +2059,7 @@ export default abstract class Client extends docx {
                         {
                             code?: number;
                             msg?: string;
-                            data?: { file_token?: string };
+                            data?: { file_token?: string; version?: string };
                         }
                     >({
                         url: fillApiPath(
@@ -1940,9 +2143,10 @@ export default abstract class Client extends docx {
                 payload?: {
                     data: {
                         file_name: string;
-                        parent_type: "explorer";
+                        parent_type: "explorer" | "wiki";
                         parent_node: string;
                         size: number;
+                        file_token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -2225,7 +2429,18 @@ export default abstract class Client extends docx {
              */
             create: async (
                 payload?: {
-                    data?: { name?: string; obj_type?: "docx" | "sheet" };
+                    data?: {
+                        owner_id?: string;
+                        obj_type?: "docx" | "sheet";
+                        parent_type?: "docx" | "sheet";
+                        name?: string;
+                        parent_token?: string;
+                        creator_id?: string;
+                        create_time?: string;
+                        update_time?: string;
+                        status?: "0" | "1" | "2";
+                        version?: string;
+                    };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                     };
@@ -2326,6 +2541,8 @@ export default abstract class Client extends docx {
                     params: {
                         obj_type: "docx" | "sheet";
                         user_id_type?: "open_id" | "union_id" | "user_id";
+                        page_token?: string;
+                        page_size?: number;
                     };
                     path: { file_token: string; version_id: string };
                 },
@@ -2727,6 +2944,7 @@ export default abstract class Client extends docx {
                         type: string;
                         file_name?: string;
                         point: { mount_type: number; mount_key: string };
+                        token?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -2814,7 +3032,7 @@ export default abstract class Client extends docx {
             },
         },
         /**
-         * 素材
+         * 分片上传
          */
         media: {
             /**
@@ -2971,7 +3189,12 @@ export default abstract class Client extends docx {
                             | "calendar"
                             | "base_global"
                             | "lark_ai_media_analysis"
-                            | "whiteboard";
+                            | "whiteboard"
+                            | "mindnote_image"
+                            | "comment_image"
+                            | "slide_img"
+                            | "slide_file"
+                            | "email";
                         parent_node: string;
                         size: number;
                         checksum?: string;
@@ -3138,7 +3361,12 @@ export default abstract class Client extends docx {
                             | "calendar"
                             | "base_global"
                             | "lark_ai_media_analysis"
-                            | "whiteboard";
+                            | "whiteboard"
+                            | "mindnote_image"
+                            | "comment_image"
+                            | "slide_img"
+                            | "slide_file"
+                            | "email";
                         size: number;
                         parent_node?: string;
                         extra?: string;
@@ -3237,6 +3465,20 @@ export default abstract class Client extends docx {
                                     latest_modify_time: string;
                                     url: string;
                                     sec_label_name?: string;
+                                    request_doc_info?: {
+                                        doc_token: string;
+                                        doc_type:
+                                            | "doc"
+                                            | "sheet"
+                                            | "bitable"
+                                            | "mindnote"
+                                            | "file"
+                                            | "wiki"
+                                            | "docx"
+                                            | "folder"
+                                            | "synced_block"
+                                            | "slides";
+                                    };
                                 }>;
                                 failed_list?: Array<{
                                     token: string;
@@ -3343,7 +3585,8 @@ export default abstract class Client extends docx {
                                 | "opendepartmentid"
                                 | "userid"
                                 | "groupid"
-                                | "wikispaceid";
+                                | "wikispaceid"
+                                | "appid";
                             member_id: string;
                             perm: "view" | "edit" | "full_access";
                             perm_type?: "container" | "single_page";
@@ -3355,6 +3598,9 @@ export default abstract class Client extends docx {
                                 | "wiki_space_member"
                                 | "wiki_space_viewer"
                                 | "wiki_space_editor";
+                            name?: string;
+                            avatar?: string;
+                            external_label?: boolean;
                         }>;
                     };
                     params: {
@@ -3394,7 +3640,8 @@ export default abstract class Client extends docx {
                                         | "opendepartmentid"
                                         | "userid"
                                         | "groupid"
-                                        | "wikispaceid";
+                                        | "wikispaceid"
+                                        | "appid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
                                     perm_type?: "container" | "single_page";
@@ -3406,6 +3653,9 @@ export default abstract class Client extends docx {
                                         | "wiki_space_member"
                                         | "wiki_space_viewer"
                                         | "wiki_space_editor";
+                                    name?: string;
+                                    avatar?: string;
+                                    external_label?: boolean;
                                 }>;
                             };
                         }
@@ -3437,8 +3687,8 @@ export default abstract class Client extends docx {
              */
             create: async (
                 payload?: {
-                    data: {
-                        member_type:
+                    data?: {
+                        member_type?:
                             | "email"
                             | "openid"
                             | "unionid"
@@ -3446,9 +3696,10 @@ export default abstract class Client extends docx {
                             | "opendepartmentid"
                             | "userid"
                             | "groupid"
-                            | "wikispaceid";
-                        member_id: string;
-                        perm: "view" | "edit" | "full_access";
+                            | "wikispaceid"
+                            | "appid";
+                        member_id?: string;
+                        perm?: "view" | "edit" | "full_access";
                         perm_type?: "container" | "single_page";
                         type?:
                             | "user"
@@ -3496,7 +3747,8 @@ export default abstract class Client extends docx {
                                         | "opendepartmentid"
                                         | "userid"
                                         | "groupid"
-                                        | "wikispaceid";
+                                        | "wikispaceid"
+                                        | "appid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
                                     perm_type?: "container" | "single_page";
@@ -3547,7 +3799,8 @@ export default abstract class Client extends docx {
                             | "group"
                             | "wiki_space_member"
                             | "wiki_space_viewer"
-                            | "wiki_space_editor";
+                            | "wiki_space_editor"
+                            | "appid";
                         perm_type?: "container" | "single_page";
                     };
                     params: {
@@ -3570,7 +3823,8 @@ export default abstract class Client extends docx {
                             | "userid"
                             | "unionid"
                             | "groupid"
-                            | "wikispaceid";
+                            | "wikispaceid"
+                            | "appid";
                     };
                     path: { token: string; member_id: string };
                 },
@@ -3647,7 +3901,8 @@ export default abstract class Client extends docx {
                                         | "opendepartmentid"
                                         | "userid"
                                         | "groupid"
-                                        | "wikispaceid";
+                                        | "wikispaceid"
+                                        | "appid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
                                     perm_type?: "container" | "single_page";
@@ -3689,9 +3944,9 @@ export default abstract class Client extends docx {
              */
             transferOwner: async (
                 payload?: {
-                    data: {
-                        member_type: "email" | "openid" | "userid";
-                        member_id: string;
+                    data?: {
+                        member_type?: "email" | "openid" | "userid" | "appid";
+                        member_id?: string;
                     };
                     params: {
                         type:
@@ -3748,8 +4003,8 @@ export default abstract class Client extends docx {
              */
             update: async (
                 payload?: {
-                    data: {
-                        member_type:
+                    data?: {
+                        member_type?:
                             | "email"
                             | "openid"
                             | "unionid"
@@ -3757,8 +4012,9 @@ export default abstract class Client extends docx {
                             | "opendepartmentid"
                             | "userid"
                             | "groupid"
-                            | "wikispaceid";
-                        perm: "view" | "edit" | "full_access";
+                            | "wikispaceid"
+                            | "appid";
+                        perm?: "view" | "edit" | "full_access";
                         perm_type?: "container" | "single_page";
                         type?:
                             | "user"
@@ -3805,7 +4061,8 @@ export default abstract class Client extends docx {
                                         | "opendepartmentid"
                                         | "userid"
                                         | "groupid"
-                                        | "wikispaceid";
+                                        | "wikispaceid"
+                                        | "appid";
                                     member_id: string;
                                     perm: "view" | "edit" | "full_access";
                                     perm_type?: "container" | "single_page";
@@ -4169,6 +4426,110 @@ export default abstract class Client extends docx {
                     });
             },
         },
+        /**
+         * user
+         */
+        user: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
+             */
+            removeSubscription: async (
+                payload?: {
+                    params: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
+             */
+            subscription: async (
+                payload?: {
+                    data: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/subscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
+             */
+            subscriptionStatus: async (
+                payload?: {
+                    params: { event_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        { code?: number; msg?: string; data?: { data: string } }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/drive/v1/user/subscription_status`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
             /**
              * 导出
@@ -4186,7 +4547,12 @@ export default abstract class Client extends docx {
                 create: async (
                     payload?: {
                         data: {
-                            file_extension: "docx" | "pdf" | "xlsx" | "csv";
+                            file_extension:
+                                | "docx"
+                                | "pdf"
+                                | "xlsx"
+                                | "csv"
+                                | "base";
                             token: string;
                             type: "doc" | "sheet" | "bitable" | "docx";
                             sub_id?: string;
@@ -4322,7 +4688,8 @@ export default abstract class Client extends docx {
                                             | "docx"
                                             | "pdf"
                                             | "xlsx"
-                                            | "csv";
+                                            | "csv"
+                                            | "base";
                                         type:
                                             | "doc"
                                             | "sheet"
@@ -4369,14 +4736,18 @@ export default abstract class Client extends docx {
                  */
                 batchQuery: async (
                     payload?: {
-                        data: { comment_ids: Array<string> };
+                        data: {
+                            comment_ids: Array<string>;
+                            need_reaction?: boolean;
+                        };
                         params: {
                             file_type:
                                 | "doc"
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path?: { file_token?: string };
@@ -4431,6 +4802,11 @@ export default abstract class Client extends docx {
                                                 extra?: {
                                                     image_list?: Array<string>;
                                                 };
+                                                reactions?: Array<{
+                                                    reaction_key: string;
+                                                    count: number;
+                                                    ahead_users?: Array<string>;
+                                                }>;
                                             }>;
                                         };
                                     }>;
@@ -4478,6 +4854,11 @@ export default abstract class Client extends docx {
                                             person?: { user_id: string };
                                         }>;
                                     };
+                                    reactions?: Array<{
+                                        reaction_key: string;
+                                        count: number;
+                                        ahead_users?: Array<string>;
+                                    }>;
                                 }>;
                             };
                         };
@@ -4532,6 +4913,11 @@ export default abstract class Client extends docx {
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
+                                            reactions?: Array<{
+                                                reaction_key: string;
+                                                count: number;
+                                                ahead_users?: Array<string>;
+                                            }>;
                                         }>;
                                     };
                                 };
@@ -4565,8 +4951,15 @@ export default abstract class Client extends docx {
                 get: async (
                     payload?: {
                         params: {
-                            file_type: "doc" | "sheet" | "file" | "docx";
+                            file_type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "docx"
+                                | "slides"
+                                | "bitable";
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            need_reaction?: boolean;
                         };
                         path: { file_token: string; comment_id: string };
                     },
@@ -4615,6 +5008,11 @@ export default abstract class Client extends docx {
                                             extra?: {
                                                 image_list?: Array<string>;
                                             };
+                                            reactions?: Array<{
+                                                reaction_key: string;
+                                                count: number;
+                                                ahead_users?: Array<string>;
+                                            }>;
                                         }>;
                                     };
                                 };
@@ -4644,12 +5042,14 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                             is_whole?: boolean;
                             is_solved?: boolean;
                             page_token?: string;
                             page_size?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            need_reaction?: boolean;
                         };
                         path: { file_token: string };
                     },
@@ -4754,6 +5154,11 @@ export default abstract class Client extends docx {
                                                                 extra?: {
                                                                     image_list?: Array<string>;
                                                                 };
+                                                                reactions?: Array<{
+                                                                    reaction_key: string;
+                                                                    count: number;
+                                                                    ahead_users?: Array<string>;
+                                                                }>;
                                                             }>;
                                                         };
                                                     }>;
@@ -4792,12 +5197,14 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                             is_whole?: boolean;
                             is_solved?: boolean;
                             page_token?: string;
                             page_size?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            need_reaction?: boolean;
                         };
                         path: { file_token: string };
                     },
@@ -4853,6 +5260,11 @@ export default abstract class Client extends docx {
                                                 extra?: {
                                                     image_list?: Array<string>;
                                                 };
+                                                reactions?: Array<{
+                                                    reaction_key: string;
+                                                    count: number;
+                                                    ahead_users?: Array<string>;
+                                                }>;
                                             }>;
                                         };
                                     }>;
@@ -4893,7 +5305,8 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                         };
                         path: { file_token: string; comment_id: string };
                     },
@@ -4905,7 +5318,11 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id`,
@@ -4929,6 +5346,87 @@ export default abstract class Client extends docx {
              */
             fileCommentReply: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=drive&resource=file.comment.reply&version=v1 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            content: {
+                                elements: Array<{
+                                    type: "text_run" | "docs_link" | "person";
+                                    text_run?: { text: string };
+                                    docs_link?: { url: string };
+                                    person?: { user_id: string };
+                                }>;
+                            };
+                        };
+                        params: {
+                            file_type:
+                                | "doc"
+                                | "sheet"
+                                | "file"
+                                | "docx"
+                                | "slides"
+                                | "bitable";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { file_token: string; comment_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    content?: {
+                                        elements: Array<{
+                                            type:
+                                                | "text_run"
+                                                | "docs_link"
+                                                | "person";
+                                            text_run?: { text: string };
+                                            docs_link?: { url: string };
+                                            person?: { user_id: string };
+                                        }>;
+                                    };
+                                    reply_id?: string;
+                                    user_id?: string;
+                                    create_time?: number;
+                                    update_time?: number;
+                                    extra?: { image_list?: Array<string> };
+                                    reactions?: Array<{
+                                        reaction_key: string;
+                                        count: number;
+                                        ahead_users?: Array<string>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=drive&resource=file.comment.reply&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/drive-v1/file-comment-reply/delete document }
@@ -4945,7 +5443,8 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                         };
                         path: {
                             file_token: string;
@@ -4961,7 +5460,11 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
@@ -4989,7 +5492,9 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
+                            need_reaction?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { file_token: string; comment_id: string };
@@ -5080,6 +5585,11 @@ export default abstract class Client extends docx {
                                                         extra?: {
                                                             image_list?: Array<string>;
                                                         };
+                                                        reactions?: Array<{
+                                                            reaction_key: string;
+                                                            count: number;
+                                                            ahead_users?: Array<string>;
+                                                        }>;
                                                     }>;
                                                     page_token?: string;
                                                     has_more: boolean;
@@ -5120,7 +5630,9 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
+                            need_reaction?: boolean;
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: { file_token: string; comment_id: string };
@@ -5154,6 +5666,11 @@ export default abstract class Client extends docx {
                                         create_time?: number;
                                         update_time?: number;
                                         extra?: { image_list?: Array<string> };
+                                        reactions?: Array<{
+                                            reaction_key: string;
+                                            count: number;
+                                            ahead_users?: Array<string>;
+                                        }>;
                                     }>;
                                     page_token?: string;
                                     has_more: boolean;
@@ -5203,7 +5720,8 @@ export default abstract class Client extends docx {
                                 | "docx"
                                 | "sheet"
                                 | "file"
-                                | "slides";
+                                | "slides"
+                                | "bitable";
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                         path: {
@@ -5220,7 +5738,11 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/comments/:comment_id/replies/:reply_id`,
@@ -5240,7 +5762,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 事件
+             * 分片上传
              */
             file: {
                 /**
@@ -5525,7 +6047,11 @@ export default abstract class Client extends docx {
                     return this.httpInstance
                         .request<
                             any,
-                            { code?: number; msg?: string; data?: {} }
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/drive/v1/files/:file_token/delete_subscribe`,
@@ -5556,6 +6082,7 @@ export default abstract class Client extends docx {
                  */
                 download: async (
                     payload?: {
+                        params?: { version?: string };
                         path?: { file_token?: string };
                     },
                     options?: IRequestOptions
@@ -6008,11 +6535,12 @@ export default abstract class Client extends docx {
                     payload?: {
                         data: {
                             file_name: string;
-                            parent_type: "explorer";
+                            parent_type: "explorer" | "wiki";
                             parent_node: string;
                             size: number;
                             checksum?: string;
                             file: Buffer | fs.ReadStream;
+                            file_token?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -6075,7 +6603,10 @@ export default abstract class Client extends docx {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { file_token?: string };
+                                data?: {
+                                    file_token?: string;
+                                    version?: string;
+                                };
                             }
                         >({
                             url: fillApiPath(
@@ -6162,9 +6693,10 @@ export default abstract class Client extends docx {
                     payload?: {
                         data: {
                             file_name: string;
-                            parent_type: "explorer";
+                            parent_type: "explorer" | "wiki";
                             parent_node: string;
                             size: number;
+                            file_token?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -6453,7 +6985,18 @@ export default abstract class Client extends docx {
                  */
                 create: async (
                     payload?: {
-                        data?: { name?: string; obj_type?: "docx" | "sheet" };
+                        data?: {
+                            owner_id?: string;
+                            obj_type?: "docx" | "sheet";
+                            parent_type?: "docx" | "sheet";
+                            name?: string;
+                            parent_token?: string;
+                            creator_id?: string;
+                            create_time?: string;
+                            update_time?: string;
+                            status?: "0" | "1" | "2";
+                            version?: string;
+                        };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                         };
@@ -6557,6 +7100,8 @@ export default abstract class Client extends docx {
                         params: {
                             obj_type: "docx" | "sheet";
                             user_id_type?: "open_id" | "union_id" | "user_id";
+                            page_token?: string;
+                            page_size?: number;
                         };
                         path: { file_token: string; version_id: string };
                     },
@@ -6967,6 +7512,7 @@ export default abstract class Client extends docx {
                             type: string;
                             file_name?: string;
                             point: { mount_type: number; mount_key: string };
+                            token?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -7054,7 +7600,7 @@ export default abstract class Client extends docx {
                 },
             },
             /**
-             * 素材
+             * 分片上传
              */
             media: {
                 /**
@@ -7211,7 +7757,12 @@ export default abstract class Client extends docx {
                                 | "calendar"
                                 | "base_global"
                                 | "lark_ai_media_analysis"
-                                | "whiteboard";
+                                | "whiteboard"
+                                | "mindnote_image"
+                                | "comment_image"
+                                | "slide_img"
+                                | "slide_file"
+                                | "email";
                             parent_node: string;
                             size: number;
                             checksum?: string;
@@ -7381,7 +7932,12 @@ export default abstract class Client extends docx {
                                 | "calendar"
                                 | "base_global"
                                 | "lark_ai_media_analysis"
-                                | "whiteboard";
+                                | "whiteboard"
+                                | "mindnote_image"
+                                | "comment_image"
+                                | "slide_img"
+                                | "slide_file"
+                                | "email";
                             size: number;
                             parent_node?: string;
                             extra?: string;
@@ -7480,6 +8036,20 @@ export default abstract class Client extends docx {
                                         latest_modify_time: string;
                                         url: string;
                                         sec_label_name?: string;
+                                        request_doc_info?: {
+                                            doc_token: string;
+                                            doc_type:
+                                                | "doc"
+                                                | "sheet"
+                                                | "bitable"
+                                                | "mindnote"
+                                                | "file"
+                                                | "wiki"
+                                                | "docx"
+                                                | "folder"
+                                                | "synced_block"
+                                                | "slides";
+                                        };
                                     }>;
                                     failed_list?: Array<{
                                         token: string;
@@ -7586,7 +8156,8 @@ export default abstract class Client extends docx {
                                     | "opendepartmentid"
                                     | "userid"
                                     | "groupid"
-                                    | "wikispaceid";
+                                    | "wikispaceid"
+                                    | "appid";
                                 member_id: string;
                                 perm: "view" | "edit" | "full_access";
                                 perm_type?: "container" | "single_page";
@@ -7598,6 +8169,9 @@ export default abstract class Client extends docx {
                                     | "wiki_space_member"
                                     | "wiki_space_viewer"
                                     | "wiki_space_editor";
+                                name?: string;
+                                avatar?: string;
+                                external_label?: boolean;
                             }>;
                         };
                         params: {
@@ -7637,7 +8211,8 @@ export default abstract class Client extends docx {
                                             | "opendepartmentid"
                                             | "userid"
                                             | "groupid"
-                                            | "wikispaceid";
+                                            | "wikispaceid"
+                                            | "appid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
                                         perm_type?: "container" | "single_page";
@@ -7649,6 +8224,9 @@ export default abstract class Client extends docx {
                                             | "wiki_space_member"
                                             | "wiki_space_viewer"
                                             | "wiki_space_editor";
+                                        name?: string;
+                                        avatar?: string;
+                                        external_label?: boolean;
                                     }>;
                                 };
                             }
@@ -7680,8 +8258,8 @@ export default abstract class Client extends docx {
                  */
                 create: async (
                     payload?: {
-                        data: {
-                            member_type:
+                        data?: {
+                            member_type?:
                                 | "email"
                                 | "openid"
                                 | "unionid"
@@ -7689,9 +8267,10 @@ export default abstract class Client extends docx {
                                 | "opendepartmentid"
                                 | "userid"
                                 | "groupid"
-                                | "wikispaceid";
-                            member_id: string;
-                            perm: "view" | "edit" | "full_access";
+                                | "wikispaceid"
+                                | "appid";
+                            member_id?: string;
+                            perm?: "view" | "edit" | "full_access";
                             perm_type?: "container" | "single_page";
                             type?:
                                 | "user"
@@ -7739,7 +8318,8 @@ export default abstract class Client extends docx {
                                             | "opendepartmentid"
                                             | "userid"
                                             | "groupid"
-                                            | "wikispaceid";
+                                            | "wikispaceid"
+                                            | "appid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
                                         perm_type?: "container" | "single_page";
@@ -7790,7 +8370,8 @@ export default abstract class Client extends docx {
                                 | "group"
                                 | "wiki_space_member"
                                 | "wiki_space_viewer"
-                                | "wiki_space_editor";
+                                | "wiki_space_editor"
+                                | "appid";
                             perm_type?: "container" | "single_page";
                         };
                         params: {
@@ -7813,7 +8394,8 @@ export default abstract class Client extends docx {
                                 | "userid"
                                 | "unionid"
                                 | "groupid"
-                                | "wikispaceid";
+                                | "wikispaceid"
+                                | "appid";
                         };
                         path: { token: string; member_id: string };
                     },
@@ -7893,7 +8475,8 @@ export default abstract class Client extends docx {
                                             | "opendepartmentid"
                                             | "userid"
                                             | "groupid"
-                                            | "wikispaceid";
+                                            | "wikispaceid"
+                                            | "appid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
                                         perm_type?: "container" | "single_page";
@@ -7935,9 +8518,13 @@ export default abstract class Client extends docx {
                  */
                 transferOwner: async (
                     payload?: {
-                        data: {
-                            member_type: "email" | "openid" | "userid";
-                            member_id: string;
+                        data?: {
+                            member_type?:
+                                | "email"
+                                | "openid"
+                                | "userid"
+                                | "appid";
+                            member_id?: string;
                         };
                         params: {
                             type:
@@ -7997,8 +8584,8 @@ export default abstract class Client extends docx {
                  */
                 update: async (
                     payload?: {
-                        data: {
-                            member_type:
+                        data?: {
+                            member_type?:
                                 | "email"
                                 | "openid"
                                 | "unionid"
@@ -8006,8 +8593,9 @@ export default abstract class Client extends docx {
                                 | "opendepartmentid"
                                 | "userid"
                                 | "groupid"
-                                | "wikispaceid";
-                            perm: "view" | "edit" | "full_access";
+                                | "wikispaceid"
+                                | "appid";
+                            perm?: "view" | "edit" | "full_access";
                             perm_type?: "container" | "single_page";
                             type?:
                                 | "user"
@@ -8054,7 +8642,8 @@ export default abstract class Client extends docx {
                                             | "opendepartmentid"
                                             | "userid"
                                             | "groupid"
-                                            | "wikispaceid";
+                                            | "wikispaceid"
+                                            | "appid";
                                         member_id: string;
                                         perm: "view" | "edit" | "full_access";
                                         perm_type?: "container" | "single_page";
@@ -8423,8 +9012,170 @@ export default abstract class Client extends docx {
                         });
                 },
             },
+            /**
+             * user
+             */
+            user: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=remove_subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remove_subscription&project=drive&resource=user&version=v1 document }
+                 */
+                removeSubscription: async (
+                    payload?: {
+                        params: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/remove_subscription`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=drive&resource=user&version=v1 document }
+                 */
+                subscription: async (
+                    payload?: {
+                        data: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=user&apiName=subscription_status&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription_status&project=drive&resource=user&version=v1 document }
+                 */
+                subscriptionStatus: async (
+                    payload?: {
+                        params: { event_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { data: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v1/user/subscription_status`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
         },
         v2: {
+            /**
+             * comment_reaction
+             */
+            commentReaction: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=drive&resource=comment_reaction&apiName=update_reaction&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update_reaction&project=drive&resource=comment_reaction&version=v2 document }
+                 *
+                 * 开放平台：添加/删除 reaction
+                 */
+                updateReaction: async (
+                    payload?: {
+                        data: {
+                            action: "add" | "delete";
+                            reply_id: string;
+                            reaction_type: string;
+                        };
+                        params: { file_type: string };
+                        path: { file_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/drive/v2/files/:file_token/comments/reaction`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * file.like
              */

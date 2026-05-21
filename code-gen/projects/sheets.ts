@@ -205,7 +205,7 @@ export default abstract class Client extends security_and_compliance {
                         condition: {
                             filter_type: string;
                             compare_type?: string;
-                            expected: Array<string>;
+                            expected?: Array<string>;
                         };
                     };
                     path?: { spreadsheet_token?: string; sheet_id?: string };
@@ -302,7 +302,7 @@ export default abstract class Client extends security_and_compliance {
                                         conditions: Array<{
                                             filter_type: string;
                                             compare_type?: string;
-                                            expected: Array<string>;
+                                            expected?: Array<string>;
                                         }>;
                                     }>;
                                 };
@@ -343,7 +343,7 @@ export default abstract class Client extends security_and_compliance {
                         condition: {
                             filter_type: string;
                             compare_type?: string;
-                            expected: Array<string>;
+                            expected?: Array<string>;
                         };
                     };
                     path?: { spreadsheet_token?: string; sheet_id?: string };
@@ -1675,7 +1675,7 @@ export default abstract class Client extends security_and_compliance {
                             condition: {
                                 filter_type: string;
                                 compare_type?: string;
-                                expected: Array<string>;
+                                expected?: Array<string>;
                             };
                         };
                         path?: {
@@ -1787,7 +1787,7 @@ export default abstract class Client extends security_and_compliance {
                                             conditions: Array<{
                                                 filter_type: string;
                                                 compare_type?: string;
-                                                expected: Array<string>;
+                                                expected?: Array<string>;
                                             }>;
                                         }>;
                                     };
@@ -1828,7 +1828,7 @@ export default abstract class Client extends security_and_compliance {
                             condition: {
                                 filter_type: string;
                                 compare_type?: string;
-                                expected: Array<string>;
+                                expected?: Array<string>;
                             };
                         };
                         path?: {

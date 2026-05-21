@@ -1347,6 +1347,7 @@ export default abstract class Client extends passport {
                                                             id?: string;
                                                             alpha3_code?: string;
                                                         };
+                                                        is_global_region?: boolean;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -1401,6 +1402,7 @@ export default abstract class Client extends passport {
                                             id?: string;
                                             alpha3_code?: string;
                                         };
+                                        is_global_region?: boolean;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;

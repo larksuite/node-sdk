@@ -331,6 +331,40 @@ export default abstract class Client extends block {
                                     theme_border_color_code?: number;
                                     fill_color_type?: number;
                                     border_color_type?: number;
+                                    border_dasharrays?: Array<number>;
+                                    border_radius?: {
+                                        top_left?: number;
+                                        top_right?: number;
+                                        bottom_right?: number;
+                                        bottom_left?: number;
+                                    };
+                                    shadow?: {
+                                        color?: string;
+                                        blur?: number;
+                                        offset_x?: number;
+                                        offset_y?: number;
+                                        opacity?: number;
+                                    };
+                                    inner_shadow?: {
+                                        color?: string;
+                                        blur?: number;
+                                        offset_x?: number;
+                                        offset_y?: number;
+                                        opacity?: number;
+                                    };
+                                    fill_gradient?: {
+                                        type?:
+                                            | "linear-gradient"
+                                            | "radial-gradient";
+                                        handle_positions?: Array<{
+                                            x?: number;
+                                            y?: number;
+                                        }>;
+                                        stops?: Array<{
+                                            position?: number;
+                                            color?: string;
+                                        }>;
+                                    };
                                 };
                                 image?: { token: string };
                                 composite_shape?: {
@@ -624,6 +658,40 @@ export default abstract class Client extends block {
                                             theme_border_color_code?: number;
                                             fill_color_type?: number;
                                             border_color_type?: number;
+                                            border_dasharrays?: Array<number>;
+                                            border_radius?: {
+                                                top_left?: number;
+                                                top_right?: number;
+                                                bottom_right?: number;
+                                                bottom_left?: number;
+                                            };
+                                            shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            inner_shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            fill_gradient?: {
+                                                type?:
+                                                    | "linear-gradient"
+                                                    | "radial-gradient";
+                                                handle_positions?: Array<{
+                                                    x?: number;
+                                                    y?: number;
+                                                }>;
+                                                stops?: Array<{
+                                                    position?: number;
+                                                    color?: string;
+                                                }>;
+                                            };
                                         };
                                         text?: {
                                             text?: string;
@@ -822,6 +890,40 @@ export default abstract class Client extends block {
                                             theme_border_color_code?: number;
                                             fill_color_type?: number;
                                             border_color_type?: number;
+                                            border_dasharrays?: Array<number>;
+                                            border_radius?: {
+                                                top_left?: number;
+                                                top_right?: number;
+                                                bottom_right?: number;
+                                                bottom_left?: number;
+                                            };
+                                            shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            inner_shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            fill_gradient?: {
+                                                type?:
+                                                    | "linear-gradient"
+                                                    | "radial-gradient";
+                                                handle_positions?: Array<{
+                                                    x?: number;
+                                                    y?: number;
+                                                }>;
+                                                stops?: Array<{
+                                                    position?: number;
+                                                    color?: string;
+                                                }>;
+                                            };
                                         };
                                     }>;
                                 };
@@ -834,7 +936,11 @@ export default abstract class Client extends block {
                                     width?: number;
                                     color?: string;
                                 };
-                                svg?: { svg_code?: string };
+                                svg?: {
+                                    svg_code?: string;
+                                    key?: string;
+                                    type?: number;
+                                };
                                 sticky_note?: {
                                     user_id?: string;
                                     show_author_info?: boolean;
@@ -872,6 +978,7 @@ export default abstract class Client extends block {
                                         | "round_angle";
                                 };
                             }>;
+                            overwrite?: boolean;
                         };
                         params?: {
                             client_token?: string;
@@ -926,6 +1033,9 @@ export default abstract class Client extends block {
                             style_type?: number;
                             syntax_type?: number;
                             diagram_type?: number;
+                            overwrite?: boolean;
+                            parse_mode?: number;
+                            look_type?: number;
                         };
                         path: { whiteboard_id: string };
                     },
@@ -940,7 +1050,10 @@ export default abstract class Client extends block {
                             {
                                 code?: number;
                                 msg?: string;
-                                data?: { node_id?: string };
+                                data?: {
+                                    node_id?: string;
+                                    extra?: Record<string, Array<string>>;
+                                };
                             }
                         >({
                             url: fillApiPath(
@@ -1114,6 +1227,40 @@ export default abstract class Client extends block {
                                             theme_border_color_code?: number;
                                             fill_color_type?: number;
                                             border_color_type?: number;
+                                            border_dasharrays?: Array<number>;
+                                            border_radius?: {
+                                                top_left?: number;
+                                                top_right?: number;
+                                                bottom_right?: number;
+                                                bottom_left?: number;
+                                            };
+                                            shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            inner_shadow?: {
+                                                color?: string;
+                                                blur?: number;
+                                                offset_x?: number;
+                                                offset_y?: number;
+                                                opacity?: number;
+                                            };
+                                            fill_gradient?: {
+                                                type?:
+                                                    | "linear-gradient"
+                                                    | "radial-gradient";
+                                                handle_positions?: Array<{
+                                                    x?: number;
+                                                    y?: number;
+                                                }>;
+                                                stops?: Array<{
+                                                    position?: number;
+                                                    color?: string;
+                                                }>;
+                                            };
                                         };
                                         image?: { token: string };
                                         composite_shape?: {
@@ -1443,6 +1590,40 @@ export default abstract class Client extends block {
                                                     theme_border_color_code?: number;
                                                     fill_color_type?: number;
                                                     border_color_type?: number;
+                                                    border_dasharrays?: Array<number>;
+                                                    border_radius?: {
+                                                        top_left?: number;
+                                                        top_right?: number;
+                                                        bottom_right?: number;
+                                                        bottom_left?: number;
+                                                    };
+                                                    shadow?: {
+                                                        color?: string;
+                                                        blur?: number;
+                                                        offset_x?: number;
+                                                        offset_y?: number;
+                                                        opacity?: number;
+                                                    };
+                                                    inner_shadow?: {
+                                                        color?: string;
+                                                        blur?: number;
+                                                        offset_x?: number;
+                                                        offset_y?: number;
+                                                        opacity?: number;
+                                                    };
+                                                    fill_gradient?: {
+                                                        type?:
+                                                            | "linear-gradient"
+                                                            | "radial-gradient";
+                                                        handle_positions?: Array<{
+                                                            x?: number;
+                                                            y?: number;
+                                                        }>;
+                                                        stops?: Array<{
+                                                            position?: number;
+                                                            color?: string;
+                                                        }>;
+                                                    };
                                                 };
                                                 text?: {
                                                     text?: string;
@@ -1645,6 +1826,40 @@ export default abstract class Client extends block {
                                                     theme_border_color_code?: number;
                                                     fill_color_type?: number;
                                                     border_color_type?: number;
+                                                    border_dasharrays?: Array<number>;
+                                                    border_radius?: {
+                                                        top_left?: number;
+                                                        top_right?: number;
+                                                        bottom_right?: number;
+                                                        bottom_left?: number;
+                                                    };
+                                                    shadow?: {
+                                                        color?: string;
+                                                        blur?: number;
+                                                        offset_x?: number;
+                                                        offset_y?: number;
+                                                        opacity?: number;
+                                                    };
+                                                    inner_shadow?: {
+                                                        color?: string;
+                                                        blur?: number;
+                                                        offset_x?: number;
+                                                        offset_y?: number;
+                                                        opacity?: number;
+                                                    };
+                                                    fill_gradient?: {
+                                                        type?:
+                                                            | "linear-gradient"
+                                                            | "radial-gradient";
+                                                        handle_positions?: Array<{
+                                                            x?: number;
+                                                            y?: number;
+                                                        }>;
+                                                        stops?: Array<{
+                                                            position?: number;
+                                                            color?: string;
+                                                        }>;
+                                                    };
                                                 };
                                             }>;
                                         };
@@ -1663,7 +1878,11 @@ export default abstract class Client extends block {
                                             width?: number;
                                             color?: string;
                                         };
-                                        svg?: { svg_code?: string };
+                                        svg?: {
+                                            svg_code?: string;
+                                            key?: string;
+                                            type?: number;
+                                        };
                                         sticky_note?: {
                                             user_id?: string;
                                             show_author_info?: boolean;
@@ -1706,6 +1925,11 @@ export default abstract class Client extends block {
                                             right_children?: Array<string>;
                                         };
                                         mind_map?: { parent_id?: string };
+                                        syntax?: {
+                                            syntax_type?: number;
+                                            code?: string;
+                                            style_type?: number;
+                                        };
                                     }>;
                                 };
                             }

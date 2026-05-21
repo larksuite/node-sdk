@@ -2795,6 +2795,99 @@ export default abstract class Client extends lingo {
             },
         },
         /**
+         * 用户邮箱
+         */
+        userMailbox: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=accessible_mailboxes&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=accessible_mailboxes&project=mail&resource=user_mailbox&version=v1 document }
+             *
+             * 获取主账号的所有可访问邮箱，包括主邮箱和公共邮箱
+             */
+            accessibleMailboxes: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                accessible_mailboxes?: Array<{
+                                    email_address?: string;
+                                    email_type?:
+                                        | "MAIL_GROUP"
+                                        | "PUBLIC_MAILBOX"
+                                        | "USER_PRIMARY"
+                                        | "USER_ALIAS"
+                                        | "PUBLIC_MAILBOX_ALIAS";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/accessible_mailboxes`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/mail-v1/user_mailbox/delete document }
+             *
+             * 释放用户邮箱地址
+             *
+             * 该接口会永久删除用户邮箱地址。可用于删除位于邮箱回收站中的用户邮箱地址，一旦删除，将无法恢复。该接口支持邮件的转移，可以将被释放邮箱的邮件转移到另外一个可以使用的邮箱中。
+             */
+            delete: async (
+                payload?: {
+                    params?: { transfer_mailbox?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 用户邮箱别名
          */
         userMailboxAlias: {
@@ -3020,22 +3113,137 @@ export default abstract class Client extends lingo {
             },
         },
         /**
-         * 用户邮箱
+         * user_mailbox.draft
          */
-        userMailbox: {
+        userMailboxDraft: {
             /**
-             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=delete&version=v1 click to debug }
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=create&version=v1 click to debug }
              *
-             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/mail-v1/user_mailbox/delete document }
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.draft&version=v1 document }
              *
-             * 释放用户邮箱地址
+             * 创建草稿
+             */
+            create: async (
+                payload?: {
+                    data?: { raw?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                draft?: {
+                                    id?: string;
+                                    message?: {
+                                        raw?: string;
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            body: string;
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    };
+                                };
+                                reference?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=delete&version=v1 click to debug }
              *
-             * 该接口会永久删除用户邮箱地址。可用于删除位于邮箱回收站中的用户邮箱地址，一旦删除，将无法恢复。该接口支持邮件的转移，可以将被释放邮箱的邮件转移到另外一个可以使用的邮箱中。
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.draft&version=v1 document }
+             *
+             * 删除指定邮箱账户下的单份邮件草稿。注意：对于草稿状态的邮件，只能使用本接口删除，禁止使用 trash_message；被删除的草稿数据无法恢复，请谨慎使用。
              */
             delete: async (
                 payload?: {
-                    params?: { transfer_mailbox?: string };
-                    path: { user_mailbox_id: string };
+                    path: { user_mailbox_id: string; draft_id: string };
                 },
                 options?: IRequestOptions
             ) => {
@@ -3045,10 +3253,424 @@ export default abstract class Client extends lingo {
                 return this.httpInstance
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
-                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
                             path
                         ),
                         method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.draft&version=v1 document }
+             *
+             * 获取草稿详情
+             */
+            get: async (
+                payload?: {
+                    params?: { format?: "metadata" | "raw" | "full" };
+                    path: { user_mailbox_id: string; draft_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                draft?: {
+                                    id?: string;
+                                    message?: {
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    };
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{ id?: string }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.draft&version=v1 document }
+             *
+             * 拉取草稿列表
+             */
+            list: async (
+                payload?: {
+                    params?: { page_size?: number; page_token?: string };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{ id?: string }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=send&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.draft&version=v1 document }
+             *
+             * 发送草稿
+             */
+            send: async (
+                payload?: {
+                    data?: { send_time?: string };
+                    path: { user_mailbox_id: string; draft_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                message_id?: string;
+                                thread_id?: string;
+                                recall_status?: "unavailable" | "available";
+                                automation_send_disable?: {
+                                    reason?: string;
+                                    reference?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id/send`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.draft&version=v1 document }
+             *
+             * 更新草稿
+             */
+            update: async (
+                payload?: {
+                    data: { raw: string };
+                    path: { user_mailbox_id: string; draft_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                draft?: {
+                                    id?: string;
+                                    message?: {
+                                        raw?: string;
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            body: string;
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    };
+                                };
+                                reference?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -3069,6 +3691,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscribe&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+             *
+             * 订阅收信事件
              */
             subscribe: async (
                 payload?: {
@@ -3102,6 +3726,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscription&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=mail&resource=user_mailbox.event&version=v1 document }
+             *
+             * 查询订阅的收信事件
              */
             subscription: async (
                 payload?: {
@@ -3141,6 +3767,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=unsubscribe&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+             *
+             * 取消订阅收信事件
              */
             unsubscribe: async (
                 payload?: {
@@ -3179,6 +3807,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=create&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.folder&version=v1 document }
+             *
+             * 创建邮箱文件夹
              */
             create: async (
                 payload?: {
@@ -3228,6 +3858,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.folder&version=v1 document }
+             *
+             * 删除用户文件夹。删除后文件夹数据无法恢复，请谨慎使用；删除文件夹会将该文件夹下的邮件移至已删除文件夹中。
              */
             delete: async (
                 payload?: {
@@ -3257,9 +3889,61 @@ export default abstract class Client extends lingo {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.folder&version=v1 document }
+             *
+             * 获取指定邮箱账户下的单个邮件文件夹详情
+             */
+            get: async (
+                payload?: {
+                    path: { user_mailbox_id: string; folder_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                folder?: {
+                                    id?: string;
+                                    name: string;
+                                    parent_folder_id: string;
+                                    folder_type?: number;
+                                    unread_message_count?: number;
+                                    unread_thread_count?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.folder&version=v1 document }
+             *
+             * 列出用户文件夹，可获取文件夹名称、文件夹ID、文件夹下的未读邮件和未读会话数量
              */
             list: async (
                 payload?: {
@@ -3309,6 +3993,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=patch&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.folder&version=v1 document }
+             *
+             * 更新用户文件夹
              */
             patch: async (
                 payload?: {
@@ -3340,6 +4026,243 @@ export default abstract class Client extends lingo {
             },
         },
         /**
+         * user_mailbox.label
+         */
+        userMailboxLabel: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.label&version=v1 document }
+             *
+             * 根据用户指定的名称、颜色等信息，创建邮件标签
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        label: { name: string; background_color?: string };
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                label?: {
+                                    id?: string;
+                                    name?: string;
+                                    background_color?: string;
+                                    messages_unread?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.label&version=v1 document }
+             *
+             * 删除用户指定的标签，注意，删除的标签无法恢复
+             */
+            delete: async (
+                payload?: {
+                    path: { user_mailbox_id: string; label_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.label&version=v1 document }
+             *
+             * 根据指定ID，获取邮件标签信息，包括名称、未读数据、颜色等信息
+             */
+            get: async (
+                payload?: {
+                    path: { user_mailbox_id: string; label_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                label?: {
+                                    id?: string;
+                                    name?: string;
+                                    background_color?: string;
+                                    messages_unread?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.label&version=v1 document }
+             *
+             * 列出邮件标签，包括ID、名称、颜色、未读信息等内容
+             */
+            list: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    name?: string;
+                                    background_color?: string;
+                                    messages_unread?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=patch&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.label&version=v1 document }
+             *
+             * 更新邮件标签
+             */
+            patch: async (
+                payload?: {
+                    data: {
+                        label: { name?: string; background_color?: string };
+                    };
+                    path: { user_mailbox_id: string; label_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                label?: {
+                                    id?: string;
+                                    name?: string;
+                                    background_color?: string;
+                                    messages_unread?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                            path
+                        ),
+                        method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * user_mailbox.mail_contact
          */
         userMailboxMailContact: {
@@ -3347,6 +4270,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=create&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             *
+             * 创建邮箱联系人
              */
             create: async (
                 payload?: {
@@ -3407,6 +4332,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             *
+             * 删除指定的邮箱联系人
              */
             delete: async (
                 payload?: {
@@ -3534,6 +4461,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             *
+             * 列出邮箱联系人
              */
             list: async (
                 payload?: {
@@ -3588,6 +4517,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=patch&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+             *
+             * 更新邮箱联系人
              */
             patch: async (
                 payload?: {
@@ -3634,6 +4565,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message.attachment&apiName=download_url&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.message.attachment&version=v1 document }
+             *
+             * 获取附件下载链接
              */
             downloadUrl: async (
                 payload?: {
@@ -3657,6 +4590,10 @@ export default abstract class Client extends lingo {
                                     download_url?: string;
                                 }>;
                                 failed_ids?: Array<string>;
+                                failed_reasons?: Array<{
+                                    attachment_id?: string;
+                                    reason?: string;
+                                }>;
                             };
                         }
                     >({
@@ -3682,12 +4619,209 @@ export default abstract class Client extends lingo {
          */
         userMailboxMessage: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 通过指定邮件ID，获取对应邮件的标签、文件夹、摘要、正文、html、附件等信息。注意，如需获取摘要、正文、主题或收发件人地址，需要申请对应的字段权限。
+             */
+            batchGet: async (
+                payload?: {
+                    data?: {
+                        format?: "full" | "plain_text_full" | "metadata";
+                        message_ids?: Array<string>;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                messages?: Array<{
+                                    raw?: string;
+                                    subject?: string;
+                                    to?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    cc?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    bcc?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    head_from?: {
+                                        mail_address: string;
+                                        name?: string;
+                                    };
+                                    body_html?: string;
+                                    internal_date?: string;
+                                    message_state?: number;
+                                    smtp_message_id?: string;
+                                    message_id?: string;
+                                    attachments?: Array<{
+                                        body: string;
+                                        filename: string;
+                                        id?: string;
+                                        attachment_type?: number;
+                                        is_inline?: boolean;
+                                        cid?: string;
+                                    }>;
+                                    body_plain_text?: string;
+                                    thread_id?: string;
+                                    body_preview?: string;
+                                    label_ids?: Array<string>;
+                                    folder_id?: string;
+                                    in_reply_to?: string;
+                                    reply_to?: string;
+                                    priority_type?: "0" | "1" | "3" | "5";
+                                    security_level?: {
+                                        is_risk?: boolean;
+                                        risk_banner_level?:
+                                            | "WARNING"
+                                            | "DANGER"
+                                            | "INFO";
+                                        risk_banner_reason?:
+                                            | "NO_REASON"
+                                            | "IMPERSONATE_DOMAIN"
+                                            | "IMPERSONATE_KP_NAME"
+                                            | "UNAUTH_EXTERNAL"
+                                            | "MALICIOUS_URL"
+                                            | "MALICIOUS_ATTACHMENT"
+                                            | "PHISHING"
+                                            | "IMPERSONATE_PARTNER"
+                                            | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                        is_header_from_external?: boolean;
+                                        via_domain?: string;
+                                        spam_banner_type?:
+                                            | "USER_REPORT"
+                                            | "USER_BLOCK"
+                                            | "ANTI_SPAM"
+                                            | "USER_RULE"
+                                            | "BLOCK_DOMIN"
+                                            | "BLOCK_ADDRESS";
+                                        spam_user_rule_id?: string;
+                                        spam_banner_info?: string;
+                                    };
+                                    references?: string;
+                                    body_calendar?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_get`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_modify&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 本接口提供修改邮件的能力，支持移动邮件的文件夹、给邮件添加和移除标签、标记邮件读和未读、移动邮件至垃圾邮件等能力。不支持移动邮件到已删除文件夹，如需，请使用批量删除邮件接口。
+             */
+            batchModify: async (
+                payload?: {
+                    data?: {
+                        message_ids?: Array<string>;
+                        add_label_ids?: Array<string>;
+                        remove_label_ids?: Array<string>;
+                        add_folder?: string;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_modify`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_trash&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_trash&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 通过指定邮件ID，批量移动邮件到已删除文件夹
+             */
+            batchTrash: async (
+                payload?: {
+                    data?: { message_ids?: Array<string> };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_trash`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 获取邮件详情
              */
             get: async (
                 payload?: {
+                    params?: {
+                        format?: "full" | "plain_text_full" | "metadata";
+                    };
                     path: { user_mailbox_id: string; message_id: string };
                 },
                 options?: IRequestOptions
@@ -3725,7 +4859,6 @@ export default abstract class Client extends lingo {
                                     message_state?: number;
                                     smtp_message_id?: string;
                                     message_id?: string;
-                                    body_plain_text?: string;
                                     attachments?: Array<{
                                         filename: string;
                                         id?: string;
@@ -3733,7 +4866,44 @@ export default abstract class Client extends lingo {
                                         is_inline?: boolean;
                                         cid?: string;
                                     }>;
+                                    body_plain_text?: string;
                                     thread_id?: string;
+                                    body_preview?: string;
+                                    label_ids?: Array<string>;
+                                    folder_id?: string;
+                                    in_reply_to?: string;
+                                    reply_to?: string;
+                                    priority_type?: "0" | "1" | "3" | "5";
+                                    security_level?: {
+                                        is_risk?: boolean;
+                                        risk_banner_level?:
+                                            | "WARNING"
+                                            | "DANGER"
+                                            | "INFO";
+                                        risk_banner_reason?:
+                                            | "NO_REASON"
+                                            | "IMPERSONATE_DOMAIN"
+                                            | "IMPERSONATE_KP_NAME"
+                                            | "UNAUTH_EXTERNAL"
+                                            | "MALICIOUS_URL"
+                                            | "MALICIOUS_ATTACHMENT"
+                                            | "PHISHING"
+                                            | "IMPERSONATE_PARTNER"
+                                            | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                        is_header_from_external?: boolean;
+                                        via_domain?: string;
+                                        spam_banner_type?:
+                                            | "USER_REPORT"
+                                            | "USER_BLOCK"
+                                            | "ANTI_SPAM"
+                                            | "USER_RULE"
+                                            | "BLOCK_DOMIN"
+                                            | "BLOCK_ADDRESS";
+                                        spam_user_rule_id?: string;
+                                        spam_banner_info?: string;
+                                    };
+                                    references?: string;
+                                    body_calendar?: string;
                                 };
                             };
                         }
@@ -3813,8 +4983,9 @@ export default abstract class Client extends lingo {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        folder_id: string;
+                        folder_id?: string;
                         only_unread?: boolean;
+                        label_id?: string;
                     };
                     path: { user_mailbox_id: string };
                 },
@@ -3902,14 +5073,17 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 根据用户指定的标签或文件夹，列出对应位置下的邮件列表。注意，必须填写folder_id或label_id中的一个字段。
              */
             list: async (
                 payload?: {
                     params: {
                         page_size: number;
                         page_token?: string;
-                        folder_id: string;
+                        folder_id?: string;
                         only_unread?: boolean;
+                        label_id?: string;
                     };
                     path: { user_mailbox_id: string };
                 },
@@ -3936,6 +5110,170 @@ export default abstract class Client extends lingo {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list_thread_message&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_thread_message&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 通过用户邮箱地址和邮件会话ID，获取该会话下的所有邮件关键信息列表。如需查询主题、正文、摘要、收发件人信息，请申请字段权限。
+             */
+            listThreadMessage: async (
+                payload?: {
+                    params?: {
+                        format?: "full" | "plain_text_full" | "metadata";
+                        include_spam_trash?: boolean;
+                    };
+                    path: { user_mailbox_id: string; thread_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    message_id?: string;
+                                    thread_id?: string;
+                                    folder_id?: string;
+                                    smtp_message_id?: string;
+                                    internal_date?: string;
+                                    message_state?: number;
+                                    message?: {
+                                        raw?: string;
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            body: string;
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/messages`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 本接口提供修改邮件的能力，支持移动邮件的文件夹、给邮件添加和移除标签、标记邮件已读和未读、移动邮件至垃圾邮件等能力。不支持移动邮件到已删除文件夹，如需删除邮件，请使用删除邮件接口。至少填写add_label_ids、remove_label_ids、add_folder中的一个参数。
+             */
+            modify: async (
+                payload?: {
+                    data?: {
+                        add_label_ids?: Array<string>;
+                        remove_label_ids?: Array<string>;
+                        add_folder?: string;
+                    };
+                    path: { user_mailbox_id: string; message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/modify`,
+                            path
+                        ),
+                        method: "PUT",
                         data,
                         params,
                         headers,
@@ -4003,6 +5341,40 @@ export default abstract class Client extends lingo {
                         throw e;
                     });
             },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=trash&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=trash&project=mail&resource=user_mailbox.message&version=v1 document }
+             *
+             * 移动邮件到已删除文件夹。注意，该接口无法删除草稿，如需删除草稿，请使用删除草稿接口
+             */
+            trash: async (
+                payload?: {
+                    path: { user_mailbox_id: string; message_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/trash`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
         },
         /**
          * user_mailbox.rule
@@ -4012,6 +5384,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=create&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.rule&version=v1 document }
+             *
+             * 创建收信规则
              */
             create: async (
                 payload?: {
@@ -4088,6 +5462,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=delete&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.rule&version=v1 document }
+             *
+             * 删除收信规则
              */
             delete: async (
                 payload?: {
@@ -4120,6 +5496,8 @@ export default abstract class Client extends lingo {
              * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=list&version=v1 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.rule&version=v1 document }
+             *
+             * 列出收信规则
              */
             list: async (
                 payload?: {
@@ -4246,6 +5624,887 @@ export default abstract class Client extends lingo {
                             path
                         ),
                         method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.setting
+         */
+        userMailboxSetting: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.setting&apiName=send_as&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send_as&project=mail&resource=user_mailbox.setting&version=v1 document }
+             *
+             * 获取账号的所有可发信地址，包括主地址、别名地址、邮件组。可以使用用户地址访问该接口，也可以使用用户有权限的公共邮箱地址访问该接口。
+             */
+            sendAs: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                sendable_addresses?: Array<{
+                                    email_address?: string;
+                                    email_type?:
+                                        | "MAIL_GROUP"
+                                        | "PUBLIC_MAILBOX"
+                                        | "USER_PRIMARY"
+                                        | "USER_ALIAS"
+                                        | "PUBLIC_MAILBOX_ALIAS";
+                                    name?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/settings/send_as`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.template.attachment
+         */
+        userMailboxTemplateAttachment: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template.attachment&apiName=download_url&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.template.attachment&version=v1 document }
+             *
+             * 获取指定邮件模板下的附件下载链接。用于在已知模板 ID 与附件 ID 的场景下，二次获取附件的有效访问 URL，便于在用户端预览或下载邮件模板中的附件资源。
+             */
+            downloadUrl: async (
+                payload?: {
+                    params: { attachment_ids: Array<string> };
+                    path: { user_mailbox_id: string; template_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                download_urls?: Array<{
+                                    attachment_id?: string;
+                                    download_url?: string;
+                                }>;
+                                failed_reasons?: Array<{
+                                    attachment_id?: string;
+                                    reason?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id/attachments/download_url`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.template
+         */
+        userMailboxTemplate: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.template&version=v1 document }
+             *
+             * 在指定用户邮箱下创建一份可复用的个人邮件模板。请求时需传入完整的模板对象（含名称、主题、正文、收件信息、附件等），创建成功后返回完整模板内容（含系统生成的 template_id），适用于将常用邮件内容沉淀为模板以便后续快速发送同类型邮件。
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        template: {
+                            name: string;
+                            subject?: string;
+                            template_content?: string;
+                            is_plain_text_mode?: boolean;
+                            tos?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            ccs?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            bccs?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            attachments?: Array<{
+                                filename?: string;
+                                id?: string;
+                                attachment_type?: number;
+                                is_inline?: boolean;
+                                cid?: string;
+                            }>;
+                        };
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                template?: {
+                                    template_id?: string;
+                                    name: string;
+                                    subject?: string;
+                                    template_content?: string;
+                                    is_plain_text_mode?: boolean;
+                                    tos?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    ccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    bccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    attachments?: Array<{
+                                        filename?: string;
+                                        id?: string;
+                                        attachment_type?: number;
+                                        is_inline?: boolean;
+                                        cid?: string;
+                                    }>;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=delete&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.template&version=v1 document }
+             *
+             * 永久删除指定用户邮箱下的某个个人邮件模板。删除操作不可恢复，删除后该模板将无法在「列出邮件模板」「获取邮件模板」等接口中再返回，常用于清理已废弃或不再使用的模板。
+             */
+            delete: async (
+                payload?: {
+                    path: { user_mailbox_id: string; template_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                            path
+                        ),
+                        method: "DELETE",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.template&version=v1 document }
+             *
+             * 获取指定邮件模板的完整详情，包括模板名称、主题、正文（HTML 或纯文本）、收件人/抄送/密送地址、附件信息等所有字段。常用于编辑模板前回填表单，或在发送邮件场景下读取模板内容做二次填充。
+             */
+            get: async (
+                payload?: {
+                    path: { user_mailbox_id: string; template_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                template?: {
+                                    template_id?: string;
+                                    name: string;
+                                    subject?: string;
+                                    template_content?: string;
+                                    is_plain_text_mode?: boolean;
+                                    tos?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    ccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    bccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    attachments?: Array<{
+                                        filename?: string;
+                                        id?: string;
+                                        attachment_type?: number;
+                                        is_inline?: boolean;
+                                        cid?: string;
+                                    }>;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.template&version=v1 document }
+             *
+             * 列出指定用户邮箱下的全部个人邮件模板基本信息（一次性返回，不分页），常用于在编辑或发送邮件场景下展示可选模板列表。如需获取模板正文与附件等完整字段，请通过获取个人邮件模板详情接口按 `template_id` 查询。
+             */
+            list: async (
+                payload?: {
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    template_id?: string;
+                                    name?: string;
+                                    create_time?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=update&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.template&version=v1 document }
+             *
+             * 以全量替换的方式更新指定邮件模板的所有字段（包括名称、主题、正文、附件、收件信息等）。本接口为「全量更新」语义：请求时需传入完整的模板对象，未携带的字段将被清空。**调用依赖**：如仅修改部分字段，请先调用获取个人邮件模板详情接口拿到完整模板，在本地修改后再传回本接口，以避免漏传字段导致数据丢失。
+             */
+            update: async (
+                payload?: {
+                    data: {
+                        template: {
+                            name: string;
+                            subject?: string;
+                            template_content?: string;
+                            is_plain_text_mode?: boolean;
+                            tos?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            ccs?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            bccs?: Array<{
+                                mail_address: string;
+                                name?: string;
+                            }>;
+                            attachments?: Array<{
+                                filename?: string;
+                                id?: string;
+                                attachment_type?: number;
+                                is_inline?: boolean;
+                                cid?: string;
+                            }>;
+                        };
+                    };
+                    path: { user_mailbox_id: string; template_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                template?: {
+                                    template_id?: string;
+                                    name: string;
+                                    subject?: string;
+                                    template_content?: string;
+                                    is_plain_text_mode?: boolean;
+                                    tos?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    ccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    bccs?: Array<{
+                                        mail_address: string;
+                                        name?: string;
+                                    }>;
+                                    attachments?: Array<{
+                                        filename?: string;
+                                        id?: string;
+                                        attachment_type?: number;
+                                        is_inline?: boolean;
+                                        cid?: string;
+                                    }>;
+                                    create_time?: string;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * user_mailbox.thread
+         */
+        userMailboxThread: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=batch_modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_modify&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 本接口提供修改邮件会话的能力，支持移动邮件会话的文件夹、给邮件会话添加和移除标签、标记邮件会话读和未读、移动邮件会话至垃圾邮件等能力。不支持移动邮件会话到已删除文件夹，如需，请使用批量删除邮件会话接口。
+             */
+            batchModify: async (
+                payload?: {
+                    data?: {
+                        add_label_ids?: Array<string>;
+                        remove_label_ids?: Array<string>;
+                        add_folder?: string;
+                        thread_ids?: Array<string>;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/batch_modify`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=batch_trash&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_trash&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 通过指定邮件会话ID，批量移动邮件到已删除文件夹
+             */
+            batchTrash: async (
+                payload?: {
+                    data?: { thread_ids?: Array<string> };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/batch_trash`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 通过用户邮箱地址和邮件会话ID，获取该会话下的所有邮件关键信息列表。如需查询主题、正文、摘要、收发件人信息，请申请字段权限。
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        format?: "full" | "plain_text_full" | "metadata";
+                        include_spam_trash?: boolean;
+                    };
+                    path: { user_mailbox_id: string; thread_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                thread?: {
+                                    id?: string;
+                                    body_preview?: string;
+                                    messages?: Array<{
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        folder_id?: string;
+                        only_unread?: boolean;
+                        label_id?: string;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items?: Array<{
+                                                    id?: string;
+                                                    body_preview?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 通过指定文件夹或标签，列出对应位置下的邮件会话列表。接口可返回邮件会话ID和会话下最新一封邮件的摘要。folder_id 和 label_id 必须且只能提供一个。
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size: number;
+                        page_token?: string;
+                        folder_id?: string;
+                        only_unread?: boolean;
+                        label_id?: string;
+                    };
+                    path: { user_mailbox_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    id?: string;
+                                    body_preview?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=modify&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 本接口提供修改邮件会话的能力，支持移动邮件会话的文件夹、给邮件会话添加和移除标签、标记邮件会话读和未读、移动邮件会话至垃圾邮件等能力。不支持移动邮件会话到已删除文件夹，如需，请使用删除邮件会话接口。至少填写add_label_ids、remove_label_ids、add_folder中的一个参数。
+             */
+            modify: async (
+                payload?: {
+                    data?: {
+                        add_label_ids?: Array<string>;
+                        remove_label_ids?: Array<string>;
+                        add_folder?: string;
+                    };
+                    path: { user_mailbox_id: string; thread_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/modify`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=trash&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=trash&project=mail&resource=user_mailbox.thread&version=v1 document }
+             *
+             * 移动指定的邮件会话到已删除文件夹
+             */
+            trash: async (
+                payload?: {
+                    path: { user_mailbox_id: string; thread_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/trash`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -7089,6 +9348,102 @@ export default abstract class Client extends lingo {
                 },
             },
             /**
+             * 用户邮箱
+             */
+            userMailbox: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=accessible_mailboxes&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=accessible_mailboxes&project=mail&resource=user_mailbox&version=v1 document }
+                 *
+                 * 获取主账号的所有可访问邮箱，包括主邮箱和公共邮箱
+                 */
+                accessibleMailboxes: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    accessible_mailboxes?: Array<{
+                                        email_address?: string;
+                                        email_type?:
+                                            | "MAIL_GROUP"
+                                            | "PUBLIC_MAILBOX"
+                                            | "USER_PRIMARY"
+                                            | "USER_ALIAS"
+                                            | "PUBLIC_MAILBOX_ALIAS";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/accessible_mailboxes`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/mail-v1/user_mailbox/delete document }
+                 *
+                 * 释放用户邮箱地址
+                 *
+                 * 该接口会永久删除用户邮箱地址。可用于删除位于邮箱回收站中的用户邮箱地址，一旦删除，将无法恢复。该接口支持邮件的转移，可以将被释放邮箱的邮件转移到另外一个可以使用的邮箱中。
+                 */
+                delete: async (
+                    payload?: {
+                        params?: { transfer_mailbox?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 用户邮箱别名
              */
             userMailboxAlias: {
@@ -7319,22 +9674,141 @@ export default abstract class Client extends lingo {
                 },
             },
             /**
-             * 用户邮箱
+             * user_mailbox.draft
              */
-            userMailbox: {
+            userMailboxDraft: {
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox&apiName=delete&version=v1 click to debug }
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=create&version=v1 click to debug }
                  *
-                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/mail-v1/user_mailbox/delete document }
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.draft&version=v1 document }
                  *
-                 * 释放用户邮箱地址
+                 * 创建草稿
+                 */
+                create: async (
+                    payload?: {
+                        data?: { raw?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    draft?: {
+                                        id?: string;
+                                        message?: {
+                                            raw?: string;
+                                            subject?: string;
+                                            to?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            head_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            body_html?: string;
+                                            internal_date?: string;
+                                            message_state?: number;
+                                            smtp_message_id?: string;
+                                            message_id?: string;
+                                            attachments?: Array<{
+                                                body: string;
+                                                filename: string;
+                                                id?: string;
+                                                attachment_type?: number;
+                                                is_inline?: boolean;
+                                                cid?: string;
+                                            }>;
+                                            body_plain_text?: string;
+                                            thread_id?: string;
+                                            body_preview?: string;
+                                            label_ids?: Array<string>;
+                                            folder_id?: string;
+                                            in_reply_to?: string;
+                                            reply_to?: string;
+                                            priority_type?:
+                                                | "0"
+                                                | "1"
+                                                | "3"
+                                                | "5";
+                                            security_level?: {
+                                                is_risk?: boolean;
+                                                risk_banner_level?:
+                                                    | "WARNING"
+                                                    | "DANGER"
+                                                    | "INFO";
+                                                risk_banner_reason?:
+                                                    | "NO_REASON"
+                                                    | "IMPERSONATE_DOMAIN"
+                                                    | "IMPERSONATE_KP_NAME"
+                                                    | "UNAUTH_EXTERNAL"
+                                                    | "MALICIOUS_URL"
+                                                    | "MALICIOUS_ATTACHMENT"
+                                                    | "PHISHING"
+                                                    | "IMPERSONATE_PARTNER"
+                                                    | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                                is_header_from_external?: boolean;
+                                                via_domain?: string;
+                                                spam_banner_type?:
+                                                    | "USER_REPORT"
+                                                    | "USER_BLOCK"
+                                                    | "ANTI_SPAM"
+                                                    | "USER_RULE"
+                                                    | "BLOCK_DOMIN"
+                                                    | "BLOCK_ADDRESS";
+                                                spam_user_rule_id?: string;
+                                                spam_banner_info?: string;
+                                            };
+                                            references?: string;
+                                            body_calendar?: string;
+                                        };
+                                    };
+                                    reference?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=delete&version=v1 click to debug }
                  *
-                 * 该接口会永久删除用户邮箱地址。可用于删除位于邮箱回收站中的用户邮箱地址，一旦删除，将无法恢复。该接口支持邮件的转移，可以将被释放邮箱的邮件转移到另外一个可以使用的邮箱中。
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.draft&version=v1 document }
+                 *
+                 * 删除指定邮箱账户下的单份邮件草稿。注意：对于草稿状态的邮件，只能使用本接口删除，禁止使用 trash_message；被删除的草稿数据无法恢复，请谨慎使用。
                  */
                 delete: async (
                     payload?: {
-                        params?: { transfer_mailbox?: string };
-                        path: { user_mailbox_id: string };
+                        path: { user_mailbox_id: string; draft_id: string };
                     },
                     options?: IRequestOptions
                 ) => {
@@ -7347,10 +9821,436 @@ export default abstract class Client extends lingo {
                             { code?: number; msg?: string; data?: {} }
                         >({
                             url: fillApiPath(
-                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id`,
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
                                 path
                             ),
                             method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.draft&version=v1 document }
+                 *
+                 * 获取草稿详情
+                 */
+                get: async (
+                    payload?: {
+                        params?: { format?: "metadata" | "raw" | "full" };
+                        path: { user_mailbox_id: string; draft_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    draft?: {
+                                        id?: string;
+                                        message?: {
+                                            subject?: string;
+                                            to?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            head_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            body_html?: string;
+                                            internal_date?: string;
+                                            message_state?: number;
+                                            smtp_message_id?: string;
+                                            message_id?: string;
+                                            attachments?: Array<{
+                                                filename: string;
+                                                id?: string;
+                                                attachment_type?: number;
+                                                is_inline?: boolean;
+                                                cid?: string;
+                                            }>;
+                                            body_plain_text?: string;
+                                            thread_id?: string;
+                                            body_preview?: string;
+                                            label_ids?: Array<string>;
+                                            folder_id?: string;
+                                            in_reply_to?: string;
+                                            reply_to?: string;
+                                            priority_type?:
+                                                | "0"
+                                                | "1"
+                                                | "3"
+                                                | "5";
+                                            security_level?: {
+                                                is_risk?: boolean;
+                                                risk_banner_level?:
+                                                    | "WARNING"
+                                                    | "DANGER"
+                                                    | "INFO";
+                                                risk_banner_reason?:
+                                                    | "NO_REASON"
+                                                    | "IMPERSONATE_DOMAIN"
+                                                    | "IMPERSONATE_KP_NAME"
+                                                    | "UNAUTH_EXTERNAL"
+                                                    | "MALICIOUS_URL"
+                                                    | "MALICIOUS_ATTACHMENT"
+                                                    | "PHISHING"
+                                                    | "IMPERSONATE_PARTNER"
+                                                    | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                                is_header_from_external?: boolean;
+                                                via_domain?: string;
+                                                spam_banner_type?:
+                                                    | "USER_REPORT"
+                                                    | "USER_BLOCK"
+                                                    | "ANTI_SPAM"
+                                                    | "USER_RULE"
+                                                    | "BLOCK_DOMIN"
+                                                    | "BLOCK_ADDRESS";
+                                                spam_user_rule_id?: string;
+                                                spam_banner_info?: string;
+                                            };
+                                            references?: string;
+                                            body_calendar?: string;
+                                        };
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.draft&version=v1 document }
+                 *
+                 * 拉取草稿列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{ id?: string }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=send&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send&project=mail&resource=user_mailbox.draft&version=v1 document }
+                 *
+                 * 发送草稿
+                 */
+                send: async (
+                    payload?: {
+                        data?: { send_time?: string };
+                        path: { user_mailbox_id: string; draft_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    message_id?: string;
+                                    thread_id?: string;
+                                    recall_status?: "unavailable" | "available";
+                                    automation_send_disable?: {
+                                        reason?: string;
+                                        reference?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id/send`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.draft&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.draft&version=v1 document }
+                 *
+                 * 更新草稿
+                 */
+                update: async (
+                    payload?: {
+                        data: { raw: string };
+                        path: { user_mailbox_id: string; draft_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    draft?: {
+                                        id?: string;
+                                        message?: {
+                                            raw?: string;
+                                            subject?: string;
+                                            to?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            head_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            body_html?: string;
+                                            internal_date?: string;
+                                            message_state?: number;
+                                            smtp_message_id?: string;
+                                            message_id?: string;
+                                            attachments?: Array<{
+                                                body: string;
+                                                filename: string;
+                                                id?: string;
+                                                attachment_type?: number;
+                                                is_inline?: boolean;
+                                                cid?: string;
+                                            }>;
+                                            body_plain_text?: string;
+                                            thread_id?: string;
+                                            body_preview?: string;
+                                            label_ids?: Array<string>;
+                                            folder_id?: string;
+                                            in_reply_to?: string;
+                                            reply_to?: string;
+                                            priority_type?:
+                                                | "0"
+                                                | "1"
+                                                | "3"
+                                                | "5";
+                                            security_level?: {
+                                                is_risk?: boolean;
+                                                risk_banner_level?:
+                                                    | "WARNING"
+                                                    | "DANGER"
+                                                    | "INFO";
+                                                risk_banner_reason?:
+                                                    | "NO_REASON"
+                                                    | "IMPERSONATE_DOMAIN"
+                                                    | "IMPERSONATE_KP_NAME"
+                                                    | "UNAUTH_EXTERNAL"
+                                                    | "MALICIOUS_URL"
+                                                    | "MALICIOUS_ATTACHMENT"
+                                                    | "PHISHING"
+                                                    | "IMPERSONATE_PARTNER"
+                                                    | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                                is_header_from_external?: boolean;
+                                                via_domain?: string;
+                                                spam_banner_type?:
+                                                    | "USER_REPORT"
+                                                    | "USER_BLOCK"
+                                                    | "ANTI_SPAM"
+                                                    | "USER_RULE"
+                                                    | "BLOCK_DOMIN"
+                                                    | "BLOCK_ADDRESS";
+                                                spam_user_rule_id?: string;
+                                                spam_banner_info?: string;
+                                            };
+                                            references?: string;
+                                            body_calendar?: string;
+                                        };
+                                    };
+                                    reference?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/drafts/:draft_id`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -7371,6 +10271,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscribe&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+                 *
+                 * 订阅收信事件
                  */
                 subscribe: async (
                     payload?: {
@@ -7407,6 +10309,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=subscription&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=mail&resource=user_mailbox.event&version=v1 document }
+                 *
+                 * 查询订阅的收信事件
                  */
                 subscription: async (
                     payload?: {
@@ -7446,6 +10350,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.event&apiName=unsubscribe&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscribe&project=mail&resource=user_mailbox.event&version=v1 document }
+                 *
+                 * 取消订阅收信事件
                  */
                 unsubscribe: async (
                     payload?: {
@@ -7487,6 +10393,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 *
+                 * 创建邮箱文件夹
                  */
                 create: async (
                     payload?: {
@@ -7536,6 +10444,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 *
+                 * 删除用户文件夹。删除后文件夹数据无法恢复，请谨慎使用；删除文件夹会将该文件夹下的邮件移至已删除文件夹中。
                  */
                 delete: async (
                     payload?: {
@@ -7568,9 +10478,61 @@ export default abstract class Client extends lingo {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 *
+                 * 获取指定邮箱账户下的单个邮件文件夹详情
+                 */
+                get: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; folder_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    folder?: {
+                                        id?: string;
+                                        name: string;
+                                        parent_folder_id: string;
+                                        folder_type?: number;
+                                        unread_message_count?: number;
+                                        unread_thread_count?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/folders/:folder_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 *
+                 * 列出用户文件夹，可获取文件夹名称、文件夹ID、文件夹下的未读邮件和未读会话数量
                  */
                 list: async (
                     payload?: {
@@ -7620,6 +10582,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.folder&apiName=patch&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.folder&version=v1 document }
+                 *
+                 * 更新用户文件夹
                  */
                 patch: async (
                     payload?: {
@@ -7654,6 +10618,246 @@ export default abstract class Client extends lingo {
                 },
             },
             /**
+             * user_mailbox.label
+             */
+            userMailboxLabel: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.label&version=v1 document }
+                 *
+                 * 根据用户指定的名称、颜色等信息，创建邮件标签
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            label: { name: string; background_color?: string };
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    label?: {
+                                        id?: string;
+                                        name?: string;
+                                        background_color?: string;
+                                        messages_unread?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.label&version=v1 document }
+                 *
+                 * 删除用户指定的标签，注意，删除的标签无法恢复
+                 */
+                delete: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; label_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.label&version=v1 document }
+                 *
+                 * 根据指定ID，获取邮件标签信息，包括名称、未读数据、颜色等信息
+                 */
+                get: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; label_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    label?: {
+                                        id?: string;
+                                        name?: string;
+                                        background_color?: string;
+                                        messages_unread?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.label&version=v1 document }
+                 *
+                 * 列出邮件标签，包括ID、名称、颜色、未读信息等内容
+                 */
+                list: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        name?: string;
+                                        background_color?: string;
+                                        messages_unread?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.label&apiName=patch&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.label&version=v1 document }
+                 *
+                 * 更新邮件标签
+                 */
+                patch: async (
+                    payload?: {
+                        data: {
+                            label: { name?: string; background_color?: string };
+                        };
+                        path: { user_mailbox_id: string; label_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    label?: {
+                                        id?: string;
+                                        name?: string;
+                                        background_color?: string;
+                                        messages_unread?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/labels/:label_id`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_mailbox.mail_contact
              */
             userMailboxMailContact: {
@@ -7661,6 +10865,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 *
+                 * 创建邮箱联系人
                  */
                 create: async (
                     payload?: {
@@ -7721,6 +10927,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 *
+                 * 删除指定的邮箱联系人
                  */
                 delete: async (
                     payload?: {
@@ -7856,6 +11064,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 *
+                 * 列出邮箱联系人
                  */
                 list: async (
                     payload?: {
@@ -7910,6 +11120,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.mail_contact&apiName=patch&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=mail&resource=user_mailbox.mail_contact&version=v1 document }
+                 *
+                 * 更新邮箱联系人
                  */
                 patch: async (
                     payload?: {
@@ -7962,6 +11174,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message.attachment&apiName=download_url&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.message.attachment&version=v1 document }
+                 *
+                 * 获取附件下载链接
                  */
                 downloadUrl: async (
                     payload?: {
@@ -7985,6 +11199,10 @@ export default abstract class Client extends lingo {
                                         download_url?: string;
                                     }>;
                                     failed_ids?: Array<string>;
+                                    failed_reasons?: Array<{
+                                        attachment_id?: string;
+                                        reason?: string;
+                                    }>;
                                 };
                             }
                         >({
@@ -8010,12 +11228,215 @@ export default abstract class Client extends lingo {
              */
             userMailboxMessage: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_get&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 通过指定邮件ID，获取对应邮件的标签、文件夹、摘要、正文、html、附件等信息。注意，如需获取摘要、正文、主题或收发件人地址，需要申请对应的字段权限。
+                 */
+                batchGet: async (
+                    payload?: {
+                        data?: {
+                            format?: "full" | "plain_text_full" | "metadata";
+                            message_ids?: Array<string>;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    messages?: Array<{
+                                        raw?: string;
+                                        subject?: string;
+                                        to?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        cc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bcc?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        head_from?: {
+                                            mail_address: string;
+                                            name?: string;
+                                        };
+                                        body_html?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        smtp_message_id?: string;
+                                        message_id?: string;
+                                        attachments?: Array<{
+                                            body: string;
+                                            filename: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        body_plain_text?: string;
+                                        thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_get`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_modify&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 本接口提供修改邮件的能力，支持移动邮件的文件夹、给邮件添加和移除标签、标记邮件读和未读、移动邮件至垃圾邮件等能力。不支持移动邮件到已删除文件夹，如需，请使用批量删除邮件接口。
+                 */
+                batchModify: async (
+                    payload?: {
+                        data?: {
+                            message_ids?: Array<string>;
+                            add_label_ids?: Array<string>;
+                            remove_label_ids?: Array<string>;
+                            add_folder?: string;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_modify`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=batch_trash&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_trash&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 通过指定邮件ID，批量移动邮件到已删除文件夹
+                 */
+                batchTrash: async (
+                    payload?: {
+                        data?: { message_ids?: Array<string> };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/batch_trash`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=get&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 获取邮件详情
                  */
                 get: async (
                     payload?: {
+                        params?: {
+                            format?: "full" | "plain_text_full" | "metadata";
+                        };
                         path: { user_mailbox_id: string; message_id: string };
                     },
                     options?: IRequestOptions
@@ -8053,7 +11474,6 @@ export default abstract class Client extends lingo {
                                         message_state?: number;
                                         smtp_message_id?: string;
                                         message_id?: string;
-                                        body_plain_text?: string;
                                         attachments?: Array<{
                                             filename: string;
                                             id?: string;
@@ -8061,7 +11481,44 @@ export default abstract class Client extends lingo {
                                             is_inline?: boolean;
                                             cid?: string;
                                         }>;
+                                        body_plain_text?: string;
                                         thread_id?: string;
+                                        body_preview?: string;
+                                        label_ids?: Array<string>;
+                                        folder_id?: string;
+                                        in_reply_to?: string;
+                                        reply_to?: string;
+                                        priority_type?: "0" | "1" | "3" | "5";
+                                        security_level?: {
+                                            is_risk?: boolean;
+                                            risk_banner_level?:
+                                                | "WARNING"
+                                                | "DANGER"
+                                                | "INFO";
+                                            risk_banner_reason?:
+                                                | "NO_REASON"
+                                                | "IMPERSONATE_DOMAIN"
+                                                | "IMPERSONATE_KP_NAME"
+                                                | "UNAUTH_EXTERNAL"
+                                                | "MALICIOUS_URL"
+                                                | "MALICIOUS_ATTACHMENT"
+                                                | "PHISHING"
+                                                | "IMPERSONATE_PARTNER"
+                                                | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                            is_header_from_external?: boolean;
+                                            via_domain?: string;
+                                            spam_banner_type?:
+                                                | "USER_REPORT"
+                                                | "USER_BLOCK"
+                                                | "ANTI_SPAM"
+                                                | "USER_RULE"
+                                                | "BLOCK_DOMIN"
+                                                | "BLOCK_ADDRESS";
+                                            spam_user_rule_id?: string;
+                                            spam_banner_info?: string;
+                                        };
+                                        references?: string;
+                                        body_calendar?: string;
                                     };
                                 };
                             }
@@ -8141,8 +11598,9 @@ export default abstract class Client extends lingo {
                         params: {
                             page_size: number;
                             page_token?: string;
-                            folder_id: string;
+                            folder_id?: string;
                             only_unread?: boolean;
+                            label_id?: string;
                         };
                         path: { user_mailbox_id: string };
                     },
@@ -8232,14 +11690,17 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 根据用户指定的标签或文件夹，列出对应位置下的邮件列表。注意，必须填写folder_id或label_id中的一个字段。
                  */
                 list: async (
                     payload?: {
                         params: {
                             page_size: number;
                             page_token?: string;
-                            folder_id: string;
+                            folder_id?: string;
                             only_unread?: boolean;
+                            label_id?: string;
                         };
                         path: { user_mailbox_id: string };
                     },
@@ -8266,6 +11727,177 @@ export default abstract class Client extends lingo {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=list_thread_message&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_thread_message&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 通过用户邮箱地址和邮件会话ID，获取该会话下的所有邮件关键信息列表。如需查询主题、正文、摘要、收发件人信息，请申请字段权限。
+                 */
+                listThreadMessage: async (
+                    payload?: {
+                        params?: {
+                            format?: "full" | "plain_text_full" | "metadata";
+                            include_spam_trash?: boolean;
+                        };
+                        path: { user_mailbox_id: string; thread_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        message_id?: string;
+                                        thread_id?: string;
+                                        folder_id?: string;
+                                        smtp_message_id?: string;
+                                        internal_date?: string;
+                                        message_state?: number;
+                                        message?: {
+                                            raw?: string;
+                                            subject?: string;
+                                            to?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            head_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            body_html?: string;
+                                            internal_date?: string;
+                                            message_state?: number;
+                                            smtp_message_id?: string;
+                                            message_id?: string;
+                                            attachments?: Array<{
+                                                body: string;
+                                                filename: string;
+                                                id?: string;
+                                                attachment_type?: number;
+                                                is_inline?: boolean;
+                                                cid?: string;
+                                            }>;
+                                            body_plain_text?: string;
+                                            thread_id?: string;
+                                            body_preview?: string;
+                                            label_ids?: Array<string>;
+                                            folder_id?: string;
+                                            in_reply_to?: string;
+                                            reply_to?: string;
+                                            priority_type?:
+                                                | "0"
+                                                | "1"
+                                                | "3"
+                                                | "5";
+                                            security_level?: {
+                                                is_risk?: boolean;
+                                                risk_banner_level?:
+                                                    | "WARNING"
+                                                    | "DANGER"
+                                                    | "INFO";
+                                                risk_banner_reason?:
+                                                    | "NO_REASON"
+                                                    | "IMPERSONATE_DOMAIN"
+                                                    | "IMPERSONATE_KP_NAME"
+                                                    | "UNAUTH_EXTERNAL"
+                                                    | "MALICIOUS_URL"
+                                                    | "MALICIOUS_ATTACHMENT"
+                                                    | "PHISHING"
+                                                    | "IMPERSONATE_PARTNER"
+                                                    | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                                is_header_from_external?: boolean;
+                                                via_domain?: string;
+                                                spam_banner_type?:
+                                                    | "USER_REPORT"
+                                                    | "USER_BLOCK"
+                                                    | "ANTI_SPAM"
+                                                    | "USER_RULE"
+                                                    | "BLOCK_DOMIN"
+                                                    | "BLOCK_ADDRESS";
+                                                spam_user_rule_id?: string;
+                                                spam_banner_info?: string;
+                                            };
+                                            references?: string;
+                                            body_calendar?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/messages`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 本接口提供修改邮件的能力，支持移动邮件的文件夹、给邮件添加和移除标签、标记邮件已读和未读、移动邮件至垃圾邮件等能力。不支持移动邮件到已删除文件夹，如需删除邮件，请使用删除邮件接口。至少填写add_label_ids、remove_label_ids、add_folder中的一个参数。
+                 */
+                modify: async (
+                    payload?: {
+                        data?: {
+                            add_label_ids?: Array<string>;
+                            remove_label_ids?: Array<string>;
+                            add_folder?: string;
+                        };
+                        path: { user_mailbox_id: string; message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/modify`,
+                                path
+                            ),
+                            method: "PUT",
                             data,
                             params,
                             headers,
@@ -8339,6 +11971,43 @@ export default abstract class Client extends lingo {
                             throw e;
                         });
                 },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.message&apiName=trash&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=trash&project=mail&resource=user_mailbox.message&version=v1 document }
+                 *
+                 * 移动邮件到已删除文件夹。注意，该接口无法删除草稿，如需删除草稿，请使用删除草稿接口
+                 */
+                trash: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; message_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/messages/:message_id/trash`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
             /**
              * user_mailbox.rule
@@ -8348,6 +12017,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 *
+                 * 创建收信规则
                  */
                 create: async (
                     payload?: {
@@ -8424,6 +12095,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=delete&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 *
+                 * 删除收信规则
                  */
                 delete: async (
                     payload?: {
@@ -8459,6 +12132,8 @@ export default abstract class Client extends lingo {
                  * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.rule&apiName=list&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.rule&version=v1 document }
+                 *
+                 * 列出收信规则
                  */
                 list: async (
                     payload?: {
@@ -8591,6 +12266,908 @@ export default abstract class Client extends lingo {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.setting
+             */
+            userMailboxSetting: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.setting&apiName=send_as&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=send_as&project=mail&resource=user_mailbox.setting&version=v1 document }
+                 *
+                 * 获取账号的所有可发信地址，包括主地址、别名地址、邮件组。可以使用用户地址访问该接口，也可以使用用户有权限的公共邮箱地址访问该接口。
+                 */
+                sendAs: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    sendable_addresses?: Array<{
+                                        email_address?: string;
+                                        email_type?:
+                                            | "MAIL_GROUP"
+                                            | "PUBLIC_MAILBOX"
+                                            | "USER_PRIMARY"
+                                            | "USER_ALIAS"
+                                            | "PUBLIC_MAILBOX_ALIAS";
+                                        name?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/settings/send_as`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.template.attachment
+             */
+            userMailboxTemplateAttachment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template.attachment&apiName=download_url&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=download_url&project=mail&resource=user_mailbox.template.attachment&version=v1 document }
+                 *
+                 * 获取指定邮件模板下的附件下载链接。用于在已知模板 ID 与附件 ID 的场景下，二次获取附件的有效访问 URL，便于在用户端预览或下载邮件模板中的附件资源。
+                 */
+                downloadUrl: async (
+                    payload?: {
+                        params: { attachment_ids: Array<string> };
+                        path: { user_mailbox_id: string; template_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    download_urls?: Array<{
+                                        attachment_id?: string;
+                                        download_url?: string;
+                                    }>;
+                                    failed_reasons?: Array<{
+                                        attachment_id?: string;
+                                        reason?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id/attachments/download_url`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.template
+             */
+            userMailboxTemplate: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=mail&resource=user_mailbox.template&version=v1 document }
+                 *
+                 * 在指定用户邮箱下创建一份可复用的个人邮件模板。请求时需传入完整的模板对象（含名称、主题、正文、收件信息、附件等），创建成功后返回完整模板内容（含系统生成的 template_id），适用于将常用邮件内容沉淀为模板以便后续快速发送同类型邮件。
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            template: {
+                                name: string;
+                                subject?: string;
+                                template_content?: string;
+                                is_plain_text_mode?: boolean;
+                                tos?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                ccs?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                bccs?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                attachments?: Array<{
+                                    filename?: string;
+                                    id?: string;
+                                    attachment_type?: number;
+                                    is_inline?: boolean;
+                                    cid?: string;
+                                }>;
+                            };
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    template?: {
+                                        template_id?: string;
+                                        name: string;
+                                        subject?: string;
+                                        template_content?: string;
+                                        is_plain_text_mode?: boolean;
+                                        tos?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        ccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        attachments?: Array<{
+                                            filename?: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=mail&resource=user_mailbox.template&version=v1 document }
+                 *
+                 * 永久删除指定用户邮箱下的某个个人邮件模板。删除操作不可恢复，删除后该模板将无法在「列出邮件模板」「获取邮件模板」等接口中再返回，常用于清理已废弃或不再使用的模板。
+                 */
+                delete: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; template_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.template&version=v1 document }
+                 *
+                 * 获取指定邮件模板的完整详情，包括模板名称、主题、正文（HTML 或纯文本）、收件人/抄送/密送地址、附件信息等所有字段。常用于编辑模板前回填表单，或在发送邮件场景下读取模板内容做二次填充。
+                 */
+                get: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; template_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    template?: {
+                                        template_id?: string;
+                                        name: string;
+                                        subject?: string;
+                                        template_content?: string;
+                                        is_plain_text_mode?: boolean;
+                                        tos?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        ccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        attachments?: Array<{
+                                            filename?: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.template&version=v1 document }
+                 *
+                 * 列出指定用户邮箱下的全部个人邮件模板基本信息（一次性返回，不分页），常用于在编辑或发送邮件场景下展示可选模板列表。如需获取模板正文与附件等完整字段，请通过获取个人邮件模板详情接口按 `template_id` 查询。
+                 */
+                list: async (
+                    payload?: {
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        template_id?: string;
+                                        name?: string;
+                                        create_time?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.template&apiName=update&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=mail&resource=user_mailbox.template&version=v1 document }
+                 *
+                 * 以全量替换的方式更新指定邮件模板的所有字段（包括名称、主题、正文、附件、收件信息等）。本接口为「全量更新」语义：请求时需传入完整的模板对象，未携带的字段将被清空。**调用依赖**：如仅修改部分字段，请先调用获取个人邮件模板详情接口拿到完整模板，在本地修改后再传回本接口，以避免漏传字段导致数据丢失。
+                 */
+                update: async (
+                    payload?: {
+                        data: {
+                            template: {
+                                name: string;
+                                subject?: string;
+                                template_content?: string;
+                                is_plain_text_mode?: boolean;
+                                tos?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                ccs?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                bccs?: Array<{
+                                    mail_address: string;
+                                    name?: string;
+                                }>;
+                                attachments?: Array<{
+                                    filename?: string;
+                                    id?: string;
+                                    attachment_type?: number;
+                                    is_inline?: boolean;
+                                    cid?: string;
+                                }>;
+                            };
+                        };
+                        path: { user_mailbox_id: string; template_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    template?: {
+                                        template_id?: string;
+                                        name: string;
+                                        subject?: string;
+                                        template_content?: string;
+                                        is_plain_text_mode?: boolean;
+                                        tos?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        ccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        bccs?: Array<{
+                                            mail_address: string;
+                                            name?: string;
+                                        }>;
+                                        attachments?: Array<{
+                                            filename?: string;
+                                            id?: string;
+                                            attachment_type?: number;
+                                            is_inline?: boolean;
+                                            cid?: string;
+                                        }>;
+                                        create_time?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/templates/:template_id`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * user_mailbox.thread
+             */
+            userMailboxThread: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=batch_modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_modify&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 本接口提供修改邮件会话的能力，支持移动邮件会话的文件夹、给邮件会话添加和移除标签、标记邮件会话读和未读、移动邮件会话至垃圾邮件等能力。不支持移动邮件会话到已删除文件夹，如需，请使用批量删除邮件会话接口。
+                 */
+                batchModify: async (
+                    payload?: {
+                        data?: {
+                            add_label_ids?: Array<string>;
+                            remove_label_ids?: Array<string>;
+                            add_folder?: string;
+                            thread_ids?: Array<string>;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/batch_modify`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=batch_trash&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_trash&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 通过指定邮件会话ID，批量移动邮件到已删除文件夹
+                 */
+                batchTrash: async (
+                    payload?: {
+                        data?: { thread_ids?: Array<string> };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/batch_trash`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 通过用户邮箱地址和邮件会话ID，获取该会话下的所有邮件关键信息列表。如需查询主题、正文、摘要、收发件人信息，请申请字段权限。
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            format?: "full" | "plain_text_full" | "metadata";
+                            include_spam_trash?: boolean;
+                        };
+                        path: { user_mailbox_id: string; thread_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    thread?: {
+                                        id?: string;
+                                        body_preview?: string;
+                                        messages?: Array<{
+                                            subject?: string;
+                                            to?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            cc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            bcc?: Array<{
+                                                mail_address: string;
+                                                name?: string;
+                                            }>;
+                                            head_from?: {
+                                                mail_address: string;
+                                                name?: string;
+                                            };
+                                            body_html?: string;
+                                            internal_date?: string;
+                                            message_state?: number;
+                                            smtp_message_id?: string;
+                                            message_id?: string;
+                                            attachments?: Array<{
+                                                filename: string;
+                                                id?: string;
+                                                attachment_type?: number;
+                                                is_inline?: boolean;
+                                                cid?: string;
+                                            }>;
+                                            body_plain_text?: string;
+                                            thread_id?: string;
+                                            body_preview?: string;
+                                            label_ids?: Array<string>;
+                                            folder_id?: string;
+                                            in_reply_to?: string;
+                                            reply_to?: string;
+                                            priority_type?:
+                                                | "0"
+                                                | "1"
+                                                | "3"
+                                                | "5";
+                                            security_level?: {
+                                                is_risk?: boolean;
+                                                risk_banner_level?:
+                                                    | "WARNING"
+                                                    | "DANGER"
+                                                    | "INFO";
+                                                risk_banner_reason?:
+                                                    | "NO_REASON"
+                                                    | "IMPERSONATE_DOMAIN"
+                                                    | "IMPERSONATE_KP_NAME"
+                                                    | "UNAUTH_EXTERNAL"
+                                                    | "MALICIOUS_URL"
+                                                    | "MALICIOUS_ATTACHMENT"
+                                                    | "PHISHING"
+                                                    | "IMPERSONATE_PARTNER"
+                                                    | "EXTERNAL_ENCRYPTION_ATTACHMENT";
+                                                is_header_from_external?: boolean;
+                                                via_domain?: string;
+                                                spam_banner_type?:
+                                                    | "USER_REPORT"
+                                                    | "USER_BLOCK"
+                                                    | "ANTI_SPAM"
+                                                    | "USER_RULE"
+                                                    | "BLOCK_DOMIN"
+                                                    | "BLOCK_ADDRESS";
+                                                spam_user_rule_id?: string;
+                                                spam_banner_info?: string;
+                                            };
+                                            references?: string;
+                                            body_calendar?: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            folder_id?: string;
+                            only_unread?: boolean;
+                            label_id?: string;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        body_preview?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 通过指定文件夹或标签，列出对应位置下的邮件会话列表。接口可返回邮件会话ID和会话下最新一封邮件的摘要。folder_id 和 label_id 必须且只能提供一个。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size: number;
+                            page_token?: string;
+                            folder_id?: string;
+                            only_unread?: boolean;
+                            label_id?: string;
+                        };
+                        path: { user_mailbox_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        body_preview?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=modify&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=modify&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 本接口提供修改邮件会话的能力，支持移动邮件会话的文件夹、给邮件会话添加和移除标签、标记邮件会话读和未读、移动邮件会话至垃圾邮件等能力。不支持移动邮件会话到已删除文件夹，如需，请使用删除邮件会话接口。至少填写add_label_ids、remove_label_ids、add_folder中的一个参数。
+                 */
+                modify: async (
+                    payload?: {
+                        data?: {
+                            add_label_ids?: Array<string>;
+                            remove_label_ids?: Array<string>;
+                            add_folder?: string;
+                        };
+                        path: { user_mailbox_id: string; thread_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/modify`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=mail&resource=user_mailbox.thread&apiName=trash&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=trash&project=mail&resource=user_mailbox.thread&version=v1 document }
+                 *
+                 * 移动指定的邮件会话到已删除文件夹
+                 */
+                trash: async (
+                    payload?: {
+                        path: { user_mailbox_id: string; thread_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/mail/v1/user_mailboxes/:user_mailbox_id/threads/:thread_id/trash`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

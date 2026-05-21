@@ -6011,6 +6011,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -6220,6 +6243,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -6427,6 +6473,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -6566,6 +6635,9 @@ export default abstract class Client extends sup_project {
                             positive_reminders?: Array<{
                                 relative_fire_minute: number;
                             }>;
+                            agent_task_status?: number;
+                            agent_task_progress?: string;
+                            text_deliveries?: Array<string>;
                         };
                         params?: { user_id_type?: string };
                     },
@@ -6745,6 +6817,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -6986,6 +7081,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -7014,6 +7132,7 @@ export default abstract class Client extends sup_project {
                             completed?: boolean;
                             type?: string;
                             user_id_type?: string;
+                            agent_task_status?: number;
                         };
                     },
                     options?: IRequestOptions
@@ -7243,6 +7362,29 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             relative_fire_minute: number;
                                                         }>;
+                                                        agent_task_status?: number;
+                                                        agent_task_progress?: string;
+                                                        text_deliveries?: Array<string>;
+                                                        attachment_deliveries?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        next_task_guid?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -7277,6 +7419,7 @@ export default abstract class Client extends sup_project {
                             completed?: boolean;
                             type?: string;
                             user_id_type?: string;
+                            agent_task_status?: number;
                         };
                     },
                     options?: IRequestOptions
@@ -7455,6 +7598,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -7570,6 +7736,9 @@ export default abstract class Client extends sup_project {
                                 positive_reminders?: Array<{
                                     relative_fire_minute: number;
                                 }>;
+                                agent_task_status?: number;
+                                agent_task_progress?: string;
+                                text_deliveries?: Array<string>;
                             };
                             update_fields: Array<string>;
                         };
@@ -7752,6 +7921,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -8011,6 +8203,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -8218,6 +8433,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -8425,6 +8663,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -8611,6 +8872,9 @@ export default abstract class Client extends sup_project {
                                 text_value?: string;
                             }>;
                             docx_source?: { token: string; block_id: string };
+                            agent_task_status?: number;
+                            agent_task_progress?: string;
+                            text_deliveries?: Array<string>;
                         };
                         params?: { user_id_type?: string };
                         path: { task_guid: string };
@@ -8791,6 +9055,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     };
                                 };
                             }
@@ -9047,6 +9334,29 @@ export default abstract class Client extends sup_project {
                                                             id?: string;
                                                             relative_fire_minute: number;
                                                         }>;
+                                                        agent_task_status?: number;
+                                                        agent_task_progress?: string;
+                                                        text_deliveries?: Array<string>;
+                                                        attachment_deliveries?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        next_task_guid?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -9258,6 +9568,29 @@ export default abstract class Client extends sup_project {
                                             id?: string;
                                             relative_fire_minute: number;
                                         }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;

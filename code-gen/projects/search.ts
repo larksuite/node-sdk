@@ -771,6 +771,348 @@ export default abstract class Client extends search_in_app {
             },
         },
         /**
+         * doc_wiki
+         */
+        docWiki: {
+            searchWithIterator: async (
+                payload?: {
+                    data: {
+                        query: string;
+                        doc_filter?: {
+                            creator_ids?: Array<string>;
+                            doc_types?: Array<
+                                | "DOC"
+                                | "SHEET"
+                                | "BITABLE"
+                                | "MINDNOTE"
+                                | "FILE"
+                                | "WIKI"
+                                | "DOCX"
+                                | "FOLDER"
+                                | "CATALOG"
+                                | "SLIDES"
+                                | "SHORTCUT"
+                            >;
+                            folder_tokens?: Array<string>;
+                            only_title?: boolean;
+                            open_time?: { start?: number; end?: number };
+                            sort_type?:
+                                | "DEFAULT_TYPE"
+                                | "OPEN_TIME"
+                                | "EDIT_TIME"
+                                | "EDIT_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_DESC"
+                                | "CREATE_TIME"
+                                | "CREATE_TIME_ASC";
+                            create_time?: { start?: number; end?: number };
+                            chat_ids?: Array<string>;
+                            sharer_ids?: Array<string>;
+                            only_comment?: boolean;
+                            my_edit_time?: { start?: number; end?: number };
+                            my_comment_time?: { start?: number; end?: number };
+                        };
+                        wiki_filter?: {
+                            creator_ids?: Array<string>;
+                            doc_types?: Array<
+                                | "DOC"
+                                | "SHEET"
+                                | "BITABLE"
+                                | "MINDNOTE"
+                                | "FILE"
+                                | "WIKI"
+                                | "DOCX"
+                                | "FOLDER"
+                                | "CATALOG"
+                                | "SLIDES"
+                                | "SHORTCUT"
+                            >;
+                            space_ids?: Array<string>;
+                            only_title?: boolean;
+                            open_time?: { start?: number; end?: number };
+                            sort_type?:
+                                | "DEFAULT_TYPE"
+                                | "OPEN_TIME"
+                                | "EDIT_TIME"
+                                | "EDIT_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_DESC"
+                                | "CREATE_TIME"
+                                | "CREATE_TIME_ASC";
+                            create_time?: { start?: number; end?: number };
+                            chat_ids?: Array<string>;
+                            sharer_ids?: Array<string>;
+                            only_comment?: boolean;
+                            my_edit_time?: { start?: number; end?: number };
+                            my_comment_time?: { start?: number; end?: number };
+                        };
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/search/v2/doc_wiki/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                total?: number;
+                                                has_more: boolean;
+                                                res_units?: Array<{
+                                                    title_highlighted?: string;
+                                                    summary_highlighted?: string;
+                                                    entity_type?:
+                                                        | "DOC"
+                                                        | "WIKI";
+                                                    result_meta?: {
+                                                        doc_types?:
+                                                            | "DOC"
+                                                            | "SHEET"
+                                                            | "BITABLE"
+                                                            | "MINDNOTE"
+                                                            | "FILE"
+                                                            | "WIKI"
+                                                            | "DOCX"
+                                                            | "FOLDER"
+                                                            | "CATALOG"
+                                                            | "SLIDES"
+                                                            | "SHORTCUT";
+                                                        update_time?: number;
+                                                        url?: string;
+                                                        owner_name?: string;
+                                                        owner_id?: string;
+                                                        is_cross_tenant?: boolean;
+                                                        create_time?: number;
+                                                        last_open_time?: number;
+                                                        edit_user_id?: string;
+                                                        edit_user_name?: string;
+                                                        token?: string;
+                                                        file_type?: string;
+                                                        icon_info?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=search&resource=doc_wiki&apiName=search&version=v2 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=search&resource=doc_wiki&version=v2 document }
+             *
+             * 搜索文档和Wiki
+             */
+            search: async (
+                payload?: {
+                    data: {
+                        query: string;
+                        doc_filter?: {
+                            creator_ids?: Array<string>;
+                            doc_types?: Array<
+                                | "DOC"
+                                | "SHEET"
+                                | "BITABLE"
+                                | "MINDNOTE"
+                                | "FILE"
+                                | "WIKI"
+                                | "DOCX"
+                                | "FOLDER"
+                                | "CATALOG"
+                                | "SLIDES"
+                                | "SHORTCUT"
+                            >;
+                            folder_tokens?: Array<string>;
+                            only_title?: boolean;
+                            open_time?: { start?: number; end?: number };
+                            sort_type?:
+                                | "DEFAULT_TYPE"
+                                | "OPEN_TIME"
+                                | "EDIT_TIME"
+                                | "EDIT_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_DESC"
+                                | "CREATE_TIME"
+                                | "CREATE_TIME_ASC";
+                            create_time?: { start?: number; end?: number };
+                            chat_ids?: Array<string>;
+                            sharer_ids?: Array<string>;
+                            only_comment?: boolean;
+                            my_edit_time?: { start?: number; end?: number };
+                            my_comment_time?: { start?: number; end?: number };
+                        };
+                        wiki_filter?: {
+                            creator_ids?: Array<string>;
+                            doc_types?: Array<
+                                | "DOC"
+                                | "SHEET"
+                                | "BITABLE"
+                                | "MINDNOTE"
+                                | "FILE"
+                                | "WIKI"
+                                | "DOCX"
+                                | "FOLDER"
+                                | "CATALOG"
+                                | "SLIDES"
+                                | "SHORTCUT"
+                            >;
+                            space_ids?: Array<string>;
+                            only_title?: boolean;
+                            open_time?: { start?: number; end?: number };
+                            sort_type?:
+                                | "DEFAULT_TYPE"
+                                | "OPEN_TIME"
+                                | "EDIT_TIME"
+                                | "EDIT_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_ASC"
+                                | "ENTITY_CREATE_TIME_DESC"
+                                | "CREATE_TIME"
+                                | "CREATE_TIME_ASC";
+                            create_time?: { start?: number; end?: number };
+                            chat_ids?: Array<string>;
+                            sharer_ids?: Array<string>;
+                            only_comment?: boolean;
+                            my_edit_time?: { start?: number; end?: number };
+                            my_comment_time?: { start?: number; end?: number };
+                        };
+                        page_token?: string;
+                        page_size?: number;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total?: number;
+                                has_more: boolean;
+                                res_units?: Array<{
+                                    title_highlighted?: string;
+                                    summary_highlighted?: string;
+                                    entity_type?: "DOC" | "WIKI";
+                                    result_meta?: {
+                                        doc_types?:
+                                            | "DOC"
+                                            | "SHEET"
+                                            | "BITABLE"
+                                            | "MINDNOTE"
+                                            | "FILE"
+                                            | "WIKI"
+                                            | "DOCX"
+                                            | "FOLDER"
+                                            | "CATALOG"
+                                            | "SLIDES"
+                                            | "SHORTCUT";
+                                        update_time?: number;
+                                        url?: string;
+                                        owner_name?: string;
+                                        owner_id?: string;
+                                        is_cross_tenant?: boolean;
+                                        create_time?: number;
+                                        last_open_time?: number;
+                                        edit_user_id?: string;
+                                        edit_user_name?: string;
+                                        token?: string;
+                                        file_type?: string;
+                                        icon_info?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/search/v2/doc_wiki/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * message
          */
         message: {
@@ -2084,6 +2426,362 @@ export default abstract class Client extends search_in_app {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * doc_wiki
+             */
+            docWiki: {
+                searchWithIterator: async (
+                    payload?: {
+                        data: {
+                            query: string;
+                            doc_filter?: {
+                                creator_ids?: Array<string>;
+                                doc_types?: Array<
+                                    | "DOC"
+                                    | "SHEET"
+                                    | "BITABLE"
+                                    | "MINDNOTE"
+                                    | "FILE"
+                                    | "WIKI"
+                                    | "DOCX"
+                                    | "FOLDER"
+                                    | "CATALOG"
+                                    | "SLIDES"
+                                    | "SHORTCUT"
+                                >;
+                                folder_tokens?: Array<string>;
+                                only_title?: boolean;
+                                open_time?: { start?: number; end?: number };
+                                sort_type?:
+                                    | "DEFAULT_TYPE"
+                                    | "OPEN_TIME"
+                                    | "EDIT_TIME"
+                                    | "EDIT_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_DESC"
+                                    | "CREATE_TIME"
+                                    | "CREATE_TIME_ASC";
+                                create_time?: { start?: number; end?: number };
+                                chat_ids?: Array<string>;
+                                sharer_ids?: Array<string>;
+                                only_comment?: boolean;
+                                my_edit_time?: { start?: number; end?: number };
+                                my_comment_time?: {
+                                    start?: number;
+                                    end?: number;
+                                };
+                            };
+                            wiki_filter?: {
+                                creator_ids?: Array<string>;
+                                doc_types?: Array<
+                                    | "DOC"
+                                    | "SHEET"
+                                    | "BITABLE"
+                                    | "MINDNOTE"
+                                    | "FILE"
+                                    | "WIKI"
+                                    | "DOCX"
+                                    | "FOLDER"
+                                    | "CATALOG"
+                                    | "SLIDES"
+                                    | "SHORTCUT"
+                                >;
+                                space_ids?: Array<string>;
+                                only_title?: boolean;
+                                open_time?: { start?: number; end?: number };
+                                sort_type?:
+                                    | "DEFAULT_TYPE"
+                                    | "OPEN_TIME"
+                                    | "EDIT_TIME"
+                                    | "EDIT_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_DESC"
+                                    | "CREATE_TIME"
+                                    | "CREATE_TIME_ASC";
+                                create_time?: { start?: number; end?: number };
+                                chat_ids?: Array<string>;
+                                sharer_ids?: Array<string>;
+                                only_comment?: boolean;
+                                my_edit_time?: { start?: number; end?: number };
+                                my_comment_time?: {
+                                    start?: number;
+                                    end?: number;
+                                };
+                            };
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/search/v2/doc_wiki/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    res_units?: Array<{
+                                                        title_highlighted?: string;
+                                                        summary_highlighted?: string;
+                                                        entity_type?:
+                                                            | "DOC"
+                                                            | "WIKI";
+                                                        result_meta?: {
+                                                            doc_types?:
+                                                                | "DOC"
+                                                                | "SHEET"
+                                                                | "BITABLE"
+                                                                | "MINDNOTE"
+                                                                | "FILE"
+                                                                | "WIKI"
+                                                                | "DOCX"
+                                                                | "FOLDER"
+                                                                | "CATALOG"
+                                                                | "SLIDES"
+                                                                | "SHORTCUT";
+                                                            update_time?: number;
+                                                            url?: string;
+                                                            owner_name?: string;
+                                                            owner_id?: string;
+                                                            is_cross_tenant?: boolean;
+                                                            create_time?: number;
+                                                            last_open_time?: number;
+                                                            edit_user_id?: string;
+                                                            edit_user_name?: string;
+                                                            token?: string;
+                                                            file_type?: string;
+                                                            icon_info?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=search&resource=doc_wiki&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=search&resource=doc_wiki&version=v2 document }
+                 *
+                 * 搜索文档和Wiki
+                 */
+                search: async (
+                    payload?: {
+                        data: {
+                            query: string;
+                            doc_filter?: {
+                                creator_ids?: Array<string>;
+                                doc_types?: Array<
+                                    | "DOC"
+                                    | "SHEET"
+                                    | "BITABLE"
+                                    | "MINDNOTE"
+                                    | "FILE"
+                                    | "WIKI"
+                                    | "DOCX"
+                                    | "FOLDER"
+                                    | "CATALOG"
+                                    | "SLIDES"
+                                    | "SHORTCUT"
+                                >;
+                                folder_tokens?: Array<string>;
+                                only_title?: boolean;
+                                open_time?: { start?: number; end?: number };
+                                sort_type?:
+                                    | "DEFAULT_TYPE"
+                                    | "OPEN_TIME"
+                                    | "EDIT_TIME"
+                                    | "EDIT_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_DESC"
+                                    | "CREATE_TIME"
+                                    | "CREATE_TIME_ASC";
+                                create_time?: { start?: number; end?: number };
+                                chat_ids?: Array<string>;
+                                sharer_ids?: Array<string>;
+                                only_comment?: boolean;
+                                my_edit_time?: { start?: number; end?: number };
+                                my_comment_time?: {
+                                    start?: number;
+                                    end?: number;
+                                };
+                            };
+                            wiki_filter?: {
+                                creator_ids?: Array<string>;
+                                doc_types?: Array<
+                                    | "DOC"
+                                    | "SHEET"
+                                    | "BITABLE"
+                                    | "MINDNOTE"
+                                    | "FILE"
+                                    | "WIKI"
+                                    | "DOCX"
+                                    | "FOLDER"
+                                    | "CATALOG"
+                                    | "SLIDES"
+                                    | "SHORTCUT"
+                                >;
+                                space_ids?: Array<string>;
+                                only_title?: boolean;
+                                open_time?: { start?: number; end?: number };
+                                sort_type?:
+                                    | "DEFAULT_TYPE"
+                                    | "OPEN_TIME"
+                                    | "EDIT_TIME"
+                                    | "EDIT_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_ASC"
+                                    | "ENTITY_CREATE_TIME_DESC"
+                                    | "CREATE_TIME"
+                                    | "CREATE_TIME_ASC";
+                                create_time?: { start?: number; end?: number };
+                                chat_ids?: Array<string>;
+                                sharer_ids?: Array<string>;
+                                only_comment?: boolean;
+                                my_edit_time?: { start?: number; end?: number };
+                                my_comment_time?: {
+                                    start?: number;
+                                    end?: number;
+                                };
+                            };
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total?: number;
+                                    has_more: boolean;
+                                    res_units?: Array<{
+                                        title_highlighted?: string;
+                                        summary_highlighted?: string;
+                                        entity_type?: "DOC" | "WIKI";
+                                        result_meta?: {
+                                            doc_types?:
+                                                | "DOC"
+                                                | "SHEET"
+                                                | "BITABLE"
+                                                | "MINDNOTE"
+                                                | "FILE"
+                                                | "WIKI"
+                                                | "DOCX"
+                                                | "FOLDER"
+                                                | "CATALOG"
+                                                | "SLIDES"
+                                                | "SHORTCUT";
+                                            update_time?: number;
+                                            url?: string;
+                                            owner_name?: string;
+                                            owner_id?: string;
+                                            is_cross_tenant?: boolean;
+                                            create_time?: number;
+                                            last_open_time?: number;
+                                            edit_user_id?: string;
+                                            edit_user_name?: string;
+                                            token?: string;
+                                            file_type?: string;
+                                            icon_info?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/search/v2/doc_wiki/search`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

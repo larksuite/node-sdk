@@ -1410,7 +1410,7 @@ export default abstract class Client extends apaas {
             },
         },
         /**
-         * 应用管理
+         * 应用
          */
         application: {
             /**
@@ -1595,6 +1595,12 @@ export default abstract class Client extends apaas {
                                         web_view_trusted_domains?: Array<string>;
                                         allowed_schemas?: Array<string>;
                                         allowed_server_domains?: Array<string>;
+                                    };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
                                     };
                                 };
                             };
@@ -1782,6 +1788,14 @@ export default abstract class Client extends apaas {
                                                         allowed_schemas?: Array<string>;
                                                         allowed_server_domains?: Array<string>;
                                                     };
+                                                    allow_refresh_token?: boolean;
+                                                    callback_info?: {
+                                                        callback_type?:
+                                                            | "webhook"
+                                                            | "websocket";
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -1930,6 +1944,12 @@ export default abstract class Client extends apaas {
                                         allowed_schemas?: Array<string>;
                                         allowed_server_domains?: Array<string>;
                                     };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
+                                    };
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -1988,6 +2008,12 @@ export default abstract class Client extends apaas {
                             web_view_trusted_domains?: Array<string>;
                             allowed_schemas?: Array<string>;
                             allowed_server_domains?: Array<string>;
+                        };
+                        allow_refresh_token?: boolean;
+                        callback_info?: {
+                            callback_type?: "webhook" | "websocket";
+                            request_url?: string;
+                            subscribed_callbacks?: Array<string>;
                         };
                     };
                     params: { lang: "zh_cn" | "en_us" | "ja_jp" };
@@ -2179,6 +2205,14 @@ export default abstract class Client extends apaas {
                                                         allowed_schemas?: Array<string>;
                                                         allowed_server_domains?: Array<string>;
                                                     };
+                                                    allow_refresh_token?: boolean;
+                                                    callback_info?: {
+                                                        callback_type?:
+                                                            | "webhook"
+                                                            | "websocket";
+                                                        request_url?: string;
+                                                        subscribed_callbacks?: Array<string>;
+                                                    };
                                                 }>;
                                                 has_more: boolean;
                                                 page_token?: string;
@@ -2322,6 +2356,12 @@ export default abstract class Client extends apaas {
                                         web_view_trusted_domains?: Array<string>;
                                         allowed_schemas?: Array<string>;
                                         allowed_server_domains?: Array<string>;
+                                    };
+                                    allow_refresh_token?: boolean;
+                                    callback_info?: {
+                                        callback_type?: "webhook" | "websocket";
+                                        request_url?: string;
+                                        subscribed_callbacks?: Array<string>;
                                     };
                                 }>;
                                 has_more: boolean;
@@ -4154,7 +4194,7 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 应用管理
+             * 应用
              */
             application: {
                 /**
@@ -4341,6 +4381,14 @@ export default abstract class Client extends apaas {
                                             web_view_trusted_domains?: Array<string>;
                                             allowed_schemas?: Array<string>;
                                             allowed_server_domains?: Array<string>;
+                                        };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
                                         };
                                     };
                                 };
@@ -4531,6 +4579,14 @@ export default abstract class Client extends apaas {
                                                             allowed_schemas?: Array<string>;
                                                             allowed_server_domains?: Array<string>;
                                                         };
+                                                        allow_refresh_token?: boolean;
+                                                        callback_info?: {
+                                                            callback_type?:
+                                                                | "webhook"
+                                                                | "websocket";
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -4681,6 +4737,14 @@ export default abstract class Client extends apaas {
                                             allowed_schemas?: Array<string>;
                                             allowed_server_domains?: Array<string>;
                                         };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
+                                        };
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -4739,6 +4803,12 @@ export default abstract class Client extends apaas {
                                 web_view_trusted_domains?: Array<string>;
                                 allowed_schemas?: Array<string>;
                                 allowed_server_domains?: Array<string>;
+                            };
+                            allow_refresh_token?: boolean;
+                            callback_info?: {
+                                callback_type?: "webhook" | "websocket";
+                                request_url?: string;
+                                subscribed_callbacks?: Array<string>;
                             };
                         };
                         params: { lang: "zh_cn" | "en_us" | "ja_jp" };
@@ -4936,6 +5006,14 @@ export default abstract class Client extends apaas {
                                                             allowed_schemas?: Array<string>;
                                                             allowed_server_domains?: Array<string>;
                                                         };
+                                                        allow_refresh_token?: boolean;
+                                                        callback_info?: {
+                                                            callback_type?:
+                                                                | "webhook"
+                                                                | "websocket";
+                                                            request_url?: string;
+                                                            subscribed_callbacks?: Array<string>;
+                                                        };
                                                     }>;
                                                     has_more: boolean;
                                                     page_token?: string;
@@ -5081,6 +5159,14 @@ export default abstract class Client extends apaas {
                                             web_view_trusted_domains?: Array<string>;
                                             allowed_schemas?: Array<string>;
                                             allowed_server_domains?: Array<string>;
+                                        };
+                                        allow_refresh_token?: boolean;
+                                        callback_info?: {
+                                            callback_type?:
+                                                | "webhook"
+                                                | "websocket";
+                                            request_url?: string;
+                                            subscribed_callbacks?: Array<string>;
                                         };
                                     }>;
                                     has_more: boolean;

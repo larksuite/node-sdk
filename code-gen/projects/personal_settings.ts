@@ -105,7 +105,7 @@ export default abstract class Client extends performance {
             batchOpen: async (
                 payload?: {
                     data: {
-                        user_list: Array<{ user_id: string; end_time: string }>;
+                        user_list: Array<{ user_id: string; end_time: number }>;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -126,7 +126,7 @@ export default abstract class Client extends performance {
                             data?: {
                                 result_list: Array<{
                                     user_id: string;
-                                    end_time: string;
+                                    end_time: number;
                                     result?:
                                         | "success_show"
                                         | "success_user_close_syn"
@@ -846,7 +846,7 @@ export default abstract class Client extends performance {
                         data: {
                             user_list: Array<{
                                 user_id: string;
-                                end_time: string;
+                                end_time: number;
                             }>;
                         };
                         params?: {
@@ -868,7 +868,7 @@ export default abstract class Client extends performance {
                                 data?: {
                                     result_list: Array<{
                                         user_id: string;
-                                        end_time: string;
+                                        end_time: number;
                                         result?:
                                             | "success_show"
                                             | "success_user_close_syn"

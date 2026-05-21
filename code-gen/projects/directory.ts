@@ -795,12 +795,12 @@ export default abstract class Client extends corehr {
                                 order_weight?: string;
                                 enabled_status?: boolean;
                                 custom_field_values?: Array<{
-                                    field_key?: string;
                                     field_type?:
                                         | "1"
                                         | "2"
                                         | "3"
                                         | "4"
+                                        | "9"
                                         | "10"
                                         | "11";
                                     text_value?: {
@@ -825,6 +825,11 @@ export default abstract class Client extends corehr {
                                         ids: Array<string>;
                                         user_type: "1";
                                     }>;
+                                    phone_value?: {
+                                        phone_number: string;
+                                        extension_number?: string;
+                                    };
+                                    field_key?: string;
                                 }>;
                                 org_dimension?: string;
                             };
@@ -988,12 +993,12 @@ export default abstract class Client extends corehr {
                                         enabled_status?: boolean;
                                         order_weight?: string;
                                         custom_field_values?: Array<{
-                                            field_key?: string;
                                             field_type?:
                                                 | "1"
                                                 | "2"
                                                 | "3"
                                                 | "4"
+                                                | "9"
                                                 | "10"
                                                 | "11";
                                             text_value?: {
@@ -1024,6 +1029,11 @@ export default abstract class Client extends corehr {
                                                 ids: Array<string>;
                                                 user_type: "1";
                                             }>;
+                                            phone_value?: {
+                                                phone_number: string;
+                                                extension_number?: string;
+                                            };
+                                            field_key?: string;
                                         }>;
                                         department_path_infos?: Array<{
                                             department_id?: string;
@@ -1053,61 +1063,6 @@ export default abstract class Client extends corehr {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/directory/v1/departments/filter`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
-                 * {@link https://open.feishu.cn/api-explorer?project=directory&resource=department&apiName=idconvert&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=idconvert&project=directory&resource=department&version=v1 document }
-                 */
-                idconvert: async (
-                    payload?: {
-                        data: { department_ids: Array<string> };
-                        params?: {
-                            department_id_type?:
-                                | "department_id"
-                                | "open_department_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    id_convert_results?: Array<{
-                                        id: string;
-                                        department_id?: string;
-                                        open_department_id?: string;
-                                    }>;
-                                    abnormals?: Array<{
-                                        id?: string;
-                                        row_error?: number;
-                                        field_errors?: Record<string, number>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/directory/v1/departments/idconvert`,
                                 path
                             ),
                             method: "POST",
@@ -1181,12 +1136,12 @@ export default abstract class Client extends corehr {
                                         enabled_status?: boolean;
                                         order_weight?: string;
                                         custom_field_values?: Array<{
-                                            field_key?: string;
                                             field_type?:
                                                 | "1"
                                                 | "2"
                                                 | "3"
                                                 | "4"
+                                                | "9"
                                                 | "10"
                                                 | "11";
                                             text_value?: {
@@ -1217,6 +1172,11 @@ export default abstract class Client extends corehr {
                                                 ids: Array<string>;
                                                 user_type: "1";
                                             }>;
+                                            phone_value?: {
+                                                phone_number: string;
+                                                extension_number?: string;
+                                            };
+                                            field_key?: string;
                                         }>;
                                         department_path_infos?: Array<{
                                             department_id?: string;
@@ -1286,12 +1246,12 @@ export default abstract class Client extends corehr {
                                 };
                                 enabled_status?: boolean;
                                 custom_field_values?: Array<{
-                                    field_key?: string;
                                     field_type?:
                                         | "1"
                                         | "2"
                                         | "3"
                                         | "4"
+                                        | "9"
                                         | "10"
                                         | "11";
                                     text_value?: {
@@ -1316,6 +1276,11 @@ export default abstract class Client extends corehr {
                                         ids: Array<string>;
                                         user_type: "1";
                                     }>;
+                                    phone_value?: {
+                                        phone_number: string;
+                                        extension_number?: string;
+                                    };
+                                    field_key?: string;
                                 }>;
                             };
                         };
@@ -1428,12 +1393,12 @@ export default abstract class Client extends corehr {
                                         enabled_status?: boolean;
                                         order_weight?: string;
                                         custom_field_values?: Array<{
-                                            field_key?: string;
                                             field_type?:
                                                 | "1"
                                                 | "2"
                                                 | "3"
                                                 | "4"
+                                                | "9"
                                                 | "10"
                                                 | "11";
                                             text_value?: {
@@ -1464,6 +1429,11 @@ export default abstract class Client extends corehr {
                                                 ids: Array<string>;
                                                 user_type: "1";
                                             }>;
+                                            phone_value?: {
+                                                phone_number: string;
+                                                extension_number?: string;
+                                            };
+                                            field_key?: string;
                                         }>;
                                         department_path_infos?: Array<{
                                             department_id?: string;
@@ -1576,12 +1546,12 @@ export default abstract class Client extends corehr {
                                 }>;
                                 job_title_id?: string;
                                 custom_field_values?: Array<{
-                                    field_key?: string;
                                     field_type?:
                                         | "1"
                                         | "2"
                                         | "3"
                                         | "4"
+                                        | "9"
                                         | "10"
                                         | "11";
                                     text_value?: {
@@ -1606,6 +1576,11 @@ export default abstract class Client extends corehr {
                                         ids: Array<string>;
                                         user_type: "1";
                                     }>;
+                                    phone_value?: {
+                                        phone_number: string;
+                                        extension_number?: string;
+                                    };
+                                    field_key?: string;
                                 }>;
                                 virtual_org_infos?: Array<{
                                     id: string;
@@ -1840,12 +1815,12 @@ export default abstract class Client extends corehr {
                                                 enabled_status?: boolean;
                                                 order_weight?: string;
                                                 custom_field_values?: Array<{
-                                                    field_key?: string;
                                                     field_type?:
                                                         | "1"
                                                         | "2"
                                                         | "3"
                                                         | "4"
+                                                        | "9"
                                                         | "10"
                                                         | "11";
                                                     text_value?: {
@@ -1876,6 +1851,11 @@ export default abstract class Client extends corehr {
                                                         ids: Array<string>;
                                                         user_type: "1";
                                                     }>;
+                                                    phone_value?: {
+                                                        phone_number: string;
+                                                        extension_number?: string;
+                                                    };
+                                                    field_key?: string;
                                                 }>;
                                                 department_path_infos?: Array<{
                                                     department_id?: string;
@@ -1904,12 +1884,12 @@ export default abstract class Client extends corehr {
                                             is_primary_admin?: boolean;
                                             enterprise_email_aliases?: Array<string>;
                                             custom_field_values?: Array<{
-                                                field_key?: string;
                                                 field_type?:
                                                     | "1"
                                                     | "2"
                                                     | "3"
                                                     | "4"
+                                                    | "9"
                                                     | "10"
                                                     | "11";
                                                 text_value?: {
@@ -1940,6 +1920,11 @@ export default abstract class Client extends corehr {
                                                     ids: Array<string>;
                                                     user_type: "1";
                                                 }>;
+                                                phone_value?: {
+                                                    phone_number: string;
+                                                    extension_number?: string;
+                                                };
+                                                field_key?: string;
                                             }>;
                                             department_path_infos?: Array<
                                                 Array<{
@@ -1965,7 +1950,7 @@ export default abstract class Client extends corehr {
                                             is_admin?: boolean;
                                             data_source?: number;
                                             geo_name?: string;
-                                            subscription_ids?: Array<string>;
+                                            subscription_ids?: Array<number>;
                                             virtual_org_infos?: Array<{
                                                 id: string;
                                                 departments?: Array<{
@@ -1994,12 +1979,12 @@ export default abstract class Client extends corehr {
                                                     enabled_status?: boolean;
                                                     order_weight?: string;
                                                     custom_field_values?: Array<{
-                                                        field_key?: string;
                                                         field_type?:
                                                             | "1"
                                                             | "2"
                                                             | "3"
                                                             | "4"
+                                                            | "9"
                                                             | "10"
                                                             | "11";
                                                         text_value?: {
@@ -2032,6 +2017,11 @@ export default abstract class Client extends corehr {
                                                             ids: Array<string>;
                                                             user_type: "1";
                                                         }>;
+                                                        phone_value?: {
+                                                            phone_number: string;
+                                                            extension_number?: string;
+                                                        };
+                                                        field_key?: string;
                                                     }>;
                                                     department_path_infos?: Array<{
                                                         department_id?: string;
@@ -2208,63 +2198,6 @@ export default abstract class Client extends corehr {
                         });
                 },
                 /**
-                 * {@link https://open.feishu.cn/api-explorer?project=directory&resource=employee&apiName=idconvert&version=v1 click to debug }
-                 *
-                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=idconvert&project=directory&resource=employee&version=v1 document }
-                 */
-                idconvert: async (
-                    payload?: {
-                        data: { employee_ids: Array<string> };
-                        params?: {
-                            employee_id_type?:
-                                | "open_id"
-                                | "union_id"
-                                | "employee_id";
-                        };
-                    },
-                    options?: IRequestOptions
-                ) => {
-                    const { headers, params, data, path } =
-                        await this.formatPayload(payload, options);
-
-                    return this.httpInstance
-                        .request<
-                            any,
-                            {
-                                code?: number;
-                                msg?: string;
-                                data?: {
-                                    id_convert_results?: Array<{
-                                        id: string;
-                                        employee_id?: string;
-                                        open_employee_id?: string;
-                                        union_employee_id?: string;
-                                    }>;
-                                    abnormals?: Array<{
-                                        id?: string;
-                                        row_error?: number;
-                                        field_errors?: Record<string, number>;
-                                    }>;
-                                };
-                            }
-                        >({
-                            url: fillApiPath(
-                                `${this.domain}/open-apis/directory/v1/employees/idconvert`,
-                                path
-                            ),
-                            method: "POST",
-                            data,
-                            params,
-                            headers,
-                            paramsSerializer: (params) =>
-                                stringify(params, { arrayFormat: "repeat" }),
-                        })
-                        .catch((e) => {
-                            this.logger.error(formatErrors(e));
-                            throw e;
-                        });
-                },
-                /**
                  * {@link https://open.feishu.cn/api-explorer?project=directory&resource=employee&apiName=mget&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=mget&project=directory&resource=employee&version=v1 document }
@@ -2360,12 +2293,12 @@ export default abstract class Client extends corehr {
                                                 enabled_status?: boolean;
                                                 order_weight?: string;
                                                 custom_field_values?: Array<{
-                                                    field_key?: string;
                                                     field_type?:
                                                         | "1"
                                                         | "2"
                                                         | "3"
                                                         | "4"
+                                                        | "9"
                                                         | "10"
                                                         | "11";
                                                     text_value?: {
@@ -2396,6 +2329,11 @@ export default abstract class Client extends corehr {
                                                         ids: Array<string>;
                                                         user_type: "1";
                                                     }>;
+                                                    phone_value?: {
+                                                        phone_number: string;
+                                                        extension_number?: string;
+                                                    };
+                                                    field_key?: string;
                                                 }>;
                                                 department_path_infos?: Array<{
                                                     department_id?: string;
@@ -2424,12 +2362,12 @@ export default abstract class Client extends corehr {
                                             is_primary_admin?: boolean;
                                             enterprise_email_aliases?: Array<string>;
                                             custom_field_values?: Array<{
-                                                field_key?: string;
                                                 field_type?:
                                                     | "1"
                                                     | "2"
                                                     | "3"
                                                     | "4"
+                                                    | "9"
                                                     | "10"
                                                     | "11";
                                                 text_value?: {
@@ -2460,6 +2398,11 @@ export default abstract class Client extends corehr {
                                                     ids: Array<string>;
                                                     user_type: "1";
                                                 }>;
+                                                phone_value?: {
+                                                    phone_number: string;
+                                                    extension_number?: string;
+                                                };
+                                                field_key?: string;
                                             }>;
                                             department_path_infos?: Array<
                                                 Array<{
@@ -2485,7 +2428,7 @@ export default abstract class Client extends corehr {
                                             is_admin?: boolean;
                                             data_source?: number;
                                             geo_name?: string;
-                                            subscription_ids?: Array<string>;
+                                            subscription_ids?: Array<number>;
                                             virtual_org_infos?: Array<{
                                                 id: string;
                                                 departments?: Array<{
@@ -2514,12 +2457,12 @@ export default abstract class Client extends corehr {
                                                     enabled_status?: boolean;
                                                     order_weight?: string;
                                                     custom_field_values?: Array<{
-                                                        field_key?: string;
                                                         field_type?:
                                                             | "1"
                                                             | "2"
                                                             | "3"
                                                             | "4"
+                                                            | "9"
                                                             | "10"
                                                             | "11";
                                                         text_value?: {
@@ -2552,6 +2495,11 @@ export default abstract class Client extends corehr {
                                                             ids: Array<string>;
                                                             user_type: "1";
                                                         }>;
+                                                        phone_value?: {
+                                                            phone_number: string;
+                                                            extension_number?: string;
+                                                        };
+                                                        field_key?: string;
                                                     }>;
                                                     department_path_infos?: Array<{
                                                         department_id?: string;
@@ -2822,12 +2770,12 @@ export default abstract class Client extends corehr {
                                 resign_type?: "0" | "1" | "2" | "3";
                                 is_frozen?: boolean;
                                 custom_field_values?: Array<{
-                                    field_key?: string;
                                     field_type?:
                                         | "1"
                                         | "2"
                                         | "3"
                                         | "4"
+                                        | "9"
                                         | "10"
                                         | "11";
                                     text_value?: {
@@ -2852,6 +2800,11 @@ export default abstract class Client extends corehr {
                                         ids: Array<string>;
                                         user_type: "1";
                                     }>;
+                                    phone_value?: {
+                                        phone_number: string;
+                                        extension_number?: string;
+                                    };
+                                    field_key?: string;
                                 }>;
                                 virtual_org_infos?: Array<{
                                     id: string;
@@ -3130,12 +3083,12 @@ export default abstract class Client extends corehr {
                                                 enabled_status?: boolean;
                                                 order_weight?: string;
                                                 custom_field_values?: Array<{
-                                                    field_key?: string;
                                                     field_type?:
                                                         | "1"
                                                         | "2"
                                                         | "3"
                                                         | "4"
+                                                        | "9"
                                                         | "10"
                                                         | "11";
                                                     text_value?: {
@@ -3166,6 +3119,11 @@ export default abstract class Client extends corehr {
                                                         ids: Array<string>;
                                                         user_type: "1";
                                                     }>;
+                                                    phone_value?: {
+                                                        phone_number: string;
+                                                        extension_number?: string;
+                                                    };
+                                                    field_key?: string;
                                                 }>;
                                                 department_path_infos?: Array<{
                                                     department_id?: string;
@@ -3194,12 +3152,12 @@ export default abstract class Client extends corehr {
                                             is_primary_admin?: boolean;
                                             enterprise_email_aliases?: Array<string>;
                                             custom_field_values?: Array<{
-                                                field_key?: string;
                                                 field_type?:
                                                     | "1"
                                                     | "2"
                                                     | "3"
                                                     | "4"
+                                                    | "9"
                                                     | "10"
                                                     | "11";
                                                 text_value?: {
@@ -3230,6 +3188,11 @@ export default abstract class Client extends corehr {
                                                     ids: Array<string>;
                                                     user_type: "1";
                                                 }>;
+                                                phone_value?: {
+                                                    phone_number: string;
+                                                    extension_number?: string;
+                                                };
+                                                field_key?: string;
                                             }>;
                                             department_path_infos?: Array<
                                                 Array<{
@@ -3255,7 +3218,7 @@ export default abstract class Client extends corehr {
                                             is_admin?: boolean;
                                             data_source?: number;
                                             geo_name?: string;
-                                            subscription_ids?: Array<string>;
+                                            subscription_ids?: Array<number>;
                                             virtual_org_infos?: Array<{
                                                 id: string;
                                                 departments?: Array<{
@@ -3284,12 +3247,12 @@ export default abstract class Client extends corehr {
                                                     enabled_status?: boolean;
                                                     order_weight?: string;
                                                     custom_field_values?: Array<{
-                                                        field_key?: string;
                                                         field_type?:
                                                             | "1"
                                                             | "2"
                                                             | "3"
                                                             | "4"
+                                                            | "9"
                                                             | "10"
                                                             | "11";
                                                         text_value?: {
@@ -3322,6 +3285,11 @@ export default abstract class Client extends corehr {
                                                             ids: Array<string>;
                                                             user_type: "1";
                                                         }>;
+                                                        phone_value?: {
+                                                            phone_number: string;
+                                                            extension_number?: string;
+                                                        };
+                                                        field_key?: string;
                                                     }>;
                                                     department_path_infos?: Array<{
                                                         department_id?: string;

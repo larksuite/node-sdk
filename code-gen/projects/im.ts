@@ -1291,6 +1291,7 @@ export default abstract class Client extends human_authentication {
                         member_id_type?: "user_id" | "union_id" | "open_id";
                         page_size?: number;
                         page_token?: string;
+                        check_security_conf?: boolean;
                     };
                     path: { chat_id: string };
                 },
@@ -1362,6 +1363,8 @@ export default abstract class Client extends human_authentication {
                                                 page_token?: string;
                                                 has_more?: boolean;
                                                 member_total?: number;
+                                                trigger_security_conf_limit?: boolean;
+                                                security_conf_limit?: number;
                                             };
                                         }
                                     )?.data || {};
@@ -1397,6 +1400,7 @@ export default abstract class Client extends human_authentication {
                         member_id_type?: "user_id" | "union_id" | "open_id";
                         page_size?: number;
                         page_token?: string;
+                        check_security_conf?: boolean;
                     };
                     path: { chat_id: string };
                 },
@@ -1421,6 +1425,8 @@ export default abstract class Client extends human_authentication {
                                 page_token?: string;
                                 has_more?: boolean;
                                 member_total?: number;
+                                trigger_security_conf_limit?: boolean;
+                                security_conf_limit?: number;
                             };
                         }
                     >({
@@ -3010,7 +3016,7 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
-         * 消息加急
+         * 消息
          */
         message: {
             /**
@@ -3068,6 +3074,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3078,6 +3085,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -3184,6 +3194,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3194,6 +3205,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -3228,6 +3242,7 @@ export default abstract class Client extends human_authentication {
                 payload?: {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        card_msg_content_type?: string;
                     };
                     path: { message_id: string };
                 },
@@ -3259,6 +3274,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3269,6 +3285,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 }>;
                             };
                         }
@@ -3299,6 +3318,8 @@ export default abstract class Client extends human_authentication {
                         sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
                         page_size?: number;
                         page_token?: string;
+                        card_msg_content_type?: string;
+                        only_thread_root_messages?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -3378,6 +3399,7 @@ export default abstract class Client extends human_authentication {
                                                         id_type: string;
                                                         sender_type: string;
                                                         tenant_key?: string;
+                                                        sender_name?: string;
                                                     };
                                                     body?: { content: string };
                                                     mentions?: Array<{
@@ -3388,6 +3410,9 @@ export default abstract class Client extends human_authentication {
                                                         tenant_key?: string;
                                                     }>;
                                                     upper_message_id?: string;
+                                                    message_app_link?: string;
+                                                    message_position?: string;
+                                                    thread_message_position?: string;
                                                 }>;
                                             };
                                         }
@@ -3430,6 +3455,8 @@ export default abstract class Client extends human_authentication {
                         sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
                         page_size?: number;
                         page_token?: string;
+                        card_msg_content_type?: string;
+                        only_thread_root_messages?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -3462,6 +3489,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3472,6 +3500,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 }>;
                             };
                         }
@@ -3544,6 +3575,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3554,6 +3586,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                                 invalid_message_id_list?: Array<string>;
                             };
@@ -3778,6 +3813,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3788,6 +3824,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -3846,6 +3885,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3856,6 +3896,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -4094,6 +4137,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4104,6 +4148,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -4182,6 +4229,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4192,6 +4240,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -4266,6 +4317,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4276,6 +4328,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -4300,6 +4355,86 @@ export default abstract class Client extends human_authentication {
          * 消息 - 表情回复
          */
         messageReaction: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+             *
+             * 批量获取消息表情
+             */
+            batchQuery: async (
+                payload?: {
+                    data: {
+                        queries: Array<{
+                            message_id?: string;
+                            page_token?: string;
+                        }>;
+                        page_size_per_message?: number;
+                        reaction_type?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                success_msg_reaction_details?: Array<{
+                                    message_id?: string;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    message_reaction_items?: Array<{
+                                        reaction_id?: string;
+                                        operator?: {
+                                            operator_id: string;
+                                            operator_type: "app" | "user";
+                                        };
+                                        action_time?: string;
+                                        emoji_type?: string;
+                                    }>;
+                                }>;
+                                success_msg_reaction_counts?: Array<{
+                                    message_id?: string;
+                                    reaction_count?: Array<{
+                                        reaction_type?: string;
+                                        count?: string;
+                                    }>;
+                                }>;
+                                fail_msg_reaction_details?: Array<{
+                                    message_id?: string;
+                                    fail_reason?:
+                                        | "invalid"
+                                        | "invalid_page_token"
+                                        | "no_permission";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
             /**
              * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
              *
@@ -4956,6 +5091,7 @@ export default abstract class Client extends human_authentication {
                                     id_type: string;
                                     sender_type: string;
                                     tenant_key?: string;
+                                    sender_name?: string;
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4966,6 +5102,9 @@ export default abstract class Client extends human_authentication {
                                     tenant_key?: string;
                                 }>;
                                 upper_message_id?: string;
+                                message_app_link?: string;
+                                message_position?: string;
+                                thread_message_position?: string;
                             };
                         }
                     >({
@@ -6270,6 +6409,7 @@ export default abstract class Client extends human_authentication {
                             member_id_type?: "user_id" | "union_id" | "open_id";
                             page_size?: number;
                             page_token?: string;
+                            check_security_conf?: boolean;
                         };
                         path: { chat_id: string };
                     },
@@ -6343,6 +6483,8 @@ export default abstract class Client extends human_authentication {
                                                     page_token?: string;
                                                     has_more?: boolean;
                                                     member_total?: number;
+                                                    trigger_security_conf_limit?: boolean;
+                                                    security_conf_limit?: number;
                                                 };
                                             }
                                         )?.data || {};
@@ -6378,6 +6520,7 @@ export default abstract class Client extends human_authentication {
                             member_id_type?: "user_id" | "union_id" | "open_id";
                             page_size?: number;
                             page_token?: string;
+                            check_security_conf?: boolean;
                         };
                         path: { chat_id: string };
                     },
@@ -6402,6 +6545,8 @@ export default abstract class Client extends human_authentication {
                                     page_token?: string;
                                     has_more?: boolean;
                                     member_total?: number;
+                                    trigger_security_conf_limit?: boolean;
+                                    security_conf_limit?: number;
                                 };
                             }
                         >({
@@ -8007,7 +8152,7 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
-             * 消息加急
+             * 消息
              */
             message: {
                 /**
@@ -8065,6 +8210,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8075,6 +8221,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -8184,6 +8333,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8194,6 +8344,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -8228,6 +8381,7 @@ export default abstract class Client extends human_authentication {
                     payload?: {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            card_msg_content_type?: string;
                         };
                         path: { message_id: string };
                     },
@@ -8259,6 +8413,7 @@ export default abstract class Client extends human_authentication {
                                             id_type: string;
                                             sender_type: string;
                                             tenant_key?: string;
+                                            sender_name?: string;
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8269,6 +8424,9 @@ export default abstract class Client extends human_authentication {
                                             tenant_key?: string;
                                         }>;
                                         upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
                                     }>;
                                 };
                             }
@@ -8299,6 +8457,8 @@ export default abstract class Client extends human_authentication {
                             sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
                             page_size?: number;
                             page_token?: string;
+                            card_msg_content_type?: string;
+                            only_thread_root_messages?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -8380,6 +8540,7 @@ export default abstract class Client extends human_authentication {
                                                             id_type: string;
                                                             sender_type: string;
                                                             tenant_key?: string;
+                                                            sender_name?: string;
                                                         };
                                                         body?: {
                                                             content: string;
@@ -8392,6 +8553,9 @@ export default abstract class Client extends human_authentication {
                                                             tenant_key?: string;
                                                         }>;
                                                         upper_message_id?: string;
+                                                        message_app_link?: string;
+                                                        message_position?: string;
+                                                        thread_message_position?: string;
                                                     }>;
                                                 };
                                             }
@@ -8434,6 +8598,8 @@ export default abstract class Client extends human_authentication {
                             sort_type?: "ByCreateTimeAsc" | "ByCreateTimeDesc";
                             page_size?: number;
                             page_token?: string;
+                            card_msg_content_type?: string;
+                            only_thread_root_messages?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -8466,6 +8632,7 @@ export default abstract class Client extends human_authentication {
                                             id_type: string;
                                             sender_type: string;
                                             tenant_key?: string;
+                                            sender_name?: string;
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8476,6 +8643,9 @@ export default abstract class Client extends human_authentication {
                                             tenant_key?: string;
                                         }>;
                                         upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
                                     }>;
                                 };
                             }
@@ -8548,6 +8718,7 @@ export default abstract class Client extends human_authentication {
                                             id_type: string;
                                             sender_type: string;
                                             tenant_key?: string;
+                                            sender_name?: string;
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8558,6 +8729,9 @@ export default abstract class Client extends human_authentication {
                                             tenant_key?: string;
                                         }>;
                                         upper_message_id?: string;
+                                        message_app_link?: string;
+                                        message_position?: string;
+                                        thread_message_position?: string;
                                     };
                                     invalid_message_id_list?: Array<string>;
                                 };
@@ -8788,6 +8962,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8798,6 +8973,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -8856,6 +9034,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8866,6 +9045,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -9104,6 +9286,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9114,6 +9297,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -9192,6 +9378,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9202,6 +9389,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -9276,6 +9466,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9286,6 +9477,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -9310,6 +9504,86 @@ export default abstract class Client extends human_authentication {
              * 消息 - 表情回复
              */
             messageReaction: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=batch_query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_query&project=im&resource=message.reaction&version=v1 document }
+                 *
+                 * 批量获取消息表情
+                 */
+                batchQuery: async (
+                    payload?: {
+                        data: {
+                            queries: Array<{
+                                message_id?: string;
+                                page_token?: string;
+                            }>;
+                            page_size_per_message?: number;
+                            reaction_type?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    success_msg_reaction_details?: Array<{
+                                        message_id?: string;
+                                        has_more?: boolean;
+                                        page_token?: string;
+                                        message_reaction_items?: Array<{
+                                            reaction_id?: string;
+                                            operator?: {
+                                                operator_id: string;
+                                                operator_type: "app" | "user";
+                                            };
+                                            action_time?: string;
+                                            emoji_type?: string;
+                                        }>;
+                                    }>;
+                                    success_msg_reaction_counts?: Array<{
+                                        message_id?: string;
+                                        reaction_count?: Array<{
+                                            reaction_type?: string;
+                                            count?: string;
+                                        }>;
+                                    }>;
+                                    fail_msg_reaction_details?: Array<{
+                                        message_id?: string;
+                                        fail_reason?:
+                                            | "invalid"
+                                            | "invalid_page_token"
+                                            | "no_permission";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/reactions/batch_query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=im&resource=message.reaction&apiName=create&version=v1 click to debug }
                  *
@@ -9973,6 +10247,7 @@ export default abstract class Client extends human_authentication {
                                         id_type: string;
                                         sender_type: string;
                                         tenant_key?: string;
+                                        sender_name?: string;
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9983,6 +10258,9 @@ export default abstract class Client extends human_authentication {
                                         tenant_key?: string;
                                     }>;
                                     upper_message_id?: string;
+                                    message_app_link?: string;
+                                    message_position?: string;
+                                    thread_message_position?: string;
                                 };
                             }
                         >({
@@ -10334,7 +10612,7 @@ export default abstract class Client extends human_authentication {
                                             tag_type?: string;
                                             name?: string;
                                             i18n_names?: Array<{
-                                                locale: string;
+                                                locale?: string;
                                                 name?: string;
                                             }>;
                                             create_time?: string;
@@ -10414,6 +10692,7 @@ export default abstract class Client extends human_authentication {
                 update: async (
                     payload?: {
                         data: {
+                            bot_id?: string;
                             user_ids?: Array<string>;
                             chat_id: string;
                             buttons?: {
@@ -10433,7 +10712,6 @@ export default abstract class Client extends human_authentication {
                                     action_map?: Record<string, string>;
                                 }>;
                             };
-                            bot_id?: string;
                         };
                         params?: {
                             user_id_type?: "open_id" | "union_id" | "user_id";
@@ -10602,7 +10880,7 @@ export default abstract class Client extends human_authentication {
                                 name: string;
                                 i18n_names?: Array<{
                                     locale: string;
-                                    name?: string;
+                                    name: string;
                                 }>;
                             };
                             bot_id?: string;
@@ -10652,11 +10930,11 @@ export default abstract class Client extends human_authentication {
                     payload?: {
                         data?: {
                             patch_tag?: {
-                                id?: string;
+                                id: string;
                                 name?: string;
                                 i18n_names?: Array<{
                                     locale: string;
-                                    name?: string;
+                                    name: string;
                                 }>;
                             };
                             bot_id?: string;
@@ -10680,7 +10958,7 @@ export default abstract class Client extends human_authentication {
                                         tag_type?: string;
                                         name?: string;
                                         i18n_names?: Array<{
-                                            locale: string;
+                                            locale?: string;
                                             name?: string;
                                         }>;
                                         create_time?: string;

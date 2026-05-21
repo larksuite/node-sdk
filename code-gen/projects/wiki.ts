@@ -232,6 +232,7 @@ export default abstract class Client extends verification {
                                     creator?: string;
                                     owner?: string;
                                     node_creator?: string;
+                                    url?: string;
                                 };
                             };
                         }
@@ -428,6 +429,7 @@ export default abstract class Client extends verification {
                         member_type: string;
                         member_id: string;
                         member_role: string;
+                        member_perm?: string;
                     };
                     params?: { need_notification?: boolean };
                     path?: { space_id?: string };
@@ -449,6 +451,7 @@ export default abstract class Client extends verification {
                                     member_id: string;
                                     member_role: string;
                                     type?: "user" | "chat" | "department";
+                                    member_perm?: string;
                                 };
                             };
                         }
@@ -486,6 +489,7 @@ export default abstract class Client extends verification {
                         member_type: string;
                         member_role: string;
                         type?: "user" | "chat" | "department";
+                        member_perm?: string;
                     };
                     path: { space_id: string; member_id: string };
                 },
@@ -506,6 +510,7 @@ export default abstract class Client extends verification {
                                     member_id: string;
                                     member_role: string;
                                     type?: "user" | "chat" | "department";
+                                    member_perm?: string;
                                 };
                             };
                         }
@@ -553,6 +558,7 @@ export default abstract class Client extends verification {
                                     member_id: string;
                                     member_role: string;
                                     type?: "user" | "chat" | "department";
+                                    member_perm?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -631,6 +637,7 @@ export default abstract class Client extends verification {
                                     creator?: string;
                                     owner?: string;
                                     node_creator?: string;
+                                    url?: string;
                                 };
                             };
                         }
@@ -716,6 +723,7 @@ export default abstract class Client extends verification {
                                     creator?: string;
                                     owner?: string;
                                     node_creator?: string;
+                                    url?: string;
                                 };
                             };
                         }
@@ -830,6 +838,7 @@ export default abstract class Client extends verification {
                                                     creator?: string;
                                                     owner?: string;
                                                     node_creator?: string;
+                                                    url?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -907,6 +916,7 @@ export default abstract class Client extends verification {
                                     creator?: string;
                                     owner?: string;
                                     node_creator?: string;
+                                    url?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -984,6 +994,7 @@ export default abstract class Client extends verification {
                                     creator?: string;
                                     owner?: string;
                                     node_creator?: string;
+                                    url?: string;
                                 };
                             };
                         }
@@ -1180,7 +1191,9 @@ export default abstract class Client extends verification {
              */
             get: async (
                 payload?: {
-                    params: { task_type: "move" };
+                    params: {
+                        task_type: "move" | "delete_space" | "delete_node";
+                    };
                     path?: { task_id?: string };
                 },
                 options?: IRequestOptions
@@ -1222,10 +1235,13 @@ export default abstract class Client extends verification {
                                             creator?: string;
                                             owner?: string;
                                             node_creator?: string;
+                                            url?: string;
                                         };
                                         status: number;
                                         status_msg: string;
                                     }>;
+                                    delete_space_result?: { status?: string };
+                                    simple_task_result?: { status?: string };
                                 };
                             };
                         }
@@ -1623,6 +1639,7 @@ export default abstract class Client extends verification {
                                         creator?: string;
                                         owner?: string;
                                         node_creator?: string;
+                                        url?: string;
                                     };
                                 };
                             }
@@ -1824,6 +1841,7 @@ export default abstract class Client extends verification {
                             member_type: string;
                             member_id: string;
                             member_role: string;
+                            member_perm?: string;
                         };
                         params?: { need_notification?: boolean };
                         path?: { space_id?: string };
@@ -1845,6 +1863,7 @@ export default abstract class Client extends verification {
                                         member_id: string;
                                         member_role: string;
                                         type?: "user" | "chat" | "department";
+                                        member_perm?: string;
                                     };
                                 };
                             }
@@ -1882,6 +1901,7 @@ export default abstract class Client extends verification {
                             member_type: string;
                             member_role: string;
                             type?: "user" | "chat" | "department";
+                            member_perm?: string;
                         };
                         path: { space_id: string; member_id: string };
                     },
@@ -1902,6 +1922,7 @@ export default abstract class Client extends verification {
                                         member_id: string;
                                         member_role: string;
                                         type?: "user" | "chat" | "department";
+                                        member_perm?: string;
                                     };
                                 };
                             }
@@ -1949,6 +1970,7 @@ export default abstract class Client extends verification {
                                         member_id: string;
                                         member_role: string;
                                         type?: "user" | "chat" | "department";
+                                        member_perm?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -2030,6 +2052,7 @@ export default abstract class Client extends verification {
                                         creator?: string;
                                         owner?: string;
                                         node_creator?: string;
+                                        url?: string;
                                     };
                                 };
                             }
@@ -2115,6 +2138,7 @@ export default abstract class Client extends verification {
                                         creator?: string;
                                         owner?: string;
                                         node_creator?: string;
+                                        url?: string;
                                     };
                                 };
                             }
@@ -2231,6 +2255,7 @@ export default abstract class Client extends verification {
                                                         creator?: string;
                                                         owner?: string;
                                                         node_creator?: string;
+                                                        url?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -2308,6 +2333,7 @@ export default abstract class Client extends verification {
                                         creator?: string;
                                         owner?: string;
                                         node_creator?: string;
+                                        url?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -2385,6 +2411,7 @@ export default abstract class Client extends verification {
                                         creator?: string;
                                         owner?: string;
                                         node_creator?: string;
+                                        url?: string;
                                     };
                                 };
                             }
@@ -2590,7 +2617,9 @@ export default abstract class Client extends verification {
                  */
                 get: async (
                     payload?: {
-                        params: { task_type: "move" };
+                        params: {
+                            task_type: "move" | "delete_space" | "delete_node";
+                        };
                         path?: { task_id?: string };
                     },
                     options?: IRequestOptions
@@ -2634,10 +2663,17 @@ export default abstract class Client extends verification {
                                                 creator?: string;
                                                 owner?: string;
                                                 node_creator?: string;
+                                                url?: string;
                                             };
                                             status: number;
                                             status_msg: string;
                                         }>;
+                                        delete_space_result?: {
+                                            status?: string;
+                                        };
+                                        simple_task_result?: {
+                                            status?: string;
+                                        };
                                     };
                                 };
                             }

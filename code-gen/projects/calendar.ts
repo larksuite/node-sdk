@@ -815,6 +815,7 @@ export default abstract class Client extends board {
                 payload?: {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        op_user_id?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -1485,6 +1486,7 @@ export default abstract class Client extends board {
                         need_resource_customization?: boolean;
                         page_token?: string;
                         page_size?: number;
+                        op_user_id?: string;
                     };
                     path: { calendar_id: string; event_id: string };
                 },
@@ -1628,6 +1630,7 @@ export default abstract class Client extends board {
                         need_resource_customization?: boolean;
                         page_token?: string;
                         page_size?: number;
+                        op_user_id?: string;
                     };
                     path: { calendar_id: string; event_id: string };
                 },
@@ -1718,6 +1721,7 @@ export default abstract class Client extends board {
                         page_token?: string;
                         page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        op_user_id?: string;
                     };
                     path: {
                         calendar_id: string;
@@ -1834,6 +1838,7 @@ export default abstract class Client extends board {
                         page_token?: string;
                         page_size?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        op_user_id?: string;
                     };
                     path: {
                         calendar_id: string;
@@ -2138,6 +2143,12 @@ export default abstract class Client extends board {
                                         need_notify_attendees?: boolean;
                                     };
                                     source?: string;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 };
                             };
                         }
@@ -2215,6 +2226,7 @@ export default abstract class Client extends board {
                         need_attendee?: boolean;
                         max_attendee_num?: number;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        op_user_id?: string;
                     };
                     path: { calendar_id: string; event_id: string };
                 },
@@ -2384,6 +2396,12 @@ export default abstract class Client extends board {
                                         need_notify_attendees?: boolean;
                                     };
                                     source?: string;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 };
                             };
                         }
@@ -2534,6 +2552,12 @@ export default abstract class Client extends board {
                                         }>;
                                         approval_reason?: string;
                                     }>;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 }>;
                             };
                         }
@@ -2650,6 +2674,7 @@ export default abstract class Client extends board {
                         start_time?: string;
                         end_time?: string;
                         user_id_type?: "user_id" | "union_id" | "open_id";
+                        op_user_id?: string;
                     };
                     path: { calendar_id: string };
                 },
@@ -2746,6 +2771,12 @@ export default abstract class Client extends board {
                                         name?: string;
                                     }>;
                                     source?: string;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 }>;
                             };
                         }
@@ -3014,6 +3045,12 @@ export default abstract class Client extends board {
                                         need_notify_attendees?: boolean;
                                     };
                                     source?: string;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 };
                             };
                         }
@@ -3209,6 +3246,12 @@ export default abstract class Client extends board {
                                                         name?: string;
                                                     }>;
                                                     source?: string;
+                                                    self_rsvp_status?:
+                                                        | "needs_action"
+                                                        | "accept"
+                                                        | "tentative"
+                                                        | "decline"
+                                                        | "removed";
                                                 }>;
                                                 page_token?: string;
                                             };
@@ -3331,6 +3374,12 @@ export default abstract class Client extends board {
                                         name?: string;
                                     }>;
                                     source?: string;
+                                    self_rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 }>;
                                 page_token?: string;
                             };
@@ -3365,6 +3414,10 @@ export default abstract class Client extends board {
              */
             subscription: async (
                 payload?: {
+                    params?: {
+                        op_user_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { calendar_id: string };
                 },
                 options?: IRequestOptions
@@ -3403,6 +3456,10 @@ export default abstract class Client extends board {
              */
             unsubscription: async (
                 payload?: {
+                    params?: {
+                        op_user_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
                     path: { calendar_id: string };
                 },
                 options?: IRequestOptions
@@ -3735,6 +3792,7 @@ export default abstract class Client extends board {
                         user_ids: Array<string>;
                         include_external_calendar?: boolean;
                         only_busy?: boolean;
+                        need_rsvp_status?: boolean;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -3756,6 +3814,12 @@ export default abstract class Client extends board {
                                     freebusy_items?: Array<{
                                         start_time: string;
                                         end_time: string;
+                                        rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     }>;
                                     user_id?: string;
                                 }>;
@@ -3796,6 +3860,7 @@ export default abstract class Client extends board {
                         room_id?: string;
                         include_external_calendar?: boolean;
                         only_busy?: boolean;
+                        need_rsvp_status?: boolean;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -3816,6 +3881,12 @@ export default abstract class Client extends board {
                                 freebusy_list?: Array<{
                                     start_time: string;
                                     end_time: string;
+                                    rsvp_status?:
+                                        | "needs_action"
+                                        | "accept"
+                                        | "tentative"
+                                        | "decline"
+                                        | "removed";
                                 }>;
                             };
                         }
@@ -4793,6 +4864,7 @@ export default abstract class Client extends board {
                     payload?: {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            op_user_id?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5491,6 +5563,7 @@ export default abstract class Client extends board {
                             need_resource_customization?: boolean;
                             page_token?: string;
                             page_size?: number;
+                            op_user_id?: string;
                         };
                         path: { calendar_id: string; event_id: string };
                     },
@@ -5636,6 +5709,7 @@ export default abstract class Client extends board {
                             need_resource_customization?: boolean;
                             page_token?: string;
                             page_size?: number;
+                            op_user_id?: string;
                         };
                         path: { calendar_id: string; event_id: string };
                     },
@@ -5726,6 +5800,7 @@ export default abstract class Client extends board {
                             page_token?: string;
                             page_size?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            op_user_id?: string;
                         };
                         path: {
                             calendar_id: string;
@@ -5844,6 +5919,7 @@ export default abstract class Client extends board {
                             page_token?: string;
                             page_size?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            op_user_id?: string;
                         };
                         path: {
                             calendar_id: string;
@@ -6154,6 +6230,12 @@ export default abstract class Client extends board {
                                             need_notify_attendees?: boolean;
                                         };
                                         source?: string;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     };
                                 };
                             }
@@ -6234,6 +6316,7 @@ export default abstract class Client extends board {
                             need_attendee?: boolean;
                             max_attendee_num?: number;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            op_user_id?: string;
                         };
                         path: { calendar_id: string; event_id: string };
                     },
@@ -6406,6 +6489,12 @@ export default abstract class Client extends board {
                                             need_notify_attendees?: boolean;
                                         };
                                         source?: string;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     };
                                 };
                             }
@@ -6559,6 +6648,12 @@ export default abstract class Client extends board {
                                             }>;
                                             approval_reason?: string;
                                         }>;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     }>;
                                 };
                             }
@@ -6675,6 +6770,7 @@ export default abstract class Client extends board {
                             start_time?: string;
                             end_time?: string;
                             user_id_type?: "user_id" | "union_id" | "open_id";
+                            op_user_id?: string;
                         };
                         path: { calendar_id: string };
                     },
@@ -6774,6 +6870,12 @@ export default abstract class Client extends board {
                                             name?: string;
                                         }>;
                                         source?: string;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     }>;
                                 };
                             }
@@ -7048,6 +7150,12 @@ export default abstract class Client extends board {
                                             need_notify_attendees?: boolean;
                                         };
                                         source?: string;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     };
                                 };
                             }
@@ -7250,6 +7358,12 @@ export default abstract class Client extends board {
                                                             name?: string;
                                                         }>;
                                                         source?: string;
+                                                        self_rsvp_status?:
+                                                            | "needs_action"
+                                                            | "accept"
+                                                            | "tentative"
+                                                            | "decline"
+                                                            | "removed";
                                                     }>;
                                                     page_token?: string;
                                                 };
@@ -7372,6 +7486,12 @@ export default abstract class Client extends board {
                                             name?: string;
                                         }>;
                                         source?: string;
+                                        self_rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     }>;
                                     page_token?: string;
                                 };
@@ -7406,6 +7526,10 @@ export default abstract class Client extends board {
                  */
                 subscription: async (
                     payload?: {
+                        params?: {
+                            op_user_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                         path: { calendar_id: string };
                     },
                     options?: IRequestOptions
@@ -7447,6 +7571,10 @@ export default abstract class Client extends board {
                  */
                 unsubscription: async (
                     payload?: {
+                        params?: {
+                            op_user_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
                         path: { calendar_id: string };
                     },
                     options?: IRequestOptions
@@ -7788,6 +7916,7 @@ export default abstract class Client extends board {
                             user_ids: Array<string>;
                             include_external_calendar?: boolean;
                             only_busy?: boolean;
+                            need_rsvp_status?: boolean;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -7809,6 +7938,12 @@ export default abstract class Client extends board {
                                         freebusy_items?: Array<{
                                             start_time: string;
                                             end_time: string;
+                                            rsvp_status?:
+                                                | "needs_action"
+                                                | "accept"
+                                                | "tentative"
+                                                | "decline"
+                                                | "removed";
                                         }>;
                                         user_id?: string;
                                     }>;
@@ -7849,6 +7984,7 @@ export default abstract class Client extends board {
                             room_id?: string;
                             include_external_calendar?: boolean;
                             only_busy?: boolean;
+                            need_rsvp_status?: boolean;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -7869,6 +8005,12 @@ export default abstract class Client extends board {
                                     freebusy_list?: Array<{
                                         start_time: string;
                                         end_time: string;
+                                        rsvp_status?:
+                                            | "needs_action"
+                                            | "accept"
+                                            | "tentative"
+                                            | "decline"
+                                            | "removed";
                                     }>;
                                 };
                             }

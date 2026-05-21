@@ -4551,6 +4551,60 @@ export default abstract class Client extends compensation {
          */
         user: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=basic_batch&version=v3 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=basic_batch&project=contact&resource=user&version=v3 document }
+             *
+             * 批量获取用户基本信息
+             */
+            basicBatch: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                users?: Array<{
+                                    user_id?: string;
+                                    name?: string;
+                                    i18n_name?: {
+                                        zh_cn?: string;
+                                        ja_jp?: string;
+                                        en_us?: string;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/contact/v3/users/basic_batch`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=batch&version=v3 click to debug }
              *
              * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch&project=contact&resource=user&version=v3 document }
@@ -11279,6 +11333,60 @@ export default abstract class Client extends compensation {
              * 用户
              */
             user: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=basic_batch&version=v3 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=basic_batch&project=contact&resource=user&version=v3 document }
+                 *
+                 * 批量获取用户基本信息
+                 */
+                basicBatch: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    users?: Array<{
+                                        user_id?: string;
+                                        name?: string;
+                                        i18n_name?: {
+                                            zh_cn?: string;
+                                            ja_jp?: string;
+                                            en_us?: string;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/contact/v3/users/basic_batch`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=contact&resource=user&apiName=batch&version=v3 click to debug }
                  *

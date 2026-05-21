@@ -29,9 +29,52 @@ export default abstract class Client extends search {
     ): Promise<Required<IPayload>>;
 
     /**
-         
-         */
+     * 安全合规
+     */
     security_and_compliance = {
+        /**
+         * multi_geo_entity.tenant
+         */
+        multiGeoEntityTenant: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
+             */
+            get: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tenant?: {
+                                    available_geo_locations: Array<string>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         /**
          * openapi_log
          */
@@ -101,7 +144,240 @@ export default abstract class Client extends search {
                     });
             },
         },
+        /**
+         * 用户迁移
+         */
+        userMigration: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=cancel&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/cancel document }
+             */
+            cancel: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/cancel`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/create document }
+             */
+            create: async (
+                payload?: {
+                    data: { user_ids: Array<string>; dest_geo: string };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_migrations?: Array<{
+                                    user_id?: string;
+                                    dest_geo?: string;
+                                    task_id?: string;
+                                    status?: "0" | "1" | "2";
+                                    progress?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/get document }
+             */
+            get: async (
+                payload?: {
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { user_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                user_migration?: {
+                                    user_id?: string;
+                                    dest_geo?: string;
+                                    task_id?: string;
+                                    status?: "0" | "1" | "2";
+                                    progress?: number;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/:user_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/search document }
+             */
+            search: async (
+                payload?: {
+                    data: { user_ids: Array<string> };
+                    params: {
+                        user_id_type: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items?: Array<{
+                                    user_id?: string;
+                                    dest_geo?: string;
+                                    task_id?: string;
+                                    status?: "0" | "1" | "2";
+                                    progress?: number;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/search`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         v1: {
+            /**
+             * multi_geo_entity.tenant
+             */
+            multiGeoEntityTenant: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=multi_geo_entity.tenant&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=security_and_compliance&resource=multi_geo_entity.tenant&version=v1 document }
+                 */
+                get: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tenant?: {
+                                        available_geo_locations: Array<string>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/multi_geo_entity/tenant`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * openapi_log
              */
@@ -171,6 +447,199 @@ export default abstract class Client extends search {
                         });
                 },
             },
+            /**
+             * 用户迁移
+             */
+            userMigration: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=cancel&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/cancel document }
+                 */
+                cancel: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/cancel`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/create document }
+                 */
+                create: async (
+                    payload?: {
+                        data: { user_ids: Array<string>; dest_geo: string };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_migrations?: Array<{
+                                        user_id?: string;
+                                        dest_geo?: string;
+                                        task_id?: string;
+                                        status?: "0" | "1" | "2";
+                                        progress?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/get document }
+                 */
+                get: async (
+                    payload?: {
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { user_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    user_migration?: {
+                                        user_id?: string;
+                                        dest_geo?: string;
+                                        task_id?: string;
+                                        status?: "0" | "1" | "2";
+                                        progress?: number;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/:user_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=security_and_compliance&resource=user_migration&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/security_and_compliance-v1/user_migration/search document }
+                 */
+                search: async (
+                    payload?: {
+                        data: { user_ids: Array<string> };
+                        params: {
+                            user_id_type: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        user_id?: string;
+                                        dest_geo?: string;
+                                        task_id?: string;
+                                        status?: "0" | "1" | "2";
+                                        progress?: number;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/security_and_compliance/v1/user_migrations/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
         },
         v2: {
             /**
@@ -225,8 +694,11 @@ export default abstract class Client extends search {
                  */
                 create: async (
                     payload?: {
-                        data: {
-                            device_system: number;
+                        data?: {
+                            device_system?: number;
+                            device_ownership?: number;
+                            device_status?: number;
+                            is_public?: boolean;
                             serial_number?: string;
                             disk_serial_number?: string;
                             uuid?: string;
@@ -234,16 +706,6 @@ export default abstract class Client extends search {
                             android_id?: string;
                             idfv?: string;
                             aaid?: string;
-                            device_ownership: number;
-                            device_status: number;
-                            latest_user_id?: string;
-                            dids?: Array<string>;
-                            is_managed?: boolean;
-                            mdm_device_id?: string;
-                            mdm_provider_name?: string;
-                        };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
                         };
                     },
                     options?: IRequestOptions
@@ -358,6 +820,15 @@ export default abstract class Client extends search {
                                         is_managed?: boolean;
                                         mdm_device_id?: string;
                                         mdm_provider_name?: string;
+                                        lsa_info?: string;
+                                        device_env_info?: string;
+                                        created_at?: number;
+                                        updated_at?: number;
+                                        is_public?: boolean;
+                                        source?: number;
+                                        cert_verified_at_unix?: string;
+                                        cert_serial_number?: string;
+                                        cert_issuer?: string;
                                     };
                                 };
                             }
@@ -403,6 +874,12 @@ export default abstract class Client extends search {
                             is_managed?: boolean;
                             mdm_device_id?: string;
                             mdm_provider_name?: string;
+                            lsa_client_status?: number;
+                            device_env_detect_status?: number;
+                            is_public?: boolean;
+                            source?: number;
+                            cert_serial_number?: string;
+                            cert_issuer?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -489,6 +966,15 @@ export default abstract class Client extends search {
                                                         is_managed?: boolean;
                                                         mdm_device_id?: string;
                                                         mdm_provider_name?: string;
+                                                        lsa_info?: string;
+                                                        device_env_info?: string;
+                                                        created_at?: number;
+                                                        updated_at?: number;
+                                                        is_public?: boolean;
+                                                        source?: number;
+                                                        cert_verified_at_unix?: string;
+                                                        cert_serial_number?: string;
+                                                        cert_issuer?: string;
                                                     }>;
                                                     page_token: string;
                                                     has_more: boolean;
@@ -540,6 +1026,12 @@ export default abstract class Client extends search {
                             is_managed?: boolean;
                             mdm_device_id?: string;
                             mdm_provider_name?: string;
+                            lsa_client_status?: number;
+                            device_env_detect_status?: number;
+                            is_public?: boolean;
+                            source?: number;
+                            cert_serial_number?: string;
+                            cert_issuer?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -577,6 +1069,15 @@ export default abstract class Client extends search {
                                         is_managed?: boolean;
                                         mdm_device_id?: string;
                                         mdm_provider_name?: string;
+                                        lsa_info?: string;
+                                        device_env_info?: string;
+                                        created_at?: number;
+                                        updated_at?: number;
+                                        is_public?: boolean;
+                                        source?: number;
+                                        cert_verified_at_unix?: string;
+                                        cert_serial_number?: string;
+                                        cert_issuer?: string;
                                     }>;
                                     page_token: string;
                                     has_more: boolean;
@@ -644,19 +1145,12 @@ export default abstract class Client extends search {
                  */
                 update: async (
                     payload?: {
-                        data: {
-                            device_ownership: number;
-                            device_status: number;
-                            latest_user_id?: string;
-                            dids?: Array<string>;
-                            is_managed?: boolean;
-                            mdm_device_id?: string;
-                            mdm_provider_name?: string;
+                        data?: {
+                            device_ownership?: number;
+                            device_status?: number;
+                            is_public?: boolean;
                         };
-                        params: {
-                            version: string;
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
+                        params: { version: string };
                         path: { device_record_id: string };
                     },
                     options?: IRequestOptions

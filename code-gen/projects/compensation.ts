@@ -899,6 +899,8 @@ export default abstract class Client extends comment_sdk {
                                     belong_time: string;
                                     issuance_country_region_id?: string;
                                     issuance_pay_group_id?: string;
+                                    detail_reference_period_start_date?: string;
+                                    detail_reference_period_end_date?: string;
                                 }>;
                                 remark?: string;
                                 binding_period_decimal?: string;
@@ -1026,6 +1028,8 @@ export default abstract class Client extends comment_sdk {
                                     belong_time?: string;
                                     issuance_country_region_id?: string;
                                     issuance_pay_group_id?: string;
+                                    detail_reference_period_start_date?: string;
+                                    detail_reference_period_end_date?: string;
                                 }>;
                                 binding_period_decimal?: string;
                                 operation_source?: string;
@@ -1209,6 +1213,8 @@ export default abstract class Client extends comment_sdk {
                                                             modify_time?: string;
                                                             issuance_country_region_id?: string;
                                                             issuance_pay_group_id?: string;
+                                                            detail_reference_period_start_date?: string;
+                                                            detail_reference_period_end_date?: string;
                                                         }>;
                                                         binding_period_decimal?: string;
                                                     }>;
@@ -1326,6 +1332,8 @@ export default abstract class Client extends comment_sdk {
                                             modify_time?: string;
                                             issuance_country_region_id?: string;
                                             issuance_pay_group_id?: string;
+                                            detail_reference_period_start_date?: string;
+                                            detail_reference_period_end_date?: string;
                                         }>;
                                         binding_period_decimal?: string;
                                     }>;
@@ -1475,6 +1483,8 @@ export default abstract class Client extends comment_sdk {
                                                         modify_time?: string;
                                                         issuance_country_region_id?: string;
                                                         issuance_pay_group_id?: string;
+                                                        detail_reference_period_start_date?: string;
+                                                        detail_reference_period_end_date?: string;
                                                     }>;
                                                 };
                                             }
@@ -1577,6 +1587,8 @@ export default abstract class Client extends comment_sdk {
                                         modify_time?: string;
                                         issuance_country_region_id?: string;
                                         issuance_pay_group_id?: string;
+                                        detail_reference_period_start_date?: string;
+                                        detail_reference_period_end_date?: string;
                                     }>;
                                 };
                             }

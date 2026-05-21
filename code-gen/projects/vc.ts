@@ -663,6 +663,7 @@ export default abstract class Client extends unified_kms_log {
                                         use_recording?: boolean;
                                         use_pstn?: boolean;
                                     };
+                                    note_id?: string;
                                 };
                                 related_artifacts?: {
                                     note_doc_token?: string;
@@ -880,6 +881,7 @@ export default abstract class Client extends unified_kms_log {
                                                     meeting_no?: string;
                                                     password?: string;
                                                     meeting_connect?: boolean;
+                                                    note_id?: string;
                                                 }>;
                                             };
                                         }
@@ -939,6 +941,7 @@ export default abstract class Client extends unified_kms_log {
                                     meeting_no?: string;
                                     password?: string;
                                     meeting_connect?: boolean;
+                                    note_id?: string;
                                 }>;
                             };
                         }
@@ -948,6 +951,177 @@ export default abstract class Client extends unified_kms_log {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        meeting_filter?: {
+                            organizer_ids?: Array<string>;
+                            participant_ids?: Array<string>;
+                            open_room_ids?: Array<string>;
+                            start_time?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                        };
+                    };
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                total?: number;
+                                                has_more: boolean;
+                                                items?: Array<{
+                                                    id?: string;
+                                                    display_info?: string;
+                                                    meta_data?: {
+                                                        app_link?: string;
+                                                        avatar?: string;
+                                                        description?: string;
+                                                    };
+                                                }>;
+                                                page_token?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=vc&resource=meeting&version=v1 document }
+             *
+             * 搜索视频会议接口
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        meeting_filter?: {
+                            organizer_ids?: Array<string>;
+                            participant_ids?: Array<string>;
+                            open_room_ids?: Array<string>;
+                            start_time?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                        };
+                    };
+                    params?: { page_token?: string; page_size?: number };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                total?: number;
+                                has_more: boolean;
+                                items?: Array<{
+                                    id?: string;
+                                    display_info?: string;
+                                    meta_data?: {
+                                        app_link?: string;
+                                        avatar?: string;
+                                        description?: string;
+                                    };
+                                }>;
+                                page_token?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings/search`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1045,7 +1219,12 @@ export default abstract class Client extends unified_kms_log {
                             code?: number;
                             msg?: string;
                             data?: {
-                                recording?: { url?: string; duration?: string };
+                                recording?: {
+                                    id?: string;
+                                    meeting_id?: string;
+                                    url?: string;
+                                    duration?: string;
+                                };
                             };
                         }
                     >({
@@ -1395,6 +1574,67 @@ export default abstract class Client extends unified_kms_log {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/meeting_list`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * note
+         */
+        note: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=note&version=v1 document }
+             */
+            get: async (
+                payload?: {
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                    path: { note_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                note?: {
+                                    creator_id: string;
+                                    create_time: string;
+                                    artifacts: Array<{
+                                        artifact_type: number;
+                                        create_time: string;
+                                        doc_token: string;
+                                    }>;
+                                    references: Array<{
+                                        reference_type: number;
+                                        doc_token: string;
+                                    }>;
+                                };
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/notes/:note_id`,
                             path
                         ),
                         method: "GET",
@@ -2300,6 +2540,7 @@ export default abstract class Client extends unified_kms_log {
                                         use_recording?: boolean;
                                         use_pstn?: boolean;
                                     };
+                                    note_id?: string;
                                 };
                             };
                         }
@@ -2444,8 +2685,14 @@ export default abstract class Client extends unified_kms_log {
                             msg?: string;
                             data?: {
                                 reserve_admin_config: {
-                                    depts?: Array<{ department_id: string }>;
-                                    users?: Array<{ user_id: string }>;
+                                    depts?: Array<{
+                                        department_id: string;
+                                        department_name?: string;
+                                    }>;
+                                    users?: Array<{
+                                        user_id: string;
+                                        user_name?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -2476,8 +2723,14 @@ export default abstract class Client extends unified_kms_log {
                     data: {
                         scope_type: number;
                         reserve_admin_config: {
-                            depts?: Array<{ department_id: string }>;
-                            users?: Array<{ user_id: string }>;
+                            depts?: Array<{
+                                department_id: string;
+                                department_name?: string;
+                            }>;
+                            users?: Array<{
+                                user_id: string;
+                                user_name?: string;
+                            }>;
                         };
                     };
                     params?: {
@@ -2541,9 +2794,13 @@ export default abstract class Client extends unified_kms_log {
                                 disable_inform?: {
                                     if_cover_child_scope?: boolean;
                                     if_inform: boolean;
-                                    informed_users?: Array<{ user_id: string }>;
+                                    informed_users?: Array<{
+                                        user_id: string;
+                                        user_name?: string;
+                                    }>;
                                     informed_depts?: Array<{
                                         department_id: string;
+                                        department_name?: string;
                                     }>;
                                 };
                             };
@@ -2577,8 +2834,14 @@ export default abstract class Client extends unified_kms_log {
                         disable_inform: {
                             if_cover_child_scope?: boolean;
                             if_inform: boolean;
-                            informed_users?: Array<{ user_id: string }>;
-                            informed_depts?: Array<{ department_id: string }>;
+                            informed_users?: Array<{
+                                user_id: string;
+                                user_name?: string;
+                            }>;
+                            informed_depts?: Array<{
+                                department_id: string;
+                                department_name?: string;
+                            }>;
                         };
                     };
                     params?: {
@@ -2642,7 +2905,10 @@ export default abstract class Client extends unified_kms_log {
                                 reserve_form_config: {
                                     if_cover_child_scope?: boolean;
                                     reserve_form: boolean;
-                                    notified_users?: Array<{ user_id: string }>;
+                                    notified_users?: Array<{
+                                        user_id: string;
+                                        user_name?: string;
+                                    }>;
                                     notified_time?: number;
                                     time_unit?: number;
                                     custom_list?: Array<{
@@ -2693,7 +2959,10 @@ export default abstract class Client extends unified_kms_log {
                         reserve_form_config: {
                             if_cover_child_scope?: boolean;
                             reserve_form: boolean;
-                            notified_users?: Array<{ user_id: string }>;
+                            notified_users?: Array<{
+                                user_id: string;
+                                user_name?: string;
+                            }>;
                             notified_time?: number;
                             time_unit?: number;
                             custom_list?: Array<{
@@ -2764,7 +3033,10 @@ export default abstract class Client extends unified_kms_log {
                             approval_switch?: number;
                             approval_condition?: number;
                             meeting_duration?: number;
-                            approvers?: Array<{ user_id: string }>;
+                            approvers?: Array<{
+                                user_id: string;
+                                user_name?: string;
+                            }>;
                         };
                         time_config?: {
                             if_cover_child_scope?: boolean;
@@ -2778,8 +3050,14 @@ export default abstract class Client extends unified_kms_log {
                         reserve_scope_config?: {
                             if_cover_child_scope?: boolean;
                             allow_all_users?: number;
-                            allow_users?: Array<{ user_id: string }>;
-                            allow_depts?: Array<{ department_id: string }>;
+                            allow_users?: Array<{
+                                user_id: string;
+                                user_name?: string;
+                            }>;
+                            allow_depts?: Array<{
+                                department_id: string;
+                                department_name?: string;
+                            }>;
                         };
                     };
                     params?: {
@@ -2843,7 +3121,10 @@ export default abstract class Client extends unified_kms_log {
                                     approval_switch?: number;
                                     approval_condition?: number;
                                     meeting_duration?: number;
-                                    approvers?: Array<{ user_id: string }>;
+                                    approvers?: Array<{
+                                        user_id: string;
+                                        user_name?: string;
+                                    }>;
                                 };
                                 time_config?: {
                                     if_cover_child_scope?: boolean;
@@ -2857,9 +3138,13 @@ export default abstract class Client extends unified_kms_log {
                                 reserve_scope_config?: {
                                     if_cover_child_scope?: boolean;
                                     allow_all_users?: number;
-                                    allow_users?: Array<{ user_id: string }>;
+                                    allow_users?: Array<{
+                                        user_id: string;
+                                        user_name?: string;
+                                    }>;
                                     allow_depts?: Array<{
                                         department_id: string;
+                                        department_name?: string;
                                     }>;
                                 };
                             };
@@ -5263,6 +5548,7 @@ export default abstract class Client extends unified_kms_log {
                                             use_recording?: boolean;
                                             use_pstn?: boolean;
                                         };
+                                        note_id?: string;
                                     };
                                     related_artifacts?: {
                                         note_doc_token?: string;
@@ -5485,6 +5771,7 @@ export default abstract class Client extends unified_kms_log {
                                                         meeting_no?: string;
                                                         password?: string;
                                                         meeting_connect?: boolean;
+                                                        note_id?: string;
                                                     }>;
                                                 };
                                             }
@@ -5544,6 +5831,7 @@ export default abstract class Client extends unified_kms_log {
                                         meeting_no?: string;
                                         password?: string;
                                         meeting_connect?: boolean;
+                                        note_id?: string;
                                     }>;
                                 };
                             }
@@ -5553,6 +5841,179 @@ export default abstract class Client extends unified_kms_log {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            meeting_filter?: {
+                                organizer_ids?: Array<string>;
+                                participant_ids?: Array<string>;
+                                open_room_ids?: Array<string>;
+                                start_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                            };
+                        };
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/vc/v1/meetings/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    items?: Array<{
+                                                        id?: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            app_link?: string;
+                                                            avatar?: string;
+                                                            description?: string;
+                                                        };
+                                                    }>;
+                                                    page_token?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=vc&resource=meeting&version=v1 document }
+                 *
+                 * 搜索视频会议接口
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            meeting_filter?: {
+                                organizer_ids?: Array<string>;
+                                participant_ids?: Array<string>;
+                                open_room_ids?: Array<string>;
+                                start_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                            };
+                        };
+                        params?: { page_token?: string; page_size?: number };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    total?: number;
+                                    has_more: boolean;
+                                    items?: Array<{
+                                        id?: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            app_link?: string;
+                                            avatar?: string;
+                                            description?: string;
+                                        };
+                                    }>;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/search`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -5654,6 +6115,8 @@ export default abstract class Client extends unified_kms_log {
                                 msg?: string;
                                 data?: {
                                     recording?: {
+                                        id?: string;
+                                        meeting_id?: string;
                                         url?: string;
                                         duration?: string;
                                     };
@@ -6017,6 +6480,67 @@ export default abstract class Client extends unified_kms_log {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/vc/v1/meeting_list`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * note
+             */
+            note: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=vc&resource=note&version=v1 document }
+                 */
+                get: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                        path: { note_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    note?: {
+                                        creator_id: string;
+                                        create_time: string;
+                                        artifacts: Array<{
+                                            artifact_type: number;
+                                            create_time: string;
+                                            doc_token: string;
+                                        }>;
+                                        references: Array<{
+                                            reference_type: number;
+                                            doc_token: string;
+                                        }>;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/notes/:note_id`,
                                 path
                             ),
                             method: "GET",
@@ -6929,6 +7453,7 @@ export default abstract class Client extends unified_kms_log {
                                             use_recording?: boolean;
                                             use_pstn?: boolean;
                                         };
+                                        note_id?: string;
                                     };
                                 };
                             }
@@ -7075,8 +7600,12 @@ export default abstract class Client extends unified_kms_log {
                                     reserve_admin_config: {
                                         depts?: Array<{
                                             department_id: string;
+                                            department_name?: string;
                                         }>;
-                                        users?: Array<{ user_id: string }>;
+                                        users?: Array<{
+                                            user_id: string;
+                                            user_name?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -7107,8 +7636,14 @@ export default abstract class Client extends unified_kms_log {
                         data: {
                             scope_type: number;
                             reserve_admin_config: {
-                                depts?: Array<{ department_id: string }>;
-                                users?: Array<{ user_id: string }>;
+                                depts?: Array<{
+                                    department_id: string;
+                                    department_name?: string;
+                                }>;
+                                users?: Array<{
+                                    user_id: string;
+                                    user_name?: string;
+                                }>;
                             };
                         };
                         params?: {
@@ -7177,9 +7712,11 @@ export default abstract class Client extends unified_kms_log {
                                         if_inform: boolean;
                                         informed_users?: Array<{
                                             user_id: string;
+                                            user_name?: string;
                                         }>;
                                         informed_depts?: Array<{
                                             department_id: string;
+                                            department_name?: string;
                                         }>;
                                     };
                                 };
@@ -7213,9 +7750,13 @@ export default abstract class Client extends unified_kms_log {
                             disable_inform: {
                                 if_cover_child_scope?: boolean;
                                 if_inform: boolean;
-                                informed_users?: Array<{ user_id: string }>;
+                                informed_users?: Array<{
+                                    user_id: string;
+                                    user_name?: string;
+                                }>;
                                 informed_depts?: Array<{
                                     department_id: string;
+                                    department_name?: string;
                                 }>;
                             };
                         };
@@ -7285,6 +7826,7 @@ export default abstract class Client extends unified_kms_log {
                                         reserve_form: boolean;
                                         notified_users?: Array<{
                                             user_id: string;
+                                            user_name?: string;
                                         }>;
                                         notified_time?: number;
                                         time_unit?: number;
@@ -7336,7 +7878,10 @@ export default abstract class Client extends unified_kms_log {
                             reserve_form_config: {
                                 if_cover_child_scope?: boolean;
                                 reserve_form: boolean;
-                                notified_users?: Array<{ user_id: string }>;
+                                notified_users?: Array<{
+                                    user_id: string;
+                                    user_name?: string;
+                                }>;
                                 notified_time?: number;
                                 time_unit?: number;
                                 custom_list?: Array<{
@@ -7410,7 +7955,10 @@ export default abstract class Client extends unified_kms_log {
                                 approval_switch?: number;
                                 approval_condition?: number;
                                 meeting_duration?: number;
-                                approvers?: Array<{ user_id: string }>;
+                                approvers?: Array<{
+                                    user_id: string;
+                                    user_name?: string;
+                                }>;
                             };
                             time_config?: {
                                 if_cover_child_scope?: boolean;
@@ -7424,8 +7972,14 @@ export default abstract class Client extends unified_kms_log {
                             reserve_scope_config?: {
                                 if_cover_child_scope?: boolean;
                                 allow_all_users?: number;
-                                allow_users?: Array<{ user_id: string }>;
-                                allow_depts?: Array<{ department_id: string }>;
+                                allow_users?: Array<{
+                                    user_id: string;
+                                    user_name?: string;
+                                }>;
+                                allow_depts?: Array<{
+                                    department_id: string;
+                                    department_name?: string;
+                                }>;
                             };
                         };
                         params?: {
@@ -7492,7 +8046,10 @@ export default abstract class Client extends unified_kms_log {
                                         approval_switch?: number;
                                         approval_condition?: number;
                                         meeting_duration?: number;
-                                        approvers?: Array<{ user_id: string }>;
+                                        approvers?: Array<{
+                                            user_id: string;
+                                            user_name?: string;
+                                        }>;
                                     };
                                     time_config?: {
                                         if_cover_child_scope?: boolean;
@@ -7508,9 +8065,11 @@ export default abstract class Client extends unified_kms_log {
                                         allow_all_users?: number;
                                         allow_users?: Array<{
                                             user_id: string;
+                                            user_name?: string;
                                         }>;
                                         allow_depts?: Array<{
                                             department_id: string;
+                                            department_name?: string;
                                         }>;
                                     };
                                 };
