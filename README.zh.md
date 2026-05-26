@@ -753,6 +753,10 @@ try {
 | signal         | 用于取消轮询的 `AbortSignal`                                                                    | AbortSignal | 否  | -                        |
 | onQRCodeReady  | 验证链接就绪时的回调，参数为 `{ url, expireIn }`。可将 URL 渲染为二维码供用户扫码，或直接作为链接展示                          | function    | 是  | -                        |
 | onStatusChange | 轮询状态变化时的回调，参数为 `{ status, interval? }`。status 取值：`polling`、`slow_down`、`domain_switched` | function    | 否  | -                        |
+| appPreset      | 预设应用信息（头像、名称、描述）。所有字段都是可选的，用户扫码后仍可在页面手动修改                                                  | AppPreset   | 否  | -                        |
+| appPreset.avatar | 应用头像 URL，支持 1-6 个；传多个时默认选中第一个。支持 png / jpg / jpeg / webp / gif（gif 自动取一帧，不保留动图）           | string \| string[] | 否  | -                |
+| appPreset.name | 应用名称，支持 `{user}` 占位符（替换为扫码用户名称）                                                              | string      | 否  | -                        |
+| appPreset.desc | 应用描述，支持 `{user}` 占位符                                                                          | string      | 否  | -                        |
 
 #### 返回值
 

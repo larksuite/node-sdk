@@ -1,5 +1,5 @@
 import httpInstance, { AxiosError } from '@node-sdk/http';
-import { RegisterAppOptions, RegisterAppResult, BeginResponse, PollResponse } from './types';
+import { RegisterAppOptions, RegisterAppResult, BeginResponse, PollResponse, AppPreset } from './types';
 import { createError } from './errors';
 
 const SDK_NAME = 'node-sdk';
@@ -8,6 +8,42 @@ const DEFAULT_FEISHU_DOMAIN = 'accounts.feishu.cn';
 const DEFAULT_LARK_DOMAIN = 'accounts.larksuite.com';
 
 const ENDPOINT = '/oauth/v1/app/registration';
+
+const AVATAR_MAX_COUNT = 6;
+
+/**
+ * Append `avatar` / `name` / `desc` query params to the QR code URL.
+ * `URLSearchParams` handles URL encoding automatically.
+ */
+function applyAppPreset(qrCodeUrl: URL, preset: AppPreset): void {
+    const { avatar, name, desc } = preset;
+
+    if (avatar !== undefined) {
+        const avatars = Array.isArray(avatar) ? avatar : [avatar];
+        if (avatars.length === 0) {
+            throw new Error('appPreset.avatar must contain at least 1 URL');
+        }
+        if (avatars.length > AVATAR_MAX_COUNT) {
+            throw new Error(
+                `appPreset.avatar supports at most ${AVATAR_MAX_COUNT} URLs, got ${avatars.length}`
+            );
+        }
+        avatars.forEach((url, idx) => {
+            if (typeof url !== 'string' || url === '') {
+                throw new Error(`appPreset.avatar[${idx}] must be a non-empty string`);
+            }
+            qrCodeUrl.searchParams.append('avatar', url);
+        });
+    }
+
+    if (name !== undefined) {
+        qrCodeUrl.searchParams.set('name', name);
+    }
+
+    if (desc !== undefined) {
+        qrCodeUrl.searchParams.set('desc', desc);
+    }
+}
 
 async function requestRegistration<T>(baseUrl: string, params: Record<string, string>): Promise<T> {
     try {
@@ -143,7 +179,7 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
 }
 
 export async function registerApp(options: RegisterAppOptions): Promise<RegisterAppResult> {
-    const { domain, source, signal, onQRCodeReady, onStatusChange } = options;
+    const { domain, source, signal, onQRCodeReady, onStatusChange, appPreset } = options;
 
     const baseUrl = `https://${domain ?? DEFAULT_FEISHU_DOMAIN}`;
 
@@ -153,6 +189,9 @@ export async function registerApp(options: RegisterAppOptions): Promise<Register
     qrCodeUrl.searchParams.set('from', 'sdk');
     qrCodeUrl.searchParams.set('source', source ? `${SDK_NAME}/${source}` : SDK_NAME);
     qrCodeUrl.searchParams.set('tp', 'sdk');
+    if (appPreset) {
+        applyAppPreset(qrCodeUrl, appPreset);
+    }
     onQRCodeReady({
         url: qrCodeUrl.toString(),
         expireIn: beginRes.expires_in ?? 600,

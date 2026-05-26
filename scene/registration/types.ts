@@ -8,6 +8,24 @@ export interface StatusChangeInfo {
     interval?: number;
 }
 
+/**
+ * Pre-fill values shown on the app-creation page after the user scans the QR
+ * code. All fields are optional and the user can still edit them on the page;
+ * the final values are whatever the user submits.
+ */
+export interface AppPreset {
+    /**
+     * App avatar URL(s). Pass a single URL or 1-6 URLs. The first one is the
+     * default selection. Each URL must point to a publicly reachable image
+     * (png / jpg / jpeg / webp / gif).
+     */
+    avatar?: string | string[];
+    /** App name. Supports `{user}` placeholder, replaced with the scanning user's name. */
+    name?: string;
+    /** App description. Supports `{user}` placeholder. */
+    desc?: string;
+}
+
 export interface RegisterAppOptions {
     domain?: string;
     larkDomain?: string;
@@ -15,6 +33,8 @@ export interface RegisterAppOptions {
     signal?: AbortSignal;
     onQRCodeReady: (info: QRCodeInfo) => void;
     onStatusChange?: (info: StatusChangeInfo) => void;
+    /** Pre-fill values for the app-creation page. See {@link AppPreset}. */
+    appPreset?: AppPreset;
 }
 
 export interface UserInfo {

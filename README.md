@@ -691,6 +691,10 @@ try {
 | signal | `AbortSignal` to cancel the polling | AbortSignal | No | - |
 | onQRCodeReady | Callback when the verification URL is ready. Receives `{ url, expireIn }`. You can render the URL as a QR code for users to scan, or display it as a link | function | Yes | - |
 | onStatusChange | Callback on polling status changes. Receives `{ status, interval? }`. Status values: `polling`, `slow_down`, `domain_switched` | function | No | - |
+| appPreset | Pre-fill values for the app-creation page. All fields are optional; users can still edit them on the page | AppPreset | No | - |
+| appPreset.avatar | App avatar URL(s). 1-6 URLs supported; the first one is selected by default. Allowed formats: png / jpg / jpeg / webp / gif (gif is sampled to a single frame, not animated) | string \| string[] | No | - |
+| appPreset.name | App name. Supports the `{user}` placeholder (replaced with the scanning user's name) | string | No | - |
+| appPreset.desc | App description. Supports the `{user}` placeholder | string | No | - |
 
 #### Return value
 
