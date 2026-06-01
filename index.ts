@@ -20,3 +20,12 @@ export { WSClient } from './ws-client';
 export { Aily } from './scene/aily/client';
 export { registerApp } from './scene/registration';
 export * from './channel';
+export type { Logger } from './typings';
+export { LoggerProxy } from './logger/logger-proxy';
+export { defaultLogger } from './logger/default-logger';
+export { DefaultCache, internalCache } from './utils/default-cache';
+export type {
+    WSConfigOverrides,
+    WSConnectionState,
+    WSConnectionStatus,
+} from './ws-client';
