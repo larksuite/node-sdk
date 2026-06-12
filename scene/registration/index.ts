@@ -1,5 +1,6 @@
 import httpInstance, { AxiosError } from '@node-sdk/http';
 import { RegisterAppOptions, RegisterAppResult, BeginResponse, PollResponse, AppPreset } from './types';
+import { encodeAddons } from './addons';
 import { createError } from './errors';
 
 const SDK_NAME = 'node-sdk';
@@ -179,7 +180,11 @@ function startPolling(ctx: PollingContext): Promise<RegisterAppResult> {
 }
 
 export async function registerApp(options: RegisterAppOptions): Promise<RegisterAppResult> {
-    const { domain, source, signal, onQRCodeReady, onStatusChange, appPreset } = options;
+    const { domain, source, signal, onQRCodeReady, onStatusChange, appPreset, addons, createOnly, appId } = options;
+
+    if (appId !== undefined && (typeof appId !== 'string' || appId === '')) {
+        throw new Error('appId must be a non-empty string');
+    }
 
     const baseUrl = `https://${domain ?? DEFAULT_FEISHU_DOMAIN}`;
 
@@ -191,6 +196,19 @@ export async function registerApp(options: RegisterAppOptions): Promise<Register
     qrCodeUrl.searchParams.set('tp', 'sdk');
     if (appPreset) {
         applyAppPreset(qrCodeUrl, appPreset);
+    }
+    if (addons) {
+        qrCodeUrl.searchParams.set('addons', encodeAddons(addons));
+    }
+    // The landing page only honors the literal value 'true'; anything else is
+    // treated as absent, so the param is simply omitted in that case.
+    if (createOnly === true) {
+        qrCodeUrl.searchParams.set('createOnly', 'true');
+    }
+    // When both are present the page gives createOnly precedence and ignores
+    // clientID, so the two params can be passed through together as-is.
+    if (appId) {
+        qrCodeUrl.searchParams.set('clientID', appId);
     }
     onQRCodeReady({
         url: qrCodeUrl.toString(),
