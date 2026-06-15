@@ -743,6 +743,36 @@ try {
 }
 ```
 
+#### 自定义权限/事件/回调（addons）与更新已有应用
+
+创建应用时，可通过 `addons` 在平台基础模板上**增量**申请权限、事件订阅和回调，这些配置会预填到用户扫码后的确认页中，用户确认后生效：
+
+```typescript
+// 创建：增量申请权限/事件/回调，且只允许创建新应用（不可选择已有应用）
+const result = await lark.registerApp({
+    addons: {
+        scopes: { tenant: ['im:message:send_as_bot'], user: ['calendar:calendar:read'] },
+        events: { items: { tenant: ['im.message.receive_v1'] } },
+        callbacks: { items: ['card.action.trigger'] },
+    },
+    createOnly: true,
+    onQRCodeReady(info) { /* ... */ },
+});
+
+// 更新：传入已有应用的 appId，让用户重新扫码确认，为该应用增量开通权限
+await lark.registerApp({
+    appId: 'cli_xxx',
+    addons: { scopes: { tenant: ['drive:drive.metadata:readonly'] } },
+    onQRCodeReady(info) { /* ... */ },
+});
+```
+
+注意：
+
+- `addons` 仅支持在基础模板上**增量叠加**，不支持删减基础权限。
+- 仅支持 5 类公开配置（应用/用户身份权限、应用/用户身份事件、回调）。敏感配置（事件订阅方式与回调地址、`security.*`、加密 key 等）不能通过 `addons` 传入，需调用[更新应用开发配置 OpenAPI](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-config/patch)。
+- SDK 只校验数据形状，不校验权限点/事件/回调名称是否存在；平台目录中不存在的名称会被确认页忽略。
+
 #### `registerApp`参数
 
 | 参数             | 描述                                                                                       | 类型          | 必须 | 默认                       |
@@ -757,6 +787,14 @@ try {
 | appPreset.avatar | 应用头像 URL，支持 1-6 个；传多个时默认选中第一个。支持 png / jpg / jpeg / webp / gif（gif 自动取一帧，不保留动图）           | string \| string[] | 否  | -                |
 | appPreset.name | 应用名称，支持 `{user}` 占位符（替换为扫码用户名称）                                                              | string      | 否  | -                        |
 | appPreset.desc | 应用描述，支持 `{user}` 占位符                                                                          | string      | 否  | -                        |
+| addons         | 增量权限/事件/回调配置，预填到扫码后的确认页，用户确认后生效。详见上方「自定义权限/事件/回调」                                              | AppAddons   | 否  | -                        |
+| addons.scopes.tenant | 应用身份权限列表，如 `im:message:send_as_bot`                                                          | string[]    | 否  | -                        |
+| addons.scopes.user | 用户身份权限列表，如 `calendar:calendar:read`                                                            | string[]    | 否  | -                        |
+| addons.events.items.tenant | 应用身份事件列表，如 `im.message.receive_v1`                                                      | string[]    | 否  | -                        |
+| addons.events.items.user | 用户身份事件列表，如 `calendar.calendar.event.changed_v4`                                           | string[]    | 否  | -                        |
+| addons.callbacks.items | 回调列表，如 `card.action.trigger`                                                                  | string[]    | 否  | -                        |
+| createOnly     | 为 `true` 时落地页仅允许创建新应用，隐藏「选择已有应用」入口，避免误选已有应用导致其配置被覆盖。与 `appId` 同时传入时优先级更高                          | boolean     | 否  | -                        |
+| appId          | 已有应用的 App ID（`cli_` 开头）。传入后流程变为更新该应用的配置：确认页展示 `addons` 带来的权限 diff，用户确认后生效。`createOnly` 为 `true` 时被忽略，仍走创建新应用流程 | string      | 否  | -                        |
 
 #### 返回值
 

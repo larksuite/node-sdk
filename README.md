@@ -681,6 +681,38 @@ try {
 }
 ```
 
+#### Custom scopes/events/callbacks (addons) and updating an existing app
+
+When creating an app, use `addons` to **incrementally** request scopes, event subscriptions and callbacks on top of the platform base template. They are pre-filled into the confirm page shown after the user scans the QR code, and take effect once the user confirms:
+
+```typescript
+// Create: incrementally request scopes/events/callbacks, and only allow
+// creating a new app (selecting an existing app is disabled)
+const result = await lark.registerApp({
+    addons: {
+        scopes: { tenant: ['im:message:send_as_bot'], user: ['calendar:calendar:read'] },
+        events: { items: { tenant: ['im.message.receive_v1'] } },
+        callbacks: { items: ['card.action.trigger'] },
+    },
+    createOnly: true,
+    onQRCodeReady(info) { /* ... */ },
+});
+
+// Update: pass the appId of an existing app to let the user re-scan and
+// confirm, incrementally granting scopes to that app
+await lark.registerApp({
+    appId: 'cli_xxx',
+    addons: { scopes: { tenant: ['drive:drive.metadata:readonly'] } },
+    onQRCodeReady(info) { /* ... */ },
+});
+```
+
+Notes:
+
+- `addons` is **additive only**: items are merged on top of the base template; base permissions can never be removed.
+- Only the 5 public config types (tenant/user scopes, tenant/user events, callbacks) are supported. Sensitive config (event subscription type and request URLs, `security.*`, encrypt keys, etc.) cannot travel via `addons` — use the [update application config OpenAPI](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-config/patch) instead.
+- The SDK only validates the shape, not the item names; names unknown to the platform catalog are silently ignored by the confirm page.
+
 #### `registerApp` parameters
 
 | Parameter | Description | Type | Required | Default |
@@ -695,6 +727,14 @@ try {
 | appPreset.avatar | App avatar URL(s). 1-6 URLs supported; the first one is selected by default. Allowed formats: png / jpg / jpeg / webp / gif (gif is sampled to a single frame, not animated) | string \| string[] | No | - |
 | appPreset.name | App name. Supports the `{user}` placeholder (replaced with the scanning user's name) | string | No | - |
 | appPreset.desc | App description. Supports the `{user}` placeholder | string | No | - |
+| addons | Incremental scopes/events/callbacks pre-filled into the confirm page, effective after user confirmation. See "Custom scopes/events/callbacks" above | AppAddons | No | - |
+| addons.scopes.tenant | App-identity (tenant) scopes, e.g. `im:message:send_as_bot` | string[] | No | - |
+| addons.scopes.user | User-identity scopes, e.g. `calendar:calendar:read` | string[] | No | - |
+| addons.events.items.tenant | App-identity events, e.g. `im.message.receive_v1` | string[] | No | - |
+| addons.events.items.user | User-identity events, e.g. `calendar.calendar.event.changed_v4` | string[] | No | - |
+| addons.callbacks.items | Callbacks, e.g. `card.action.trigger` | string[] | No | - |
+| createOnly | When `true`, the landing page only allows creating a new app — the "select existing app" entry is hidden, preventing accidental overwrite of an existing app's config. Takes precedence over `appId` when both are set | boolean | No | - |
+| appId | App ID (`cli_` prefix) of an existing app. When set, the flow updates that app's config: the confirm page shows the diff brought by `addons` and the user explicitly re-authorizes. Ignored when `createOnly` is `true` — the page still runs the create-new-app flow | string | No | - |
 
 #### Return value
 
