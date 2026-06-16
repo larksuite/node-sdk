@@ -30,3 +30,18 @@ export type {
     WSConnectionState,
     WSConnectionStatus,
 } from './ws-client';
+// ClientAssertion (keyless) auth
+export {
+    ClientAssertionError,
+    AccessTokenError,
+} from './client/client-assertion';
+export type {
+    ClientAssertionProvider,
+    ClientAssertionToken,
+    TargetInfo,
+} from './client/client-assertion';
+export type {
+    AccessTokenResponse,
+    IAuthorizationCodeParams,
+    IRefreshParams,
+} from './client/access-token';

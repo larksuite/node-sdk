@@ -20,6 +20,13 @@ import { IRequestOptions, IClientParams, IPayload } from './types';
 import { TokenManager } from './token-manager';
 import { HttpInstance } from '@node-sdk/typings/http';
 import { UserAccessToken } from './user-access-token';
+import { AccessToken } from './access-token';
+import {
+    ClientAssertionError,
+    ClientAssertionProvider,
+    ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
+    ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
+} from './client-assertion';
 
 export class Client extends RequestTemplate {
     appId: string = '';
@@ -46,6 +53,12 @@ export class Client extends RequestTemplate {
 
     userAccessToken: UserAccessToken;
 
+    accessToken: AccessToken;
+
+    clientAssertionProvider?: ClientAssertionProvider;
+
+    oauthBaseUrl?: string;
+
     private readonly userAgent: string;
 
     constructor(params: IClientParams) {
@@ -57,16 +70,33 @@ export class Client extends RequestTemplate {
         );
 
         this.appId = params.appId;
-        this.appSecret = params.appSecret;
+        this.appSecret = params.appSecret || '';
+        this.clientAssertionProvider = params.clientAssertionProvider;
+        this.oauthBaseUrl = params.oauthBaseUrl;
         this.disableTokenCache = params.disableTokenCache;
         this.userAgent = buildUserAgent(params.source, { extraTags: params.extraUaTags });
 
         assert(!this.appId, () => this.logger.error('appId is needed'));
-        assert(!this.appSecret, () => this.logger.error('appSecret is needed'));
 
         this.helpDeskId = params.helpDeskId;
         this.helpDeskToken = params.helpDeskToken;
         this.appType = params?.appType || AppType.SelfBuild;
+
+        // Credential validation (fail-fast). `appSecret` and
+        // `clientAssertionProvider` are mutually exclusive-or: at least one is
+        // required, and ClientAssertion mode is self-build only.
+        if (!this.appSecret && !this.clientAssertionProvider) {
+            throw new ClientAssertionError(
+                ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
+                'appSecret or clientAssertionProvider is required'
+            );
+        }
+        if (this.clientAssertionProvider && this.appType === AppType.ISV) {
+            throw new ClientAssertionError(
+                ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
+                'ClientAssertion mode is not supported for ISV apps'
+            );
+        }
 
         this.domain = formatDomain(params.domain || Domain.Feishu);
         this.logger.debug(`use domain url: ${this.domain}`);
@@ -82,9 +112,21 @@ export class Client extends RequestTemplate {
             logger: this.logger,
             appType: this.appType,
             httpInstance: this.httpInstance,
+            clientAssertionProvider: this.clientAssertionProvider,
+            oauthBaseUrl: this.oauthBaseUrl,
         });
 
         this.userAccessToken = new UserAccessToken({client: this});
+
+        this.accessToken = new AccessToken({
+            appId: this.appId,
+            appSecret: this.appSecret,
+            clientAssertionProvider: this.clientAssertionProvider,
+            oauthBaseUrl: this.oauthBaseUrl,
+            domain: this.domain,
+            httpInstance: this.httpInstance,
+            logger: this.logger,
+        });
 
         this.logger.info('client ready');
     }

@@ -2,6 +2,14 @@ import qs from 'querystring';
 import WebSocket from 'ws';
 import { EventDispatcher } from '@node-sdk/dispatcher/event';
 import { assert, formatDomain, buildUserAgent } from '@node-sdk/utils';
+import {
+  ClientAssertionError,
+  ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
+  ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY,
+  X_TARGET_SERVICE,
+  buildProxyUrl,
+  extractAudFromUrl,
+} from '@node-sdk/client/client-assertion';
 import { defaultLogger } from '@node-sdk/logger/default-logger';
 import { LoggerProxy } from '@node-sdk/logger/logger-proxy';
 import { Domain, Logger, LoggerLevel } from '@node-sdk/typings';
@@ -80,6 +88,7 @@ export class WSClient {
     const {
       appId,
       appSecret,
+      clientAssertionProvider,
       agent,
       domain = Domain.Feishu,
       httpInstance = defaultHttpInstance,
@@ -101,14 +110,22 @@ export class WSClient {
     this.logger = new LoggerProxy(loggerLevel, logger);
 
     assert(!appId, () => this.logger.error('appId is needed'));
-    assert(!appSecret, () => this.logger.error('appSecret is needed'));
+    // appSecret and clientAssertionProvider are mutually exclusive-or: at
+    // least one is required.
+    if (!appSecret && !clientAssertionProvider) {
+      throw new ClientAssertionError(
+        ERR_CODE_APP_SECRET_AND_CLIENT_ASSERTION_EMPTY,
+        'appSecret or clientAssertionProvider is required'
+      );
+    }
 
     this.agent = agent;
     this.dataCache = new DataCache({logger: this.logger});
     this.httpInstance = httpInstance;
     this.wsConfig.updateClient({
       appId,
-      appSecret,
+      appSecret: appSecret || '',
+      clientAssertionProvider,
       domain: formatDomain(domain),
     });
 
@@ -179,10 +196,43 @@ export class WSClient {
   private async pullConnectConfig(): Promise<ConnectResult> {
     const {
       appId,
-      appSecret
+      appSecret,
+      clientAssertionProvider,
+      domain,
     } = this.wsConfig.getClient();
 
+    // Path component of `wsConfig.wsConfigUrl`; needed standalone to build the
+    // GDPR proxy URL.
+    const WS_ENDPOINT_URI = '/callback/ws/endpoint';
+    let url = this.wsConfig.wsConfigUrl;
+    const headers: Record<string, string> = {
+      // consumed by gateway
+      "locale": "zh",
+      "User-Agent": this.userAgent,
+    };
+    const body: Record<string, any> = { AppID: appId };
+
     try {
+      if (clientAssertionProvider) {
+        // WS endpoint discovery binds the assertion to the OpenAPI domain host.
+        const aud = extractAudFromUrl(domain as string);
+        const assertion = await clientAssertionProvider.retrieveToken(aud);
+        if (!assertion || !assertion.value) {
+          throw new ClientAssertionError(
+            ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY,
+            'client assertion token is empty'
+          );
+        }
+        body.AppSecret = '';
+        body.ClientAssertion = assertion.value;
+        if (assertion.targetInfo) {
+          url = buildProxyUrl(assertion.targetInfo, WS_ENDPOINT_URI);
+          headers[X_TARGET_SERVICE] = aud;
+        }
+      } else {
+        body.AppSecret = appSecret;
+      }
+
       const {
         code,
         data: {
@@ -192,16 +242,9 @@ export class WSClient {
         msg
       } = await this.httpInstance.request({
         method: "post",
-        url: this.wsConfig.wsConfigUrl,
-        data: {
-          AppID: appId,
-          AppSecret: appSecret
-        },
-        // consumed by gateway
-        headers: {
-          "locale": "zh",
-          "User-Agent": this.userAgent,
-        },
+        url,
+        data: body,
+        headers,
         timeout: 15000,
       });
 
@@ -240,6 +283,10 @@ export class WSClient {
       return { ok: true };
     } catch(e) {
       this.logger.error('[ws]', (e as any)?.message || 'system busy');
+      // A credential/config problem (e.g. empty assertion) is not retryable.
+      if (e instanceof ClientAssertionError) {
+        return { ok: false, retryable: false, error: e.message };
+      }
       return { ok: false, retryable: true };
     }
   }

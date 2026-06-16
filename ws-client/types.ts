@@ -1,5 +1,6 @@
 import { Domain, Logger, LoggerLevel } from '@node-sdk/typings';
 import { HttpInstance } from '@node-sdk/typings/http';
+import { ClientAssertionProvider } from '@node-sdk/client/client-assertion';
 
 /**
  * Client-only WebSocket settings the Feishu server does not push. Server-
@@ -20,7 +21,16 @@ export interface WSConfigOverrides {
 
 export interface IConstructorParams {
   appId: string;
-  appSecret: string;
+  /**
+   * App secret. Optional: provide either `appSecret` or
+   * `clientAssertionProvider` (at least one).
+   */
+  appSecret?: string;
+  /**
+   * Keyless (ClientAssertion) credential provider. When set, endpoint
+   * discovery sends `ClientAssertion` instead of `AppSecret`.
+   */
+  clientAssertionProvider?: ClientAssertionProvider;
   domain?: string | Domain;
   logger?: Logger;
   loggerLevel?: LoggerLevel;

@@ -49,7 +49,7 @@ describe('DataCache', () => {
   });
 
   test('data is expired', () => {
-    jest.useFakeTimers();
+    jest.useFakeTimers({ doNotFake: ['performance'] });
   
     const dataCache = new DataCache({});
     const text = '{"data":"hello,world"}';
@@ -70,7 +70,7 @@ describe('DataCache', () => {
   });
 
   test('data is lived', () => {
-    jest.useFakeTimers();
+    jest.useFakeTimers({ doNotFake: ['performance'] });
   
     const dataCache = new DataCache({});
     const text = '{"data":"hello,world"}';

@@ -3,6 +3,20 @@ import { Cache, AppType, Logger } from '@node-sdk/typings';
 import { assert } from '@node-sdk/utils';
 import AppTicketManager from './app-ticket-manager';
 import { HttpInstance } from '@node-sdk/typings/http';
+import {
+    ClientAssertionError,
+    ClientAssertionProvider,
+    CLIENT_ASSERTION_TYPE_JWT_BEARER,
+    ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
+    ERR_CODE_CLIENT_ASSERTION_RETRIEVE_FAILED,
+    ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY,
+    GRANT_TYPE_JWT_BEARER,
+    OAUTH_TOKEN_URI,
+    X_TARGET_SERVICE,
+    buildProxyUrl,
+    resolveOauthAud,
+    resolveOauthBaseUrl,
+} from './client-assertion';
 
 interface IParams {
     appId: string;
@@ -12,6 +26,8 @@ interface IParams {
     logger: Logger;
     appType: AppType;
     httpInstance: HttpInstance;
+    clientAssertionProvider?: ClientAssertionProvider;
+    oauthBaseUrl?: string;
 }
 
 export class TokenManager {
@@ -31,6 +47,10 @@ export class TokenManager {
 
     httpInstance: HttpInstance;
 
+    clientAssertionProvider?: ClientAssertionProvider;
+
+    oauthBaseUrl?: string;
+
     constructor(params: IParams) {
         this.appId = params.appId;
         this.appSecret = params.appSecret;
@@ -39,6 +59,8 @@ export class TokenManager {
         this.logger = params.logger;
         this.appType = params.appType;
         this.httpInstance = params.httpInstance;
+        this.clientAssertionProvider = params.clientAssertionProvider;
+        this.oauthBaseUrl = params.oauthBaseUrl;
 
         this.appTicketManager = new AppTicketManager({
             appId: this.appId,
@@ -54,6 +76,12 @@ export class TokenManager {
     }
 
     async getCustomTenantAccessToken() {
+        // Keyless (ClientAssertion) mode forks to a separate OAuth exchange.
+        // Without a provider, the legacy app_secret path below is unchanged.
+        if (this.clientAssertionProvider) {
+            return this.getTenantTokenByClientAssertion();
+        }
+
         const cachedTenantAccessToken = await this.cache?.get(
             CTenantAccessToken,
             {
@@ -93,7 +121,109 @@ export class TokenManager {
         return tenant_access_token;
     }
 
+    /**
+     * Exchange a ClientAssertion for a tenant access token at the OAuth token
+     * endpoint (`jwt-bearer` grant). Credential failures are surfaced as
+     * {@link ClientAssertionError} — never swallowed.
+     */
+    private async getTenantTokenByClientAssertion(): Promise<string> {
+        const oauthBaseUrl = resolveOauthBaseUrl({
+            oauthBaseUrl: this.oauthBaseUrl,
+            domain: this.domain,
+        });
+        const aud = resolveOauthAud({
+            oauthBaseUrl: this.oauthBaseUrl,
+            domain: this.domain,
+        });
+
+        const cachedTenantAccessToken = await this.cache?.get(
+            CTenantAccessToken,
+            { namespace: this.appId }
+        );
+        if (cachedTenantAccessToken) {
+            this.logger.debug('use cache token');
+            return cachedTenantAccessToken;
+        }
+
+        let assertion;
+        try {
+            assertion = await this.clientAssertionProvider!.retrieveToken(aud);
+        } catch (e: any) {
+            throw new ClientAssertionError(
+                ERR_CODE_CLIENT_ASSERTION_RETRIEVE_FAILED,
+                e?.message || 'client assertion provider failed'
+            );
+        }
+        if (!assertion || !assertion.value) {
+            throw new ClientAssertionError(
+                ERR_CODE_CLIENT_ASSERTION_TOKEN_EMPTY,
+                'client assertion token is empty'
+            );
+        }
+
+        let url = `${oauthBaseUrl}${OAUTH_TOKEN_URI}`;
+        const headers: Record<string, string> = {};
+        if (assertion.targetInfo) {
+            url = buildProxyUrl(assertion.targetInfo, OAUTH_TOKEN_URI);
+            headers[X_TARGET_SERVICE] = aud;
+        }
+
+        this.logger.debug('request token (client assertion)');
+        let resp: any;
+        try {
+            resp = await this.httpInstance.request({
+                method: 'post',
+                url,
+                headers,
+                data: {
+                    grant_type: GRANT_TYPE_JWT_BEARER,
+                    client_assertion_type: CLIENT_ASSERTION_TYPE_JWT_BEARER,
+                    client_assertion: assertion.value,
+                    client_id: this.appId,
+                },
+            });
+        } catch (e: any) {
+            this.logger.error(e);
+            throw new ClientAssertionError(
+                e?.response?.data?.code || 0,
+                e?.response?.data?.error_description ||
+                    e?.response?.data?.error ||
+                    'client assertion token exchange failed'
+            );
+        }
+
+        const tenantAccessToken = resp?.access_token;
+        if (!tenantAccessToken) {
+            throw new ClientAssertionError(
+                resp?.code || 0,
+                resp?.error_description ||
+                    resp?.error ||
+                    'oauth token response missing access token'
+            );
+        }
+
+        const expiresIn = Number(resp?.expires_in) || 0;
+        await this.cache?.set(
+            CTenantAccessToken,
+            tenantAccessToken,
+            // Expire 180s early to absorb network latency.
+            new Date().getTime() + Math.max(expiresIn - 180, 0) * 1000,
+            { namespace: this.appId }
+        );
+
+        return tenantAccessToken;
+    }
+
     async getMarketTenantAccessToken(tenantKey: string) {
+        // ISV / marketplace apps depend on app_access_token, which is
+        // unavailable in ClientAssertion mode — fail fast.
+        if (this.clientAssertionProvider) {
+            throw new ClientAssertionError(
+                ERR_CODE_CLIENT_ASSERTION_PROVIDER_NOT_CONFIGURED,
+                'ClientAssertion mode is not supported for ISV apps'
+            );
+        }
+
         if (!tenantKey) {
             this.logger.error('market app request need tenant key');
             return undefined;
