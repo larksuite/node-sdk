@@ -21,7 +21,9 @@ describe('formatErrors', () => {
             {
                 headers: {},
                 config: {},
-                data: 'response-data',
+                // A real Feishu error body is an object; formatErrors spreads it
+                // (and merges a nested `error` field) into the appended entry.
+                data: { code: 400, msg: 'response-msg' },
                 status: 400,
                 statusText: 'response-statusText',
             }
@@ -43,12 +45,12 @@ describe('formatErrors', () => {
                     method: 'request-method',
                 },
                 response: {
-                    data: 'response-data',
+                    data: { code: 400, msg: 'response-msg' },
                     status: 400,
                     statusText: 'response-statusText',
                 },
             },
-            'response-data',
+            { code: 400, msg: 'response-msg' },
         ]);
     });
 

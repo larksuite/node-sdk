@@ -15,3 +15,7 @@ local-tests
 
 # jest coverage reports
 coverage
+
+# oapi-harness local task state & sandbox run artifacts
+.harness/
+.harness-sandbox-result.json
