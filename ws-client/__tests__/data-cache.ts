@@ -1,6 +1,10 @@
 import { DataCache } from '../data-cache';
 
 describe('DataCache', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   test('mergeData is right when sum = 1', () => {
     const dataCache = new DataCache({});
     const text = '{"data":"hello,world"}';
@@ -49,8 +53,10 @@ describe('DataCache', () => {
   });
 
   test('data is expired', () => {
-    jest.useFakeTimers();
-  
+    // doNotFake performance: @sinonjs/fake-timers cannot hijack the read-only
+    // global `performance` on newer Node, which otherwise throws on install.
+    jest.useFakeTimers({ doNotFake: ['performance'] });
+
     const dataCache = new DataCache({});
     const text = '{"data":"hello,world"}';
 
@@ -70,8 +76,10 @@ describe('DataCache', () => {
   });
 
   test('data is lived', () => {
-    jest.useFakeTimers();
-  
+    // doNotFake performance: @sinonjs/fake-timers cannot hijack the read-only
+    // global `performance` on newer Node, which otherwise throws on install.
+    jest.useFakeTimers({ doNotFake: ['performance'] });
+
     const dataCache = new DataCache({});
     const text = '{"data":"hello,world"}';
 
