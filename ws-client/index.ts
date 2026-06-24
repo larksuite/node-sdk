@@ -635,6 +635,7 @@ export class WSClient {
       this.reconnectInterval = undefined;
     }
     this.clearLiveness();
+    this.dataCache.destroy();
     this.isConnecting = false;
     this.currentReconnectAttempts = 0;
     const wsInstance = this.wsConfig.getWSInstance();
@@ -667,6 +668,9 @@ export class WSClient {
     // getConnectionStatus() reflects the fresh start.
     this.terminalError = false;
     this.currentReconnectAttempts = 0;
+    // Re-arm the cache sweep in case the client was previously close()d
+    // (which destroys the timer); idempotent when already running.
+    this.dataCache.clearAtInterval();
 
     this.logger.info(
       '[ws]',
