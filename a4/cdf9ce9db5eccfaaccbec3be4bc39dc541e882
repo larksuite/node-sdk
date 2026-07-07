@@ -1,0 +1,16 @@
+package.json
+  h_799da3a36f987d 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "a4cdf9ce9db5eccfaaccbec3be4bc39dc541e882",
+  "prompts": {},
+  "humans": {
+    "h_799da3a36f987d": {
+      "author": "mazhe.nerd <mazhe.nerd@bytedance.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
