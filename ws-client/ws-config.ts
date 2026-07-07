@@ -1,10 +1,12 @@
 import { Domain } from '@node-sdk/typings';
 import WebSocket from 'ws';
+import { ClientAssertionProvider } from '@node-sdk/client/client-assertion';
 
 interface IClientConfig {
   appId: string;
   appSecret: string;
   domain: string | Domain;
+  clientAssertionProvider?: ClientAssertionProvider;
 }
 
 interface IWSConfig {
