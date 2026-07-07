@@ -45,6 +45,17 @@ export interface AppPreset {
  *   otherwise the whole param is ignored and the default flow is used.
  */
 export interface AppAddons {
+    /**
+     * Template base selector, carried as the top-level `preset` field inside
+     * the encoded addons payload (parsed by the confirm page, not the backend).
+     * - `true` / omitted: keep the platform default template and layer the
+     *   declared scopes / events / callbacks on top (additive — same as before).
+     * - `false`: drop the default template, use the minimal base (bot capability
+     *   only, no business scopes) and show only the explicitly declared items.
+     *   With `preset: false` an otherwise-empty addons is valid (minimal base,
+     *   zero increments); without it at least one item is still required.
+     */
+    preset?: boolean;
     /** Permission scopes. */
     scopes?: {
         /** App-identity (tenant) scopes, e.g. `'im:message:send_as_bot'`. */

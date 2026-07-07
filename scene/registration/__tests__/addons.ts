@@ -93,4 +93,47 @@ describe('encodeAddons', () => {
         expect(() => encodeAddons('x' as unknown as AppAddons)).toThrow(/addons must be an object/);
         expect(() => encodeAddons([] as unknown as AppAddons)).toThrow(/addons must be an object/);
     });
+
+    test('passes preset:true through alongside the declared sections', () => {
+        const addons: AppAddons = { preset: true, scopes: { tenant: ['im:message:send_as_bot'] } };
+        expect(decode(encodeAddons(addons))).toEqual({
+            preset: true,
+            scopes: { tenant: ['im:message:send_as_bot'] },
+        });
+    });
+
+    test('passes preset:false through alongside the declared sections', () => {
+        const addons: AppAddons = { preset: false, scopes: { tenant: ['im:message:send_as_bot'] } };
+        expect(decode(encodeAddons(addons))).toEqual({
+            preset: false,
+            scopes: { tenant: ['im:message:send_as_bot'] },
+        });
+    });
+
+    test('allows preset:false with zero addon sections (minimal base, no declarations)', () => {
+        expect(decode(encodeAddons({ preset: false }))).toEqual({ preset: false });
+    });
+
+    test('throws on preset:true with zero addon sections (preset does not exempt the empty-payload rule)', () => {
+        expect(() => encodeAddons({ preset: true })).toThrow(/at least one scope, event or callback/);
+    });
+
+    test('still requires at least one section when preset is absent', () => {
+        const match = /at least one scope, event or callback/;
+        expect(() => encodeAddons({})).toThrow(match);
+        expect(() => encodeAddons({ scopes: {} })).toThrow(match);
+    });
+
+    test('does not inject a preset key when preset is not provided', () => {
+        const decoded = decode(encodeAddons({ scopes: { tenant: ['x'] } })) as Record<string, unknown>;
+        expect(decoded).not.toHaveProperty('preset');
+    });
+
+    test('throws on non-boolean preset, validated before the empty-payload check', () => {
+        // 'false' must not slip past as truthy/`!== false` and bypass the empty-payload rule;
+        // the type check has to run first, so each of these fails on preset, not on emptiness.
+        expect(() => encodeAddons({ preset: 'false' } as any)).toThrow(/addons\.preset/);
+        expect(() => encodeAddons({ preset: 0 } as any)).toThrow(/addons\.preset/);
+        expect(() => encodeAddons({ preset: null } as any)).toThrow(/addons\.preset/);
+    });
 });
