@@ -30,6 +30,23 @@ interface IParams {
     oauthBaseUrl?: string;
 }
 
+interface TokenResponse {
+    code?: number | string;
+    msg?: string;
+}
+
+/**
+ * Build an error message for a token response that is missing its expected
+ * field. Only the API's own `code`/`msg` are echoed back — never request
+ * credentials (app_secret, app_ticket, tokens) — so the message is safe to
+ * surface to callers and logs.
+ */
+function buildTokenError(field: string, response?: TokenResponse): string {
+    const code = response?.code ?? 'unknown';
+    const msg = response?.msg ?? 'no message';
+    return `failed to get ${field}, code: ${code}, msg: ${msg}`;
+}
+
 export class TokenManager {
     appId: string;
 
@@ -75,6 +92,34 @@ export class TokenManager {
         this.logger.debug('token manager is ready');
     }
 
+    /**
+     * POST a token endpoint and return the validated response body.
+     *
+     * On transport failure the original error is logged and rethrown — so the
+     * caller sees the real cause (EPIPE, timeout, ...) instead of a secondary
+     * "Cannot destructure ... of undefined". On an HTTP-200 business failure the
+     * required field is absent; we throw an error carrying only the API's
+     * code/msg and never cache an undefined token.
+     */
+    private async requestToken<T extends Record<string, unknown>>(
+        url: string,
+        body: Record<string, unknown>,
+        requiredField: Extract<keyof T, string>
+    ): Promise<T & TokenResponse> {
+        const response = await this.httpInstance
+            .post<T & TokenResponse>(url, body)
+            .catch((e) => {
+                this.logger.error(e);
+                throw e;
+            });
+
+        if (!response || !response[requiredField]) {
+            throw new Error(buildTokenError(requiredField, response));
+        }
+
+        return response;
+    }
+
     async getCustomTenantAccessToken() {
         // Keyless (ClientAssertion) mode forks to a separate OAuth exchange.
         // Without a provider, the legacy app_secret path below is unchanged.
@@ -95,24 +140,23 @@ export class TokenManager {
         }
 
         this.logger.debug('request token');
-        // @ts-ignore
-        const { tenant_access_token, expire } = await this.httpInstance
-            .post(
-                `${this.domain}/open-apis/auth/v3/tenant_access_token/internal`,
-                {
-                    app_id: this.appId,
-                    app_secret: this.appSecret,
-                }
-            )
-            .catch((e) => {
-                this.logger.error(e);
-            });
+        const { tenant_access_token, expire } = await this.requestToken<{
+            tenant_access_token?: string;
+            expire?: number;
+        }>(
+            `${this.domain}/open-apis/auth/v3/tenant_access_token/internal`,
+            {
+                app_id: this.appId,
+                app_secret: this.appSecret,
+            },
+            'tenant_access_token'
+        );
 
         await this.cache?.set(
             CTenantAccessToken,
             tenant_access_token,
             // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
-            new Date().getTime() + expire * 1000 - 3 * 60 * 1000,
+            new Date().getTime() + expire! * 1000 - 3 * 60 * 1000,
             {
                 namespace: this.appId
             }
@@ -251,37 +295,38 @@ export class TokenManager {
 
         this.logger.debug('get app access token');
         // 获取app_access_token
-        // @ts-ignore
-        const { app_access_token } = await this.httpInstance
-            .post<{
-                app_access_token: string;
-            }>(`${this.domain}/open-apis/auth/v3/app_access_token`, {
+        const { app_access_token } = await this.requestToken<{
+            app_access_token?: string;
+        }>(
+            `${this.domain}/open-apis/auth/v3/app_access_token`,
+            {
                 app_id: this.appId,
                 app_secret: this.appSecret,
                 app_ticket: appTicket,
-            })
-            .catch((e) => {
-                this.logger.error(e);
-            });
+            },
+            'app_access_token'
+        );
 
         this.logger.debug('get tenant access token');
         // 获取tenant_access_token
-        // @ts-ignore
-        const { tenant_access_token, expire } = await this.httpInstance
-            .post(`${this.domain}/open-apis/auth/v3/tenant_access_token`, {
+        const { tenant_access_token, expire } = await this.requestToken<{
+            tenant_access_token?: string;
+            expire?: number;
+        }>(
+            `${this.domain}/open-apis/auth/v3/tenant_access_token`,
+            {
                 app_access_token,
                 tenant_key: tenantKey,
-            })
-            .catch((e) => {
-                this.logger.error(e);
-            });
+            },
+            'tenant_access_token'
+        );
 
         // 设置tenant_access_token
         await this.cache.set(
             `larkMarketAccessToken${tenantKey}`,
             tenant_access_token,
             // Due to the time-consuming network, the expiration time needs to be 3 minutes earlier
-            new Date().getTime() + expire * 1000 - 3 * 60 * 1000,
+            new Date().getTime() + expire! * 1000 - 3 * 60 * 1000,
             {
                 namespace: this.appId
             }

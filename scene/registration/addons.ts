@@ -45,12 +45,13 @@ function validateStringArray(value: unknown, path: string): string[] | undefined
 }
 
 /**
- * Validate the shape of `addons` and rebuild it from the 5 known public
- * fields only, so nothing outside the whitelist can ever be serialized.
+ * Validate the shape of `addons` and rebuild it from the known public
+ * fields only (`preset` / `scopes` / `events` / `callbacks`), so nothing
+ * outside the whitelist can ever be serialized.
  */
 function normalizeAddons(addons: AppAddons): AppAddons {
     assertPlainObject(addons, 'addons');
-    assertAllowedKeys(addons, ['scopes', 'events', 'callbacks'], 'addons');
+    assertAllowedKeys(addons, ['preset', 'scopes', 'events', 'callbacks'], 'addons');
 
     let itemCount = 0;
     const pick = (value: unknown, path: string): string[] | undefined => {
@@ -60,6 +61,16 @@ function normalizeAddons(addons: AppAddons): AppAddons {
     };
 
     const normalized: AppAddons = {};
+
+    // Validate `preset` before the empty-payload check below: a non-boolean
+    // (e.g. the string 'false') must throw here rather than slip past the
+    // `preset !== false` relaxation, and only the validated boolean is copied.
+    if (addons.preset !== undefined) {
+        if (typeof addons.preset !== 'boolean') {
+            throw new Error('addons.preset must be a boolean');
+        }
+        normalized.preset = addons.preset;
+    }
 
     if (addons.scopes !== undefined) {
         assertPlainObject(addons.scopes, 'addons.scopes');
@@ -94,8 +105,10 @@ function normalizeAddons(addons: AppAddons): AppAddons {
     }
 
     // An all-empty addons is treated as "no addons" by the confirm page —
-    // passing one is always a caller bug, so surface it at build time.
-    if (itemCount === 0) {
+    // passing one is normally a caller bug, so surface it at build time. The
+    // exception is `preset: false`, which is a meaningful payload on its own
+    // (minimal base template, zero increments).
+    if (itemCount === 0 && addons.preset !== false) {
         throw new Error(
             'addons must contain at least one scope, event or callback'
         );

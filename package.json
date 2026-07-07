@@ -1,6 +1,6 @@
 {
   "name": "@larksuiteoapi/node-sdk",
-  "version": "1.68.0",
+  "version": "1.70.0",
   "description": "larksuite open sdk for nodejs",
   "keywords": [
     "feishu",
@@ -26,8 +26,14 @@
   },
   "author": "mazhe.nerd",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/larksuite/node-sdk.git"
+  },
   "homepage": "https://github.com/larksuite/node-sdk",
-  "url": "https://github.com/larksuite/node-sdk/issues",
+  "bugs": {
+    "url": "https://github.com/larksuite/node-sdk/issues"
+  },
   "dependencies": {
     "axios": "~1.13.3",
     "lodash.identity": "^3.0.0",

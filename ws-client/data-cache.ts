@@ -9,7 +9,9 @@ export class DataCache {
   }>
 
   logger?: Logger;
-  
+
+  private timer?: ReturnType<typeof setInterval>;
+
   constructor(params: {
     logger?: Logger;
   }) {
@@ -66,10 +68,15 @@ export class DataCache {
     this.cache.delete(message_id);
   }
 
-  private clearAtInterval() {
+  // Idempotent: re-arming an already-running sweep is a no-op, so it is safe
+  // to call again on start() after a previous destroy().
+  clearAtInterval() {
+    if (this.timer) {
+      return;
+    }
     // magic number，10s expired
     const clearIntervalMs = 10000;
-    setInterval(() => {
+    this.timer = setInterval(() => {
       const now = Date.now();
       this.cache.forEach((value, key) => {
         const { create_time, trace_id, message_id } = value;
@@ -79,6 +86,21 @@ export class DataCache {
         }
       });
     }, clearIntervalMs);
+    // Don't let the sweep timer keep the Node process alive on its own; the
+    // process should be free to exit once nothing else references the loop.
+    if (typeof this.timer.unref === 'function') {
+      this.timer.unref();
+    }
+  }
+
+  // Stop the sweep timer and drop cached fragments. Called from
+  // WSClient.close() so the client releases its event-loop handle.
+  destroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
+    this.cache.clear();
   }
 }
 
