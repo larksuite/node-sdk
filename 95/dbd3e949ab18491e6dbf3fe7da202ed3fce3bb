@@ -1,0 +1,14 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "95dbd3e949ab18491e6dbf3fe7da202ed3fce3bb",
+  "prompts": {},
+  "humans": {
+    "h_799da3a36f987d": {
+      "author": "mazhe.nerd <mazhe.nerd@bytedance.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
