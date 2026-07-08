@@ -705,10 +705,22 @@ await lark.registerApp({
     addons: { scopes: { tenant: ['drive:drive.metadata:readonly'] } },
     onQRCodeReady(info) { /* ... */ },
 });
+
+// Minimal base: drop the default template (bot capability only, no business
+// scopes) and show only the explicitly declared items. With `preset: false`
+// an otherwise-empty addons is valid.
+await lark.registerApp({
+    addons: {
+        preset: false,
+        scopes: { tenant: ['im:message:send_as_bot'] },
+    },
+    onQRCodeReady(info) { /* ... */ },
+});
 ```
 
 Notes:
 
+- `addons.preset` selects the template base: `true` / omitted keeps the platform default template and layers the declared items on top (additive — the default behavior); `false` drops the default template and starts from the minimal base (bot capability only, no business scopes), showing only the explicitly declared items. Only with `preset: false` may `addons` be otherwise empty (minimal base, zero increments); otherwise at least one scope, event or callback is required.
 - `addons` is **additive only**: items are merged on top of the base template; base permissions can never be removed.
 - Only the 5 public config types (tenant/user scopes, tenant/user events, callbacks) are supported. Sensitive config (event subscription type and request URLs, `security.*`, encrypt keys, etc.) cannot travel via `addons` — use the [update application config OpenAPI](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-config/patch) instead.
 - The SDK only validates the shape, not the item names; names unknown to the platform catalog are silently ignored by the confirm page.
@@ -728,6 +740,7 @@ Notes:
 | appPreset.name | App name. Supports the `{user}` placeholder (replaced with the scanning user's name) | string | No | - |
 | appPreset.desc | App description. Supports the `{user}` placeholder | string | No | - |
 | addons | Incremental scopes/events/callbacks pre-filled into the confirm page, effective after user confirmation. See "Custom scopes/events/callbacks" above | AppAddons | No | - |
+| addons.preset | Template base selector. `true`/omitted: keep the platform default template and layer the declared items on top; `false`: drop the default template and use the minimal base (bot capability only, no business scopes). With `false`, an otherwise-empty `addons` is valid | boolean | No | `true` |
 | addons.scopes.tenant | App-identity (tenant) scopes, e.g. `im:message:send_as_bot` | string[] | No | - |
 | addons.scopes.user | User-identity scopes, e.g. `calendar:calendar:read` | string[] | No | - |
 | addons.events.items.tenant | App-identity events, e.g. `im.message.receive_v1` | string[] | No | - |

@@ -765,10 +765,21 @@ await lark.registerApp({
     addons: { scopes: { tenant: ['drive:drive.metadata:readonly'] } },
     onQRCodeReady(info) { /* ... */ },
 });
+
+// 最小基座：丢弃默认模板（仅保留机器人能力，无业务权限），仅展示显式声明的配置项。
+// 传入 `preset: false` 时，即使 addons 没有其他配置项也是合法的。
+await lark.registerApp({
+    addons: {
+        preset: false,
+        scopes: { tenant: ['im:message:send_as_bot'] },
+    },
+    onQRCodeReady(info) { /* ... */ },
+});
 ```
 
 注意：
 
+- `addons.preset` 用于选择模板基座：`true` / 不传表示保留平台默认模板，并在其上叠加声明的配置项（增量，默认行为）；`false` 表示丢弃默认模板，从最小基座（仅机器人能力，无业务权限）开始，仅展示显式声明的配置项。仅当 `preset: false` 时 `addons` 可以不含其他配置项（最小基座、零增量），否则至少需包含一个权限、事件或回调。
 - `addons` 仅支持在基础模板上**增量叠加**，不支持删减基础权限。
 - 仅支持 5 类公开配置（应用/用户身份权限、应用/用户身份事件、回调）。敏感配置（事件订阅方式与回调地址、`security.*`、加密 key 等）不能通过 `addons` 传入，需调用[更新应用开发配置 OpenAPI](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v7/application-v7/application-config/patch)。
 - SDK 只校验数据形状，不校验权限点/事件/回调名称是否存在；平台目录中不存在的名称会被确认页忽略。
@@ -788,6 +799,7 @@ await lark.registerApp({
 | appPreset.name | 应用名称，支持 `{user}` 占位符（替换为扫码用户名称）                                                              | string      | 否  | -                        |
 | appPreset.desc | 应用描述，支持 `{user}` 占位符                                                                          | string      | 否  | -                        |
 | addons         | 增量权限/事件/回调配置，预填到扫码后的确认页，用户确认后生效。详见上方「自定义权限/事件/回调」                                              | AppAddons   | 否  | -                        |
+| addons.preset  | 模板基座选择。`true`/不传：保留平台默认模板，在其上叠加声明的配置项；`false`：丢弃默认模板，使用最小基座（仅机器人能力，无业务权限）。传 `false` 时 `addons` 可不含其他配置项       | boolean     | 否  | `true`                   |
 | addons.scopes.tenant | 应用身份权限列表，如 `im:message:send_as_bot`                                                          | string[]    | 否  | -                        |
 | addons.scopes.user | 用户身份权限列表，如 `calendar:calendar:read`                                                            | string[]    | 否  | -                        |
 | addons.events.items.tenant | 应用身份事件列表，如 `im.message.receive_v1`                                                      | string[]    | 否  | -                        |
