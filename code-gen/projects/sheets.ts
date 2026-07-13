@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import security_and_compliance from "./security_and_compliance";
+import sheet_ai from "./sheet_ai";
 
 // auto gen
-export default abstract class Client extends security_and_compliance {
+export default abstract class Client extends sheet_ai {
     declare tokenManager;
 
     declare domain;
@@ -915,7 +915,7 @@ export default abstract class Client extends security_and_compliance {
             },
         },
         /**
-         * 工作表
+         * 单元格
          */
         spreadsheetSheet: {
             /**
@@ -2418,7 +2418,7 @@ export default abstract class Client extends security_and_compliance {
                 },
             },
             /**
-             * 工作表
+             * 单元格
              */
             spreadsheetSheet: {
                 /**

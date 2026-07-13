@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import translation from "./translation";
+import trust_party from "./trust_party";
 
 // auto gen
-export default abstract class Client extends translation {
+export default abstract class Client extends trust_party {
     declare tokenManager;
 
     declare domain;

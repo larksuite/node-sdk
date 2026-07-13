@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import cardkit from "./cardkit";
+import collab_plugins from "./collab_plugins";
 
 // auto gen
-export default abstract class Client extends cardkit {
+export default abstract class Client extends collab_plugins {
     declare tokenManager;
 
     declare domain;

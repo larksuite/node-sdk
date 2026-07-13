@@ -49,26 +49,6 @@ export interface IHandles extends IOtherEventHandles {
         face_uploaded?: boolean;
     }) => Promise<any> | any;
     /**
-         
-         */
-    "apaas.workspace.record_change_v1"?: (data: {
-        event_id?: string;
-        token?: string;
-        create_time?: string;
-        event_type?: string;
-        tenant_key?: string;
-        ts?: string;
-        uuid?: string;
-        type?: string;
-        app_id?: string;
-        workspace?: string;
-        app?: string;
-        table?: string;
-        operator?: string;
-        before?: string;
-        after?: string;
-    }) => Promise<any> | any;
-    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/application-v6/application-app_version/events/audit document }
      *
      * 应用审核
@@ -162,7 +142,26 @@ export interface IHandles extends IOtherEventHandles {
                     pc_min_lark_version?: string;
                 };
                 web_app?: { pc_url?: string; mobile_url?: string };
-                bot?: { card_request_url?: string };
+                bot?: {
+                    card_request_url?: string;
+                    bot_menu_enable?: boolean;
+                    bot_menus?: Array<{
+                        menu_id?: string;
+                        parent_menu_id?: string;
+                        sort?: number;
+                        default_name?: string;
+                        i18n_name?: Record<string, string>;
+                        redirect_link?: {
+                            pc_url?: string;
+                            mobile_url?: string;
+                        };
+                        event_key?: string;
+                        icon_file_key?: string;
+                        ud_icon?: { token?: string; color?: string };
+                        menu_content_type?: number;
+                    }>;
+                    bot_menu_display_strategy?: number;
+                };
                 workplace_widgets?: Array<{ min_lark_version?: string }>;
                 navigate?: {
                     pc?: {
@@ -282,7 +281,26 @@ export interface IHandles extends IOtherEventHandles {
                     pc_min_lark_version?: string;
                 };
                 web_app?: { pc_url?: string; mobile_url?: string };
-                bot?: { card_request_url?: string };
+                bot?: {
+                    card_request_url?: string;
+                    bot_menu_enable?: boolean;
+                    bot_menus?: Array<{
+                        menu_id?: string;
+                        parent_menu_id?: string;
+                        sort?: number;
+                        default_name?: string;
+                        i18n_name?: Record<string, string>;
+                        redirect_link?: {
+                            pc_url?: string;
+                            mobile_url?: string;
+                        };
+                        event_key?: string;
+                        icon_file_key?: string;
+                        ud_icon?: { token?: string; color?: string };
+                        menu_content_type?: number;
+                    }>;
+                    bot_menu_display_strategy?: number;
+                };
                 workplace_widgets?: Array<{ min_lark_version?: string }>;
                 navigate?: {
                     pc?: {
@@ -525,6 +543,25 @@ export interface IHandles extends IOtherEventHandles {
             timestamp?: string;
             extra?: string;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "auth.user_access_token.revoked_v4"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        revoke_token_type: string;
+        revoke_reason: string;
+        open_id: string;
+        union_id: string;
+        user_id?: string;
     }) => Promise<any> | any;
     /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/calendar-v4/calendar-acl/events/created document }
@@ -3392,6 +3429,84 @@ export interface IHandles extends IOtherEventHandles {
         is_mentioned?: boolean;
     }) => Promise<any> | any;
     /**
+         
+         */
+    "elearning.course_registration.created_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        course_id?: string;
+        learner?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            email?: string;
+            phone?: string;
+        };
+        enroll_at?: number;
+        enroll_type?: number;
+        learning_duration?: number;
+        finished_at?: number;
+        learning_state?: number;
+        compulsory_lesson_ids?: Array<string>;
+        learned_compulsory_lesson_ids?: Array<string>;
+        optional_lesson_ids?: Array<string>;
+        learned_optional_lesson_ids?: Array<string>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "elearning.course_registration.deleted_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        course_id?: string;
+        learner?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            email?: string;
+            phone?: string;
+        };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "elearning.course_registration.updated_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        course_id?: string;
+        learner?: {
+            user_id?: { union_id?: string; user_id?: string; open_id?: string };
+            email?: string;
+            phone?: string;
+        };
+        enroll_at?: number;
+        enroll_type?: number;
+        learning_duration?: number;
+        finished_at?: number;
+        learning_state?: number;
+        compulsory_lesson_ids?: Array<string>;
+        learned_compulsory_lesson_ids?: Array<string>;
+        optional_lesson_ids?: Array<string>;
+        learned_optional_lesson_ids?: Array<string>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/helpdesk-v1/notification/events/approve document }
      *
      * 审核事件
@@ -4413,6 +4528,27 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "minutes.minute.generated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        minute_token?: string;
+        minute_source?: { source_type?: string; source_entity_id?: string };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "moments.comment.created_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -4817,6 +4953,22 @@ export interface IHandles extends IOtherEventHandles {
     /**
          
          */
+    "task.task.update_user_access_v2"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        event_types?: Array<string>;
+        task_guid?: string;
+    }) => Promise<any> | any;
+    /**
+         
+         */
     "vc.meeting.all_meeting_ended_v1"?: (data: {
         event_id?: string;
         token?: string;
@@ -5141,6 +5293,62 @@ export interface IHandles extends IOtherEventHandles {
         };
     }) => Promise<any> | any;
     /**
+         
+         */
+    "vc.meeting.participant_meeting_ended_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        meeting?: {
+            id?: string;
+            topic?: string;
+            meeting_no?: string;
+            meeting_source?: number;
+            start_time?: string;
+            end_time?: string;
+            host_user?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            owner?: {
+                id?: { union_id?: string; user_id?: string; open_id?: string };
+                user_role?: number;
+                user_type?: number;
+            };
+            calendar_event_id?: string;
+            meeting_sub_type?: number;
+            security_setting?: {
+                security_level?: number;
+                group_ids?: Array<string>;
+                user_ids?: Array<{
+                    union_id?: string;
+                    user_id?: string;
+                    open_id?: string;
+                }>;
+                room_ids?: Array<string>;
+                has_set_security_contacts_and_group?: boolean;
+            };
+            webinar_setting?: { webinar_type?: number };
+        };
+        operator?: {
+            id?: { union_id?: string; user_id?: string; open_id?: string };
+            user_role?: number;
+            user_type?: number;
+        };
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
+    }) => Promise<any> | any;
+    /**
      * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/vc-v1/meeting/events/recording_ended document }
      *
      * 录制停止
@@ -5399,6 +5607,26 @@ export interface IHandles extends IOtherEventHandles {
             user_role?: number;
             user_type?: number;
         };
+    }) => Promise<any> | any;
+    /**
+         
+         */
+    "vc.note.generated_v1"?: (data: {
+        event_id?: string;
+        token?: string;
+        create_time?: string;
+        event_type?: string;
+        tenant_key?: string;
+        ts?: string;
+        uuid?: string;
+        type?: string;
+        app_id?: string;
+        note_id?: string;
+        subscriber_ids?: Array<{
+            union_id?: string;
+            user_id?: string;
+            open_id?: string;
+        }>;
     }) => Promise<any> | any;
     /**
          

@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import optical_char_recognition from "./optical_char_recognition";
+import partner_ai from "./partner_ai";
 
 // auto gen
-export default abstract class Client extends optical_char_recognition {
+export default abstract class Client extends partner_ai {
     declare tokenManager;
 
     declare domain;

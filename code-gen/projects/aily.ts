@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import admin from "./admin";
+import aily_rag from "./aily_rag";
 
 // auto gen
-export default abstract class Client extends admin {
+export default abstract class Client extends aily_rag {
     declare tokenManager;
 
     declare domain;
@@ -33,6 +33,465 @@ export default abstract class Client extends admin {
          */
     aily = {
         v1: {
+            /**
+             * agent.agent_artifact
+             */
+            agentAgentArtifact: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_artifact&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=aily&resource=agent.agent_artifact&version=v1 document }
+                 *
+                 * 获取Agent产物
+                 */
+                get: async (
+                    payload?: {
+                        path: { agent_id: string; agent_artifact_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    agent_artifact?: {
+                                        artifact_id: string;
+                                        name: string;
+                                        url: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/artifacts/:agent_artifact_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent.agent_attachment
+             */
+            agentAgentAttachment: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_attachment&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=aily&resource=agent.agent_attachment&version=v1 document }
+                 *
+                 * 上传文件
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            file?: Buffer | fs.ReadStream;
+                            type: string;
+                            doc_url?: string;
+                        };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { agent_attachment_id: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/attachments`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * agent.agent_chat
+             */
+            agentAgentChat: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=aily&resource=agent.agent_chat&version=v1 document }
+                 *
+                 * 发起对话
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            user_message: {
+                                content: Array<{ type: string; text: string }>;
+                                agent_attachment_ids?: Array<string>;
+                            };
+                            stream?: boolean;
+                            session_id?: string;
+                        };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    agent_chat_id: string;
+                                    session_id?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/chats`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=aily&resource=agent.agent_chat&version=v1 document }
+                 *
+                 * 获取对话内容
+                 */
+                get: async (
+                    payload?: {
+                        path: { agent_id: string; agent_chat_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    content: Array<{
+                                        type?: string;
+                                        text?: string;
+                                        agent_artifact_id?: string;
+                                        artifact_type?: string;
+                                    }>;
+                                    finish_reason?: string;
+                                    status: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/chats/:agent_chat_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent.agent_chat_session
+             */
+            agentAgentChatSession: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat_session&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=aily&resource=agent.agent_chat_session&version=v1 document }
+                 *
+                 * 创建智能体会话
+                 */
+                create: async (
+                    payload?: {
+                        data?: { name?: string };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    session_id?: string;
+                                    name?: string;
+                                    created_at?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/sessions`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat_session&apiName=delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=delete&project=aily&resource=agent.agent_chat_session&version=v1 document }
+                 *
+                 * 删除会话
+                 */
+                delete: async (
+                    payload?: {
+                        path: {
+                            agent_id: string;
+                            agent_chat_session_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/sessions/:agent_chat_session_id`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat_session&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=aily&resource=agent.agent_chat_session&version=v1 document }
+                 *
+                 * 获取指定会话信息
+                 */
+                get: async (
+                    payload?: {
+                        path: {
+                            agent_id: string;
+                            agent_chat_session_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    session_id?: string;
+                                    name?: string;
+                                    status?: string;
+                                    created_at?: string;
+                                    last_chat_at?: string;
+                                    turns?: {
+                                        agent_chat_id?: string;
+                                        created_at?: number;
+                                        status?: string;
+                                    };
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/sessions/:agent_chat_session_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_chat_session&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=aily&resource=agent.agent_chat_session&version=v1 document }
+                 *
+                 * 会话列表
+                 */
+                list: async (
+                    payload?: {
+                        params?: { page_size?: number; page_token?: string };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    sessions?: Array<{
+                                        session_id: string;
+                                        name?: string;
+                                        status?: string;
+                                        created_at?: number;
+                                        last_chat_at?: number;
+                                    }>;
+                                    has_more?: boolean;
+                                    next_page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/sessions`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * agent.agent_visibility
+             */
+            agentAgentVisibility: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=agent.agent_visibility&apiName=check&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=check&project=aily&resource=agent.agent_visibility&version=v1 document }
+                 *
+                 * 校验当前用户是否可访问Agent
+                 */
+                check: async (
+                    payload?: {
+                        data: { channel_type: string };
+                        path: { agent_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { visibility?: boolean };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/agents/:agent_id/agent_visibility/check`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * aily_session.aily_message
              */
@@ -2409,6 +2868,186 @@ export default abstract class Client extends admin {
                                 path
                             ),
                             method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * tenant.app_stat
+             */
+            tenantAppStat: {
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            start_at: string;
+                            end_at: string;
+                            filter_type: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/aily/v1/app_stats`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        id: string;
+                                                        name?: string;
+                                                        avg_daily_active_user_num?: number;
+                                                        avg_daily_run_num?: number;
+                                                        avg_daily_credit_usage?: number;
+                                                        total_credit_usage?: number;
+                                                        owner?: {
+                                                            id: string;
+                                                            name?: string;
+                                                            tenant_id?: string;
+                                                            lark_user_id?: string;
+                                                            open_user_id?: string;
+                                                            open_id?: string;
+                                                        };
+                                                        app_created_at?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=aily&resource=tenant.app_stat&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=aily&resource=tenant.app_stat&version=v1 document }
+                 *
+                 * ## 功能介绍获取租户下应用的统计数据列表，支持按时间范围筛选，包含日活用户数、运行次数、额度使用等核心指标，用于租户级应用运营分析与成本监控场景。
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            start_at: string;
+                            end_at: string;
+                            filter_type: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id: string;
+                                        name?: string;
+                                        avg_daily_active_user_num?: number;
+                                        avg_daily_run_num?: number;
+                                        avg_daily_credit_usage?: number;
+                                        total_credit_usage?: number;
+                                        owner?: {
+                                            id: string;
+                                            name?: string;
+                                            tenant_id?: string;
+                                            lark_user_id?: string;
+                                            open_user_id?: string;
+                                            open_id?: string;
+                                        };
+                                        app_created_at?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/aily/v1/app_stats`,
+                                path
+                            ),
+                            method: "GET",
                             data,
                             params,
                             headers,

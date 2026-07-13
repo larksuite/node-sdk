@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import approval from "./approval";
+import attendance_machine from "./attendance_machine";
 
 // auto gen
-export default abstract class Client extends approval {
+export default abstract class Client extends attendance_machine {
     declare tokenManager;
 
     declare domain;

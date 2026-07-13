@@ -2212,6 +2212,55 @@ export default abstract class Client extends aily {
                 },
             },
             /**
+             * tenant_app_metrics
+             */
+            tenantAppMetrics: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=apaas&resource=tenant_app_metrics&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=query&project=apaas&resource=tenant_app_metrics&version=v1 document }
+                 */
+                query: async (
+                    payload?: {
+                        data: { namespaces: Array<string>; date: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    metrics?: Array<{
+                                        namespace?: string;
+                                        data?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/apaas/v1/tenant_app_metrics/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * user_task
              */
             userTask: {

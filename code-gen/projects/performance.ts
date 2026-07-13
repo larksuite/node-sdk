@@ -29,9 +29,452 @@ export default abstract class Client extends people_bytedance {
     ): Promise<Required<IPayload>>;
 
     /**
-         
-         */
+     * 绩效
+     */
     performance = {
+        v1: {
+            /**
+             * 绩效
+             */
+            reviewData: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=review_data&apiName=query&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/performance-v1/review_data/query document }
+                 *
+                 * 获取绩效结果
+                 *
+                 * 获取绩效结果
+                 */
+                query: async (
+                    payload?: {
+                        data: {
+                            start_time: string;
+                            end_time: string;
+                            stage_types: Array<
+                                | "leader_review"
+                                | "communication_and_open_result"
+                                | "view_result"
+                            >;
+                            stage_progress?: Array<number>;
+                            semester_id_list?: Array<string>;
+                            reviewee_user_id_list: Array<string>;
+                            updated_later_than?: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    semesters?: Array<{
+                                        id?: string;
+                                        year?: number;
+                                        type_group?: string;
+                                        type?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        progress?: "initiating" | "enabled";
+                                        start_time?: string;
+                                        end_time?: string;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        create_user_id?: string;
+                                        modify_user_id?: string;
+                                    }>;
+                                    activities?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        semester_id?: string;
+                                    }>;
+                                    indicators?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        options?: Array<{
+                                            id?: string;
+                                            name?: {
+                                                "zh-CN"?: string;
+                                                "en-US"?: string;
+                                            };
+                                            label?: string;
+                                        }>;
+                                    }>;
+                                    templates?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        stage?: string;
+                                    }>;
+                                    units?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                    }>;
+                                    fields?: Array<{
+                                        id?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        indicator_id?: string;
+                                        parent_field_id?: string;
+                                    }>;
+                                    datas?: Array<{
+                                        user_id?: {
+                                            open_id?: string;
+                                            user_id?: string;
+                                        };
+                                        semester_id?: string;
+                                        activity_id?: string;
+                                        stages?: Array<{
+                                            stage_type?: string;
+                                            progress?: number;
+                                            data?: Array<{
+                                                template_id?: string;
+                                                unit_id?: string;
+                                                field_id?: string;
+                                                reviewer_user_id?: {
+                                                    open_id?: string;
+                                                    user_id?: string;
+                                                };
+                                                submit_time?: string;
+                                                indicator_id?: string;
+                                                option_id?: string;
+                                                score?: string;
+                                                text?: string;
+                                                perf_coefficient_result?: string;
+                                                richtext?: string;
+                                            }>;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v1/review_datas/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * semester
+             */
+            semester: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=semester&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=performance&resource=semester&version=v1 document }
+                 */
+                list: async (
+                    payload?: {
+                        params?: {
+                            start_time?: string;
+                            end_time?: string;
+                            year?: number;
+                            type_group?:
+                                | "Annual"
+                                | "Semi-annual"
+                                | "Quarter"
+                                | "Bimonth"
+                                | "Month"
+                                | "Non-standard";
+                            type?:
+                                | "Annual"
+                                | "H1"
+                                | "H2"
+                                | "Q1"
+                                | "Q2"
+                                | "Q3"
+                                | "Q4"
+                                | "January-February"
+                                | "March-April"
+                                | "May-June"
+                                | "July-August"
+                                | "September-October"
+                                | "November-December"
+                                | "January"
+                                | "February"
+                                | "March"
+                                | "April"
+                                | "May"
+                                | "June"
+                                | "July"
+                                | "August"
+                                | "September"
+                                | "October"
+                                | "November"
+                                | "December"
+                                | "Custom";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        id?: string;
+                                        year?: number;
+                                        type_group?: string;
+                                        type?: string;
+                                        name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        progress?: "initiating" | "enabled";
+                                        start_time?: string;
+                                        end_time?: string;
+                                        create_time?: string;
+                                        modify_time?: string;
+                                        create_user_id?: string;
+                                        modify_user_id?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v1/semesters`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * stage_task
+             */
+            stageTask: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=stage_task&apiName=find_by_page&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=find_by_page&project=performance&resource=stage_task&version=v1 document }
+                 */
+                findByPage: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            task_option_lists?: Array<number>;
+                            after_time?: string;
+                            before_time?: string;
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    base?: {
+                                        semester_id?: string;
+                                        semester_name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        start_time?: string;
+                                        end_time?: string;
+                                    };
+                                    items?: Array<{
+                                        user_id?: string;
+                                        stage_num_lists?: Array<{
+                                            task_option_id?: number;
+                                            stage_num?: number;
+                                        }>;
+                                        stage_task_info_lists?: Array<{
+                                            stage_id?: string;
+                                            name?: {
+                                                "zh-CN"?: string;
+                                                "en-US"?: string;
+                                            };
+                                            deadline?: string;
+                                            need_todo_count?: number;
+                                            jump_url?: string;
+                                            stage_task_status?:
+                                                | "need_todo"
+                                                | "overdue"
+                                                | "all_done"
+                                                | "stage_pause";
+                                            task_option_id?: number;
+                                            finished_count?: number;
+                                        }>;
+                                    }>;
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v1/stage_tasks/find_by_page`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=performance&resource=stage_task&apiName=find_by_user_list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=find_by_user_list&project=performance&resource=stage_task&version=v1 document }
+                 */
+                findByUserList: async (
+                    payload?: {
+                        data: {
+                            semester_id: string;
+                            user_id_lists: Array<string>;
+                            task_option_lists?: Array<number>;
+                            after_time?: string;
+                            before_time?: string;
+                        };
+                        params?: {
+                            user_id_type?:
+                                | "user_id"
+                                | "union_id"
+                                | "open_id"
+                                | "people_admin_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    base?: {
+                                        semester_id?: string;
+                                        semester_name?: {
+                                            "zh-CN"?: string;
+                                            "en-US"?: string;
+                                        };
+                                        start_time?: string;
+                                        end_time?: string;
+                                    };
+                                    items?: Array<{
+                                        user_id?: string;
+                                        stage_num_lists?: Array<{
+                                            task_option_id?: number;
+                                            stage_num?: number;
+                                        }>;
+                                        stage_task_info_lists?: Array<{
+                                            stage_id?: string;
+                                            name?: {
+                                                "zh-CN"?: string;
+                                                "en-US"?: string;
+                                            };
+                                            deadline?: string;
+                                            need_todo_count?: number;
+                                            jump_url?: string;
+                                            stage_task_status?:
+                                                | "need_todo"
+                                                | "overdue"
+                                                | "all_done"
+                                                | "stage_pause";
+                                            task_option_id?: number;
+                                            finished_count?: number;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/performance/v1/stage_tasks/find_by_user_list`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
         v2: {
             /**
              * activity
@@ -127,7 +570,7 @@ export default abstract class Client extends people_bytedance {
                     payload?: {
                         data: {
                             semester_id: string;
-                            additional_informations?: Array<{
+                            additional_informations: Array<{
                                 item_id?: string;
                                 external_id?: string;
                                 reviewee_user_id: string;

@@ -636,6 +636,7 @@ export default abstract class Client extends human_authentication {
                         sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
                         page_token?: string;
                         page_size?: number;
+                        types?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -711,6 +712,14 @@ export default abstract class Client extends human_authentication {
                                                         | "normal"
                                                         | "dissolved"
                                                         | "dissolved_save";
+                                                    chat_mode?:
+                                                        | "group"
+                                                        | "topic"
+                                                        | "p2p";
+                                                    p2p_target_type?:
+                                                        | "user"
+                                                        | "bot";
+                                                    p2p_target_id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -750,6 +759,7 @@ export default abstract class Client extends human_authentication {
                         sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
                         page_token?: string;
                         page_size?: number;
+                        types?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -778,6 +788,9 @@ export default abstract class Client extends human_authentication {
                                         | "normal"
                                         | "dissolved"
                                         | "dissolved_save";
+                                    chat_mode?: "group" | "topic" | "p2p";
+                                    p2p_target_type?: "user" | "bot";
+                                    p2p_target_id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -882,6 +895,14 @@ export default abstract class Client extends human_authentication {
                                                         | "normal"
                                                         | "dissolved"
                                                         | "dissolved_save";
+                                                    chat_mode?:
+                                                        | "group"
+                                                        | "topic"
+                                                        | "p2p";
+                                                    p2p_target_type?:
+                                                        | "user"
+                                                        | "bot";
+                                                    p2p_target_id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -949,6 +970,9 @@ export default abstract class Client extends human_authentication {
                                         | "normal"
                                         | "dissolved"
                                         | "dissolved_save";
+                                    chat_mode?: "group" | "topic" | "p2p";
+                                    p2p_target_type?: "user" | "bot";
+                                    p2p_target_id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -3075,6 +3099,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3195,6 +3225,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3243,6 +3279,7 @@ export default abstract class Client extends human_authentication {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         card_msg_content_type?: string;
+                        with_sender_name?: boolean;
                     };
                     path: { message_id: string };
                 },
@@ -3275,6 +3312,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3320,6 +3363,7 @@ export default abstract class Client extends human_authentication {
                         page_token?: string;
                         card_msg_content_type?: string;
                         only_thread_root_messages?: boolean;
+                        with_sender_name?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -3400,6 +3444,12 @@ export default abstract class Client extends human_authentication {
                                                         sender_type: string;
                                                         tenant_key?: string;
                                                         sender_name?: string;
+                                                        open_bot_id?: string;
+                                                        sender_i18n_names?: {
+                                                            zh_cn?: string;
+                                                            en_us?: string;
+                                                            ja_jp?: string;
+                                                        };
                                                     };
                                                     body?: { content: string };
                                                     mentions?: Array<{
@@ -3457,6 +3507,7 @@ export default abstract class Client extends human_authentication {
                         page_token?: string;
                         card_msg_content_type?: string;
                         only_thread_root_messages?: boolean;
+                        with_sender_name?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -3490,6 +3541,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3576,6 +3633,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -3814,6 +3877,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -3832,6 +3901,269 @@ export default abstract class Client extends human_authentication {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            searchWithIterator: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        filter?: {
+                            from_ids?: Array<string>;
+                            chat_ids?: Array<string>;
+                            time_range?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                            include_attachment_types?: Array<
+                                "image" | "video" | "file" | "link"
+                            >;
+                            from_types?: Array<"user" | "bot">;
+                            at_chatter_ids?: Array<string>;
+                            chat_type?: "group" | "p2p";
+                            is_at_me?: boolean;
+                            exclude_from_types?: Array<"user" | "bot">;
+                        };
+                    };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/search`,
+                                path
+                            ),
+                            method: "POST",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                items: Array<{
+                                                    id: string;
+                                                    display_info?: string;
+                                                    meta_data?: {
+                                                        message_id: string;
+                                                        type?:
+                                                            | "unknown"
+                                                            | "post"
+                                                            | "file"
+                                                            | "text"
+                                                            | "image"
+                                                            | "system"
+                                                            | "audio"
+                                                            | "email"
+                                                            | "share_group_chat"
+                                                            | "sticker"
+                                                            | "merge_forward"
+                                                            | "calendar"
+                                                            | "cloud_file"
+                                                            | "card"
+                                                            | "media"
+                                                            | "share_calendar_event"
+                                                            | "hongbao"
+                                                            | "general_calendar"
+                                                            | "video_chat"
+                                                            | "location"
+                                                            | "commercialized_hongbao"
+                                                            | "share_user_card"
+                                                            | "todo"
+                                                            | "folder"
+                                                            | "diagnose"
+                                                            | "vote"
+                                                            | "link";
+                                                        create_time?: string;
+                                                        update_time?: string;
+                                                        position?: number;
+                                                        chat_id?: string;
+                                                        from_id?: string;
+                                                        thread_id?: string;
+                                                        thread_position?: number;
+                                                        is_p2p_chat?: boolean;
+                                                    };
+                                                }>;
+                                                total?: number;
+                                                has_more: boolean;
+                                                page_token?: string;
+                                                notice?: string;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+             *
+             * 搜索消息
+             */
+            search: async (
+                payload?: {
+                    data?: {
+                        query?: string;
+                        filter?: {
+                            from_ids?: Array<string>;
+                            chat_ids?: Array<string>;
+                            time_range?: {
+                                start_time?: string;
+                                end_time?: string;
+                            };
+                            include_attachment_types?: Array<
+                                "image" | "video" | "file" | "link"
+                            >;
+                            from_types?: Array<"user" | "bot">;
+                            at_chatter_ids?: Array<string>;
+                            chat_type?: "group" | "p2p";
+                            is_at_me?: boolean;
+                            exclude_from_types?: Array<"user" | "bot">;
+                        };
+                    };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                items: Array<{
+                                    id: string;
+                                    display_info?: string;
+                                    meta_data?: {
+                                        message_id: string;
+                                        type?:
+                                            | "unknown"
+                                            | "post"
+                                            | "file"
+                                            | "text"
+                                            | "image"
+                                            | "system"
+                                            | "audio"
+                                            | "email"
+                                            | "share_group_chat"
+                                            | "sticker"
+                                            | "merge_forward"
+                                            | "calendar"
+                                            | "cloud_file"
+                                            | "card"
+                                            | "media"
+                                            | "share_calendar_event"
+                                            | "hongbao"
+                                            | "general_calendar"
+                                            | "video_chat"
+                                            | "location"
+                                            | "commercialized_hongbao"
+                                            | "share_user_card"
+                                            | "todo"
+                                            | "folder"
+                                            | "diagnose"
+                                            | "vote"
+                                            | "link";
+                                        create_time?: string;
+                                        update_time?: string;
+                                        position?: number;
+                                        chat_id?: string;
+                                        from_id?: string;
+                                        thread_id?: string;
+                                        thread_position?: number;
+                                        is_p2p_chat?: boolean;
+                                    };
+                                }>;
+                                total?: number;
+                                has_more: boolean;
+                                page_token?: string;
+                                notice?: string;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/messages/search`,
                             path
                         ),
                         method: "POST",
@@ -3886,6 +4218,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4138,6 +4476,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4230,6 +4574,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4318,6 +4668,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -4786,6 +5142,150 @@ export default abstract class Client extends human_authentication {
             },
         },
         /**
+         * message_cot
+         */
+        messageCot: {
+            /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+标记指定智能对话思考过程为完成状态，同步完成原因，用于终止对话机器人的思考流程并反馈处理结果，适用于智能客服、自动问答等场景。
+
+### 注意事项
+- 思考过程标记完成后将无法继续修改或恢复，需确保流程已真正结束。
+- 若传入`error`或`timeout`原因，系统将记录异常日志用于问题排查。
+         */
+            complete: async (
+                payload?: {
+                    params: { message_id: string; reason?: string };
+                    path: { cot_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+生成并发送带有智能思考过程的消息内容，支持向单聊或群组发送结构化消息，适用于需要展示AI推导逻辑的对话场景。
+
+### 注意事项
+- 消息内容需符合平台内容安全规范，违规内容将被拦截。
+- 思考过程仅在特定客户端版本可见，旧版本客户端将仅展示最终消息内容。
+         */
+            create: async (
+                payload?: {
+                    data: { receive_id: string; origin_message_id?: string };
+                    params: { receive_id_type: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { cot_id?: string; message_id?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+更新指定思考过程关联的消息事件列表，支持添加或替换AG2UI交互事件，用于同步AI助手与用户端的对话交互轨迹，确保思考过程与实际展示内容一致。
+
+### 前提条件
+- 需拥有目标消息及思考过程的编辑权限
+- 待更新的思考过程需处于可编辑状态
+
+### 注意事项
+- 事件列表将完全覆盖原有内容，增量更新需先获取当前事件列表后合并再提交
+- 时间戳需严格按照事件发生顺序填写，否则会导致交互轨迹展示异常
+- 事件内容需符合JSON格式规范，否则会导致解析失败
+         */
+            update: async (
+                payload?: {
+                    data: {
+                        events: Array<{
+                            event_type: string;
+                            content: string;
+                            timestamp: string;
+                        }>;
+                        message_id: string;
+                        cot_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/im/v1/message_cot`,
+                            path
+                        ),
+                        method: "PUT",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 消息 - Pin
          */
         pin: {
@@ -5092,6 +5592,12 @@ export default abstract class Client extends human_authentication {
                                     sender_type: string;
                                     tenant_key?: string;
                                     sender_name?: string;
+                                    open_bot_id?: string;
+                                    sender_i18n_names?: {
+                                        zh_cn?: string;
+                                        en_us?: string;
+                                        ja_jp?: string;
+                                    };
                                 };
                                 body?: { content: string };
                                 mentions?: Array<{
@@ -5745,6 +6251,7 @@ export default abstract class Client extends human_authentication {
                             sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
                             page_token?: string;
                             page_size?: number;
+                            types?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5822,6 +6329,14 @@ export default abstract class Client extends human_authentication {
                                                             | "normal"
                                                             | "dissolved"
                                                             | "dissolved_save";
+                                                        chat_mode?:
+                                                            | "group"
+                                                            | "topic"
+                                                            | "p2p";
+                                                        p2p_target_type?:
+                                                            | "user"
+                                                            | "bot";
+                                                        p2p_target_id?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -5861,6 +6376,7 @@ export default abstract class Client extends human_authentication {
                             sort_type?: "ByCreateTimeAsc" | "ByActiveTimeDesc";
                             page_token?: string;
                             page_size?: number;
+                            types?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -5889,6 +6405,9 @@ export default abstract class Client extends human_authentication {
                                             | "normal"
                                             | "dissolved"
                                             | "dissolved_save";
+                                        chat_mode?: "group" | "topic" | "p2p";
+                                        p2p_target_type?: "user" | "bot";
+                                        p2p_target_id?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -5995,6 +6514,14 @@ export default abstract class Client extends human_authentication {
                                                             | "normal"
                                                             | "dissolved"
                                                             | "dissolved_save";
+                                                        chat_mode?:
+                                                            | "group"
+                                                            | "topic"
+                                                            | "p2p";
+                                                        p2p_target_type?:
+                                                            | "user"
+                                                            | "bot";
+                                                        p2p_target_id?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -6062,6 +6589,9 @@ export default abstract class Client extends human_authentication {
                                             | "normal"
                                             | "dissolved"
                                             | "dissolved_save";
+                                        chat_mode?: "group" | "topic" | "p2p";
+                                        p2p_target_type?: "user" | "bot";
+                                        p2p_target_id?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -8211,6 +8741,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8334,6 +8870,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8382,6 +8924,7 @@ export default abstract class Client extends human_authentication {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             card_msg_content_type?: string;
+                            with_sender_name?: boolean;
                         };
                         path: { message_id: string };
                     },
@@ -8414,6 +8957,12 @@ export default abstract class Client extends human_authentication {
                                             sender_type: string;
                                             tenant_key?: string;
                                             sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8459,6 +9008,7 @@ export default abstract class Client extends human_authentication {
                             page_token?: string;
                             card_msg_content_type?: string;
                             only_thread_root_messages?: boolean;
+                            with_sender_name?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -8541,6 +9091,12 @@ export default abstract class Client extends human_authentication {
                                                             sender_type: string;
                                                             tenant_key?: string;
                                                             sender_name?: string;
+                                                            open_bot_id?: string;
+                                                            sender_i18n_names?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                                ja_jp?: string;
+                                                            };
                                                         };
                                                         body?: {
                                                             content: string;
@@ -8600,6 +9156,7 @@ export default abstract class Client extends human_authentication {
                             page_token?: string;
                             card_msg_content_type?: string;
                             only_thread_root_messages?: boolean;
+                            with_sender_name?: boolean;
                         };
                     },
                     options?: IRequestOptions
@@ -8633,6 +9190,12 @@ export default abstract class Client extends human_authentication {
                                             sender_type: string;
                                             tenant_key?: string;
                                             sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8719,6 +9282,12 @@ export default abstract class Client extends human_authentication {
                                             sender_type: string;
                                             tenant_key?: string;
                                             sender_name?: string;
+                                            open_bot_id?: string;
+                                            sender_i18n_names?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                                ja_jp?: string;
+                                            };
                                         };
                                         body?: { content: string };
                                         mentions?: Array<{
@@ -8963,6 +9532,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -8981,6 +9556,271 @@ export default abstract class Client extends human_authentication {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/im/v1/messages/:message_id/reply`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                from_ids?: Array<string>;
+                                chat_ids?: Array<string>;
+                                time_range?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                include_attachment_types?: Array<
+                                    "image" | "video" | "file" | "link"
+                                >;
+                                from_types?: Array<"user" | "bot">;
+                                at_chatter_ids?: Array<string>;
+                                chat_type?: "group" | "p2p";
+                                is_at_me?: boolean;
+                                exclude_from_types?: Array<"user" | "bot">;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v1/messages/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            message_id: string;
+                                                            type?:
+                                                                | "unknown"
+                                                                | "post"
+                                                                | "file"
+                                                                | "text"
+                                                                | "image"
+                                                                | "system"
+                                                                | "audio"
+                                                                | "email"
+                                                                | "share_group_chat"
+                                                                | "sticker"
+                                                                | "merge_forward"
+                                                                | "calendar"
+                                                                | "cloud_file"
+                                                                | "card"
+                                                                | "media"
+                                                                | "share_calendar_event"
+                                                                | "hongbao"
+                                                                | "general_calendar"
+                                                                | "video_chat"
+                                                                | "location"
+                                                                | "commercialized_hongbao"
+                                                                | "share_user_card"
+                                                                | "todo"
+                                                                | "folder"
+                                                                | "diagnose"
+                                                                | "vote"
+                                                                | "link";
+                                                            create_time?: string;
+                                                            update_time?: string;
+                                                            position?: number;
+                                                            chat_id?: string;
+                                                            from_id?: string;
+                                                            thread_id?: string;
+                                                            thread_position?: number;
+                                                            is_p2p_chat?: boolean;
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=message&apiName=search&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=message&version=v1 document }
+                 *
+                 * 搜索消息
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                from_ids?: Array<string>;
+                                chat_ids?: Array<string>;
+                                time_range?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                include_attachment_types?: Array<
+                                    "image" | "video" | "file" | "link"
+                                >;
+                                from_types?: Array<"user" | "bot">;
+                                at_chatter_ids?: Array<string>;
+                                chat_type?: "group" | "p2p";
+                                is_at_me?: boolean;
+                                exclude_from_types?: Array<"user" | "bot">;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            message_id: string;
+                                            type?:
+                                                | "unknown"
+                                                | "post"
+                                                | "file"
+                                                | "text"
+                                                | "image"
+                                                | "system"
+                                                | "audio"
+                                                | "email"
+                                                | "share_group_chat"
+                                                | "sticker"
+                                                | "merge_forward"
+                                                | "calendar"
+                                                | "cloud_file"
+                                                | "card"
+                                                | "media"
+                                                | "share_calendar_event"
+                                                | "hongbao"
+                                                | "general_calendar"
+                                                | "video_chat"
+                                                | "location"
+                                                | "commercialized_hongbao"
+                                                | "share_user_card"
+                                                | "todo"
+                                                | "folder"
+                                                | "diagnose"
+                                                | "vote"
+                                                | "link";
+                                            create_time?: string;
+                                            update_time?: string;
+                                            position?: number;
+                                            chat_id?: string;
+                                            from_id?: string;
+                                            thread_id?: string;
+                                            thread_position?: number;
+                                            is_p2p_chat?: boolean;
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/messages/search`,
                                 path
                             ),
                             method: "POST",
@@ -9035,6 +9875,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9287,6 +10133,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9379,6 +10231,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9467,6 +10325,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -9937,6 +10801,159 @@ export default abstract class Client extends human_authentication {
                 },
             },
             /**
+             * message_cot
+             */
+            messageCot: {
+                /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=complete&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=complete&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+标记指定智能对话思考过程为完成状态，同步完成原因，用于终止对话机器人的思考流程并反馈处理结果，适用于智能客服、自动问答等场景。
+
+### 注意事项
+- 思考过程标记完成后将无法继续修改或恢复，需确保流程已真正结束。
+- 若传入`error`或`timeout`原因，系统将记录异常日志用于问题排查。
+         */
+                complete: async (
+                    payload?: {
+                        params: { message_id: string; reason?: string };
+                        path: { cot_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot/complete/:cot_id`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=create&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+生成并发送带有智能思考过程的消息内容，支持向单聊或群组发送结构化消息，适用于需要展示AI推导逻辑的对话场景。
+
+### 注意事项
+- 消息内容需符合平台内容安全规范，违规内容将被拦截。
+- 思考过程仅在特定客户端版本可见，旧版本客户端将仅展示最终消息内容。
+         */
+                create: async (
+                    payload?: {
+                        data: {
+                            receive_id: string;
+                            origin_message_id?: string;
+                        };
+                        params: { receive_id_type: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { cot_id?: string; message_id?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+         * {@link https://open.feishu.cn/api-explorer?project=im&resource=message_cot&apiName=update&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=update&project=im&resource=message_cot&version=v1 document } 
+ * 
+* ## 功能介绍
+更新指定思考过程关联的消息事件列表，支持添加或替换AG2UI交互事件，用于同步AI助手与用户端的对话交互轨迹，确保思考过程与实际展示内容一致。
+
+### 前提条件
+- 需拥有目标消息及思考过程的编辑权限
+- 待更新的思考过程需处于可编辑状态
+
+### 注意事项
+- 事件列表将完全覆盖原有内容，增量更新需先获取当前事件列表后合并再提交
+- 时间戳需严格按照事件发生顺序填写，否则会导致交互轨迹展示异常
+- 事件内容需符合JSON格式规范，否则会导致解析失败
+         */
+                update: async (
+                    payload?: {
+                        data: {
+                            events: Array<{
+                                event_type: string;
+                                content: string;
+                                timestamp: string;
+                            }>;
+                            message_id: string;
+                            cot_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v1/message_cot`,
+                                path
+                            ),
+                            method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 消息 - Pin
              */
             pin: {
@@ -10248,6 +11265,12 @@ export default abstract class Client extends human_authentication {
                                         sender_type: string;
                                         tenant_key?: string;
                                         sender_name?: string;
+                                        open_bot_id?: string;
+                                        sender_i18n_names?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                            ja_jp?: string;
+                                        };
                                     };
                                     body?: { content: string };
                                     mentions?: Array<{
@@ -10668,6 +11691,232 @@ export default abstract class Client extends human_authentication {
                                 path
                             ),
                             method: "PUT",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * chat
+             */
+            chat: {
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                search_types?: Array<
+                                    | "private"
+                                    | "external"
+                                    | "public_joined"
+                                    | "public_not_joined"
+                                >;
+                                member_ids?: Array<string>;
+                                is_manager?: boolean;
+                                disable_search_by_user?: boolean;
+                                chat_modes?: Array<"default" | "thread">;
+                            };
+                            sorter?:
+                                | "create_time_desc"
+                                | "update_time_desc"
+                                | "member_count_desc";
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/im/v2/chats/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            chat_id: string;
+                                                            create_time?: string;
+                                                            update_time?: string;
+                                                            external?: boolean;
+                                                            chat_mode?: string;
+                                                            description?: string;
+                                                            avatar?: string;
+                                                            name?: string;
+                                                            owner_id?: string;
+                                                            owner_id_type?: string;
+                                                            tenant_key?: string;
+                                                            chat_status?:
+                                                                | "normal"
+                                                                | "dissolved"
+                                                                | "dissolved_save";
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=im&resource=chat&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=im&resource=chat&version=v2 document }
+                 *
+                 * 搜索群组
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                search_types?: Array<
+                                    | "private"
+                                    | "external"
+                                    | "public_joined"
+                                    | "public_not_joined"
+                                >;
+                                member_ids?: Array<string>;
+                                is_manager?: boolean;
+                                disable_search_by_user?: boolean;
+                                chat_modes?: Array<"default" | "thread">;
+                            };
+                            sorter?:
+                                | "create_time_desc"
+                                | "update_time_desc"
+                                | "member_count_desc";
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            chat_id: string;
+                                            create_time?: string;
+                                            update_time?: string;
+                                            external?: boolean;
+                                            chat_mode?: string;
+                                            description?: string;
+                                            avatar?: string;
+                                            name?: string;
+                                            owner_id?: string;
+                                            owner_id_type?: string;
+                                            tenant_key?: string;
+                                            chat_status?:
+                                                | "normal"
+                                                | "dissolved"
+                                                | "dissolved_save";
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/im/v2/chats/search`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

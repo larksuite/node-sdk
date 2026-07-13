@@ -33,7 +33,7 @@ export default abstract class Client extends application {
      */
     approval = {
         /**
-         * 原生审批定义
+         * 事件
          */
         approval: {
             /**
@@ -1488,6 +1488,47 @@ export default abstract class Client extends application {
          */
         instance: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=add_cc&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_cc&project=approval&resource=instance&version=v4 document }
+             *
+             * 抄送审批实例
+             */
+            addCc: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        cc_user_ids: Array<string>;
+                        comment?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances/add_cc`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=add_sign&version=v4 click to debug }
              *
              * {@link https://open.feishu.cn/document/ukTMukTMukTM/ukTM5UjL5ETO14SOxkTN/approval-task-addsign document }
@@ -1719,6 +1760,161 @@ export default abstract class Client extends application {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=detail&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=detail&project=approval&resource=instance&version=v4 document }
+             *
+             * 查看审批实例详情
+             */
+            detail: async (
+                payload?: {
+                    params: {
+                        instance_code: string;
+                        locale?:
+                            | "zh-CN"
+                            | "en-US"
+                            | "ja-JP"
+                            | "zh-HK"
+                            | "zh-TW"
+                            | "de-DE"
+                            | "es-ES"
+                            | "fr-FR"
+                            | "id-ID"
+                            | "it-IT"
+                            | "ko-KR"
+                            | "pt-BR"
+                            | "th-TH"
+                            | "vi-VN"
+                            | "ms-MY"
+                            | "ru-RU";
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                definition_name: string;
+                                start_time?: string;
+                                end_time: string;
+                                user_id: string;
+                                serial_number: string;
+                                department_id: string;
+                                status:
+                                    | "PENDING"
+                                    | "APPROVED"
+                                    | "REJECTED"
+                                    | "CANCELED"
+                                    | "DELETED";
+                                form: string;
+                                tasks: Array<{
+                                    id: string;
+                                    user_id: string;
+                                    status:
+                                        | "PENDING"
+                                        | "APPROVED"
+                                        | "REJECTED"
+                                        | "TRANSFERRED"
+                                        | "DONE";
+                                    node_id?: string;
+                                    node_name?: string;
+                                    type?:
+                                        | "AND"
+                                        | "OR"
+                                        | "AUTO_PASS"
+                                        | "AUTO_REJECT"
+                                        | "SEQUENTIAL";
+                                    start_time: string;
+                                    end_time?: string;
+                                }>;
+                                comments: Array<{
+                                    id: string;
+                                    user_id: string;
+                                    comment: string;
+                                    create_time: string;
+                                    files?: Array<{
+                                        url?: string;
+                                        file_size?: number;
+                                        title?: string;
+                                        type?: string;
+                                    }>;
+                                }>;
+                                operation_records: Array<{
+                                    type:
+                                        | "START"
+                                        | "PASS"
+                                        | "REJECT"
+                                        | "AUTO_PASS"
+                                        | "AUTO_REJECT"
+                                        | "REMOVE_REPEAT"
+                                        | "TRANSFER"
+                                        | "ADD_APPROVER_BEFORE"
+                                        | "ADD_APPROVER"
+                                        | "ADD_APPROVER_AFTER"
+                                        | "DELETE_APPROVER"
+                                        | "ROLLBACK_SELECTED"
+                                        | "ROLLBACK"
+                                        | "CANCEL"
+                                        | "DELETE"
+                                        | "CC";
+                                    create_time: string;
+                                    user_id?: string;
+                                    cc_user_ids?: Array<string>;
+                                    task_id?: string;
+                                    comment?: string;
+                                    node_id?: string;
+                                    files?: Array<{
+                                        url?: string;
+                                        file_size?: number;
+                                        title?: string;
+                                        type?: string;
+                                    }>;
+                                }>;
+                                definition_code: string;
+                                reverted?: boolean;
+                                instance_code: string;
+                                current_nodes?: Array<{
+                                    node_id?: string;
+                                    node_name?: string;
+                                    type?:
+                                        | "AND"
+                                        | "OR"
+                                        | "AUTO_PASS"
+                                        | "AUTO_REJECT"
+                                        | "SEQUENTIAL";
+                                    approvers?: Array<{
+                                        task_id?: string;
+                                        user_id?: string;
+                                    }>;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances/detail`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=get&version=v4 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/get document }
@@ -1864,6 +2060,191 @@ export default abstract class Client extends application {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/:instance_id`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            initiatedWithIterator: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        definition_code?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/initiated`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                instances: Array<{
+                                                    instance_status:
+                                                        | "0"
+                                                        | "1"
+                                                        | "2"
+                                                        | "3"
+                                                        | "4"
+                                                        | "5";
+                                                    definition_code: string;
+                                                    initiator?: string;
+                                                    initiator_name?: string;
+                                                    instance_code: string;
+                                                    definition_group_id?: string;
+                                                    definition_group_name?: string;
+                                                    definition_name?: string;
+                                                    summaries?: Array<{
+                                                        key?: string;
+                                                        value?: string;
+                                                    }>;
+                                                    instance_external_id?: string;
+                                                    link?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                count?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=initiated&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=initiated&project=approval&resource=instance&version=v4 document }
+             *
+             * 查询用户的已发起列表
+             */
+            initiated: async (
+                payload?: {
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        definition_code?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                instances: Array<{
+                                    instance_status:
+                                        | "0"
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5";
+                                    definition_code: string;
+                                    initiator?: string;
+                                    initiator_name?: string;
+                                    instance_code: string;
+                                    definition_group_id?: string;
+                                    definition_group_name?: string;
+                                    definition_name?: string;
+                                    summaries?: Array<{
+                                        key?: string;
+                                        value?: string;
+                                    }>;
+                                    instance_external_id?: string;
+                                    link?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                count?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances/initiated`,
                             path
                         ),
                         method: "GET",
@@ -2349,6 +2730,78 @@ export default abstract class Client extends application {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/instances/query`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=recall&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recall&project=approval&resource=instance&version=v4 document }
+             *
+             * 撤回审批实例
+             */
+            recall: async (
+                payload?: {
+                    data: { instance_code: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances/recall`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=remind&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remind&project=approval&resource=instance&version=v4 document }
+             *
+             * 催办
+             */
+            remind: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_ids: Array<string>;
+                        comment?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/instances/remind`,
                             path
                         ),
                         method: "POST",
@@ -2893,6 +3346,50 @@ export default abstract class Client extends application {
          */
         task: {
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=add_sign&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_sign&project=approval&resource=task&version=v4 document }
+             *
+             * 审批任务加签
+             */
+            addSign: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_id: string;
+                        comment?: string;
+                        add_sign_user_ids: Array<string>;
+                        add_sign_type: number;
+                        approval_method?: number;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/add_sign`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=approve&version=v4 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/approve document }
@@ -2924,6 +3421,303 @@ export default abstract class Client extends application {
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/approve`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=forward&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=approval&resource=task&version=v4 document }
+             *
+             * 转交审批任务
+             */
+            forward: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_id: string;
+                        transfer_user_id: string;
+                        comment?: string;
+                    };
+                    params?: {
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/forward`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            listWithIterator: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        topic: "1" | "2" | "3" | "17" | "18";
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        definition_code?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                tasks: Array<{
+                                                    topic:
+                                                        | "1"
+                                                        | "2"
+                                                        | "3"
+                                                        | "17"
+                                                        | "18";
+                                                    user_id: string;
+                                                    title: string;
+                                                    status:
+                                                        | "1"
+                                                        | "2"
+                                                        | "17"
+                                                        | "18"
+                                                        | "33"
+                                                        | "34";
+                                                    instance_status:
+                                                        | "0"
+                                                        | "1"
+                                                        | "2"
+                                                        | "3"
+                                                        | "4"
+                                                        | "5";
+                                                    definition_code: string;
+                                                    initiator?: string;
+                                                    initiator_name?: string;
+                                                    task_id: string;
+                                                    instance_code: string;
+                                                    definition_group_id?: string;
+                                                    definition_group_name?: string;
+                                                    definition_name?: string;
+                                                    summaries?: Array<{
+                                                        key?: string;
+                                                        value?: string;
+                                                    }>;
+                                                    instance_external_id?: string;
+                                                    task_external_id?: string;
+                                                    support_api_operate?: boolean;
+                                                    link?: string;
+                                                }>;
+                                                page_token?: string;
+                                                has_more?: boolean;
+                                                count?: number;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=list&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=approval&resource=task&version=v4 document }
+             */
+            list: async (
+                payload?: {
+                    params: {
+                        page_size?: number;
+                        page_token?: string;
+                        topic: "1" | "2" | "3" | "17" | "18";
+                        locale?: "zh-CN" | "en-US" | "ja-JP";
+                        definition_code?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                tasks: Array<{
+                                    topic: "1" | "2" | "3" | "17" | "18";
+                                    user_id: string;
+                                    title: string;
+                                    status:
+                                        | "1"
+                                        | "2"
+                                        | "17"
+                                        | "18"
+                                        | "33"
+                                        | "34";
+                                    instance_status:
+                                        | "0"
+                                        | "1"
+                                        | "2"
+                                        | "3"
+                                        | "4"
+                                        | "5";
+                                    definition_code: string;
+                                    initiator?: string;
+                                    initiator_name?: string;
+                                    task_id: string;
+                                    instance_code: string;
+                                    definition_group_id?: string;
+                                    definition_group_name?: string;
+                                    definition_name?: string;
+                                    summaries?: Array<{
+                                        key?: string;
+                                        value?: string;
+                                    }>;
+                                    instance_external_id?: string;
+                                    task_external_id?: string;
+                                    support_api_operate?: boolean;
+                                    link?: string;
+                                }>;
+                                page_token?: string;
+                                has_more?: boolean;
+                                count?: number;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=pass&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=pass&project=approval&resource=task&version=v4 document }
+             *
+             * 同意审批任务
+             */
+            pass: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_id: string;
+                        form?: string;
+                        comment?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/pass`,
                             path
                         ),
                         method: "POST",
@@ -3162,6 +3956,44 @@ export default abstract class Client extends application {
                     });
             },
             /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=refuse&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=refuse&project=approval&resource=task&version=v4 document }
+             *
+             * 拒绝审批任务
+             */
+            refuse: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_id: string;
+                        comment?: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/refuse`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
              * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=reject&version=v4 click to debug }
              *
              * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/reject document }
@@ -3239,6 +4071,45 @@ export default abstract class Client extends application {
                     .request<any, { code?: number; msg?: string; data?: {} }>({
                         url: fillApiPath(
                             `${this.domain}/open-apis/approval/v4/tasks/resubmit`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=rollback&version=v4 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=rollback&project=approval&resource=task&version=v4 document }
+             *
+             * 退回审批任务
+             */
+            rollback: async (
+                payload?: {
+                    data: {
+                        instance_code: string;
+                        task_id: string;
+                        comment?: string;
+                        node_ids: Array<string>;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/approval/v4/tasks/rollback`,
                             path
                         ),
                         method: "POST",
@@ -3449,7 +4320,7 @@ export default abstract class Client extends application {
         },
         v4: {
             /**
-             * 原生审批定义
+             * 事件
              */
             approval: {
                 /**
@@ -4928,6 +5799,50 @@ export default abstract class Client extends application {
              */
             instance: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=add_cc&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_cc&project=approval&resource=instance&version=v4 document }
+                 *
+                 * 抄送审批实例
+                 */
+                addCc: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            cc_user_ids: Array<string>;
+                            comment?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/add_cc`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=add_sign&version=v4 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/ukTMukTMukTM/ukTM5UjL5ETO14SOxkTN/approval-task-addsign document }
@@ -5168,6 +6083,161 @@ export default abstract class Client extends application {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=detail&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=detail&project=approval&resource=instance&version=v4 document }
+                 *
+                 * 查看审批实例详情
+                 */
+                detail: async (
+                    payload?: {
+                        params: {
+                            instance_code: string;
+                            locale?:
+                                | "zh-CN"
+                                | "en-US"
+                                | "ja-JP"
+                                | "zh-HK"
+                                | "zh-TW"
+                                | "de-DE"
+                                | "es-ES"
+                                | "fr-FR"
+                                | "id-ID"
+                                | "it-IT"
+                                | "ko-KR"
+                                | "pt-BR"
+                                | "th-TH"
+                                | "vi-VN"
+                                | "ms-MY"
+                                | "ru-RU";
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    definition_name: string;
+                                    start_time?: string;
+                                    end_time: string;
+                                    user_id: string;
+                                    serial_number: string;
+                                    department_id: string;
+                                    status:
+                                        | "PENDING"
+                                        | "APPROVED"
+                                        | "REJECTED"
+                                        | "CANCELED"
+                                        | "DELETED";
+                                    form: string;
+                                    tasks: Array<{
+                                        id: string;
+                                        user_id: string;
+                                        status:
+                                            | "PENDING"
+                                            | "APPROVED"
+                                            | "REJECTED"
+                                            | "TRANSFERRED"
+                                            | "DONE";
+                                        node_id?: string;
+                                        node_name?: string;
+                                        type?:
+                                            | "AND"
+                                            | "OR"
+                                            | "AUTO_PASS"
+                                            | "AUTO_REJECT"
+                                            | "SEQUENTIAL";
+                                        start_time: string;
+                                        end_time?: string;
+                                    }>;
+                                    comments: Array<{
+                                        id: string;
+                                        user_id: string;
+                                        comment: string;
+                                        create_time: string;
+                                        files?: Array<{
+                                            url?: string;
+                                            file_size?: number;
+                                            title?: string;
+                                            type?: string;
+                                        }>;
+                                    }>;
+                                    operation_records: Array<{
+                                        type:
+                                            | "START"
+                                            | "PASS"
+                                            | "REJECT"
+                                            | "AUTO_PASS"
+                                            | "AUTO_REJECT"
+                                            | "REMOVE_REPEAT"
+                                            | "TRANSFER"
+                                            | "ADD_APPROVER_BEFORE"
+                                            | "ADD_APPROVER"
+                                            | "ADD_APPROVER_AFTER"
+                                            | "DELETE_APPROVER"
+                                            | "ROLLBACK_SELECTED"
+                                            | "ROLLBACK"
+                                            | "CANCEL"
+                                            | "DELETE"
+                                            | "CC";
+                                        create_time: string;
+                                        user_id?: string;
+                                        cc_user_ids?: Array<string>;
+                                        task_id?: string;
+                                        comment?: string;
+                                        node_id?: string;
+                                        files?: Array<{
+                                            url?: string;
+                                            file_size?: number;
+                                            title?: string;
+                                            type?: string;
+                                        }>;
+                                    }>;
+                                    definition_code: string;
+                                    reverted?: boolean;
+                                    instance_code: string;
+                                    current_nodes?: Array<{
+                                        node_id?: string;
+                                        node_name?: string;
+                                        type?:
+                                            | "AND"
+                                            | "OR"
+                                            | "AUTO_PASS"
+                                            | "AUTO_REJECT"
+                                            | "SEQUENTIAL";
+                                        approvers?: Array<{
+                                            task_id?: string;
+                                            user_id?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/detail`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=get&version=v4 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/instance/get document }
@@ -5313,6 +6383,193 @@ export default abstract class Client extends application {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances/:instance_id`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                initiatedWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            definition_code?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/approval/v4/instances/initiated`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    instances: Array<{
+                                                        instance_status:
+                                                            | "0"
+                                                            | "1"
+                                                            | "2"
+                                                            | "3"
+                                                            | "4"
+                                                            | "5";
+                                                        definition_code: string;
+                                                        initiator?: string;
+                                                        initiator_name?: string;
+                                                        instance_code: string;
+                                                        definition_group_id?: string;
+                                                        definition_group_name?: string;
+                                                        definition_name?: string;
+                                                        summaries?: Array<{
+                                                            key?: string;
+                                                            value?: string;
+                                                        }>;
+                                                        instance_external_id?: string;
+                                                        link?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    count?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=initiated&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=initiated&project=approval&resource=instance&version=v4 document }
+                 *
+                 * 查询用户的已发起列表
+                 */
+                initiated: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            definition_code?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    instances: Array<{
+                                        instance_status:
+                                            | "0"
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5";
+                                        definition_code: string;
+                                        initiator?: string;
+                                        initiator_name?: string;
+                                        instance_code: string;
+                                        definition_group_id?: string;
+                                        definition_group_name?: string;
+                                        definition_name?: string;
+                                        summaries?: Array<{
+                                            key?: string;
+                                            value?: string;
+                                        }>;
+                                        instance_external_id?: string;
+                                        link?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    count?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/initiated`,
                                 path
                             ),
                             method: "GET",
@@ -5804,6 +7061,84 @@ export default abstract class Client extends application {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/instances/query`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=recall&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recall&project=approval&resource=instance&version=v4 document }
+                 *
+                 * 撤回审批实例
+                 */
+                recall: async (
+                    payload?: {
+                        data: { instance_code: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/recall`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=instance&apiName=remind&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=remind&project=approval&resource=instance&version=v4 document }
+                 *
+                 * 催办
+                 */
+                remind: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_ids: Array<string>;
+                            comment?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/instances/remind`,
                                 path
                             ),
                             method: "POST",
@@ -6355,6 +7690,53 @@ export default abstract class Client extends application {
              */
             task: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=add_sign&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=add_sign&project=approval&resource=task&version=v4 document }
+                 *
+                 * 审批任务加签
+                 */
+                addSign: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_id: string;
+                            comment?: string;
+                            add_sign_user_ids: Array<string>;
+                            add_sign_type: number;
+                            approval_method?: number;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks/add_sign`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=approve&version=v4 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/approve document }
@@ -6389,6 +7771,311 @@ export default abstract class Client extends application {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/tasks/approve`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=forward&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=forward&project=approval&resource=task&version=v4 document }
+                 *
+                 * 转交审批任务
+                 */
+                forward: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_id: string;
+                            transfer_user_id: string;
+                            comment?: string;
+                        };
+                        params?: {
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks/forward`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                listWithIterator: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            topic: "1" | "2" | "3" | "17" | "18";
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            definition_code?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/approval/v4/tasks`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    tasks: Array<{
+                                                        topic:
+                                                            | "1"
+                                                            | "2"
+                                                            | "3"
+                                                            | "17"
+                                                            | "18";
+                                                        user_id: string;
+                                                        title: string;
+                                                        status:
+                                                            | "1"
+                                                            | "2"
+                                                            | "17"
+                                                            | "18"
+                                                            | "33"
+                                                            | "34";
+                                                        instance_status:
+                                                            | "0"
+                                                            | "1"
+                                                            | "2"
+                                                            | "3"
+                                                            | "4"
+                                                            | "5";
+                                                        definition_code: string;
+                                                        initiator?: string;
+                                                        initiator_name?: string;
+                                                        task_id: string;
+                                                        instance_code: string;
+                                                        definition_group_id?: string;
+                                                        definition_group_name?: string;
+                                                        definition_name?: string;
+                                                        summaries?: Array<{
+                                                            key?: string;
+                                                            value?: string;
+                                                        }>;
+                                                        instance_external_id?: string;
+                                                        task_external_id?: string;
+                                                        support_api_operate?: boolean;
+                                                        link?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                    count?: number;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=list&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=approval&resource=task&version=v4 document }
+                 */
+                list: async (
+                    payload?: {
+                        params: {
+                            page_size?: number;
+                            page_token?: string;
+                            topic: "1" | "2" | "3" | "17" | "18";
+                            locale?: "zh-CN" | "en-US" | "ja-JP";
+                            definition_code?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    tasks: Array<{
+                                        topic: "1" | "2" | "3" | "17" | "18";
+                                        user_id: string;
+                                        title: string;
+                                        status:
+                                            | "1"
+                                            | "2"
+                                            | "17"
+                                            | "18"
+                                            | "33"
+                                            | "34";
+                                        instance_status:
+                                            | "0"
+                                            | "1"
+                                            | "2"
+                                            | "3"
+                                            | "4"
+                                            | "5";
+                                        definition_code: string;
+                                        initiator?: string;
+                                        initiator_name?: string;
+                                        task_id: string;
+                                        instance_code: string;
+                                        definition_group_id?: string;
+                                        definition_group_name?: string;
+                                        definition_name?: string;
+                                        summaries?: Array<{
+                                            key?: string;
+                                            value?: string;
+                                        }>;
+                                        instance_external_id?: string;
+                                        task_external_id?: string;
+                                        support_api_operate?: boolean;
+                                        link?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                    count?: number;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=pass&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=pass&project=approval&resource=task&version=v4 document }
+                 *
+                 * 同意审批任务
+                 */
+                pass: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_id: string;
+                            form?: string;
+                            comment?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks/pass`,
                                 path
                             ),
                             method: "POST",
@@ -6632,6 +8319,47 @@ export default abstract class Client extends application {
                         });
                 },
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=refuse&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=refuse&project=approval&resource=task&version=v4 document }
+                 *
+                 * 拒绝审批任务
+                 */
+                refuse: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_id: string;
+                            comment?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks/refuse`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=reject&version=v4 click to debug }
                  *
                  * {@link https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/approval-v4/task/reject document }
@@ -6715,6 +8443,48 @@ export default abstract class Client extends application {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/approval/v4/tasks/resubmit`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=approval&resource=task&apiName=rollback&version=v4 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=rollback&project=approval&resource=task&version=v4 document }
+                 *
+                 * 退回审批任务
+                 */
+                rollback: async (
+                    payload?: {
+                        data: {
+                            instance_code: string;
+                            task_id: string;
+                            comment?: string;
+                            node_ids: Array<string>;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/approval/v4/tasks/rollback`,
                                 path
                             ),
                             method: "POST",

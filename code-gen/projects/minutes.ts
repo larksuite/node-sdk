@@ -70,7 +70,12 @@ export default abstract class Client extends meeting_room {
                                     minute_todos?: Array<{
                                         content?: string;
                                         assignees?: Array<string>;
+                                        is_done?: boolean;
+                                        todo_id?: string;
+                                        operation?: string;
                                     }>;
+                                    keywords?: Array<string>;
+                                    transcript?: string;
                                 };
                             }
                         >({
@@ -238,6 +243,7 @@ export default abstract class Client extends meeting_room {
                                                     total?: number;
                                                     has_more: boolean;
                                                     page_token?: string;
+                                                    notice?: string;
                                                 };
                                             }
                                         )?.data || {};
@@ -307,11 +313,86 @@ export default abstract class Client extends meeting_room {
                                     total?: number;
                                     has_more: boolean;
                                     page_token?: string;
+                                    notice?: string;
                                 };
                             }
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/minutes/v1/minutes/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=minutes&resource=minute&version=v1 document }
+                 *
+                 * 订阅妙记变更事件
+                 */
+                subscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=minutes&resource=minute&apiName=unsubscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=minutes&resource=minute&version=v1 document }
+                 *
+                 * 取消订阅妙记变更事件
+                 */
+                unsubscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/minutes/v1/minutes/unsubscription`,
                                 path
                             ),
                             method: "POST",

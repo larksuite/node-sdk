@@ -5909,6 +5909,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -6141,6 +6150,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -6371,6 +6389,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -6543,6 +6570,15 @@ export default abstract class Client extends sup_project {
                                     ko_kr?: string;
                                 };
                                 href?: { url?: string; title?: string };
+                                refer_resources?: Array<{
+                                    resource_id?: string;
+                                    type?: string;
+                                    source_message?: {
+                                        message_id?: string;
+                                        content?: string;
+                                    };
+                                    unavailable_reason?: string;
+                                }>;
                             };
                             extra?: string;
                             completed_at?: string;
@@ -6715,6 +6751,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -6979,6 +7024,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -7258,6 +7312,15 @@ export default abstract class Client extends sup_project {
                                                                 url?: string;
                                                                 title?: string;
                                                             };
+                                                            refer_resources?: Array<{
+                                                                resource_id?: string;
+                                                                type?: string;
+                                                                source_message?: {
+                                                                    message_id?: string;
+                                                                    content?: string;
+                                                                };
+                                                                unavailable_reason?: string;
+                                                            }>;
                                                         };
                                                         extra?: string;
                                                         tasklists?: Array<{
@@ -7496,6 +7559,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -7819,6 +7891,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -8101,6 +8182,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -8331,6 +8421,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -8561,6 +8660,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -8706,6 +8814,231 @@ export default abstract class Client extends sup_project {
                             throw e;
                         });
                 },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                creator_ids?: Array<string>;
+                                assignee_ids?: Array<string>;
+                                is_completed?: boolean;
+                                due_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                follower_ids?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasks/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            app_link?: string;
+                                                            avatar?: string;
+                                                            description?: string;
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=task&resource=task&version=v2 document }
+                 *
+                 * 搜索任务
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                creator_ids?: Array<string>;
+                                assignee_ids?: Array<string>;
+                                is_completed?: boolean;
+                                due_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                follower_ids?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            app_link?: string;
+                                            avatar?: string;
+                                            description?: string;
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/search`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=set_ancestor_task&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=set_ancestor_task&project=task&resource=task&version=v2 document }
+                 */
+                setAncestorTask: async (
+                    payload?: {
+                        data?: {
+                            ancestor_guid?: string;
+                            user_id_type?: string;
+                            target_user_id?: string;
+                        };
+                        path: { task_guid: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasks/:task_guid/set_ancestor_task`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
                 /**
                  * {@link https://open.feishu.cn/api-explorer?project=task&resource=task&apiName=tasklists&version=v2 click to debug }
                  *
@@ -8782,6 +9115,15 @@ export default abstract class Client extends sup_project {
                                     ko_kr?: string;
                                 };
                                 href?: { url?: string; title?: string };
+                                refer_resources?: Array<{
+                                    resource_id?: string;
+                                    type?: string;
+                                    source_message?: {
+                                        message_id?: string;
+                                        content?: string;
+                                    };
+                                    unavailable_reason?: string;
+                                }>;
                             };
                             extra?: string;
                             completed_at?: string;
@@ -8953,6 +9295,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -9230,6 +9581,15 @@ export default abstract class Client extends sup_project {
                                                                 url?: string;
                                                                 title?: string;
                                                             };
+                                                            refer_resources?: Array<{
+                                                                resource_id?: string;
+                                                                type?: string;
+                                                                source_message?: {
+                                                                    message_id?: string;
+                                                                    content?: string;
+                                                                };
+                                                                unavailable_reason?: string;
+                                                            }>;
                                                         };
                                                         extra?: string;
                                                         tasklists?: Array<{
@@ -9466,6 +9826,15 @@ export default abstract class Client extends sup_project {
                                                 url?: string;
                                                 title?: string;
                                             };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
                                         };
                                         extra?: string;
                                         tasklists?: Array<{
@@ -9602,6 +9971,589 @@ export default abstract class Client extends sup_project {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * task_v2
+             */
+            taskV2: {
+                listRelatedTaskWithIterator: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            completed?: boolean;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            task_updated_time?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/task_v2/list_related_task`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items?: Array<{
+                                                        guid?: string;
+                                                        summary?: string;
+                                                        description?: string;
+                                                        due?: {
+                                                            timestamp?: string;
+                                                            is_all_day?: boolean;
+                                                        };
+                                                        reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
+                                                        creator?: {
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        };
+                                                        members?: Array<{
+                                                            id?: string;
+                                                            type?: string;
+                                                            role?: string;
+                                                            name?: string;
+                                                        }>;
+                                                        completed_at?: string;
+                                                        attachments?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        origin?: {
+                                                            platform_i18n_name?: {
+                                                                en_us?: string;
+                                                                zh_cn?: string;
+                                                                zh_hk?: string;
+                                                                zh_tw?: string;
+                                                                ja_jp?: string;
+                                                                fr_fr?: string;
+                                                                it_it?: string;
+                                                                de_de?: string;
+                                                                ru_ru?: string;
+                                                                th_th?: string;
+                                                                es_es?: string;
+                                                                ko_kr?: string;
+                                                            };
+                                                            href?: {
+                                                                url?: string;
+                                                                title?: string;
+                                                            };
+                                                            refer_resources?: Array<{
+                                                                resource_id?: string;
+                                                                type?: string;
+                                                                source_message?: {
+                                                                    message_id?: string;
+                                                                    content?: string;
+                                                                };
+                                                                unavailable_reason?: string;
+                                                            }>;
+                                                        };
+                                                        extra?: string;
+                                                        tasklists?: Array<{
+                                                            tasklist_guid?: string;
+                                                            section_guid?: string;
+                                                        }>;
+                                                        repeat_rule?: string;
+                                                        parent_task_guid?: string;
+                                                        mode?: number;
+                                                        source?: number;
+                                                        custom_complete?: {
+                                                            pc?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                            ios?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                            android?: {
+                                                                href?: string;
+                                                                tip?: {
+                                                                    en_us?: string;
+                                                                    zh_cn?: string;
+                                                                    zh_hk?: string;
+                                                                    zh_tw?: string;
+                                                                    ja_jp?: string;
+                                                                    fr_fr?: string;
+                                                                    it_it?: string;
+                                                                    de_de?: string;
+                                                                    ru_ru?: string;
+                                                                    th_th?: string;
+                                                                    es_es?: string;
+                                                                    ko_kr?: string;
+                                                                };
+                                                            };
+                                                        };
+                                                        task_id?: string;
+                                                        created_at?: string;
+                                                        updated_at?: string;
+                                                        status?: string;
+                                                        url?: string;
+                                                        start?: {
+                                                            timestamp?: string;
+                                                            is_all_day?: boolean;
+                                                        };
+                                                        subtask_count?: number;
+                                                        is_milestone?: boolean;
+                                                        custom_fields?: Array<{
+                                                            guid?: string;
+                                                            type?: string;
+                                                            number_value?: string;
+                                                            datetime_value?: string;
+                                                            member_value?: Array<{
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            }>;
+                                                            single_select_value?: string;
+                                                            multi_select_value?: Array<string>;
+                                                            name?: string;
+                                                            text_value?: string;
+                                                        }>;
+                                                        dependencies?: Array<{
+                                                            type:
+                                                                | "prev"
+                                                                | "next";
+                                                            task_guid: string;
+                                                        }>;
+                                                        assignee_related?: Array<{
+                                                            id?: string;
+                                                            completed_at?: string;
+                                                        }>;
+                                                        positive_reminders?: Array<{
+                                                            id?: string;
+                                                            relative_fire_minute: number;
+                                                        }>;
+                                                        agent_task_status?: number;
+                                                        agent_task_progress?: string;
+                                                        text_deliveries?: Array<string>;
+                                                        attachment_deliveries?: Array<{
+                                                            guid?: string;
+                                                            file_token?: string;
+                                                            name?: string;
+                                                            size?: number;
+                                                            resource?: {
+                                                                type?: string;
+                                                                id?: string;
+                                                            };
+                                                            uploader?: {
+                                                                id?: string;
+                                                                type?: string;
+                                                                role?: string;
+                                                                name?: string;
+                                                            };
+                                                            is_cover?: boolean;
+                                                            uploaded_at?: string;
+                                                            url?: string;
+                                                        }>;
+                                                        next_task_guid?: string;
+                                                    }>;
+                                                    page_token?: string;
+                                                    has_more?: boolean;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task_v2&apiName=list_related_task&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list_related_task&project=task&resource=task_v2&version=v2 document }
+                 */
+                listRelatedTask: async (
+                    payload?: {
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            completed?: boolean;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                            task_updated_time?: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items?: Array<{
+                                        guid?: string;
+                                        summary?: string;
+                                        description?: string;
+                                        due?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        creator?: {
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        };
+                                        members?: Array<{
+                                            id?: string;
+                                            type?: string;
+                                            role?: string;
+                                            name?: string;
+                                        }>;
+                                        completed_at?: string;
+                                        attachments?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        origin?: {
+                                            platform_i18n_name?: {
+                                                en_us?: string;
+                                                zh_cn?: string;
+                                                zh_hk?: string;
+                                                zh_tw?: string;
+                                                ja_jp?: string;
+                                                fr_fr?: string;
+                                                it_it?: string;
+                                                de_de?: string;
+                                                ru_ru?: string;
+                                                th_th?: string;
+                                                es_es?: string;
+                                                ko_kr?: string;
+                                            };
+                                            href?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            refer_resources?: Array<{
+                                                resource_id?: string;
+                                                type?: string;
+                                                source_message?: {
+                                                    message_id?: string;
+                                                    content?: string;
+                                                };
+                                                unavailable_reason?: string;
+                                            }>;
+                                        };
+                                        extra?: string;
+                                        tasklists?: Array<{
+                                            tasklist_guid?: string;
+                                            section_guid?: string;
+                                        }>;
+                                        repeat_rule?: string;
+                                        parent_task_guid?: string;
+                                        mode?: number;
+                                        source?: number;
+                                        custom_complete?: {
+                                            pc?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            ios?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                            android?: {
+                                                href?: string;
+                                                tip?: {
+                                                    en_us?: string;
+                                                    zh_cn?: string;
+                                                    zh_hk?: string;
+                                                    zh_tw?: string;
+                                                    ja_jp?: string;
+                                                    fr_fr?: string;
+                                                    it_it?: string;
+                                                    de_de?: string;
+                                                    ru_ru?: string;
+                                                    th_th?: string;
+                                                    es_es?: string;
+                                                    ko_kr?: string;
+                                                };
+                                            };
+                                        };
+                                        task_id?: string;
+                                        created_at?: string;
+                                        updated_at?: string;
+                                        status?: string;
+                                        url?: string;
+                                        start?: {
+                                            timestamp?: string;
+                                            is_all_day?: boolean;
+                                        };
+                                        subtask_count?: number;
+                                        is_milestone?: boolean;
+                                        custom_fields?: Array<{
+                                            guid?: string;
+                                            type?: string;
+                                            number_value?: string;
+                                            datetime_value?: string;
+                                            member_value?: Array<{
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            }>;
+                                            single_select_value?: string;
+                                            multi_select_value?: Array<string>;
+                                            name?: string;
+                                            text_value?: string;
+                                        }>;
+                                        dependencies?: Array<{
+                                            type: "prev" | "next";
+                                            task_guid: string;
+                                        }>;
+                                        assignee_related?: Array<{
+                                            id?: string;
+                                            completed_at?: string;
+                                        }>;
+                                        positive_reminders?: Array<{
+                                            id?: string;
+                                            relative_fire_minute: number;
+                                        }>;
+                                        agent_task_status?: number;
+                                        agent_task_progress?: string;
+                                        text_deliveries?: Array<string>;
+                                        attachment_deliveries?: Array<{
+                                            guid?: string;
+                                            file_token?: string;
+                                            name?: string;
+                                            size?: number;
+                                            resource?: {
+                                                type?: string;
+                                                id?: string;
+                                            };
+                                            uploader?: {
+                                                id?: string;
+                                                type?: string;
+                                                role?: string;
+                                                name?: string;
+                                            };
+                                            is_cover?: boolean;
+                                            uploaded_at?: string;
+                                            url?: string;
+                                        }>;
+                                        next_task_guid?: string;
+                                    }>;
+                                    page_token?: string;
+                                    has_more?: boolean;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/task_v2/list_related_task`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=task_v2&apiName=task_subscription&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=task_subscription&project=task&resource=task_v2&version=v2 document }
+                 */
+                taskSubscription: async (
+                    payload?: {
+                        params?: {
+                            user_id_type?: "union_id" | "user_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { code?: number; msg?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/task_v2/task_subscription`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -10498,6 +11450,185 @@ export default abstract class Client extends sup_project {
                         >({
                             url: fillApiPath(
                                 `${this.domain}/open-apis/task/v2/tasklists/:tasklist_guid/remove_members`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                searchWithIterator: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                create_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                user_id?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/task/v2/tasklists/search`,
+                                    path
+                                ),
+                                method: "POST",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    items: Array<{
+                                                        id: string;
+                                                        display_info?: string;
+                                                        meta_data?: {
+                                                            app_link?: string;
+                                                            avatar?: string;
+                                                            description?: string;
+                                                        };
+                                                    }>;
+                                                    total?: number;
+                                                    has_more: boolean;
+                                                    page_token?: string;
+                                                    notice?: string;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=task&resource=tasklist&apiName=search&version=v2 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=search&project=task&resource=tasklist&version=v2 document }
+                 *
+                 * 搜索任务清单
+                 */
+                search: async (
+                    payload?: {
+                        data?: {
+                            query?: string;
+                            filter?: {
+                                create_time?: {
+                                    start_time?: string;
+                                    end_time?: string;
+                                };
+                                user_id?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    items: Array<{
+                                        id: string;
+                                        display_info?: string;
+                                        meta_data?: {
+                                            app_link?: string;
+                                            avatar?: string;
+                                            description?: string;
+                                        };
+                                    }>;
+                                    total?: number;
+                                    has_more: boolean;
+                                    page_token?: string;
+                                    notice?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/task/v2/tasklists/search`,
                                 path
                             ),
                             method: "POST",

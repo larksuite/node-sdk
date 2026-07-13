@@ -512,7 +512,7 @@ export default abstract class Client extends helpdesk {
             },
         },
         /**
-         * 投递
+         * 入职
          */
         application: {
             /**
@@ -1416,6 +1416,7 @@ export default abstract class Client extends helpdesk {
                         page_size?: number;
                         update_start_time?: string;
                         update_end_time?: string;
+                        keyword?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -9581,6 +9582,8 @@ export default abstract class Client extends helpdesk {
                         recruiter_id_list?: Array<string>;
                         hiring_manager_id_list?: Array<string>;
                         assistant_id_list?: Array<string>;
+                        department_id?: string;
+                        with_sub_department?: boolean;
                     };
                 },
                 options?: IRequestOptions
@@ -21814,7 +21817,7 @@ export default abstract class Client extends helpdesk {
                 },
             },
             /**
-             * 投递
+             * 入职
              */
             application: {
                 /**
@@ -22725,6 +22728,7 @@ export default abstract class Client extends helpdesk {
                             page_size?: number;
                             update_start_time?: string;
                             update_end_time?: string;
+                            keyword?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -31037,6 +31041,8 @@ export default abstract class Client extends helpdesk {
                             recruiter_id_list?: Array<string>;
                             hiring_manager_id_list?: Array<string>;
                             assistant_id_list?: Array<string>;
+                            department_id?: string;
+                            with_sub_department?: boolean;
                         };
                     },
                     options?: IRequestOptions

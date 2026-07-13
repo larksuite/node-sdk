@@ -29,12 +29,9 @@ export default abstract class Client extends apaas {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 应用信息
-     */
-    application = {
-        /**
-         * 应用红点
+         
          */
+    application = {
         appBadge: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_badge&apiName=set&version=v6 click to debug }
@@ -82,9 +79,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * 我的常用推荐规则
-         */
         appRecommendRule: {
             listWithIterator: async (
                 payload?: {
@@ -338,9 +332,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * 应用使用情况
-         */
         applicationAppUsage: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_usage&apiName=department_overview&version=v6 click to debug }
@@ -544,9 +535,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * 事件
-         */
         applicationAppVersion: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.app_version&apiName=contacts_range_suggest&version=v6 click to debug }
@@ -691,7 +679,32 @@ export default abstract class Client extends apaas {
                                             pc_url?: string;
                                             mobile_url?: string;
                                         };
-                                        bot?: { card_request_url?: string };
+                                        bot?: {
+                                            card_request_url?: string;
+                                            bot_menu_enable?: boolean;
+                                            bot_menus?: Array<{
+                                                menu_id?: string;
+                                                parent_menu_id?: string;
+                                                sort?: number;
+                                                default_name?: string;
+                                                i18n_name?: Record<
+                                                    string,
+                                                    string
+                                                >;
+                                                redirect_link?: {
+                                                    pc_url?: string;
+                                                    mobile_url?: string;
+                                                };
+                                                event_key?: string;
+                                                icon_file_key?: string;
+                                                ud_icon?: {
+                                                    token?: string;
+                                                    color?: string;
+                                                };
+                                                menu_content_type?: number;
+                                            }>;
+                                            bot_menu_display_strategy?: number;
+                                        };
                                         workplace_widgets?: Array<{
                                             min_lark_version?: string;
                                         }>;
@@ -920,6 +933,29 @@ export default abstract class Client extends apaas {
                                                         };
                                                         bot?: {
                                                             card_request_url?: string;
+                                                            bot_menu_enable?: boolean;
+                                                            bot_menus?: Array<{
+                                                                menu_id?: string;
+                                                                parent_menu_id?: string;
+                                                                sort?: number;
+                                                                default_name?: string;
+                                                                i18n_name?: Record<
+                                                                    string,
+                                                                    string
+                                                                >;
+                                                                redirect_link?: {
+                                                                    pc_url?: string;
+                                                                    mobile_url?: string;
+                                                                };
+                                                                event_key?: string;
+                                                                icon_file_key?: string;
+                                                                ud_icon?: {
+                                                                    token?: string;
+                                                                    color?: string;
+                                                                };
+                                                                menu_content_type?: number;
+                                                            }>;
+                                                            bot_menu_display_strategy?: number;
                                                         };
                                                         workplace_widgets?: Array<{
                                                             min_lark_version?: string;
@@ -1108,7 +1144,32 @@ export default abstract class Client extends apaas {
                                             pc_url?: string;
                                             mobile_url?: string;
                                         };
-                                        bot?: { card_request_url?: string };
+                                        bot?: {
+                                            card_request_url?: string;
+                                            bot_menu_enable?: boolean;
+                                            bot_menus?: Array<{
+                                                menu_id?: string;
+                                                parent_menu_id?: string;
+                                                sort?: number;
+                                                default_name?: string;
+                                                i18n_name?: Record<
+                                                    string,
+                                                    string
+                                                >;
+                                                redirect_link?: {
+                                                    pc_url?: string;
+                                                    mobile_url?: string;
+                                                };
+                                                event_key?: string;
+                                                icon_file_key?: string;
+                                                ud_icon?: {
+                                                    token?: string;
+                                                    color?: string;
+                                                };
+                                                menu_content_type?: number;
+                                            }>;
+                                            bot_menu_display_strategy?: number;
+                                        };
                                         workplace_widgets?: Array<{
                                             min_lark_version?: string;
                                         }>;
@@ -1253,9 +1314,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * application.collaborators
-         */
         applicationCollaborators: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.collaborators&apiName=get&version=v6 click to debug }
@@ -1350,9 +1408,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * application.contacts_range
-         */
         applicationContactsRange: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.contacts_range&apiName=patch&version=v6 click to debug }
@@ -1410,7 +1465,7 @@ export default abstract class Client extends apaas {
             },
         },
         /**
-         * 应用
+         * application
          */
         application: {
             /**
@@ -2386,9 +2441,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * 应用反馈
-         */
         applicationFeedback: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.feedback&apiName=list&version=v6 click to debug }
@@ -2505,9 +2557,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * application.management
-         */
         applicationManagement: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.management&apiName=update&version=v6 click to debug }
@@ -2543,9 +2592,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * application.owner
-         */
         applicationOwner: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.owner&apiName=update&version=v6 click to debug }
@@ -2584,9 +2630,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * 事件
-         */
         applicationVisibility: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.visibility&apiName=check_white_black_list&version=v6 click to debug }
@@ -2717,9 +2760,6 @@ export default abstract class Client extends apaas {
                     });
             },
         },
-        /**
-         * scope
-         */
         scope: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=application&resource=scope&apiName=apply&version=v6 click to debug }
@@ -2787,6 +2827,363 @@ export default abstract class Client extends apaas {
                         this.logger.error(formatErrors(e));
                         throw e;
                     });
+            },
+        },
+        v5: {
+            /**
+             * application
+             */
+            application: {
+                favouriteWithIterator: async (
+                    payload?: {
+                        params?: {
+                            language?: "zh_cn" | "en_us" | "ja_jp";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/application/v5/applications/favourite`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    total_count?: number;
+                                                    has_more?: boolean;
+                                                    app_list?: Array<{
+                                                        app_id: string;
+                                                        app_name: string;
+                                                        description: string;
+                                                        app_type:
+                                                            | "app"
+                                                            | "shortcut";
+                                                        avatar_url: string;
+                                                        open_methods: Array<{
+                                                            type?:
+                                                                | "mobile_gadget"
+                                                                | "mobile_web"
+                                                                | "pc_gadget"
+                                                                | "pc_web"
+                                                                | "bot";
+                                                            applink?: string;
+                                                        }>;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=favourite&version=v5 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=favourite&project=application&resource=application&version=v5 document }
+                 */
+                favourite: async (
+                    payload?: {
+                        params?: {
+                            language?: "zh_cn" | "en_us" | "ja_jp";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    total_count?: number;
+                                    has_more?: boolean;
+                                    app_list?: Array<{
+                                        app_id: string;
+                                        app_name: string;
+                                        description: string;
+                                        app_type: "app" | "shortcut";
+                                        avatar_url: string;
+                                        open_methods: Array<{
+                                            type?:
+                                                | "mobile_gadget"
+                                                | "mobile_web"
+                                                | "pc_gadget"
+                                                | "pc_web"
+                                                | "bot";
+                                            applink?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v5/applications/favourite`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                recommendWithIterator: async (
+                    payload?: {
+                        params?: {
+                            language?: "zh_cn" | "en_us" | "ja_jp";
+                            recommend_type?:
+                                | "user_unremovable"
+                                | "user_removable";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/application/v5/applications/recommend`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    page_token?: string;
+                                                    page_size?: number;
+                                                    total_count?: number;
+                                                    has_more?: boolean;
+                                                    app_list?: Array<{
+                                                        app_id: string;
+                                                        app_name: string;
+                                                        description: string;
+                                                        app_type:
+                                                            | "app"
+                                                            | "shortcut";
+                                                        avatar_url: string;
+                                                        open_methods: Array<{
+                                                            type?:
+                                                                | "mobile_gadget"
+                                                                | "mobile_web"
+                                                                | "pc_gadget"
+                                                                | "pc_web"
+                                                                | "bot";
+                                                            applink?: string;
+                                                        }>;
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application&apiName=recommend&version=v5 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=recommend&project=application&resource=application&version=v5 document }
+                 */
+                recommend: async (
+                    payload?: {
+                        params?: {
+                            language?: "zh_cn" | "en_us" | "ja_jp";
+                            recommend_type?:
+                                | "user_unremovable"
+                                | "user_removable";
+                            page_token?: string;
+                            page_size?: number;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    page_token?: string;
+                                    page_size?: number;
+                                    total_count?: number;
+                                    has_more?: boolean;
+                                    app_list?: Array<{
+                                        app_id: string;
+                                        app_name: string;
+                                        description: string;
+                                        app_type: "app" | "shortcut";
+                                        avatar_url: string;
+                                        open_methods: Array<{
+                                            type?:
+                                                | "mobile_gadget"
+                                                | "mobile_web"
+                                                | "pc_gadget"
+                                                | "pc_web"
+                                                | "bot";
+                                            applink?: string;
+                                        }>;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v5/applications/recommend`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
             },
         },
         v6: {
@@ -3458,7 +3855,32 @@ export default abstract class Client extends apaas {
                                                 pc_url?: string;
                                                 mobile_url?: string;
                                             };
-                                            bot?: { card_request_url?: string };
+                                            bot?: {
+                                                card_request_url?: string;
+                                                bot_menu_enable?: boolean;
+                                                bot_menus?: Array<{
+                                                    menu_id?: string;
+                                                    parent_menu_id?: string;
+                                                    sort?: number;
+                                                    default_name?: string;
+                                                    i18n_name?: Record<
+                                                        string,
+                                                        string
+                                                    >;
+                                                    redirect_link?: {
+                                                        pc_url?: string;
+                                                        mobile_url?: string;
+                                                    };
+                                                    event_key?: string;
+                                                    icon_file_key?: string;
+                                                    ud_icon?: {
+                                                        token?: string;
+                                                        color?: string;
+                                                    };
+                                                    menu_content_type?: number;
+                                                }>;
+                                                bot_menu_display_strategy?: number;
+                                            };
                                             workplace_widgets?: Array<{
                                                 min_lark_version?: string;
                                             }>;
@@ -3690,6 +4112,29 @@ export default abstract class Client extends apaas {
                                                             };
                                                             bot?: {
                                                                 card_request_url?: string;
+                                                                bot_menu_enable?: boolean;
+                                                                bot_menus?: Array<{
+                                                                    menu_id?: string;
+                                                                    parent_menu_id?: string;
+                                                                    sort?: number;
+                                                                    default_name?: string;
+                                                                    i18n_name?: Record<
+                                                                        string,
+                                                                        string
+                                                                    >;
+                                                                    redirect_link?: {
+                                                                        pc_url?: string;
+                                                                        mobile_url?: string;
+                                                                    };
+                                                                    event_key?: string;
+                                                                    icon_file_key?: string;
+                                                                    ud_icon?: {
+                                                                        token?: string;
+                                                                        color?: string;
+                                                                    };
+                                                                    menu_content_type?: number;
+                                                                }>;
+                                                                bot_menu_display_strategy?: number;
                                                             };
                                                             workplace_widgets?: Array<{
                                                                 min_lark_version?: string;
@@ -3880,7 +4325,32 @@ export default abstract class Client extends apaas {
                                                 pc_url?: string;
                                                 mobile_url?: string;
                                             };
-                                            bot?: { card_request_url?: string };
+                                            bot?: {
+                                                card_request_url?: string;
+                                                bot_menu_enable?: boolean;
+                                                bot_menus?: Array<{
+                                                    menu_id?: string;
+                                                    parent_menu_id?: string;
+                                                    sort?: number;
+                                                    default_name?: string;
+                                                    i18n_name?: Record<
+                                                        string,
+                                                        string
+                                                    >;
+                                                    redirect_link?: {
+                                                        pc_url?: string;
+                                                        mobile_url?: string;
+                                                    };
+                                                    event_key?: string;
+                                                    icon_file_key?: string;
+                                                    ud_icon?: {
+                                                        token?: string;
+                                                        color?: string;
+                                                    };
+                                                    menu_content_type?: number;
+                                                }>;
+                                                bot_menu_display_strategy?: number;
+                                            };
                                             workplace_widgets?: Array<{
                                                 min_lark_version?: string;
                                             }>;
@@ -4194,7 +4664,7 @@ export default abstract class Client extends apaas {
                 },
             },
             /**
-             * 应用
+             * 应用管理
              */
             application: {
                 /**
@@ -5597,6 +6067,382 @@ export default abstract class Client extends apaas {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+        },
+        v7: {
+            /**
+             * app_avatar.upload
+             */
+            appAvatarUpload: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=app_avatar.upload&apiName=create&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=app_avatar.upload&version=v7 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: { avatar: Buffer | fs.ReadStream };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const res = await this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { url?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/app_avatar/upload`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers: {
+                                ...headers,
+                                "Content-Type": "multipart/form-data",
+                            },
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                    return res?.data || null;
+                },
+            },
+            /**
+             * application.ability
+             */
+            applicationAbility: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.ability&apiName=patch&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.ability&version=v7 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            web_app?: {
+                                enable: boolean;
+                                pc_url?: string;
+                                pc_new_page_open_mode?: "new_tab" | "browser";
+                                mobile_url?: string;
+                            };
+                            bot?: {
+                                enable: boolean;
+                                message_card_callback_url?: string;
+                                i18ns?: Array<{
+                                    i18n_key:
+                                        | "zh_cn"
+                                        | "en_us"
+                                        | "ja_jp"
+                                        | "zh_hk"
+                                        | "zh_tw"
+                                        | "id_id"
+                                        | "ms_my"
+                                        | "de_de"
+                                        | "es_es"
+                                        | "fr_fr"
+                                        | "it_it"
+                                        | "pt_br"
+                                        | "vi_vn"
+                                        | "ru_ru"
+                                        | "th_th"
+                                        | "ko_kr";
+                                    get_started_desc: string;
+                                }>;
+                                bot_menu_enable?: boolean;
+                                bot_menus?: Array<{
+                                    menu_id?: string;
+                                    parent_menu_id?: string;
+                                    sort?: number;
+                                    default_name?: string;
+                                    i18n_name?: Record<string, string>;
+                                    redirect_link?: {
+                                        pc_url?: string;
+                                        mobile_url?: string;
+                                    };
+                                    event_key?: string;
+                                    icon_file_key?: string;
+                                    ud_icon?: {
+                                        token?: string;
+                                        color?: string;
+                                    };
+                                    menu_content_type?: number;
+                                }>;
+                                bot_menu_display_strategy?: number;
+                                allow_invited_to_group_by_other_app_switch_open?: boolean;
+                            };
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/ability`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.base
+             */
+            applicationBase: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.base&apiName=patch&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.base&version=v7 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            i18ns?: Array<{
+                                i18n_key:
+                                    | "zh_cn"
+                                    | "en_us"
+                                    | "ja_jp"
+                                    | "zh_hk"
+                                    | "zh_tw"
+                                    | "id_id"
+                                    | "ms_my"
+                                    | "de_de"
+                                    | "es_es"
+                                    | "fr_fr"
+                                    | "it_it"
+                                    | "pt_br"
+                                    | "vi_vn"
+                                    | "ru_ru"
+                                    | "th_th"
+                                    | "ko_kr";
+                                name?: string;
+                                description?: string;
+                                help_use?: string;
+                            }>;
+                            avatar_url?: string;
+                            homepage_url?: string;
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/base`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.config
+             */
+            applicationConfig: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.config&apiName=patch&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=patch&project=application&resource=application.config&version=v7 document }
+                 */
+                patch: async (
+                    payload?: {
+                        data?: {
+                            scope?: {
+                                add_scopes?: Array<{
+                                    scope_name: string;
+                                    token_type: "user" | "tenant";
+                                }>;
+                                remove_scopes?: Array<{
+                                    scope_name: string;
+                                    token_type: "user" | "tenant";
+                                }>;
+                            };
+                            event?: {
+                                subscription_type: "webhook" | "websocket";
+                                request_url?: string;
+                                add_events?: Array<string>;
+                                remove_events?: Array<string>;
+                            };
+                            security?: {
+                                add?: {
+                                    redirect_urls?: Array<string>;
+                                    allowed_ips?: Array<string>;
+                                    h5_trusted_domains?: Array<string>;
+                                    web_view_trusted_domains?: Array<string>;
+                                    allowed_schemas?: Array<string>;
+                                    allowed_server_domains?: Array<string>;
+                                };
+                                remove?: {
+                                    redirect_urls?: Array<string>;
+                                    allowed_ips?: Array<string>;
+                                    h5_trusted_domains?: Array<string>;
+                                    web_view_trusted_domains?: Array<string>;
+                                    allowed_schemas?: Array<string>;
+                                    allowed_server_domains?: Array<string>;
+                                };
+                                allow_refresh_token?: boolean;
+                            };
+                            visibility?: {
+                                is_visible_to_all: boolean;
+                                visible_list?: {
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                };
+                            };
+                            contacts?: {
+                                contacts_range_type:
+                                    | "equal_to_availability"
+                                    | "some"
+                                    | "all";
+                                visible_list?: {
+                                    user_ids?: Array<string>;
+                                    department_ids?: Array<string>;
+                                };
+                            };
+                            event_and_callback_encrypt_strategy?: {
+                                encryption_key?: string;
+                                verification_token?: string;
+                            };
+                            callback?: {
+                                callback_type: "webhook" | "websocket";
+                                request_url?: string;
+                                add_callbacks?: Array<string>;
+                                remove_callbacks?: Array<string>;
+                            };
+                        };
+                        params?: {
+                            department_id_type?:
+                                | "open_department_id"
+                                | "department_id";
+                            user_id_type?: "open_id" | "user_id" | "union_id";
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/config`,
+                                path
+                            ),
+                            method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
+             * application.publish
+             */
+            applicationPublish: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=application&resource=application.publish&apiName=create&version=v7 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=application&resource=application.publish&version=v7 document }
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            mobile_default_ability?:
+                                | "gadget"
+                                | "web_app"
+                                | "bot";
+                            pc_default_ability?: "gadget" | "web_app" | "bot";
+                            remark: string;
+                            changelog: string;
+                            version?: string;
+                        };
+                        path: { app_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    version_id?: string;
+                                    version?: string;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/application/v7/applications/:app_id/publish`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

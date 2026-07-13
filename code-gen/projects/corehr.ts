@@ -1840,6 +1840,11 @@ export default abstract class Client extends contract {
                         custom_org_3_ids?: string;
                         custom_org_4_ids?: string;
                         custom_org_5_ids?: string;
+                        custom_org_6_ids?: string;
+                        custom_org_7_ids?: string;
+                        custom_org_8_ids?: string;
+                        custom_org_9_ids?: string;
+                        custom_org_10_ids?: string;
                     };
                 },
                 options?: IRequestOptions
@@ -7584,6 +7589,7 @@ export default abstract class Client extends contract {
                         employee_reasons?: Array<string>;
                         department_ids?: Array<string>;
                         select_fields?: Array<string>;
+                        filter_str?: string;
                     };
                     params: {
                         page_size: number;
@@ -7745,6 +7751,13 @@ export default abstract class Client extends contract {
                                                             }>;
                                                         };
                                                         no_permission_fields?: Array<string>;
+                                                        minor_reason?: {
+                                                            enum_name: string;
+                                                            display?: Array<{
+                                                                lang: string;
+                                                                value: string;
+                                                            }>;
+                                                        };
                                                     };
                                                     offboarding_checklist?: {
                                                         checklist_status?: string;
@@ -7756,6 +7769,8 @@ export default abstract class Client extends contract {
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
+                                                total?: number;
+                                                reject_export?: boolean;
                                             };
                                         }
                                     )?.data || {};
@@ -7805,6 +7820,7 @@ export default abstract class Client extends contract {
                         employee_reasons?: Array<string>;
                         department_ids?: Array<string>;
                         select_fields?: Array<string>;
+                        filter_str?: string;
                     };
                     params: {
                         page_size: number;
@@ -7919,6 +7935,13 @@ export default abstract class Client extends contract {
                                             }>;
                                         };
                                         no_permission_fields?: Array<string>;
+                                        minor_reason?: {
+                                            enum_name: string;
+                                            display?: Array<{
+                                                lang: string;
+                                                value: string;
+                                            }>;
+                                        };
                                     };
                                     offboarding_checklist?: {
                                         checklist_status?: string;
@@ -7930,6 +7953,8 @@ export default abstract class Client extends contract {
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
+                                total?: number;
+                                reject_export?: boolean;
                             };
                         }
                     >({
@@ -13840,6 +13865,11 @@ export default abstract class Client extends contract {
                             custom_org_3_ids?: string;
                             custom_org_4_ids?: string;
                             custom_org_5_ids?: string;
+                            custom_org_6_ids?: string;
+                            custom_org_7_ids?: string;
+                            custom_org_8_ids?: string;
+                            custom_org_9_ids?: string;
+                            custom_org_10_ids?: string;
                         };
                     },
                     options?: IRequestOptions
@@ -19646,6 +19676,7 @@ export default abstract class Client extends contract {
                             employee_reasons?: Array<string>;
                             department_ids?: Array<string>;
                             select_fields?: Array<string>;
+                            filter_str?: string;
                         };
                         params: {
                             page_size: number;
@@ -19809,6 +19840,13 @@ export default abstract class Client extends contract {
                                                                 }>;
                                                             };
                                                             no_permission_fields?: Array<string>;
+                                                            minor_reason?: {
+                                                                enum_name: string;
+                                                                display?: Array<{
+                                                                    lang: string;
+                                                                    value: string;
+                                                                }>;
+                                                            };
                                                         };
                                                         offboarding_checklist?: {
                                                             checklist_status?: string;
@@ -19820,6 +19858,8 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
+                                                    total?: number;
+                                                    reject_export?: boolean;
                                                 };
                                             }
                                         )?.data || {};
@@ -19869,6 +19909,7 @@ export default abstract class Client extends contract {
                             employee_reasons?: Array<string>;
                             department_ids?: Array<string>;
                             select_fields?: Array<string>;
+                            filter_str?: string;
                         };
                         params: {
                             page_size: number;
@@ -19983,6 +20024,13 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             no_permission_fields?: Array<string>;
+                                            minor_reason?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
                                         };
                                         offboarding_checklist?: {
                                             checklist_status?: string;
@@ -19994,6 +20042,8 @@ export default abstract class Client extends contract {
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
+                                    total?: number;
+                                    reject_export?: boolean;
                                 };
                             }
                         >({
@@ -24397,7 +24447,12 @@ export default abstract class Client extends contract {
                                                             | "custom_org_02"
                                                             | "custom_org_03"
                                                             | "custom_org_04"
-                                                            | "custom_org_05";
+                                                            | "custom_org_05"
+                                                            | "custom_org_06"
+                                                            | "custom_org_07"
+                                                            | "custom_org_08"
+                                                            | "custom_org_09"
+                                                            | "custom_org_10";
                                                         org_name?: string;
                                                     }>;
                                                 }>;
@@ -24412,7 +24467,12 @@ export default abstract class Client extends contract {
                                                             | "custom_org_02"
                                                             | "custom_org_03"
                                                             | "custom_org_04"
-                                                            | "custom_org_05";
+                                                            | "custom_org_05"
+                                                            | "custom_org_06"
+                                                            | "custom_org_07"
+                                                            | "custom_org_08"
+                                                            | "custom_org_09"
+                                                            | "custom_org_10";
                                                         org_name?: string;
                                                     }>;
                                                 }>;
@@ -24534,14 +24594,14 @@ export default abstract class Client extends contract {
                                                     en_us?: string;
                                                 };
                                             };
-                                            original_worklocation_name?: {
+                                            original_work_location_name?: {
                                                 id?: string;
                                                 name?: {
                                                     zh_cn?: string;
                                                     en_us?: string;
                                                 };
                                             };
-                                            target_worklocation_name?: {
+                                            target_work_location_name?: {
                                                 id?: string;
                                                 name?: {
                                                     zh_cn?: string;
@@ -24618,6 +24678,253 @@ export default abstract class Client extends contract {
                                                     en_us?: string;
                                                 };
                                             };
+                                            original_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_contract_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_contract_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_duration_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_duration_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_signing_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_signing_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_working_hours_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_working_hours_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_working_calendar_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_working_calendar_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_work_shift_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_work_shift_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_job_grade_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_job_grade_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_compensation_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_compensation_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_service_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_service_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_position_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_position_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_employee_subtype_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_employee_subtype_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_pathway_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_pathway_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_default_cost_center_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_default_cost_center_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_dotted_manager_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_dotted_manager_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            initiator_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            exception_handler_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_social_security_city_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_social_security_city_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            wk_created_at?: string;
+                                            transform_source?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            details_of_job_status_change?: Array<{
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            }>;
                                         };
                                         employment_name?: {
                                             id?: string;
@@ -24628,6 +24935,21 @@ export default abstract class Client extends contract {
                                         };
                                         exception_status?: string;
                                         no_permission_fields?: Array<string>;
+                                        approval_nodes?: Array<{
+                                            name?: string;
+                                            value?: string;
+                                            approval_type?: string;
+                                            approvers?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                avatar?: string;
+                                                user_id?: string;
+                                                employee_number?: string;
+                                            }>;
+                                            approval_status?: string;
+                                            process_id?: string;
+                                            exception_status?: string;
+                                        }>;
                                     }>;
                                 };
                             }
@@ -28532,6 +28854,7 @@ export default abstract class Client extends contract {
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
+                                    reject_export?: boolean;
                                 };
                             }
                         >({
@@ -28826,20 +29149,10 @@ export default abstract class Client extends contract {
                             }>;
                             match_rule_groups?: Array<{
                                 match_rules?: Array<{
-                                    left_value:
-                                        | "department"
-                                        | "department_hierarchy"
-                                        | "work_location"
-                                        | "work_location_hierarchy"
-                                        | "cost_center"
-                                        | "cost_center_hierarchy"
-                                        | "job"
-                                        | "job_level"
-                                        | "job_family"
-                                        | "job_family_hierarchy"
-                                        | "employee_type";
+                                    left_value: string;
                                     operator: "contains" | "notContains";
                                     right_values?: Array<string>;
+                                    ref_key?: "specified" | "reference";
                                 }>;
                             }>;
                             custom_fields?: Array<{
@@ -29009,6 +29322,7 @@ export default abstract class Client extends contract {
                             parent_id?: string;
                             active?: boolean;
                             need_match_rule?: boolean;
+                            manager_id?: string;
                         };
                         params: {
                             page_size: number;
@@ -29054,22 +29368,14 @@ export default abstract class Client extends contract {
                                         }>;
                                         match_rule_groups?: Array<{
                                             match_rules?: Array<{
-                                                left_value:
-                                                    | "department"
-                                                    | "department_hierarchy"
-                                                    | "work_location"
-                                                    | "work_location_hierarchy"
-                                                    | "cost_center"
-                                                    | "cost_center_hierarchy"
-                                                    | "job"
-                                                    | "job_level"
-                                                    | "job_family"
-                                                    | "job_family_hierarchy"
-                                                    | "employee_type";
+                                                left_value: string;
                                                 operator:
                                                     | "contains"
                                                     | "notContains";
                                                 right_values?: Array<string>;
+                                                ref_key?:
+                                                    | "specified"
+                                                    | "reference";
                                             }>;
                                         }>;
                                         active?: boolean;
@@ -29262,20 +29568,10 @@ export default abstract class Client extends contract {
                             org_id: string;
                             match_rule_groups?: Array<{
                                 match_rules?: Array<{
-                                    left_value:
-                                        | "department"
-                                        | "department_hierarchy"
-                                        | "work_location"
-                                        | "work_location_hierarchy"
-                                        | "cost_center"
-                                        | "cost_center_hierarchy"
-                                        | "job"
-                                        | "job_level"
-                                        | "job_family"
-                                        | "job_family_hierarchy"
-                                        | "employee_type";
+                                    left_value: string;
                                     operator: "contains" | "notContains";
                                     right_values?: Array<string>;
+                                    ref_key?: "specified" | "reference";
                                 }>;
                             }>;
                         };
@@ -29735,6 +30031,7 @@ export default abstract class Client extends contract {
                                             is_root?: boolean;
                                         }>;
                                     }>;
+                                    reject_export?: boolean;
                                 };
                             }
                         >({
@@ -30388,6 +30685,7 @@ export default abstract class Client extends contract {
                             code_list?: Array<string>;
                             get_all_version?: boolean;
                             fields?: Array<string>;
+                            keyword?: string;
                         };
                         params: {
                             page_size: number;
@@ -30520,6 +30818,8 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
+                                                    reject_export?: boolean;
+                                                    total_count?: string;
                                                 };
                                             }
                                         )?.data || {};
@@ -30557,6 +30857,7 @@ export default abstract class Client extends contract {
                             code_list?: Array<string>;
                             get_all_version?: boolean;
                             fields?: Array<string>;
+                            keyword?: string;
                         };
                         params: {
                             page_size: number;
@@ -30640,6 +30941,8 @@ export default abstract class Client extends contract {
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
+                                    reject_export?: boolean;
+                                    total_count?: string;
                                 };
                             }
                         >({
@@ -30699,6 +31002,7 @@ export default abstract class Client extends contract {
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
+                                    reject_export?: boolean;
                                 };
                             }
                         >({
@@ -31605,6 +31909,18 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     view_order?: string;
                                                 }>;
+                                                emails?: Array<{
+                                                    email: string;
+                                                    is_primary?: boolean;
+                                                    is_public?: boolean;
+                                                    email_usage?: {
+                                                        enum_name: string;
+                                                        display?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                    };
+                                                }>;
                                             }>;
                                             emergency_contact_list?: Array<{
                                                 id?: string;
@@ -32100,6 +32416,73 @@ export default abstract class Client extends contract {
                                                 };
                                                 marital_status_date?: string;
                                             }>;
+                                            preferred_name_v2?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                tertiary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                wk_id?: string;
+                                            };
+                                            mother_name?: string;
+                                            city_of_birth?: string;
+                                            region_of_birth?: string;
+                                            tax_info_mys?: {
+                                                epf_ee_tp3?: string;
+                                                fresh_graduate?: boolean;
+                                                monthly_gross?: string;
+                                                mtd?: string;
+                                                previous_income_in_the_current_year?: boolean;
+                                                socso?: string;
+                                                tax_relief_1?: string;
+                                                tax_relief_2?: string;
+                                                tax_relief_3?: string;
+                                                tax_relief_4?: string;
+                                                tax_relief_5?: string;
+                                            };
                                         };
                                         custom_fields?: Array<{
                                             custom_api_name: string;
@@ -33789,6 +34172,18 @@ export default abstract class Client extends contract {
                                                                     }>;
                                                                     view_order?: string;
                                                                 }>;
+                                                                emails?: Array<{
+                                                                    email: string;
+                                                                    is_primary?: boolean;
+                                                                    is_public?: boolean;
+                                                                    email_usage?: {
+                                                                        enum_name: string;
+                                                                        display?: Array<{
+                                                                            lang: string;
+                                                                            value: string;
+                                                                        }>;
+                                                                    };
+                                                                }>;
                                                             }>;
                                                             emergency_contact_list?: Array<{
                                                                 id?: string;
@@ -34284,6 +34679,73 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 marital_status_date?: string;
                                                             }>;
+                                                            preferred_name_v2?: {
+                                                                local_primary?: string;
+                                                                local_first_name?: string;
+                                                                country_region_id: string;
+                                                                name_type: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_first_name_2?: string;
+                                                                local_primary_2?: string;
+                                                                additional_name?: string;
+                                                                additional_name_type?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                first_name?: string;
+                                                                full_name?: string;
+                                                                hereditary?: string;
+                                                                custom_name?: string;
+                                                                custom_local_name?: string;
+                                                                middle_name?: string;
+                                                                name_primary?: string;
+                                                                secondary?: string;
+                                                                tertiary?: string;
+                                                                social?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                title?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_middle_name?: string;
+                                                                local_secondary?: string;
+                                                                display_name_local_and_western_script?: string;
+                                                                display_name_local_script?: string;
+                                                                display_name_western_script?: string;
+                                                                wk_id?: string;
+                                                            };
+                                                            mother_name?: string;
+                                                            city_of_birth?: string;
+                                                            region_of_birth?: string;
+                                                            tax_info_mys?: {
+                                                                epf_ee_tp3?: string;
+                                                                fresh_graduate?: boolean;
+                                                                monthly_gross?: string;
+                                                                mtd?: string;
+                                                                previous_income_in_the_current_year?: boolean;
+                                                                socso?: string;
+                                                                tax_relief_1?: string;
+                                                                tax_relief_2?: string;
+                                                                tax_relief_3?: string;
+                                                                tax_relief_4?: string;
+                                                                tax_relief_5?: string;
+                                                            };
                                                         };
                                                         custom_fields?: Array<{
                                                             custom_api_name: string;
@@ -35325,6 +35787,18 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     view_order?: string;
                                                 }>;
+                                                emails?: Array<{
+                                                    email: string;
+                                                    is_primary?: boolean;
+                                                    is_public?: boolean;
+                                                    email_usage?: {
+                                                        enum_name: string;
+                                                        display?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                    };
+                                                }>;
                                             }>;
                                             emergency_contact_list?: Array<{
                                                 id?: string;
@@ -35820,6 +36294,73 @@ export default abstract class Client extends contract {
                                                 };
                                                 marital_status_date?: string;
                                             }>;
+                                            preferred_name_v2?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                tertiary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                wk_id?: string;
+                                            };
+                                            mother_name?: string;
+                                            city_of_birth?: string;
+                                            region_of_birth?: string;
+                                            tax_info_mys?: {
+                                                epf_ee_tp3?: string;
+                                                fresh_graduate?: boolean;
+                                                monthly_gross?: string;
+                                                mtd?: string;
+                                                previous_income_in_the_current_year?: boolean;
+                                                socso?: string;
+                                                tax_relief_1?: string;
+                                                tax_relief_2?: string;
+                                                tax_relief_3?: string;
+                                                tax_relief_4?: string;
+                                                tax_relief_5?: string;
+                                            };
                                         };
                                         custom_fields?: Array<{
                                             custom_api_name: string;
@@ -37627,6 +38168,7 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             pathway_id?: string;
+                                            work_calendar_id?: string;
                                         }>;
                                     }>;
                                 };
@@ -37778,6 +38320,7 @@ export default abstract class Client extends contract {
                                                 }>;
                                             };
                                             pathway_id?: string;
+                                            work_calendar_id?: string;
                                         }>;
                                     }>;
                                     page_token?: string;
@@ -38370,6 +38913,24 @@ export default abstract class Client extends contract {
                                         custom_api_name: string;
                                         value: string;
                                     }>;
+                                    notice_period_change_record?: {
+                                        probation_voluntary?: {
+                                            value?: number;
+                                            value_unit?: string;
+                                        };
+                                        probation_involuntary?: {
+                                            value?: number;
+                                            value_unit?: string;
+                                        };
+                                        positive_voluntary?: {
+                                            value?: number;
+                                            value_unit?: string;
+                                        };
+                                        positive_involuntary?: {
+                                            value?: number;
+                                            value_unit?: string;
+                                        };
+                                    };
                                 };
                                 target_job_grade?: string;
                                 target_compensation_type?: string;
@@ -38506,6 +39067,24 @@ export default abstract class Client extends contract {
                                                 type?: number;
                                                 value: string;
                                             }>;
+                                            notice_period_change_record?: {
+                                                probation_voluntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                probation_involuntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                positive_voluntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                positive_involuntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                            };
                                         };
                                         target_employment_change?: {
                                             regular_employee_start_date?: string;
@@ -38520,6 +39099,24 @@ export default abstract class Client extends contract {
                                                 type?: number;
                                                 value: string;
                                             }>;
+                                            notice_period_change_record?: {
+                                                probation_voluntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                probation_involuntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                positive_voluntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                                positive_involuntary?: {
+                                                    value?: number;
+                                                    value_unit?: string;
+                                                };
+                                            };
                                         };
                                         original_job_grade?: string;
                                         target_job_grade?: string;
@@ -38548,14 +39145,14 @@ export default abstract class Client extends contract {
                                                 en_us?: string;
                                             };
                                         };
-                                        original_worklocation_name?: {
+                                        original_work_location_name?: {
                                             id?: string;
                                             name?: {
                                                 zh_cn?: string;
                                                 en_us?: string;
                                             };
                                         };
-                                        target_worklocation_name?: {
+                                        target_work_location_name?: {
                                             id?: string;
                                             name?: {
                                                 zh_cn?: string;
@@ -38632,6 +39229,253 @@ export default abstract class Client extends contract {
                                                 en_us?: string;
                                             };
                                         };
+                                        original_company_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_company_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_contract_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_contract_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_duration_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_duration_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_signing_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_signing_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_working_hours_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_working_hours_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_working_calendar_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_working_calendar_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_work_shift_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_work_shift_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_job_grade_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_job_grade_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_compensation_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_compensation_type_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_service_company_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_service_company_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_position_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_position_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_employee_subtype_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_employee_subtype_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_pathway_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_pathway_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_default_cost_center_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_default_cost_center_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_dotted_manager_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_dotted_manager_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        initiator_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        exception_handler_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        original_social_security_city_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        target_social_security_city_name?: {
+                                            id?: string;
+                                            name?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                        };
+                                        wk_created_at?: string;
+                                        transform_source?: {
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        };
+                                        details_of_job_status_change?: Array<{
+                                            zh_cn?: string;
+                                            en_us?: string;
+                                        }>;
                                     };
                                     is_adjust_salary?: boolean;
                                     custom_fields?: Array<{
@@ -38653,6 +39497,21 @@ export default abstract class Client extends contract {
                                     };
                                     exception_status?: string;
                                     no_permission_fields?: Array<string>;
+                                    approval_nodes?: Array<{
+                                        name?: string;
+                                        value?: string;
+                                        approval_type?: string;
+                                        approvers?: Array<{
+                                            id?: string;
+                                            name?: string;
+                                            avatar?: string;
+                                            user_id?: string;
+                                            employee_number?: string;
+                                        }>;
+                                        approval_status?: string;
+                                        process_id?: string;
+                                        exception_status?: string;
+                                    }>;
                                 };
                             }
                         >({
@@ -38744,6 +39603,7 @@ export default abstract class Client extends contract {
                             original_department_ids?: Array<string>;
                             employment_department_ids?: Array<string>;
                             select_fields?: Array<string>;
+                            filter_str?: string;
                         };
                         params: {
                             page_size: number;
@@ -38914,6 +39774,24 @@ export default abstract class Client extends contract {
                                                                     type?: number;
                                                                     value: string;
                                                                 }>;
+                                                                notice_period_change_record?: {
+                                                                    probation_voluntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    probation_involuntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    positive_voluntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    positive_involuntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                };
                                                             };
                                                             target_employment_change?: {
                                                                 regular_employee_start_date?: string;
@@ -38928,6 +39806,24 @@ export default abstract class Client extends contract {
                                                                     type?: number;
                                                                     value: string;
                                                                 }>;
+                                                                notice_period_change_record?: {
+                                                                    probation_voluntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    probation_involuntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    positive_voluntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                    positive_involuntary?: {
+                                                                        value?: number;
+                                                                        value_unit?: string;
+                                                                    };
+                                                                };
                                                             };
                                                             original_job_grade?: string;
                                                             target_job_grade?: string;
@@ -38956,14 +39852,14 @@ export default abstract class Client extends contract {
                                                                     en_us?: string;
                                                                 };
                                                             };
-                                                            original_worklocation_name?: {
+                                                            original_work_location_name?: {
                                                                 id?: string;
                                                                 name?: {
                                                                     zh_cn?: string;
                                                                     en_us?: string;
                                                                 };
                                                             };
-                                                            target_worklocation_name?: {
+                                                            target_work_location_name?: {
                                                                 id?: string;
                                                                 name?: {
                                                                     zh_cn?: string;
@@ -39040,6 +39936,253 @@ export default abstract class Client extends contract {
                                                                     en_us?: string;
                                                                 };
                                                             };
+                                                            original_company_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_company_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_contract_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_contract_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_duration_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_duration_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_signing_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_signing_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_working_hours_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_working_hours_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_working_calendar_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_working_calendar_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_work_shift_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_work_shift_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_job_grade_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_job_grade_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_compensation_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_compensation_type_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_service_company_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_service_company_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_position_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_position_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_employee_subtype_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_employee_subtype_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_pathway_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_pathway_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_default_cost_center_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_default_cost_center_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_dotted_manager_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_dotted_manager_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            initiator_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            exception_handler_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            original_social_security_city_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            target_social_security_city_name?: {
+                                                                id?: string;
+                                                                name?: {
+                                                                    zh_cn?: string;
+                                                                    en_us?: string;
+                                                                };
+                                                            };
+                                                            wk_created_at?: string;
+                                                            transform_source?: {
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            };
+                                                            details_of_job_status_change?: Array<{
+                                                                zh_cn?: string;
+                                                                en_us?: string;
+                                                            }>;
                                                         };
                                                         is_adjust_salary?: boolean;
                                                         custom_fields?: Array<{
@@ -39061,9 +40204,26 @@ export default abstract class Client extends contract {
                                                         };
                                                         exception_status?: string;
                                                         no_permission_fields?: Array<string>;
+                                                        approval_nodes?: Array<{
+                                                            name?: string;
+                                                            value?: string;
+                                                            approval_type?: string;
+                                                            approvers?: Array<{
+                                                                id?: string;
+                                                                name?: string;
+                                                                avatar?: string;
+                                                                user_id?: string;
+                                                                employee_number?: string;
+                                                            }>;
+                                                            approval_status?: string;
+                                                            process_id?: string;
+                                                            exception_status?: string;
+                                                        }>;
                                                     }>;
                                                     has_more?: boolean;
                                                     page_token?: string;
+                                                    total?: number;
+                                                    reject_export?: boolean;
                                                 };
                                             }
                                         )?.data || {};
@@ -39113,6 +40273,7 @@ export default abstract class Client extends contract {
                             original_department_ids?: Array<string>;
                             employment_department_ids?: Array<string>;
                             select_fields?: Array<string>;
+                            filter_str?: string;
                         };
                         params: {
                             page_size: number;
@@ -39234,6 +40395,24 @@ export default abstract class Client extends contract {
                                                     type?: number;
                                                     value: string;
                                                 }>;
+                                                notice_period_change_record?: {
+                                                    probation_voluntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    probation_involuntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    positive_voluntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    positive_involuntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                };
                                             };
                                             target_employment_change?: {
                                                 regular_employee_start_date?: string;
@@ -39248,6 +40427,24 @@ export default abstract class Client extends contract {
                                                     type?: number;
                                                     value: string;
                                                 }>;
+                                                notice_period_change_record?: {
+                                                    probation_voluntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    probation_involuntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    positive_voluntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                    positive_involuntary?: {
+                                                        value?: number;
+                                                        value_unit?: string;
+                                                    };
+                                                };
                                             };
                                             original_job_grade?: string;
                                             target_job_grade?: string;
@@ -39276,14 +40473,14 @@ export default abstract class Client extends contract {
                                                     en_us?: string;
                                                 };
                                             };
-                                            original_worklocation_name?: {
+                                            original_work_location_name?: {
                                                 id?: string;
                                                 name?: {
                                                     zh_cn?: string;
                                                     en_us?: string;
                                                 };
                                             };
-                                            target_worklocation_name?: {
+                                            target_work_location_name?: {
                                                 id?: string;
                                                 name?: {
                                                     zh_cn?: string;
@@ -39360,6 +40557,253 @@ export default abstract class Client extends contract {
                                                     en_us?: string;
                                                 };
                                             };
+                                            original_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_contract_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_contract_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_duration_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_duration_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_signing_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_signing_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_working_hours_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_working_hours_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_working_calendar_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_working_calendar_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_work_shift_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_work_shift_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_job_grade_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_job_grade_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_compensation_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_compensation_type_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_service_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_service_company_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_position_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_position_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_employee_subtype_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_employee_subtype_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_pathway_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_pathway_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_default_cost_center_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_default_cost_center_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_dotted_manager_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_dotted_manager_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            initiator_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            exception_handler_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            original_social_security_city_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            target_social_security_city_name?: {
+                                                id?: string;
+                                                name?: {
+                                                    zh_cn?: string;
+                                                    en_us?: string;
+                                                };
+                                            };
+                                            wk_created_at?: string;
+                                            transform_source?: {
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            };
+                                            details_of_job_status_change?: Array<{
+                                                zh_cn?: string;
+                                                en_us?: string;
+                                            }>;
                                         };
                                         is_adjust_salary?: boolean;
                                         custom_fields?: Array<{
@@ -39381,9 +40825,26 @@ export default abstract class Client extends contract {
                                         };
                                         exception_status?: string;
                                         no_permission_fields?: Array<string>;
+                                        approval_nodes?: Array<{
+                                            name?: string;
+                                            value?: string;
+                                            approval_type?: string;
+                                            approvers?: Array<{
+                                                id?: string;
+                                                name?: string;
+                                                avatar?: string;
+                                                user_id?: string;
+                                                employee_number?: string;
+                                            }>;
+                                            approval_status?: string;
+                                            process_id?: string;
+                                            exception_status?: string;
+                                        }>;
                                     }>;
                                     has_more?: boolean;
                                     page_token?: string;
+                                    total?: number;
+                                    reject_export?: boolean;
                                 };
                             }
                         >({
@@ -41665,6 +43126,12 @@ export default abstract class Client extends contract {
                                     }>;
                                     view_order?: string;
                                 }>;
+                                emails?: Array<{
+                                    email: string;
+                                    is_primary?: boolean;
+                                    is_public?: boolean;
+                                    email_usage?: { enum_name: string };
+                                }>;
                             }>;
                             emergency_contact_list?: Array<{
                                 id?: string;
@@ -41858,6 +43325,46 @@ export default abstract class Client extends contract {
                                 ethnicity_race?: { enum_name: string };
                                 marital_status_date?: string;
                             }>;
+                            preferred_name_v2?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                tertiary?: string;
+                                social?: { enum_name: string };
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                wk_id?: string;
+                            };
+                            mother_name?: string;
+                            city_of_birth?: string;
+                            region_of_birth?: string;
+                            tax_info_mys?: {
+                                epf_ee_tp3?: string;
+                                fresh_graduate?: boolean;
+                                monthly_gross?: string;
+                                mtd?: string;
+                                previous_income_in_the_current_year?: boolean;
+                                socso?: string;
+                                tax_relief_1?: string;
+                                tax_relief_2?: string;
+                                tax_relief_3?: string;
+                                tax_relief_4?: string;
+                                tax_relief_5?: string;
+                            };
                         };
                         params?: { client_token?: string };
                     },
@@ -42438,6 +43945,18 @@ export default abstract class Client extends contract {
                                                 }>;
                                                 view_order?: string;
                                             }>;
+                                            emails?: Array<{
+                                                email: string;
+                                                is_primary?: boolean;
+                                                is_public?: boolean;
+                                                email_usage?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                            }>;
                                         }>;
                                         emergency_contact_list?: Array<{
                                             id?: string;
@@ -42919,6 +44438,73 @@ export default abstract class Client extends contract {
                                             };
                                             marital_status_date?: string;
                                         }>;
+                                        preferred_name_v2?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            tertiary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            wk_id?: string;
+                                        };
+                                        mother_name?: string;
+                                        city_of_birth?: string;
+                                        region_of_birth?: string;
+                                        tax_info_mys?: {
+                                            epf_ee_tp3?: string;
+                                            fresh_graduate?: boolean;
+                                            monthly_gross?: string;
+                                            mtd?: string;
+                                            previous_income_in_the_current_year?: boolean;
+                                            socso?: string;
+                                            tax_relief_1?: string;
+                                            tax_relief_2?: string;
+                                            tax_relief_3?: string;
+                                            tax_relief_4?: string;
+                                            tax_relief_5?: string;
+                                        };
                                     };
                                 };
                             }
@@ -43222,6 +44808,12 @@ export default abstract class Client extends contract {
                                     }>;
                                     view_order?: string;
                                 }>;
+                                emails?: Array<{
+                                    email: string;
+                                    is_primary?: boolean;
+                                    is_public?: boolean;
+                                    email_usage?: { enum_name: string };
+                                }>;
                             }>;
                             emergency_contact_list?: Array<{
                                 id?: string;
@@ -43415,6 +45007,46 @@ export default abstract class Client extends contract {
                                 ethnicity_race?: { enum_name: string };
                                 marital_status_date?: string;
                             }>;
+                            preferred_name_v2?: {
+                                local_primary?: string;
+                                local_first_name?: string;
+                                country_region_id: string;
+                                name_type: { enum_name: string };
+                                local_first_name_2?: string;
+                                local_primary_2?: string;
+                                additional_name?: string;
+                                additional_name_type?: { enum_name: string };
+                                first_name?: string;
+                                full_name?: string;
+                                hereditary?: string;
+                                custom_name?: string;
+                                custom_local_name?: string;
+                                middle_name?: string;
+                                name_primary?: string;
+                                secondary?: string;
+                                tertiary?: string;
+                                social?: { enum_name: string };
+                                title?: { enum_name: string };
+                                local_middle_name?: string;
+                                local_secondary?: string;
+                                wk_id?: string;
+                            };
+                            mother_name?: string;
+                            city_of_birth?: string;
+                            region_of_birth?: string;
+                            tax_info_mys?: {
+                                epf_ee_tp3?: string;
+                                fresh_graduate?: boolean;
+                                monthly_gross?: string;
+                                mtd?: string;
+                                previous_income_in_the_current_year?: boolean;
+                                socso?: string;
+                                tax_relief_1?: string;
+                                tax_relief_2?: string;
+                                tax_relief_3?: string;
+                                tax_relief_4?: string;
+                                tax_relief_5?: string;
+                            };
                         };
                         params?: {
                             client_token?: string;
@@ -43999,6 +45631,18 @@ export default abstract class Client extends contract {
                                                 }>;
                                                 view_order?: string;
                                             }>;
+                                            emails?: Array<{
+                                                email: string;
+                                                is_primary?: boolean;
+                                                is_public?: boolean;
+                                                email_usage?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                            }>;
                                         }>;
                                         emergency_contact_list?: Array<{
                                             id?: string;
@@ -44479,6 +46123,73 @@ export default abstract class Client extends contract {
                                             };
                                             marital_status_date?: string;
                                         }>;
+                                        preferred_name_v2?: {
+                                            local_primary?: string;
+                                            local_first_name?: string;
+                                            country_region_id: string;
+                                            name_type: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_first_name_2?: string;
+                                            local_primary_2?: string;
+                                            additional_name?: string;
+                                            additional_name_type?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            first_name?: string;
+                                            full_name?: string;
+                                            hereditary?: string;
+                                            custom_name?: string;
+                                            custom_local_name?: string;
+                                            middle_name?: string;
+                                            name_primary?: string;
+                                            secondary?: string;
+                                            tertiary?: string;
+                                            social?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            title?: {
+                                                enum_name: string;
+                                                display?: Array<{
+                                                    lang: string;
+                                                    value: string;
+                                                }>;
+                                            };
+                                            local_middle_name?: string;
+                                            local_secondary?: string;
+                                            display_name_local_and_western_script?: string;
+                                            display_name_local_script?: string;
+                                            display_name_western_script?: string;
+                                            wk_id?: string;
+                                        };
+                                        mother_name?: string;
+                                        city_of_birth?: string;
+                                        region_of_birth?: string;
+                                        tax_info_mys?: {
+                                            epf_ee_tp3?: string;
+                                            fresh_graduate?: boolean;
+                                            monthly_gross?: string;
+                                            mtd?: string;
+                                            previous_income_in_the_current_year?: boolean;
+                                            socso?: string;
+                                            tax_relief_1?: string;
+                                            tax_relief_2?: string;
+                                            tax_relief_3?: string;
+                                            tax_relief_4?: string;
+                                            tax_relief_5?: string;
+                                        };
                                     };
                                 };
                             }
@@ -45249,6 +46960,12 @@ export default abstract class Client extends contract {
                                         local_first_name_2?: string;
                                         local_primary_2?: string;
                                     };
+                                    emails?: Array<{
+                                        email: string;
+                                        is_primary: boolean;
+                                        is_public: boolean;
+                                        email_usage: string;
+                                    }>;
                                 }>;
                                 religion?: string;
                                 bank_account_list?: Array<{
@@ -45383,6 +47100,110 @@ export default abstract class Client extends contract {
                                 }>;
                                 expected_graduate_date?: string;
                                 political_affiliation?: string;
+                                legal_names?: Array<{
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    country_region: string;
+                                    name_type: string;
+                                    additional_name?: string;
+                                    wk_id?: string;
+                                    hereditary?: string;
+                                    secondary?: string;
+                                    social?: string;
+                                    tertiary?: string;
+                                    title?: string;
+                                    local_secondary?: string;
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                }>;
+                                person_for_countries?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    gender?: string;
+                                    religion?: string;
+                                    marital_status?: string;
+                                    ethnicity_race?: string;
+                                    marital_status_date?: string;
+                                }>;
+                                passports?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    passport_number: string;
+                                    issued_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                }>;
+                                visas?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    visa_number: string;
+                                    issued_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                }>;
+                                national_id_v2s?: Array<{
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    national_id_number: string;
+                                    issue_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                    wk_id?: string;
+                                    series?: string;
+                                    effective_for_a_long_time?: boolean;
+                                }>;
+                                preferred_name_v2?: {
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    country_region: string;
+                                    name_type: string;
+                                    additional_name?: string;
+                                    wk_id?: string;
+                                    hereditary?: string;
+                                    secondary?: string;
+                                    social?: string;
+                                    tertiary?: string;
+                                    title?: string;
+                                    local_secondary?: string;
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                };
+                                mother_name?: string;
+                                city_of_birth?: string;
+                                region_of_birth?: string;
+                                tax_info_mys?: {
+                                    epf_ee_tp3?: string;
+                                    fresh_graduate?: boolean;
+                                    monthly_gross?: string;
+                                    mtd?: string;
+                                    previous_income_in_the_current_year?: boolean;
+                                    socso?: string;
+                                    tax_relief_1?: string;
+                                    tax_relief_2?: string;
+                                    tax_relief_3?: string;
+                                    tax_relief_4?: string;
+                                    tax_relief_5?: string;
+                                };
                             };
                             offer_info: {
                                 offer_id?: string;
@@ -45813,6 +47634,12 @@ export default abstract class Client extends contract {
                                         local_first_name_2?: string;
                                         local_primary_2?: string;
                                     };
+                                    emails?: Array<{
+                                        email: string;
+                                        is_primary: boolean;
+                                        is_public: boolean;
+                                        email_usage: string;
+                                    }>;
                                 }>;
                                 religion?: string;
                                 bank_account_list?: Array<{
@@ -45975,6 +47802,110 @@ export default abstract class Client extends contract {
                                     degree?: string;
                                 }>;
                                 political_affiliation?: string;
+                                legal_names?: Array<{
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    country_region: string;
+                                    name_type: string;
+                                    additional_name?: string;
+                                    wk_id?: string;
+                                    hereditary?: string;
+                                    secondary?: string;
+                                    social?: string;
+                                    tertiary?: string;
+                                    title?: string;
+                                    local_secondary?: string;
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                }>;
+                                person_for_countries?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    gender?: string;
+                                    religion?: string;
+                                    marital_status?: string;
+                                    ethnicity_race?: string;
+                                    marital_status_date?: string;
+                                }>;
+                                passports?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    passport_number: string;
+                                    issued_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                }>;
+                                visas?: Array<{
+                                    wk_id?: string;
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    visa_number: string;
+                                    issued_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                }>;
+                                national_id_v2s?: Array<{
+                                    country_region_id: string;
+                                    national_id_type_id: string;
+                                    national_id_number: string;
+                                    issue_date?: string;
+                                    expiration_date?: string;
+                                    issued_by?: string;
+                                    custom_fields?: Array<{
+                                        field_name: string;
+                                        value: string;
+                                    }>;
+                                    wk_id?: string;
+                                    series?: string;
+                                    effective_for_a_long_time?: boolean;
+                                }>;
+                                preferred_name_v2?: {
+                                    full_name?: string;
+                                    first_name?: string;
+                                    middle_name?: string;
+                                    name_primary?: string;
+                                    local_first_name?: string;
+                                    local_middle_name?: string;
+                                    local_primary?: string;
+                                    custom_local_name?: string;
+                                    custom_western_name?: string;
+                                    country_region: string;
+                                    name_type: string;
+                                    additional_name?: string;
+                                    wk_id?: string;
+                                    hereditary?: string;
+                                    secondary?: string;
+                                    social?: string;
+                                    tertiary?: string;
+                                    title?: string;
+                                    local_secondary?: string;
+                                    local_first_name_2?: string;
+                                    local_primary_2?: string;
+                                };
+                                mother_name?: string;
+                                city_of_birth?: string;
+                                region_of_birth?: string;
+                                tax_info_mys?: {
+                                    epf_ee_tp3?: string;
+                                    fresh_graduate?: boolean;
+                                    monthly_gross?: string;
+                                    mtd?: string;
+                                    previous_income_in_the_current_year?: boolean;
+                                    socso?: string;
+                                    tax_relief_1?: string;
+                                    tax_relief_2?: string;
+                                    tax_relief_3?: string;
+                                    tax_relief_4?: string;
+                                    tax_relief_5?: string;
+                                };
                             };
                             offer_info_update?: {
                                 onboarding_date?: string;
@@ -46793,6 +48724,18 @@ export default abstract class Client extends contract {
                                                                     }>;
                                                                     view_order?: string;
                                                                 }>;
+                                                                emails?: Array<{
+                                                                    email: string;
+                                                                    is_primary?: boolean;
+                                                                    is_public?: boolean;
+                                                                    email_usage?: {
+                                                                        enum_name: string;
+                                                                        display?: Array<{
+                                                                            lang: string;
+                                                                            value: string;
+                                                                        }>;
+                                                                    };
+                                                                }>;
                                                             }>;
                                                             emergency_contact_list?: Array<{
                                                                 id?: string;
@@ -47298,6 +49241,73 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 marital_status_date?: string;
                                                             }>;
+                                                            preferred_name_v2?: {
+                                                                local_primary?: string;
+                                                                local_first_name?: string;
+                                                                country_region_id: string;
+                                                                name_type: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_first_name_2?: string;
+                                                                local_primary_2?: string;
+                                                                additional_name?: string;
+                                                                additional_name_type?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                first_name?: string;
+                                                                full_name?: string;
+                                                                hereditary?: string;
+                                                                custom_name?: string;
+                                                                custom_local_name?: string;
+                                                                middle_name?: string;
+                                                                name_primary?: string;
+                                                                secondary?: string;
+                                                                tertiary?: string;
+                                                                social?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                title?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_middle_name?: string;
+                                                                local_secondary?: string;
+                                                                display_name_local_and_western_script?: string;
+                                                                display_name_local_script?: string;
+                                                                display_name_western_script?: string;
+                                                                wk_id?: string;
+                                                            };
+                                                            mother_name?: string;
+                                                            city_of_birth?: string;
+                                                            region_of_birth?: string;
+                                                            tax_info_mys?: {
+                                                                epf_ee_tp3?: string;
+                                                                fresh_graduate?: boolean;
+                                                                monthly_gross?: string;
+                                                                mtd?: string;
+                                                                previous_income_in_the_current_year?: boolean;
+                                                                socso?: string;
+                                                                tax_relief_1?: string;
+                                                                tax_relief_2?: string;
+                                                                tax_relief_3?: string;
+                                                                tax_relief_4?: string;
+                                                                tax_relief_5?: string;
+                                                            };
                                                         };
                                                         employment_info?: {
                                                             department_id?: string;
@@ -47565,6 +49575,7 @@ export default abstract class Client extends contract {
                                                                     | "completed";
                                                                 operator_id?: string;
                                                                 task_code?: string;
+                                                                current_operators?: Array<string>;
                                                             }>;
                                                             onboarding_address?: {
                                                                 full_address_local_script?: string;
@@ -48297,6 +50308,18 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     view_order?: string;
                                                 }>;
+                                                emails?: Array<{
+                                                    email: string;
+                                                    is_primary?: boolean;
+                                                    is_public?: boolean;
+                                                    email_usage?: {
+                                                        enum_name: string;
+                                                        display?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                    };
+                                                }>;
                                             }>;
                                             emergency_contact_list?: Array<{
                                                 id?: string;
@@ -48802,6 +50825,73 @@ export default abstract class Client extends contract {
                                                 };
                                                 marital_status_date?: string;
                                             }>;
+                                            preferred_name_v2?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                tertiary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                wk_id?: string;
+                                            };
+                                            mother_name?: string;
+                                            city_of_birth?: string;
+                                            region_of_birth?: string;
+                                            tax_info_mys?: {
+                                                epf_ee_tp3?: string;
+                                                fresh_graduate?: boolean;
+                                                monthly_gross?: string;
+                                                mtd?: string;
+                                                previous_income_in_the_current_year?: boolean;
+                                                socso?: string;
+                                                tax_relief_1?: string;
+                                                tax_relief_2?: string;
+                                                tax_relief_3?: string;
+                                                tax_relief_4?: string;
+                                                tax_relief_5?: string;
+                                            };
                                         };
                                         employment_info?: {
                                             department_id?: string;
@@ -49069,6 +51159,7 @@ export default abstract class Client extends contract {
                                                     | "completed";
                                                 operator_id?: string;
                                                 task_code?: string;
+                                                current_operators?: Array<string>;
                                             }>;
                                             onboarding_address?: {
                                                 full_address_local_script?: string;
@@ -49907,6 +51998,18 @@ export default abstract class Client extends contract {
                                                                     }>;
                                                                     view_order?: string;
                                                                 }>;
+                                                                emails?: Array<{
+                                                                    email: string;
+                                                                    is_primary?: boolean;
+                                                                    is_public?: boolean;
+                                                                    email_usage?: {
+                                                                        enum_name: string;
+                                                                        display?: Array<{
+                                                                            lang: string;
+                                                                            value: string;
+                                                                        }>;
+                                                                    };
+                                                                }>;
                                                             }>;
                                                             emergency_contact_list?: Array<{
                                                                 id?: string;
@@ -50412,6 +52515,73 @@ export default abstract class Client extends contract {
                                                                 };
                                                                 marital_status_date?: string;
                                                             }>;
+                                                            preferred_name_v2?: {
+                                                                local_primary?: string;
+                                                                local_first_name?: string;
+                                                                country_region_id: string;
+                                                                name_type: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_first_name_2?: string;
+                                                                local_primary_2?: string;
+                                                                additional_name?: string;
+                                                                additional_name_type?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                first_name?: string;
+                                                                full_name?: string;
+                                                                hereditary?: string;
+                                                                custom_name?: string;
+                                                                custom_local_name?: string;
+                                                                middle_name?: string;
+                                                                name_primary?: string;
+                                                                secondary?: string;
+                                                                tertiary?: string;
+                                                                social?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                title?: {
+                                                                    enum_name: string;
+                                                                    display?: Array<{
+                                                                        lang: string;
+                                                                        value: string;
+                                                                    }>;
+                                                                };
+                                                                local_middle_name?: string;
+                                                                local_secondary?: string;
+                                                                display_name_local_and_western_script?: string;
+                                                                display_name_local_script?: string;
+                                                                display_name_western_script?: string;
+                                                                wk_id?: string;
+                                                            };
+                                                            mother_name?: string;
+                                                            city_of_birth?: string;
+                                                            region_of_birth?: string;
+                                                            tax_info_mys?: {
+                                                                epf_ee_tp3?: string;
+                                                                fresh_graduate?: boolean;
+                                                                monthly_gross?: string;
+                                                                mtd?: string;
+                                                                previous_income_in_the_current_year?: boolean;
+                                                                socso?: string;
+                                                                tax_relief_1?: string;
+                                                                tax_relief_2?: string;
+                                                                tax_relief_3?: string;
+                                                                tax_relief_4?: string;
+                                                                tax_relief_5?: string;
+                                                            };
                                                         };
                                                         employment_info?: {
                                                             department_id?: string;
@@ -51432,6 +53602,18 @@ export default abstract class Client extends contract {
                                                     }>;
                                                     view_order?: string;
                                                 }>;
+                                                emails?: Array<{
+                                                    email: string;
+                                                    is_primary?: boolean;
+                                                    is_public?: boolean;
+                                                    email_usage?: {
+                                                        enum_name: string;
+                                                        display?: Array<{
+                                                            lang: string;
+                                                            value: string;
+                                                        }>;
+                                                    };
+                                                }>;
                                             }>;
                                             emergency_contact_list?: Array<{
                                                 id?: string;
@@ -51937,6 +54119,73 @@ export default abstract class Client extends contract {
                                                 };
                                                 marital_status_date?: string;
                                             }>;
+                                            preferred_name_v2?: {
+                                                local_primary?: string;
+                                                local_first_name?: string;
+                                                country_region_id: string;
+                                                name_type: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_first_name_2?: string;
+                                                local_primary_2?: string;
+                                                additional_name?: string;
+                                                additional_name_type?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                first_name?: string;
+                                                full_name?: string;
+                                                hereditary?: string;
+                                                custom_name?: string;
+                                                custom_local_name?: string;
+                                                middle_name?: string;
+                                                name_primary?: string;
+                                                secondary?: string;
+                                                tertiary?: string;
+                                                social?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                title?: {
+                                                    enum_name: string;
+                                                    display?: Array<{
+                                                        lang: string;
+                                                        value: string;
+                                                    }>;
+                                                };
+                                                local_middle_name?: string;
+                                                local_secondary?: string;
+                                                display_name_local_and_western_script?: string;
+                                                display_name_local_script?: string;
+                                                display_name_western_script?: string;
+                                                wk_id?: string;
+                                            };
+                                            mother_name?: string;
+                                            city_of_birth?: string;
+                                            region_of_birth?: string;
+                                            tax_info_mys?: {
+                                                epf_ee_tp3?: string;
+                                                fresh_graduate?: boolean;
+                                                monthly_gross?: string;
+                                                mtd?: string;
+                                                previous_income_in_the_current_year?: boolean;
+                                                socso?: string;
+                                                tax_relief_1?: string;
+                                                tax_relief_2?: string;
+                                                tax_relief_3?: string;
+                                                tax_relief_4?: string;
+                                                tax_relief_5?: string;
+                                            };
                                         };
                                         employment_info?: {
                                             department_id?: string;

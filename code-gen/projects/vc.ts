@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import unified_kms_log from "./unified_kms_log";
+import vault from "./vault";
 
 // auto gen
-export default abstract class Client extends unified_kms_log {
+export default abstract class Client extends vault {
     declare tokenManager;
 
     declare domain;
@@ -205,6 +205,384 @@ export default abstract class Client extends unified_kms_log {
                     >({
                         url: fillApiPath(
                             `${this.domain}/open-apis/vc/v1/alerts`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
+         * bot
+         */
+        bot: {
+            eventsWithIterator: async (
+                payload?: {
+                    params: {
+                        meeting_id: string;
+                        page_token?: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                const sendRequest = async (innerPayload: {
+                    headers: any;
+                    params: any;
+                    data: any;
+                }) => {
+                    const res = await this.httpInstance
+                        .request<any, any>({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/events`,
+                                path
+                            ),
+                            method: "GET",
+                            headers: pickBy(innerPayload.headers, identity),
+                            params: pickBy(innerPayload.params, identity),
+                            data,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                        });
+                    return res;
+                };
+
+                const Iterable = {
+                    async *[Symbol.asyncIterator]() {
+                        let hasMore = true;
+                        let pageToken;
+
+                        while (hasMore) {
+                            try {
+                                const res = await sendRequest({
+                                    headers,
+                                    params: {
+                                        ...params,
+                                        page_token: pageToken,
+                                    },
+                                    data,
+                                });
+
+                                const {
+                                    // @ts-ignore
+                                    has_more,
+                                    // @ts-ignore
+                                    page_token,
+                                    // @ts-ignore
+                                    next_page_token,
+                                    ...rest
+                                } =
+                                    (
+                                        res as {
+                                            code?: number;
+                                            msg?: string;
+                                            data?: {
+                                                has_more?: boolean;
+                                                page_token?: string;
+                                                events?: Array<{
+                                                    event_id?: string;
+                                                    event_type?: string;
+                                                    event_time?: string;
+                                                    payload?: {
+                                                        meeting?: {
+                                                            id?: string;
+                                                            topic?: string;
+                                                            meeting_no?: string;
+                                                            start_time?: string;
+                                                            end_time?: string;
+                                                            host_user?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                        };
+                                                        activity_event_type?: string;
+                                                        participant_joined_items?: Array<{
+                                                            participant?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            join_time?: string;
+                                                        }>;
+                                                        participant_left_items?: Array<{
+                                                            participant?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            leave_reason?: number;
+                                                            leave_time?: string;
+                                                        }>;
+                                                        transcript_received_items?: Array<{
+                                                            speaker?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            text?: string;
+                                                            language?: string;
+                                                            start_time_ms?: string;
+                                                            end_time_ms?: string;
+                                                            sentence_id?: string;
+                                                        }>;
+                                                        chat_received_items?: Array<{
+                                                            operator?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            message_id?: string;
+                                                            message_type?: number;
+                                                            content?: string;
+                                                            send_time?: string;
+                                                        }>;
+                                                        magic_share_started_items?: Array<{
+                                                            operator?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            share_id?: string;
+                                                            share_doc?: {
+                                                                url?: string;
+                                                                title?: string;
+                                                            };
+                                                            time?: string;
+                                                        }>;
+                                                        magic_share_ended_items?: Array<{
+                                                            operator?: {
+                                                                id?: string;
+                                                                user_type?: number;
+                                                                user_role?: number;
+                                                                user_name?: string;
+                                                            };
+                                                            share_id?: string;
+                                                            time?: string;
+                                                        }>;
+                                                    };
+                                                }>;
+                                            };
+                                        }
+                                    )?.data || {};
+
+                                yield rest;
+
+                                hasMore = Boolean(has_more);
+                                pageToken = page_token || next_page_token;
+                            } catch (e) {
+                                yield null;
+                                break;
+                            }
+                        }
+                    },
+                };
+
+                return Iterable;
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=events&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=events&project=vc&resource=bot&version=v1 document }
+             *
+             * 获取机器人会议事件接口
+             */
+            events: async (
+                payload?: {
+                    params: {
+                        meeting_id: string;
+                        page_token?: string;
+                        start_time?: string;
+                        end_time?: string;
+                        page_size?: number;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                has_more?: boolean;
+                                page_token?: string;
+                                events?: Array<{
+                                    event_id?: string;
+                                    event_type?: string;
+                                    event_time?: string;
+                                    payload?: {
+                                        meeting?: {
+                                            id?: string;
+                                            topic?: string;
+                                            meeting_no?: string;
+                                            start_time?: string;
+                                            end_time?: string;
+                                            host_user?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                        };
+                                        activity_event_type?: string;
+                                        participant_joined_items?: Array<{
+                                            participant?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            join_time?: string;
+                                        }>;
+                                        participant_left_items?: Array<{
+                                            participant?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            leave_reason?: number;
+                                            leave_time?: string;
+                                        }>;
+                                        transcript_received_items?: Array<{
+                                            speaker?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            text?: string;
+                                            language?: string;
+                                            start_time_ms?: string;
+                                            end_time_ms?: string;
+                                            sentence_id?: string;
+                                        }>;
+                                        chat_received_items?: Array<{
+                                            operator?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            message_id?: string;
+                                            message_type?: number;
+                                            content?: string;
+                                            send_time?: string;
+                                        }>;
+                                        magic_share_started_items?: Array<{
+                                            operator?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            share_id?: string;
+                                            share_doc?: {
+                                                url?: string;
+                                                title?: string;
+                                            };
+                                            time?: string;
+                                        }>;
+                                        magic_share_ended_items?: Array<{
+                                            operator?: {
+                                                id?: string;
+                                                user_type?: number;
+                                                user_role?: number;
+                                                user_name?: string;
+                                            };
+                                            share_id?: string;
+                                            time?: string;
+                                        }>;
+                                    };
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/bots/events`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+         * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=user_active_meeting&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_active_meeting&project=vc&resource=bot&version=v1 document } 
+ * 
+* ## 功能介绍
+查询指定用户当前正在参与的所有会议列表，包含会议号、会议ID及会议标题等核心信息，用于实时同步用户参会状态或会议管理场景。
+
+### 注意事项
+- 返回结果仅包含用户当前处于活跃状态的会议，已结束或未开始的会议不会被返回。
+         */
+            userActiveMeeting: async (
+                payload?: {
+                    params?: {
+                        user_id?: string;
+                        user_id_type?: "user_id" | "union_id" | "open_id";
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                meetings?: Array<{
+                                    meeting_no?: string;
+                                    meeting_id?: string;
+                                    meeting_title?: string;
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/bots/user_active_meeting`,
                             path
                         ),
                         method: "GET",
@@ -1049,6 +1427,7 @@ export default abstract class Client extends unified_kms_log {
                                                     };
                                                 }>;
                                                 page_token?: string;
+                                                notice?: string;
                                             };
                                         }
                                     )?.data || {};
@@ -1114,6 +1493,7 @@ export default abstract class Client extends unified_kms_log {
                                     };
                                 }>;
                                 page_token?: string;
+                                notice?: string;
                             };
                         }
                     >({
@@ -1176,6 +1556,74 @@ export default abstract class Client extends unified_kms_log {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=meeting&version=v1 document }
+             *
+             * 订阅会议变更事件
+             */
+            subscription: async (
+                payload?: {
+                    data?: { event_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings/subscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=unsubscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=meeting&version=v1 document }
+             *
+             * 取消订阅会议变更事件
+             */
+            unsubscription: async (
+                payload?: {
+                    data?: { event_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/meetings/unsubscription`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -1629,6 +2077,11 @@ export default abstract class Client extends unified_kms_log {
                                         reference_type: number;
                                         doc_token: string;
                                     }>;
+                                    note_source?: {
+                                        source_type?: string;
+                                        source_entity_id?: string;
+                                    };
+                                    note_display_type?: number;
                                 };
                             };
                         }
@@ -1638,6 +2091,74 @@ export default abstract class Client extends unified_kms_log {
                             path
                         ),
                         method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=subscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=note&version=v1 document }
+             *
+             * 订阅纪要变更事件
+             */
+            subscription: async (
+                payload?: {
+                    data?: { event_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/notes/subscription`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=unsubscription&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=note&version=v1 document }
+             *
+             * 取消订阅纪要变更事件
+             */
+            unsubscription: async (
+                payload?: {
+                    data?: { event_type?: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<any, { code?: number; msg?: string; data?: {} }>({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/vc/v1/notes/unsubscription`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -5103,6 +5624,386 @@ export default abstract class Client extends unified_kms_log {
                 },
             },
             /**
+             * bot
+             */
+            bot: {
+                eventsWithIterator: async (
+                    payload?: {
+                        params: {
+                            meeting_id: string;
+                            page_token?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    const sendRequest = async (innerPayload: {
+                        headers: any;
+                        params: any;
+                        data: any;
+                    }) => {
+                        const res = await this.httpInstance
+                            .request<any, any>({
+                                url: fillApiPath(
+                                    `${this.domain}/open-apis/vc/v1/bots/events`,
+                                    path
+                                ),
+                                method: "GET",
+                                headers: pickBy(innerPayload.headers, identity),
+                                params: pickBy(innerPayload.params, identity),
+                                data,
+                                paramsSerializer: (params) =>
+                                    stringify(params, {
+                                        arrayFormat: "repeat",
+                                    }),
+                            })
+                            .catch((e) => {
+                                this.logger.error(formatErrors(e));
+                            });
+                        return res;
+                    };
+
+                    const Iterable = {
+                        async *[Symbol.asyncIterator]() {
+                            let hasMore = true;
+                            let pageToken;
+
+                            while (hasMore) {
+                                try {
+                                    const res = await sendRequest({
+                                        headers,
+                                        params: {
+                                            ...params,
+                                            page_token: pageToken,
+                                        },
+                                        data,
+                                    });
+
+                                    const {
+                                        // @ts-ignore
+                                        has_more,
+                                        // @ts-ignore
+                                        page_token,
+                                        // @ts-ignore
+                                        next_page_token,
+                                        ...rest
+                                    } =
+                                        (
+                                            res as {
+                                                code?: number;
+                                                msg?: string;
+                                                data?: {
+                                                    has_more?: boolean;
+                                                    page_token?: string;
+                                                    events?: Array<{
+                                                        event_id?: string;
+                                                        event_type?: string;
+                                                        event_time?: string;
+                                                        payload?: {
+                                                            meeting?: {
+                                                                id?: string;
+                                                                topic?: string;
+                                                                meeting_no?: string;
+                                                                start_time?: string;
+                                                                end_time?: string;
+                                                                host_user?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                            };
+                                                            activity_event_type?: string;
+                                                            participant_joined_items?: Array<{
+                                                                participant?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                join_time?: string;
+                                                            }>;
+                                                            participant_left_items?: Array<{
+                                                                participant?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                leave_reason?: number;
+                                                                leave_time?: string;
+                                                            }>;
+                                                            transcript_received_items?: Array<{
+                                                                speaker?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                text?: string;
+                                                                language?: string;
+                                                                start_time_ms?: string;
+                                                                end_time_ms?: string;
+                                                                sentence_id?: string;
+                                                            }>;
+                                                            chat_received_items?: Array<{
+                                                                operator?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                message_id?: string;
+                                                                message_type?: number;
+                                                                content?: string;
+                                                                send_time?: string;
+                                                            }>;
+                                                            magic_share_started_items?: Array<{
+                                                                operator?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                share_id?: string;
+                                                                share_doc?: {
+                                                                    url?: string;
+                                                                    title?: string;
+                                                                };
+                                                                time?: string;
+                                                            }>;
+                                                            magic_share_ended_items?: Array<{
+                                                                operator?: {
+                                                                    id?: string;
+                                                                    user_type?: number;
+                                                                    user_role?: number;
+                                                                    user_name?: string;
+                                                                };
+                                                                share_id?: string;
+                                                                time?: string;
+                                                            }>;
+                                                        };
+                                                    }>;
+                                                };
+                                            }
+                                        )?.data || {};
+
+                                    yield rest;
+
+                                    hasMore = Boolean(has_more);
+                                    pageToken = page_token || next_page_token;
+                                } catch (e) {
+                                    yield null;
+                                    break;
+                                }
+                            }
+                        },
+                    };
+
+                    return Iterable;
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=events&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=events&project=vc&resource=bot&version=v1 document }
+                 *
+                 * 获取机器人会议事件接口
+                 */
+                events: async (
+                    payload?: {
+                        params: {
+                            meeting_id: string;
+                            page_token?: string;
+                            start_time?: string;
+                            end_time?: string;
+                            page_size?: number;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    has_more?: boolean;
+                                    page_token?: string;
+                                    events?: Array<{
+                                        event_id?: string;
+                                        event_type?: string;
+                                        event_time?: string;
+                                        payload?: {
+                                            meeting?: {
+                                                id?: string;
+                                                topic?: string;
+                                                meeting_no?: string;
+                                                start_time?: string;
+                                                end_time?: string;
+                                                host_user?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                            };
+                                            activity_event_type?: string;
+                                            participant_joined_items?: Array<{
+                                                participant?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                join_time?: string;
+                                            }>;
+                                            participant_left_items?: Array<{
+                                                participant?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                leave_reason?: number;
+                                                leave_time?: string;
+                                            }>;
+                                            transcript_received_items?: Array<{
+                                                speaker?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                text?: string;
+                                                language?: string;
+                                                start_time_ms?: string;
+                                                end_time_ms?: string;
+                                                sentence_id?: string;
+                                            }>;
+                                            chat_received_items?: Array<{
+                                                operator?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                message_id?: string;
+                                                message_type?: number;
+                                                content?: string;
+                                                send_time?: string;
+                                            }>;
+                                            magic_share_started_items?: Array<{
+                                                operator?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                share_id?: string;
+                                                share_doc?: {
+                                                    url?: string;
+                                                    title?: string;
+                                                };
+                                                time?: string;
+                                            }>;
+                                            magic_share_ended_items?: Array<{
+                                                operator?: {
+                                                    id?: string;
+                                                    user_type?: number;
+                                                    user_role?: number;
+                                                    user_name?: string;
+                                                };
+                                                share_id?: string;
+                                                time?: string;
+                                            }>;
+                                        };
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/events`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+         * {@link https://open.feishu.cn/api-explorer?project=vc&resource=bot&apiName=user_active_meeting&version=v1 click to debug } 
+ * 
+* {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=user_active_meeting&project=vc&resource=bot&version=v1 document } 
+ * 
+* ## 功能介绍
+查询指定用户当前正在参与的所有会议列表，包含会议号、会议ID及会议标题等核心信息，用于实时同步用户参会状态或会议管理场景。
+
+### 注意事项
+- 返回结果仅包含用户当前处于活跃状态的会议，已结束或未开始的会议不会被返回。
+         */
+                userActiveMeeting: async (
+                    payload?: {
+                        params?: {
+                            user_id?: string;
+                            user_id_type?: "user_id" | "union_id" | "open_id";
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    meetings?: Array<{
+                                        meeting_no?: string;
+                                        meeting_id?: string;
+                                        meeting_title?: string;
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/bots/user_active_meeting`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 导出
              */
             export: {
@@ -5941,6 +6842,7 @@ export default abstract class Client extends unified_kms_log {
                                                         };
                                                     }>;
                                                     page_token?: string;
+                                                    notice?: string;
                                                 };
                                             }
                                         )?.data || {};
@@ -6006,6 +6908,7 @@ export default abstract class Client extends unified_kms_log {
                                         };
                                     }>;
                                     page_token?: string;
+                                    notice?: string;
                                 };
                             }
                         >({
@@ -6071,6 +6974,80 @@ export default abstract class Client extends unified_kms_log {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=meeting&version=v1 document }
+                 *
+                 * 订阅会议变更事件
+                 */
+                subscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=meeting&apiName=unsubscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=meeting&version=v1 document }
+                 *
+                 * 取消订阅会议变更事件
+                 */
+                unsubscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/meetings/unsubscription`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -6535,6 +7512,11 @@ export default abstract class Client extends unified_kms_log {
                                             reference_type: number;
                                             doc_token: string;
                                         }>;
+                                        note_source?: {
+                                            source_type?: string;
+                                            source_entity_id?: string;
+                                        };
+                                        note_display_type?: number;
                                     };
                                 };
                             }
@@ -6544,6 +7526,80 @@ export default abstract class Client extends unified_kms_log {
                                 path
                             ),
                             method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=subscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=subscription&project=vc&resource=note&version=v1 document }
+                 *
+                 * 订阅纪要变更事件
+                 */
+                subscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/notes/subscription`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=vc&resource=note&apiName=unsubscription&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=unsubscription&project=vc&resource=note&version=v1 document }
+                 *
+                 * 取消订阅纪要变更事件
+                 */
+                unsubscription: async (
+                    payload?: {
+                        data?: { event_type?: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            { code?: number; msg?: string; data?: {} }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/vc/v1/notes/unsubscription`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,

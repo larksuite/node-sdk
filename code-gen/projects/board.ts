@@ -197,6 +197,49 @@ export default abstract class Client extends block {
              */
             whiteboardNode: {
                 /**
+                 * {@link https://open.feishu.cn/api-explorer?project=board&resource=whiteboard.node&apiName=batch_delete&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=batch_delete&project=board&resource=whiteboard.node&version=v1 document }
+                 *
+                 * 批量删除画板内的节点，存在子节点时子节点也被删除
+                 */
+                batchDelete: async (
+                    payload?: {
+                        data?: { ids?: Array<string> };
+                        params?: { client_token?: string };
+                        path: { whiteboard_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { client_token: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/board/v1/whiteboards/:whiteboard_id/nodes/batch_delete`,
+                                path
+                            ),
+                            method: "DELETE",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
                  * {@link https://open.feishu.cn/api-explorer?project=board&resource=whiteboard.node&apiName=create&version=v1 click to debug }
                  *
                  * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=board&resource=whiteboard.node&version=v1 document }

@@ -29,12 +29,9 @@ export default abstract class Client extends task {
     ): Promise<Required<IPayload>>;
 
     /**
-     * 企业信息
-     */
-    tenant = {
-        /**
-         * tenant.product_assign_info
+         
          */
+    tenant = {
         tenantProductAssignInfo: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant.product_assign_info&apiName=query&version=v2 click to debug }
@@ -86,9 +83,6 @@ export default abstract class Client extends task {
                     });
             },
         },
-        /**
-         * 企业信息
-         */
         tenant: {
             /**
              * {@link https://open.feishu.cn/api-explorer?project=tenant&resource=tenant&apiName=query&version=v2 click to debug }

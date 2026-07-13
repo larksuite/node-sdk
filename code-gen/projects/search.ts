@@ -811,6 +811,7 @@ export default abstract class Client extends search_in_app {
                             only_comment?: boolean;
                             my_edit_time?: { start?: number; end?: number };
                             my_comment_time?: { start?: number; end?: number };
+                            original_creator_ids?: Array<string>;
                         };
                         wiki_filter?: {
                             creator_ids?: Array<string>;
@@ -845,6 +846,7 @@ export default abstract class Client extends search_in_app {
                             only_comment?: boolean;
                             my_edit_time?: { start?: number; end?: number };
                             my_comment_time?: { start?: number; end?: number };
+                            original_creator_ids?: Array<string>;
                         };
                         page_token?: string;
                         page_size?: number;
@@ -945,6 +947,7 @@ export default abstract class Client extends search_in_app {
                                                     };
                                                 }>;
                                                 page_token?: string;
+                                                notice?: string;
                                             };
                                         }
                                     )?.data || {};
@@ -1007,6 +1010,7 @@ export default abstract class Client extends search_in_app {
                             only_comment?: boolean;
                             my_edit_time?: { start?: number; end?: number };
                             my_comment_time?: { start?: number; end?: number };
+                            original_creator_ids?: Array<string>;
                         };
                         wiki_filter?: {
                             creator_ids?: Array<string>;
@@ -1041,6 +1045,7 @@ export default abstract class Client extends search_in_app {
                             only_comment?: boolean;
                             my_edit_time?: { start?: number; end?: number };
                             my_comment_time?: { start?: number; end?: number };
+                            original_creator_ids?: Array<string>;
                         };
                         page_token?: string;
                         page_size?: number;
@@ -1092,6 +1097,7 @@ export default abstract class Client extends search_in_app {
                                     };
                                 }>;
                                 page_token?: string;
+                                notice?: string;
                             };
                         }
                     >({
@@ -2482,6 +2488,7 @@ export default abstract class Client extends search_in_app {
                                     start?: number;
                                     end?: number;
                                 };
+                                original_creator_ids?: Array<string>;
                             };
                             wiki_filter?: {
                                 creator_ids?: Array<string>;
@@ -2519,6 +2526,7 @@ export default abstract class Client extends search_in_app {
                                     start?: number;
                                     end?: number;
                                 };
+                                original_creator_ids?: Array<string>;
                             };
                             page_token?: string;
                             page_size?: number;
@@ -2621,6 +2629,7 @@ export default abstract class Client extends search_in_app {
                                                         };
                                                     }>;
                                                     page_token?: string;
+                                                    notice?: string;
                                                 };
                                             }
                                         )?.data || {};
@@ -2686,6 +2695,7 @@ export default abstract class Client extends search_in_app {
                                     start?: number;
                                     end?: number;
                                 };
+                                original_creator_ids?: Array<string>;
                             };
                             wiki_filter?: {
                                 creator_ids?: Array<string>;
@@ -2723,6 +2733,7 @@ export default abstract class Client extends search_in_app {
                                     start?: number;
                                     end?: number;
                                 };
+                                original_creator_ids?: Array<string>;
                             };
                             page_token?: string;
                             page_size?: number;
@@ -2774,6 +2785,7 @@ export default abstract class Client extends search_in_app {
                                         };
                                     }>;
                                     page_token?: string;
+                                    notice?: string;
                                 };
                             }
                         >({

@@ -33,6 +33,45 @@ export default abstract class Client extends elearning {
      */
     event = {
         /**
+         * connection
+         */
+        connection: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=event&resource=connection&apiName=get&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=event&resource=connection&version=v1 document }
+             */
+            get: async (payload?: {}, options?: IRequestOptions) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { online_instance_cnt?: number };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/event/v1/connection`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 事件订阅
          */
         outboundIp: {
@@ -171,6 +210,45 @@ export default abstract class Client extends elearning {
             },
         },
         v1: {
+            /**
+             * connection
+             */
+            connection: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=event&resource=connection&apiName=get&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=get&project=event&resource=connection&version=v1 document }
+                 */
+                get: async (payload?: {}, options?: IRequestOptions) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { online_instance_cnt?: number };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/event/v1/connection`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * 事件订阅
              */

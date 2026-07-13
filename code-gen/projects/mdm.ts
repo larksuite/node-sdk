@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import mail from "./mail";
+import mcp from "./mcp";
 
 // auto gen
-export default abstract class Client extends mail {
+export default abstract class Client extends mcp {
     declare tokenManager;
 
     declare domain;

@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import corehr from "./corehr";
+import device from "./device";
 
 // auto gen
-export default abstract class Client extends corehr {
+export default abstract class Client extends device {
     declare tokenManager;
 
     declare domain;

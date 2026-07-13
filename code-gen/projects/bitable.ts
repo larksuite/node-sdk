@@ -9,10 +9,10 @@ import { IPayload } from "@node-sdk/client/types";
 import { HttpInstance } from "@node-sdk/typings/http";
 import { Readable } from "stream";
 import { stringify } from "qs";
-import base from "./base";
+import batch from "./batch";
 
 // auto gen
-export default abstract class Client extends base {
+export default abstract class Client extends batch {
     declare tokenManager;
 
     declare domain;
@@ -32,6 +32,58 @@ export default abstract class Client extends base {
      * 云文档-多维表格
      */
     bitable = {
+        /**
+         * app.block_workflow
+         */
+        appBlockWorkflow: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.block_workflow&apiName=list&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=bitable&resource=app.block_workflow&version=v1 document }
+             *
+             * 列出工作流
+             */
+            list: async (
+                payload?: {
+                    path: { app_token: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: {
+                                workflows?: Array<{
+                                    workflow_id?: string;
+                                    title?: string;
+                                    status?: "Enable" | "Disable";
+                                }>;
+                            };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/block_workflows`,
+                            path
+                        ),
+                        method: "GET",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
         /**
          * 多维表格
          */
@@ -310,7 +362,11 @@ export default abstract class Client extends base {
             },
             listWithIterator: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        with_share_config?: boolean;
+                    };
                     path: { app_token: string };
                 },
                 options?: IRequestOptions
@@ -375,9 +431,21 @@ export default abstract class Client extends base {
                                                 dashboards: Array<{
                                                     block_id: string;
                                                     name: string;
+                                                    share_config?: {
+                                                        share_flag?: boolean;
+                                                        share_scope_type?:
+                                                            | "1"
+                                                            | "2"
+                                                            | "3";
+                                                        share_token?: string;
+                                                        share_link?: string;
+                                                        show_source?: boolean;
+                                                        source_link?: string;
+                                                    };
                                                 }>;
                                                 page_token: string;
                                                 has_more: boolean;
+                                                total?: number;
                                             };
                                         }
                                     )?.data || {};
@@ -409,7 +477,11 @@ export default abstract class Client extends base {
              */
             list: async (
                 payload?: {
-                    params?: { page_size?: number; page_token?: string };
+                    params?: {
+                        page_size?: number;
+                        page_token?: string;
+                        with_share_config?: boolean;
+                    };
                     path: { app_token: string };
                 },
                 options?: IRequestOptions
@@ -427,9 +499,18 @@ export default abstract class Client extends base {
                                 dashboards: Array<{
                                     block_id: string;
                                     name: string;
+                                    share_config?: {
+                                        share_flag?: boolean;
+                                        share_scope_type?: "1" | "2" | "3";
+                                        share_token?: string;
+                                        share_link?: string;
+                                        show_source?: boolean;
+                                        source_link?: string;
+                                    };
                                 }>;
                                 page_token: string;
                                 has_more: boolean;
+                                total?: number;
                             };
                         }
                     >({
@@ -1404,9 +1485,6 @@ export default abstract class Client extends base {
                             }>;
                         }>;
                     };
-                    params?: {
-                        user_id_type?: "user_id" | "union_id" | "open_id";
-                    };
                     path: { app_token: string };
                 },
                 options?: IRequestOptions
@@ -1684,7 +1762,7 @@ export default abstract class Client extends base {
             },
             listWithIterator: async (
                 payload?: {
-                    params?: { page_token?: string; page_size?: number };
+                    params?: { page_size?: number; page_token?: string };
                     path: { app_token: string };
                 },
                 options?: IRequestOptions
@@ -1785,7 +1863,7 @@ export default abstract class Client extends base {
              */
             list: async (
                 payload?: {
-                    params?: { page_token?: string; page_size?: number };
+                    params?: { page_size?: number; page_token?: string };
                     path: { app_token: string };
                 },
                 options?: IRequestOptions
@@ -1899,6 +1977,7 @@ export default abstract class Client extends base {
                             auto_fill?: boolean;
                             multiple?: boolean;
                             table_id?: string;
+                            table_name?: string;
                             back_field_name?: string;
                             auto_serial?: {
                                 type: "custom" | "auto_increment_number";
@@ -1964,6 +2043,8 @@ export default abstract class Client extends base {
                             };
                         };
                         description?: { disable_sync?: boolean; text?: string };
+                        is_primary?: boolean;
+                        field_id?: string;
                         ui_type?:
                             | "Text"
                             | "Email"
@@ -1990,6 +2071,7 @@ export default abstract class Client extends base {
                             | "CreatedUser"
                             | "ModifiedUser"
                             | "AutoNumber";
+                        is_hidden?: boolean;
                     };
                     params?: { client_token?: string };
                     path: { app_token: string; table_id: string };
@@ -2198,8 +2280,8 @@ export default abstract class Client extends base {
                     params?: {
                         view_id?: string;
                         text_field_as_array?: boolean;
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -2420,8 +2502,8 @@ export default abstract class Client extends base {
                     params?: {
                         view_id?: string;
                         text_field_as_array?: boolean;
-                        page_token?: string;
                         page_size?: number;
+                        page_token?: string;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -2667,6 +2749,7 @@ export default abstract class Client extends base {
                             };
                         };
                         description?: { disable_sync?: boolean; text?: string };
+                        is_primary?: boolean;
                         ui_type?:
                             | "Text"
                             | "Email"
@@ -2693,7 +2776,9 @@ export default abstract class Client extends base {
                             | "CreatedUser"
                             | "ModifiedUser"
                             | "AutoNumber";
+                        is_hidden?: boolean;
                     };
+                    params?: { client_token?: string };
                     path: {
                         app_token: string;
                         table_id: string;
@@ -2852,6 +2937,60 @@ export default abstract class Client extends base {
             },
         },
         /**
+         * app.table.field_group
+         */
+        appTableFieldGroup: {
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.field_group&apiName=create&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=bitable&resource=app.table.field_group&version=v1 document }
+             *
+             * 新增字段编组
+             */
+            create: async (
+                payload?: {
+                    data: {
+                        field_groups: Array<{
+                            id?: string;
+                            name: string;
+                            children: Array<{ type: "field"; id: string }>;
+                            description?: string;
+                        }>;
+                    };
+                    path: { app_token: string; table_id: string };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { field_groups?: string };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/field_groups`,
+                            path
+                        ),
+                        method: "POST",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+        },
+        /**
          * 表单
          */
         appTableFormField: {
@@ -2929,6 +3068,13 @@ export default abstract class Client extends base {
                                                     description?: string;
                                                     required?: boolean;
                                                     visible?: boolean;
+                                                    rich_description?: Array<{
+                                                        segment_type:
+                                                            | "text"
+                                                            | "url";
+                                                        text: string;
+                                                        link?: string;
+                                                    }>;
                                                 }>;
                                                 page_token: string;
                                                 has_more: boolean;
@@ -2989,6 +3135,11 @@ export default abstract class Client extends base {
                                     description?: string;
                                     required?: boolean;
                                     visible?: boolean;
+                                    rich_description?: Array<{
+                                        segment_type: "text" | "url";
+                                        text: string;
+                                        link?: string;
+                                    }>;
                                 }>;
                                 page_token: string;
                                 has_more: boolean;
@@ -3031,6 +3182,11 @@ export default abstract class Client extends base {
                         description?: string;
                         required?: boolean;
                         visible?: boolean;
+                        rich_description?: Array<{
+                            segment_type: "text" | "url";
+                            text: string;
+                            link?: string;
+                        }>;
                     };
                     path: {
                         app_token: string;
@@ -3051,12 +3207,17 @@ export default abstract class Client extends base {
                             code?: number;
                             msg?: string;
                             data?: {
-                                field?: {
+                                fields?: {
                                     pre_field_id?: string;
                                     title?: string;
                                     description?: string;
                                     required?: boolean;
                                     visible?: boolean;
+                                    rich_description?: Array<{
+                                        segment_type: "text" | "url";
+                                        text: string;
+                                        link?: string;
+                                    }>;
                                 };
                             };
                         }
@@ -3203,6 +3364,55 @@ export default abstract class Client extends base {
                             path
                         ),
                         method: "PATCH",
+                        data,
+                        params,
+                        headers,
+                        paramsSerializer: (params) =>
+                            stringify(params, { arrayFormat: "repeat" }),
+                    })
+                    .catch((e) => {
+                        this.logger.error(formatErrors(e));
+                        throw e;
+                    });
+            },
+            /**
+             * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=upgrade&version=v1 click to debug }
+             *
+             * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upgrade&project=bitable&resource=app.table.form&version=v1 document }
+             *
+             * 升级表单
+             */
+            upgrade: async (
+                payload?: {
+                    data: {
+                        form_name: string;
+                        display_mode: "traditional" | "one_question_per_page";
+                    };
+                    path: {
+                        app_token: string;
+                        table_id: string;
+                        form_id: string;
+                    };
+                },
+                options?: IRequestOptions
+            ) => {
+                const { headers, params, data, path } =
+                    await this.formatPayload(payload, options);
+
+                return this.httpInstance
+                    .request<
+                        any,
+                        {
+                            code?: number;
+                            msg?: string;
+                            data?: { form?: { id?: string } };
+                        }
+                    >({
+                        url: fillApiPath(
+                            `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/upgrade`,
+                            path
+                        ),
+                        method: "POST",
                         data,
                         params,
                         headers,
@@ -3405,6 +3615,7 @@ export default abstract class Client extends base {
             batchDelete: async (
                 payload?: {
                     data: { records: Array<string> };
+                    params?: { ignore_consistency_check?: boolean };
                     path: { app_token: string; table_id: string };
                 },
                 options?: IRequestOptions
@@ -3630,6 +3841,7 @@ export default abstract class Client extends base {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         ignore_consistency_check?: boolean;
+                        client_token?: string;
                     };
                     path: { app_token: string; table_id: string };
                 },
@@ -3776,6 +3988,7 @@ export default abstract class Client extends base {
                                   tmp_url?: string;
                               }>
                         >;
+                        record_id?: string;
                     };
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
@@ -3888,6 +4101,7 @@ export default abstract class Client extends base {
              */
             delete: async (
                 payload?: {
+                    params?: { ignore_consistency_check?: boolean };
                     path: {
                         app_token: string;
                         table_id: string;
@@ -4731,6 +4945,7 @@ export default abstract class Client extends base {
                     params?: {
                         user_id_type?: "user_id" | "union_id" | "open_id";
                         ignore_consistency_check?: boolean;
+                        client_token?: string;
                     };
                     path: {
                         app_token: string;
@@ -4901,11 +5116,6 @@ export default abstract class Client extends base {
                                             field_id?: string;
                                         };
                                     };
-                                    view_public_level?:
-                                        | "Public"
-                                        | "Locked"
-                                        | "Private";
-                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -4979,6 +5189,7 @@ export default abstract class Client extends base {
              */
             get: async (
                 payload?: {
+                    params?: { user_id_type?: string };
                     path?: {
                         app_token?: string;
                         table_id?: string;
@@ -5028,11 +5239,6 @@ export default abstract class Client extends base {
                                             field_id?: string;
                                         };
                                     };
-                                    view_public_level?:
-                                        | "Public"
-                                        | "Locked"
-                                        | "Private";
-                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -5154,11 +5360,6 @@ export default abstract class Client extends base {
                                                             field_id?: string;
                                                         };
                                                     };
-                                                    view_public_level?:
-                                                        | "Public"
-                                                        | "Locked"
-                                                        | "Private";
-                                                    view_private_owner_id?: string;
                                                 }>;
                                                 page_token?: string;
                                                 has_more?: boolean;
@@ -5244,11 +5445,6 @@ export default abstract class Client extends base {
                                             field_id?: string;
                                         };
                                     };
-                                    view_public_level?:
-                                        | "Public"
-                                        | "Locked"
-                                        | "Private";
-                                    view_private_owner_id?: string;
                                 }>;
                                 page_token?: string;
                                 has_more?: boolean;
@@ -5308,6 +5504,7 @@ export default abstract class Client extends base {
                             hierarchy_config?: { field_id?: string };
                         };
                     };
+                    params?: { user_id_type?: string };
                     path?: {
                         app_token?: string;
                         table_id?: string;
@@ -5357,11 +5554,6 @@ export default abstract class Client extends base {
                                             field_id?: string;
                                         };
                                     };
-                                    view_public_level?:
-                                        | "Public"
-                                        | "Locked"
-                                        | "Private";
-                                    view_private_owner_id?: string;
                                 };
                             };
                         }
@@ -5389,7 +5581,6 @@ export default abstract class Client extends base {
         appWorkflow: {
             listWithIterator: async (
                 payload?: {
-                    params?: { page_token?: string; page_size?: number };
                     path?: { app_token?: string };
                 },
                 options?: IRequestOptions
@@ -5481,7 +5672,6 @@ export default abstract class Client extends base {
              */
             list: async (
                 payload?: {
-                    params?: { page_token?: string; page_size?: number };
                     path?: { app_token?: string };
                 },
                 options?: IRequestOptions
@@ -5555,6 +5745,58 @@ export default abstract class Client extends base {
             },
         },
         v1: {
+            /**
+             * app.block_workflow
+             */
+            appBlockWorkflow: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.block_workflow&apiName=list&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=list&project=bitable&resource=app.block_workflow&version=v1 document }
+                 *
+                 * 列出工作流
+                 */
+                list: async (
+                    payload?: {
+                        path: { app_token: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: {
+                                    workflows?: Array<{
+                                        workflow_id?: string;
+                                        title?: string;
+                                        status?: "Enable" | "Disable";
+                                    }>;
+                                };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/block_workflows`,
+                                path
+                            ),
+                            method: "GET",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
             /**
              * 多维表格
              */
@@ -5833,7 +6075,11 @@ export default abstract class Client extends base {
                 },
                 listWithIterator: async (
                     payload?: {
-                        params?: { page_size?: number; page_token?: string };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            with_share_config?: boolean;
+                        };
                         path: { app_token: string };
                     },
                     options?: IRequestOptions
@@ -5900,9 +6146,21 @@ export default abstract class Client extends base {
                                                     dashboards: Array<{
                                                         block_id: string;
                                                         name: string;
+                                                        share_config?: {
+                                                            share_flag?: boolean;
+                                                            share_scope_type?:
+                                                                | "1"
+                                                                | "2"
+                                                                | "3";
+                                                            share_token?: string;
+                                                            share_link?: string;
+                                                            show_source?: boolean;
+                                                            source_link?: string;
+                                                        };
                                                     }>;
                                                     page_token: string;
                                                     has_more: boolean;
+                                                    total?: number;
                                                 };
                                             }
                                         )?.data || {};
@@ -5934,7 +6192,11 @@ export default abstract class Client extends base {
                  */
                 list: async (
                     payload?: {
-                        params?: { page_size?: number; page_token?: string };
+                        params?: {
+                            page_size?: number;
+                            page_token?: string;
+                            with_share_config?: boolean;
+                        };
                         path: { app_token: string };
                     },
                     options?: IRequestOptions
@@ -5952,9 +6214,18 @@ export default abstract class Client extends base {
                                     dashboards: Array<{
                                         block_id: string;
                                         name: string;
+                                        share_config?: {
+                                            share_flag?: boolean;
+                                            share_scope_type?: "1" | "2" | "3";
+                                            share_token?: string;
+                                            share_link?: string;
+                                            show_source?: boolean;
+                                            source_link?: string;
+                                        };
                                     }>;
                                     page_token: string;
                                     has_more: boolean;
+                                    total?: number;
                                 };
                             }
                         >({
@@ -6950,9 +7221,6 @@ export default abstract class Client extends base {
                                 }>;
                             }>;
                         };
-                        params?: {
-                            user_id_type?: "user_id" | "union_id" | "open_id";
-                        };
                         path: { app_token: string };
                     },
                     options?: IRequestOptions
@@ -7238,7 +7506,7 @@ export default abstract class Client extends base {
                 },
                 listWithIterator: async (
                     payload?: {
-                        params?: { page_token?: string; page_size?: number };
+                        params?: { page_size?: number; page_token?: string };
                         path: { app_token: string };
                     },
                     options?: IRequestOptions
@@ -7341,7 +7609,7 @@ export default abstract class Client extends base {
                  */
                 list: async (
                     payload?: {
-                        params?: { page_token?: string; page_size?: number };
+                        params?: { page_size?: number; page_token?: string };
                         path: { app_token: string };
                     },
                     options?: IRequestOptions
@@ -7455,6 +7723,7 @@ export default abstract class Client extends base {
                                 auto_fill?: boolean;
                                 multiple?: boolean;
                                 table_id?: string;
+                                table_name?: string;
                                 back_field_name?: string;
                                 auto_serial?: {
                                     type: "custom" | "auto_increment_number";
@@ -7523,6 +7792,8 @@ export default abstract class Client extends base {
                                 disable_sync?: boolean;
                                 text?: string;
                             };
+                            is_primary?: boolean;
+                            field_id?: string;
                             ui_type?:
                                 | "Text"
                                 | "Email"
@@ -7549,6 +7820,7 @@ export default abstract class Client extends base {
                                 | "CreatedUser"
                                 | "ModifiedUser"
                                 | "AutoNumber";
+                            is_hidden?: boolean;
                         };
                         params?: { client_token?: string };
                         path: { app_token: string; table_id: string };
@@ -7759,8 +8031,8 @@ export default abstract class Client extends base {
                         params?: {
                             view_id?: string;
                             text_field_as_array?: boolean;
-                            page_token?: string;
                             page_size?: number;
+                            page_token?: string;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -7983,8 +8255,8 @@ export default abstract class Client extends base {
                         params?: {
                             view_id?: string;
                             text_field_as_array?: boolean;
-                            page_token?: string;
                             page_size?: number;
+                            page_token?: string;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -8235,6 +8507,7 @@ export default abstract class Client extends base {
                                 disable_sync?: boolean;
                                 text?: string;
                             };
+                            is_primary?: boolean;
                             ui_type?:
                                 | "Text"
                                 | "Email"
@@ -8261,7 +8534,9 @@ export default abstract class Client extends base {
                                 | "CreatedUser"
                                 | "ModifiedUser"
                                 | "AutoNumber";
+                            is_hidden?: boolean;
                         };
+                        params?: { client_token?: string };
                         path: {
                             app_token: string;
                             table_id: string;
@@ -8422,6 +8697,60 @@ export default abstract class Client extends base {
                 },
             },
             /**
+             * app.table.field_group
+             */
+            appTableFieldGroup: {
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.field_group&apiName=create&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=create&project=bitable&resource=app.table.field_group&version=v1 document }
+                 *
+                 * 新增字段编组
+                 */
+                create: async (
+                    payload?: {
+                        data: {
+                            field_groups: Array<{
+                                id?: string;
+                                name: string;
+                                children: Array<{ type: "field"; id: string }>;
+                                description?: string;
+                            }>;
+                        };
+                        path: { app_token: string; table_id: string };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { field_groups?: string };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/field_groups`,
+                                path
+                            ),
+                            method: "POST",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+            },
+            /**
              * 表单
              */
             appTableFormField: {
@@ -8501,6 +8830,13 @@ export default abstract class Client extends base {
                                                         description?: string;
                                                         required?: boolean;
                                                         visible?: boolean;
+                                                        rich_description?: Array<{
+                                                            segment_type:
+                                                                | "text"
+                                                                | "url";
+                                                            text: string;
+                                                            link?: string;
+                                                        }>;
                                                     }>;
                                                     page_token: string;
                                                     has_more: boolean;
@@ -8561,6 +8897,11 @@ export default abstract class Client extends base {
                                         description?: string;
                                         required?: boolean;
                                         visible?: boolean;
+                                        rich_description?: Array<{
+                                            segment_type: "text" | "url";
+                                            text: string;
+                                            link?: string;
+                                        }>;
                                     }>;
                                     page_token: string;
                                     has_more: boolean;
@@ -8603,6 +8944,11 @@ export default abstract class Client extends base {
                             description?: string;
                             required?: boolean;
                             visible?: boolean;
+                            rich_description?: Array<{
+                                segment_type: "text" | "url";
+                                text: string;
+                                link?: string;
+                            }>;
                         };
                         path: {
                             app_token: string;
@@ -8623,12 +8969,17 @@ export default abstract class Client extends base {
                                 code?: number;
                                 msg?: string;
                                 data?: {
-                                    field?: {
+                                    fields?: {
                                         pre_field_id?: string;
                                         title?: string;
                                         description?: string;
                                         required?: boolean;
                                         visible?: boolean;
+                                        rich_description?: Array<{
+                                            segment_type: "text" | "url";
+                                            text: string;
+                                            link?: string;
+                                        }>;
                                     };
                                 };
                             }
@@ -8775,6 +9126,57 @@ export default abstract class Client extends base {
                                 path
                             ),
                             method: "PATCH",
+                            data,
+                            params,
+                            headers,
+                            paramsSerializer: (params) =>
+                                stringify(params, { arrayFormat: "repeat" }),
+                        })
+                        .catch((e) => {
+                            this.logger.error(formatErrors(e));
+                            throw e;
+                        });
+                },
+                /**
+                 * {@link https://open.feishu.cn/api-explorer?project=bitable&resource=app.table.form&apiName=upgrade&version=v1 click to debug }
+                 *
+                 * {@link https://open.feishu.cn/api-explorer?from=op_doc_tab&apiName=upgrade&project=bitable&resource=app.table.form&version=v1 document }
+                 *
+                 * 升级表单
+                 */
+                upgrade: async (
+                    payload?: {
+                        data: {
+                            form_name: string;
+                            display_mode:
+                                | "traditional"
+                                | "one_question_per_page";
+                        };
+                        path: {
+                            app_token: string;
+                            table_id: string;
+                            form_id: string;
+                        };
+                    },
+                    options?: IRequestOptions
+                ) => {
+                    const { headers, params, data, path } =
+                        await this.formatPayload(payload, options);
+
+                    return this.httpInstance
+                        .request<
+                            any,
+                            {
+                                code?: number;
+                                msg?: string;
+                                data?: { form?: { id?: string } };
+                            }
+                        >({
+                            url: fillApiPath(
+                                `${this.domain}/open-apis/bitable/v1/apps/:app_token/tables/:table_id/forms/:form_id/upgrade`,
+                                path
+                            ),
+                            method: "POST",
                             data,
                             params,
                             headers,
@@ -8977,6 +9379,7 @@ export default abstract class Client extends base {
                 batchDelete: async (
                     payload?: {
                         data: { records: Array<string> };
+                        params?: { ignore_consistency_check?: boolean };
                         path: { app_token: string; table_id: string };
                     },
                     options?: IRequestOptions
@@ -9202,6 +9605,7 @@ export default abstract class Client extends base {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             ignore_consistency_check?: boolean;
+                            client_token?: string;
                         };
                         path: { app_token: string; table_id: string };
                     },
@@ -9348,6 +9752,7 @@ export default abstract class Client extends base {
                                       tmp_url?: string;
                                   }>
                             >;
+                            record_id?: string;
                         };
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
@@ -9460,6 +9865,7 @@ export default abstract class Client extends base {
                  */
                 delete: async (
                     payload?: {
+                        params?: { ignore_consistency_check?: boolean };
                         path: {
                             app_token: string;
                             table_id: string;
@@ -10316,6 +10722,7 @@ export default abstract class Client extends base {
                         params?: {
                             user_id_type?: "user_id" | "union_id" | "open_id";
                             ignore_consistency_check?: boolean;
+                            client_token?: string;
                         };
                         path: {
                             app_token: string;
@@ -10486,11 +10893,6 @@ export default abstract class Client extends base {
                                                 field_id?: string;
                                             };
                                         };
-                                        view_public_level?:
-                                            | "Public"
-                                            | "Locked"
-                                            | "Private";
-                                        view_private_owner_id?: string;
                                     };
                                 };
                             }
@@ -10567,6 +10969,7 @@ export default abstract class Client extends base {
                  */
                 get: async (
                     payload?: {
+                        params?: { user_id_type?: string };
                         path?: {
                             app_token?: string;
                             table_id?: string;
@@ -10616,11 +11019,6 @@ export default abstract class Client extends base {
                                                 field_id?: string;
                                             };
                                         };
-                                        view_public_level?:
-                                            | "Public"
-                                            | "Locked"
-                                            | "Private";
-                                        view_private_owner_id?: string;
                                     };
                                 };
                             }
@@ -10744,11 +11142,6 @@ export default abstract class Client extends base {
                                                                 field_id?: string;
                                                             };
                                                         };
-                                                        view_public_level?:
-                                                            | "Public"
-                                                            | "Locked"
-                                                            | "Private";
-                                                        view_private_owner_id?: string;
                                                     }>;
                                                     page_token?: string;
                                                     has_more?: boolean;
@@ -10834,11 +11227,6 @@ export default abstract class Client extends base {
                                                 field_id?: string;
                                             };
                                         };
-                                        view_public_level?:
-                                            | "Public"
-                                            | "Locked"
-                                            | "Private";
-                                        view_private_owner_id?: string;
                                     }>;
                                     page_token?: string;
                                     has_more?: boolean;
@@ -10898,6 +11286,7 @@ export default abstract class Client extends base {
                                 hierarchy_config?: { field_id?: string };
                             };
                         };
+                        params?: { user_id_type?: string };
                         path?: {
                             app_token?: string;
                             table_id?: string;
@@ -10947,11 +11336,6 @@ export default abstract class Client extends base {
                                                 field_id?: string;
                                             };
                                         };
-                                        view_public_level?:
-                                            | "Public"
-                                            | "Locked"
-                                            | "Private";
-                                        view_private_owner_id?: string;
                                     };
                                 };
                             }
@@ -10979,7 +11363,6 @@ export default abstract class Client extends base {
             appWorkflow: {
                 listWithIterator: async (
                     payload?: {
-                        params?: { page_token?: string; page_size?: number };
                         path?: { app_token?: string };
                     },
                     options?: IRequestOptions
@@ -11073,7 +11456,6 @@ export default abstract class Client extends base {
                  */
                 list: async (
                     payload?: {
-                        params?: { page_token?: string; page_size?: number };
                         path?: { app_token?: string };
                     },
                     options?: IRequestOptions
